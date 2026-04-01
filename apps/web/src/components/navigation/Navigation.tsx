@@ -113,26 +113,6 @@ export default function Navigation() {
                 >
                   Dashboard
                 </Link>
-              ) : (
-                <>
-                  <Link
-                    href="/login"
-                    className={cn(
-                      'px-4 py-2 rounded-lg font-medium transition-all duration-300',
-                      isScrolled
-                        ? 'dark:text-white/80 dark:hover:text-white dark:hover:bg-white/5 text-slate-700 hover:text-slate-900 hover:bg-slate-100'
-                        : 'text-slate-700 hover:text-slate-900'
-                    )}
-                  >
-                    Masuk
-                  </Link>
-                  <Link
-                    href="/register"
-                    className="px-5 py-2.5 rounded-xl font-semibold bg-gradient-to-r from-amber-500 to-amber-600 text-white hover:shadow-lg dark:hover:shadow-amber-900/50 hover:shadow-amber-200/50 transition-all duration-300"
-                  >
-                    Daftar
-                  </Link>
-                </>
               )}
             </div>
 
@@ -212,7 +192,7 @@ export default function Navigation() {
                   </Link>
                 ))}
                 <div className="border-t dark:border-white/10 border-slate-200 mt-4 pt-4 flex flex-col gap-2">
-                  {isLoggedIn ? (
+                  {isLoggedIn && (
                     <Link
                       href="/dashboard"
                       onClick={() => setIsMobileMenuOpen(false)}
@@ -220,23 +200,6 @@ export default function Navigation() {
                     >
                       Dashboard
                     </Link>
-                  ) : (
-                    <>
-                      <Link
-                        href="/login"
-                        onClick={() => setIsMobileMenuOpen(false)}
-                        className="px-4 py-3 rounded-xl dark:text-white/80 font-medium text-center dark:hover:bg-white/5 hover:bg-slate-100"
-                      >
-                        Masuk
-                      </Link>
-                      <Link
-                        href="/register"
-                        onClick={() => setIsMobileMenuOpen(false)}
-                        className="px-4 py-3 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 text-white font-semibold text-center"
-                      >
-                        Daftar
-                      </Link>
-                    </>
                   )}
                 </div>
               </div>
