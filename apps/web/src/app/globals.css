@@ -1,0 +1,398 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /* Light mode (default) */
+  body {
+    @apply bg-slate-50 text-slate-900 font-sans antialiased;
+    overflow-x: hidden;
+  }
+
+  * {
+    @apply border-slate-200;
+  }
+
+  /* Custom selection */
+  ::selection {
+    @apply bg-blue-500/30 text-blue-700;
+  }
+
+  /* Dark mode */
+  .dark body,
+  html.dark body {
+    @apply bg-[#0a0a0f] text-slate-100;
+  }
+
+  .dark * {
+    @apply border-slate-800;
+  }
+
+  .dark ::selection {
+    @apply bg-blue-500/30 text-blue-300;
+  }
+
+  .dark ::-webkit-scrollbar-track {
+    @apply bg-slate-900;
+  }
+
+  .dark ::-webkit-scrollbar-thumb {
+    @apply bg-slate-700;
+  }
+
+  .dark ::-webkit-scrollbar-thumb:hover {
+    @apply bg-slate-600;
+  }
+}
+
+@layer components {
+  .container-fluid {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  .section-padding {
+    @apply py-16 md:py-24;
+  }
+
+  .heading-1 {
+    @apply text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight;
+  }
+
+  .heading-2 {
+    @apply text-3xl md:text-4xl font-bold tracking-tight;
+  }
+
+  .heading-3 {
+    @apply text-2xl md:text-3xl font-semibold;
+  }
+
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-blue-800;
+  }
+
+  .dark .text-gradient {
+    @apply bg-gradient-to-r from-blue-400 to-blue-600;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .animate-stagger {
+    animation-delay: calc(var(--stagger-index, 0) * 100ms);
+  }
+
+  /* Hide scrollbar utility */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
+
+/* Modern thin scrollbar - show on hover only, supports touch swipe */
+.scrollbar-thin {
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+  padding-bottom: 12px; /* space between tabs and scrollbar */
+}
+
+.scrollbar-thin::-webkit-scrollbar {
+  height: 4px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.scrollbar-thin::-webkit-scrollbar-track {
+  @apply bg-transparent;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  @apply bg-slate-300 dark:bg-slate-700 rounded-full;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb:hover {
+  @apply bg-slate-400 dark:bg-slate-600;
+}
+
+.scrollbar-thin:hover::-webkit-scrollbar {
+  opacity: 1;
+}
+
+/* Global scrollbar - show on hover only */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-slate-300 dark:bg-slate-700 rounded-full;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-slate-400 dark:bg-slate-600;
+  opacity: 1;
+}
+
+/* Dark mode global scrollbar */
+.dark ::-webkit-scrollbar-thumb {
+  @apply bg-slate-700 rounded-full;
+  opacity: 0;
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  @apply bg-slate-600;
+  opacity: 1;
+}
+
+/* Hero gradient animation */
+@keyframes gradient-shift {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+.animate-gradient {
+  background-size: 200% 200%;
+  animation: gradient-shift 8s ease infinite;
+}
+
+/* Pulse glow effect */
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 40px rgba(59, 130, 246, 0.6);
+  }
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+/* Float animation */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+/* Light mode specific utilities */
+.light .card-dark {
+  @apply bg-white border-slate-200 shadow-sm;
+}
+
+.light .text-dark {
+  @apply text-slate-900;
+}
+
+.light .text-muted-dark {
+  @apply text-slate-500;
+}
+
+.light .bg-dark {
+  @apply bg-slate-100;
+}
+
+.light .bg-card-dark {
+  @apply bg-white;
+}
+
+.light .border-dark {
+  @apply border-slate-200;
+}
+
+/* Sticky navbar/section backdrop - more solid for readability */
+.sticky-bg {
+  @apply bg-white/95 dark:bg-[#06060e]/95 backdrop-blur-xl border-b border-slate-200 dark:border-white/[0.08];
+}
+
+/* Alternative with stronger solid feel */
+.sticky-bg-solid {
+  @apply bg-white dark:bg-[#0a0a0f] border-b border-slate-200 dark:border-white/[0.06];
+}
+
+/* Glass effect adjustments for light mode */
+.light .glass {
+  @apply bg-white/80 backdrop-blur-xl border-slate-200/50;
+}
+
+.dark .glass {
+  @apply bg-black/20 backdrop-blur-xl border-white/10;
+}
+
+/* ============================================
+   THEME-AWARE PAGE BACKGROUNDS
+   Use these classes for consistent light/dark mode
+   ============================================ */
+
+/* Page backgrounds */
+.page-bg {
+  @apply bg-slate-50 text-slate-900;
+}
+
+.dark .page-bg {
+  @apply bg-[#06060e] text-slate-100;
+}
+
+/* Card backgrounds */
+.page-card {
+  @apply bg-white border-slate-200 shadow-sm;
+}
+
+.dark .page-card {
+  @apply bg-white/[0.03] border-white/[0.08];
+}
+
+/* Section alternate backgrounds */
+.section-alt {
+  @apply bg-white;
+}
+
+.dark .section-alt {
+  @apply bg-white/[0.01];
+}
+
+/* Text colors */
+.page-text {
+  @apply text-slate-900;
+}
+
+.dark .page-text {
+  @apply text-white;
+}
+
+.page-text-muted {
+  @apply text-slate-500;
+}
+
+.dark .page-text-muted {
+  @apply text-white/45;
+}
+
+/* Border colors */
+.page-border {
+  @apply border-slate-200;
+}
+
+.dark .page-border {
+  @apply border-white/[0.08];
+}
+
+/* Input fields */
+.page-input {
+  @apply bg-white border-slate-200 text-slate-900 placeholder-slate-400;
+}
+
+.dark .page-input {
+  @apply bg-white/[0.05] border-white/[0.08] text-white placeholder-white/30;
+}
+
+/* Hero gradient backgrounds */
+.hero-glow-1 {
+  @apply bg-blue-500/[0.07];
+}
+
+.dark .hero-glow-1 {
+  @apply bg-emerald-500/[0.1];
+}
+
+.hero-glow-2 {
+  @apply bg-blue-600/[0.05];
+}
+
+.dark .hero-glow-2 {
+  @apply bg-blue-600/[0.08];
+}
+
+/* Badge styles */
+.page-badge {
+  @apply bg-blue-50 border-blue-200 text-blue-700;
+}
+
+.dark .page-badge {
+  @apply bg-emerald-500/10 border-emerald-500/25 text-emerald-400;
+}
+
+/* Button outline for light mode */
+.btn-outline-dark {
+  @apply border-slate-300 text-slate-700 hover:bg-slate-100;
+}
+
+.dark .btn-outline-dark {
+  @apply border-white/[0.12] text-white hover:bg-white/[0.05];
+}
+
+/* Tab button states */
+.page-tab-selected {
+  @apply bg-blue-50 border-blue-200 text-blue-700;
+}
+
+.dark .page-tab-selected {
+  @apply bg-emerald-500/15 border-emerald-500/30 text-emerald-400;
+}
+
+.page-tab-unselected {
+  @apply bg-slate-100 border-slate-200 text-slate-600 hover:bg-slate-200;
+}
+
+.dark .page-tab-unselected {
+  @apply bg-white/[0.03] border-white/[0.08] text-white/50 hover:bg-white/[0.05] hover:text-white/70;
+}
+
+/* Sidebar/TOC card */
+.page-sidebar {
+  @apply bg-white border-slate-200;
+}
+
+.dark .page-sidebar {
+  @apply bg-white/[0.03] border-white/[0.08];
+}
+
+/* Page section card */
+.page-section-card {
+  @apply bg-white border-slate-200;
+}
+
+.dark .page-section-card {
+  @apply bg-white/[0.03] border-white/[0.08];
+}
+
+/* Page icon badge */
+.page-icon-bg {
+  @apply bg-blue-50 border-blue-200;
+}
+
+.dark .page-icon-bg {
+  @apply bg-emerald-500/10 border-emerald-500/20;
+}

@@ -1,0 +1,21 @@
+// Sections barrel export
+export { default as HeroSection } from './HeroSection';
+export { default as FeaturesSection } from './FeaturesSection';
+export { default as ServicesSection } from './ServicesSection';
+export { default as CTASection } from './CTASection';
+export { default as TestimonialsSection } from './TestimonialsSection';
+export { default as AreasSection } from './AreasSection';
+export { default as BlogSection } from './BlogSection';
+export { default as ServicesHeroSection } from './ServicesHeroSection';
+export { default as CategoryFilter } from './CategoryFilter';
+export { default as WhyChooseSection } from './WhyChooseSection';
+export { default as BookingHeaderSection } from './BookingHeaderSection';
+export { default as ServiceSelectionStep } from './ServiceSelectionStep';
+export { default as ScheduleStep } from './ScheduleStep';
+export { default as AddressStep } from './AddressStep';
+export { default as ConfirmationStep } from './ConfirmationStep';
+export { default as BlogHeroSection } from './BlogHeroSection';
+export { default as BlogListSection } from './BlogListSection';
+export { default as NewsletterSection } from './NewsletterSection';
+export { default as AuthHeaderSection } from './AuthHeaderSection';
+export { default as ImageShowcase } from './ImageShowcase';
