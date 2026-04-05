@@ -1,4 +1,5 @@
 /** @type {import('next').NextConfig} */
+const path = require('path');
 const nextConfig = {
   transpilePackages: ['@ningclean/ui'],
   images: {
@@ -10,7 +11,7 @@ const nextConfig = {
     ],
   },
   turbopack: {
-    root: __dirname,
+    root: path.resolve(__dirname, '../../'),
   },
 }
 
