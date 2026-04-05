@@ -7,7 +7,7 @@
     "apps/*"
   ],
   "scripts": {
-    "dev": "concurrently -n WEB,API -c blue,green \"npm run dev:web\" \"npm run dev:api\"",
+    "dev": "concurrently -n WEB,API,ADMIN -c blue,green,yellow \"npm run dev:web\" \"npm run dev:api\" \"npm run dev:admin\"",
     "dev:full": "concurrently -n WEB,API,ADMIN -c blue,green,yellow \"npm run dev:web\" \"npm run dev:api\" \"npm run dev:admin\"",
     "dev:web": "cd apps/web && npm run dev",
     "dev:api": "cd apps/api && npm run start:dev",
@@ -17,7 +17,13 @@
     "lint": "npm run lint --workspace=@ningclean/web"
   },
   "devDependencies": {
+    "bcryptjs": "^3.0.3",
     "concurrently": "^9.2.1",
+    "ts-node": "^10.9.2",
+    "tsx": "^4.21.0",
     "turbo": "^2.0.0"
+  },
+  "prisma": {
+    "seed": "npx tsx prisma/seed.ts"
   }
 }

@@ -89,4 +89,22 @@ export class AuthService {
       where: { id: payload.sub },
     });
   }
+
+  async getProfile(userId: string) {
+    const user = await this.prisma.user.findUnique({
+      where: { id: userId },
+      select: {
+        id: true,
+        email: true,
+        name: true,
+        role: true,
+        phone: true,
+        createdAt: true,
+      },
+    });
+    if (!user) {
+      return null;
+    }
+    return user;
+  }
 }

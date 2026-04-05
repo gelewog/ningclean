@@ -2,9 +2,11 @@
 
 import * as React from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { useRouter } from 'next/navigation'
 import { Sidebar } from '@/components/admin/Sidebar'
 import { Header } from '@/components/admin/Header'
 import { usePathname } from 'next/navigation'
+import { getToken } from '@/lib/api'
 
 interface AdminLayoutProps {
   children: React.ReactNode
@@ -13,15 +15,29 @@ interface AdminLayoutProps {
 export function AdminLayout({ children }: AdminLayoutProps) {
   const [sidebarCollapsed, setSidebarCollapsed] = React.useState(false)
   const pathname = usePathname()
+  const router = useRouter()
+
+  // Auth check
+  React.useEffect(() => {
+    const token = getToken()
+    if (!token && pathname !== '/login') {
+      router.push('/login')
+    }
+  }, [pathname, router])
+
+  // Don't render layout on login page
+  if (pathname === '/login') {
+    return <>{children}</>
+  }
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-slate-50">
       <Sidebar collapsed={sidebarCollapsed} onToggle={() => setSidebarCollapsed(!sidebarCollapsed)} />
 
       <motion.div
         initial={false}
-        animate={{ marginLeft: sidebarCollapsed ? 80 : 256 }}
-        transition={{ duration: 0.3, ease: 'easeInOut' }}
+        animate={{ marginLeft: sidebarCollapsed ? 88 : 280 }}
+        transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
         className="flex min-h-screen flex-col"
       >
         <Header onMenuClick={() => setSidebarCollapsed(!sidebarCollapsed)} />

@@ -21,7 +21,7 @@ export default function ServiceCard({ service, index = 0, variant = 'default', i
       viewport={{ once: true }}
       transition={{ delay: index * 0.1, duration: 0.6 }}
     >
-      <Link href={`/services#${service.id}`}>
+      <Link href={`/booking?service=${service.id}`}>
         <div className="group relative page-card border rounded-2xl overflow-hidden h-full hover:border-emerald-500/20 transition-all duration-300">
           {/* Image */}
           <div className="relative h-44 bg-gradient-to-br from-gray-900 to-gray-800 overflow-hidden">

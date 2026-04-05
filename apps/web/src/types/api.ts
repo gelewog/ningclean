@@ -22,6 +22,7 @@ export interface Service {
   category: string;
   features: string[];
   isActive: boolean;
+  isPopular?: boolean;
   createdAt: string;
   updatedAt: string;
 }

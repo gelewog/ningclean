@@ -9,8 +9,8 @@ import { Footer } from '@/components/footer';
 import { SectionLoader } from '@/components/ui/Spinner';
 import Button from '@/components/ui/Button';
 import { ServiceCard } from '@/components/cards';
-import { MapPin, Users, Clock, Star, ArrowRight, CheckCircle } from 'lucide-react';
-import { mockServices } from '@/lib/mock/services';
+import { MapPin, Star, ArrowRight, CheckCircle } from 'lucide-react';
+import { getServiceAreas, getServices } from '@/lib/api';
 
 const cityData: Record<string, {
   name: string;
@@ -88,17 +88,51 @@ const cityData: Record<string, {
 export default function AreaCityPage() {
   const params = useParams();
   const [loading, setLoading] = useState(true);
+  const [area, setArea] = useState<any>(null);
+  const [services, setServices] = useState<any[]>([]);
   const citySlug = (params?.city as string || 'surabaya').toLowerCase();
-  const city = cityData[citySlug] || cityData.surabaya;
 
   useEffect(() => {
-    const timer = setTimeout(() => setLoading(false), 300);
-    return () => clearTimeout(timer);
-  }, []);
+    const fetchData = async () => {
+      try {
+        const [areasData, servicesData] = await Promise.all([
+          getServiceAreas(),
+          getServices(),
+        ]);
+        // Find matching area or fallback to first
+        const matchedArea = areasData.find((a: any) => a.slug === citySlug) || areasData[0];
+        setArea(matchedArea || {
+          city: citySlug.charAt(0).toUpperCase() + citySlug.slice(1),
+          tagline: 'Area Layanan',
+          description: 'Layanan cleaning profesional di area ini.',
+          coverage: [],
+        });
+        setServices(servicesData || []);
+      } catch (error) {
+        console.error('Failed to fetch area data:', error);
+        setArea({
+          city: citySlug.charAt(0).toUpperCase() + citySlug.slice(1),
+          tagline: 'Area Layanan',
+          description: 'Layanan cleaning profesional di area ini.',
+          coverage: [],
+        });
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, [citySlug]);
 
   if (loading) {
     return <SectionLoader />;
   }
+
+  const stats = [
+    { label: 'Pelanggan Aktif', value: '500+' },
+    { label: 'Booking Selesai', value: '3.000+' },
+    { label: 'Tim Cleaner', value: '25+' },
+    { label: 'Coverage Area', value: '15+' },
+  ];
 
   return (
     <div className="min-h-screen page-bg">
@@ -122,7 +156,7 @@ export default function AreaCityPage() {
               <span>/</span>
               <span className="page-text">Area Layanan</span>
               <span>/</span>
-              <span className="text-emerald-400">{city.name}</span>
+              <span className="text-emerald-400">{area.city}</span>
             </div>
 
             <div className="flex flex-col md:flex-row md:items-end gap-8">
@@ -131,15 +165,15 @@ export default function AreaCityPage() {
                 <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-500/[0.08] border border-emerald-500/20 mb-4">
                   <MapPin className="w-3.5 h-3.5 text-emerald-400" />
                   <span className="text-[11px] font-semibold text-emerald-400 tracking-wider uppercase">
-                    {city.tagline}
+                    {area.tagline}
                   </span>
                 </div>
                 <h1 className="font-serif text-4xl md:text-5xl page-text mb-4">
                   Layanan Cleaning<br />
-                  <em className="italic text-emerald-400">di {city.name}</em>
+                  <em className="italic text-emerald-400">di {area.city}</em>
                 </h1>
                 <p className="text-[15px] page-text-muted45 max-w-lg leading-relaxed">
-                  {city.description}
+                  {area.description}
                 </p>
               </div>
 
@@ -172,7 +206,7 @@ export default function AreaCityPage() {
             transition={{ delay: 0.1 }}
             className="grid grid-cols-2 md:grid-cols-4 gap-4"
           >
-            {city.stats.map((stat, idx) => (
+            {stats.map((stat, idx) => (
               <div key={idx} className="page-section-card border rounded-2xl p-5 text-center">
                 <p className="text-2xl font-bold text-emerald-400 mb-1">{stat.value}</p>
                 <p className="text-[12px] page-text-muted">{stat.label}</p>
@@ -191,12 +225,12 @@ export default function AreaCityPage() {
             transition={{ delay: 0.2 }}
             className="mb-8"
           >
-            <h2 className="text-2xl font-semibold page-text mb-2">Layanan di {city.name}</h2>
+            <h2 className="text-2xl font-semibold page-text mb-2">Layanan di {area.city}</h2>
             <p className="text-[14px] page-text-muted">Semua layanan Ningclean tersedia di area ini.</p>
           </motion.div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
-            {mockServices.slice(0, 6).map((service, idx) => (
+            {services.slice(0, 6).map((service, idx) => (
               <motion.div
                 key={service.id}
                 initial={{ opacity: 0, y: 20 }}
@@ -238,18 +272,18 @@ export default function AreaCityPage() {
                 <MapPin className="w-6 h-6 text-emerald-400" />
               </div>
               <div>
-                <h2 className="text-xl font-semibold page-text">Area Coverage di {city.name}</h2>
-                <p className="text-[13px] page-text-muted">{city.coverage.length} wilayah tercover</p>
+                <h2 className="text-xl font-semibold page-text">Area Coverage di {area.city}</h2>
+                <p className="text-[13px] page-text-muted">{area.coverage?.length || 0} wilayah tercover</p>
               </div>
             </div>
 
             <div className="flex flex-wrap gap-2">
-              {city.coverage.map((area, idx) => (
+              {(area.coverage || []).map((coverageArea: string, idx: number) => (
                 <span
                   key={idx}
                   className="px-3 py-1.5 rounded-full page-section-card border text-[13px] page-text-muted"
                 >
-                  {area}
+                  {coverageArea}
                 </span>
               ))}
             </div>
@@ -273,40 +307,14 @@ export default function AreaCityPage() {
             transition={{ delay: 0.4 }}
             className="mb-8"
           >
-            <h2 className="text-2xl font-semibold page-text mb-2">Kata Mereka di {city.name}</h2>
+            <h2 className="text-2xl font-semibold page-text mb-2">Layanan di {area.city}</h2>
             <p className="text-[14px] page-text-muted">Review asli dari pelanggan kami.</p>
           </motion.div>
 
           <div className="grid md:grid-cols-3 gap-5">
-            {city.testimonials.map((t, idx) => (
-              <motion.div
-                key={idx}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.45 + idx * 0.08 }}
-                className="page-section-card border rounded-2xl p-6"
-              >
-                {/* Stars */}
-                <div className="flex gap-1 mb-4">
-                  {Array.from({ length: 5 }).map((_, sIdx) => (
-                    <Star
-                      key={sIdx}
-                      className={`w-4 h-4 ${sIdx < t.rating ? 'text-amber-400 fill-amber-400' : 'page-text-muted20'}`}
-                    />
-                  ))}
-                </div>
-                <p className="text-[14px] page-text-muted italic mb-4 leading-relaxed">"{t.text}"</p>
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-emerald-500/[0.1] border border-emerald-500/20 flex items-center justify-center text-emerald-400 font-bold text-sm">
-                    {t.name.charAt(0)}
-                  </div>
-                  <div>
-                    <p className="text-[13px] font-medium page-text">{t.name}</p>
-                    <p className="text-[11px] page-text-muted">{t.service}</p>
-                  </div>
-                </div>
-              </motion.div>
-            ))}
+            <p className="text-[14px] page-text-muted col-span-3 text-center py-8">
+              Testimoni pelanggan di area ini akan segera ditambahkan.
+            </p>
           </div>
         </div>
       </section>

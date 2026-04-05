@@ -5,6 +5,9 @@ import {
   IsArray,
   ValidateNested,
   IsOptional,
+  IsEmail,
+  IsInt,
+  Min,
 } from 'class-validator';
 import { Type } from 'class-transformer';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
@@ -17,8 +20,9 @@ class BookingItemDto {
   serviceId: string;
 
   @ApiProperty()
-  @IsString()
-  @IsNotEmpty()
+  @IsInt()
+  @Min(1)
+  @Type(() => Number)
   quantity: number;
 }
 
@@ -52,6 +56,22 @@ export class CreateBookingDto {
   @ValidateNested({ each: true })
   @Type(() => BookingItemDto)
   items: BookingItemDto[];
+
+  // Guest booking support
+  @ApiPropertyOptional({ example: 'John Doe' })
+  @IsOptional()
+  @IsString()
+  customerName?: string;
+
+  @ApiPropertyOptional({ example: 'john@example.com' })
+  @IsOptional()
+  @IsEmail()
+  customerEmail?: string;
+
+  @ApiPropertyOptional({ example: '081234567890' })
+  @IsOptional()
+  @IsString()
+  customerPhone?: string;
 }
 
 export class UpdateBookingStatusDto {

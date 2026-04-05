@@ -1,169 +1,246 @@
-import axios, { AxiosInstance, AxiosError, InternalAxiosRequestConfig } from 'axios';
-import Cookies from 'js-cookie';
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api'
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
+const TOKEN_KEY = 'auth_token'
+const USER_KEY = 'auth_user'
 
-const api: AxiosInstance = axios.create({
-  baseURL: API_URL,
-  headers: {
+// Token management
+export function getToken(): string | null {
+  if (typeof window === 'undefined') return null
+  return localStorage.getItem(TOKEN_KEY)
+}
+
+export function setToken(token: string): void {
+  if (typeof window === 'undefined') return
+  localStorage.setItem(TOKEN_KEY, token)
+}
+
+export function removeToken(): void {
+  if (typeof window === 'undefined') return
+  localStorage.removeItem(TOKEN_KEY)
+  localStorage.removeItem(USER_KEY)
+}
+
+export function getUser(): { id: string; name: string; email: string; role: string } | null {
+  if (typeof window === 'undefined') return null
+  const user = localStorage.getItem(USER_KEY)
+  return user ? JSON.parse(user) : null
+}
+
+export function setUser(user: { id: string; name: string; email: string; role: string }): void {
+  if (typeof window === 'undefined') return
+  localStorage.setItem(USER_KEY, JSON.stringify(user))
+}
+
+// isAuthenticated check
+export function isAuthenticated(): boolean {
+  return !!getToken()
+}
+
+async function fetchApi<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
+  const token = getToken()
+
+  const headers: Record<string, string> = {
     'Content-Type': 'application/json',
-  },
-  timeout: 15000,
-});
-
-// Request interceptor to add auth token
-api.interceptors.request.use(
-  (config: InternalAxiosRequestConfig) => {
-    const token = Cookies.get('auth_token');
-    if (token && config.headers) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
-    return config;
-  },
-  (error) => Promise.reject(error)
-);
-
-// Response interceptor for error handling
-api.interceptors.response.use(
-  (response) => response,
-  (error: AxiosError) => {
-    if (error.response?.status === 401) {
-      // Clear auth cookie and redirect to login
-      Cookies.remove('auth_token');
-      if (typeof window !== 'undefined') {
-        window.location.href = '/login';
-      }
-    }
-    return Promise.reject(error);
+    ...(options.headers as Record<string, string>),
   }
-);
 
-export default api;
+  if (token) {
+    headers['Authorization'] = `Bearer ${token}`
+  }
 
-// Auth API
-export const authApi = {
-  login: async (email: string, password: string) => {
-    const response = await api.post('/auth/login', { email, password });
-    if (response.data.access_token) {
-      Cookies.set('auth_token', response.data.access_token, { expires: 7 });
-    }
-    return response.data;
+  const response = await fetch(`${API_BASE}${endpoint}`, {
+    ...options,
+    headers,
+  })
+
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({ message: 'An error occurred' }))
+    throw new Error(error.message || `HTTP error! status: ${response.status}`)
+  }
+
+  return response.json()
+}
+
+// Services
+export async function getServices() {
+  return fetchApi<any[]>('/services')
+}
+
+export async function getService(slug: string) {
+  return fetchApi<any>(`/services/${slug}`)
+}
+
+// Blog
+export async function getBlogPosts() {
+  return fetchApi<any[]>('/blog')
+}
+
+export async function getBlogPost(slug: string) {
+  return fetchApi<any>(`/blog/slug/${slug}`)
+}
+
+// Blog API
+export const blogApi = {
+  getAll: (params?: { page?: number; limit?: number }) => {
+    const queryParams = new URLSearchParams()
+    if (params?.page) queryParams.set('page', params.page.toString())
+    if (params?.limit) queryParams.set('limit', params.limit.toString())
+    const query = queryParams.toString()
+    return fetchApi<any>(`/blog${query ? `?${query}` : ''}`)
   },
-  
-  register: async (data: { email: string; password: string; name: string; phone?: string }) => {
-    const response = await api.post('/auth/register', data);
-    if (response.data.access_token) {
-      Cookies.set('auth_token', response.data.access_token, { 
-        expires: 7,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: 'lax'
-      });
-    }
-    return response.data;
+  getRecent: (limit = 3) => {
+    return fetchApi<any>(`/blog?limit=${limit}`)
   },
-  
-  logout: () => {
-    Cookies.remove('auth_token');
+  getBySlug: (slug: string) => {
+    return fetchApi<any>(`/blog/slug/${slug}`)
   },
-  
-  getProfile: async () => {
-    const response = await api.get('/auth/profile');
-    return response.data;
-  },
-};
+}
+
+// Team Members (Public)
+export async function getTeamMembers() {
+  try {
+    return await fetchApi<any[]>('/team-members')
+  } catch {
+    return []
+  }
+}
+
+// Company Stats (Public)
+export async function getCompanyStats() {
+  try {
+    return await fetchApi<any[]>('/company-stats')
+  } catch {
+    return []
+  }
+}
+
+// Gallery (Public)
+export async function getGalleryItems(category?: string) {
+  try {
+    const endpoint = category ? `/gallery/category/${category}` : '/gallery'
+    return await fetchApi<any[]>(endpoint)
+  } catch {
+    return []
+  }
+}
+
+// FAQ (Public)
+export async function getFAQs(category?: string) {
+  try {
+    const endpoint = category ? `/faq/category/${category}` : '/faq'
+    return await fetchApi<any[]>(endpoint)
+  } catch {
+    return []
+  }
+}
+
+// Service Areas (Public)
+export async function getServiceAreas() {
+  try {
+    return await fetchApi<any[]>('/service-areas')
+  } catch {
+    return []
+  }
+}
+
+export async function getServiceArea(slug: string) {
+  try {
+    return await fetchApi<any>(`/service-areas/${slug}`)
+  } catch {
+    return null
+  }
+}
+
+// Job Listings/Careers (Public)
+export async function getJobListings() {
+  try {
+    return await fetchApi<any[]>('/careers')
+  } catch {
+    return []
+  }
+}
+
+export async function getJobListing(id: string) {
+  try {
+    return await fetchApi<any>(`/careers/${id}`)
+  } catch {
+    return null
+  }
+}
+
+// Pricing Plans (Public)
+export async function getPricingPlans() {
+  try {
+    return await fetchApi<any[]>('/pricing-plans')
+  } catch {
+    return []
+  }
+}
+
+// Testimonials (Public)
+export async function getTestimonials() {
+  try {
+    return await fetchApi<any[]>('/testimonials')
+  } catch {
+    return []
+  }
+}
+
+// Bookings
+export async function createBooking(data: any) {
+  return fetchApi<{ success: boolean; message: string; data: any }>('/bookings', {
+    method: 'POST',
+    body: JSON.stringify(data),
+  })
+}
 
 // Services API
 export const servicesApi = {
   getAll: async () => {
-    const response = await api.get('/services');
-    return response.data;
+    const data = await getServices()
+    return { data }
   },
-  
-  getById: async (id: string) => {
-    const response = await api.get(`/services/${id}`);
-    return response.data;
+  get: async (slug: string) => {
+    return { data: await getService(slug) }
   },
-  
-  getFeatured: async () => {
-    const response = await api.get('/services?featured=true');
-    return response.data;
-  },
-};
+}
 
 // Bookings API
 export const bookingsApi = {
-  getAll: async (params?: { page?: number; limit?: number; status?: string }) => {
-    const response = await api.get('/bookings', { params });
-    return response.data;
-  },
-  
-  getById: async (id: string) => {
-    const response = await api.get(`/bookings/${id}`);
-    return response.data;
-  },
-  
-  create: async (data: {
-    serviceId: string;
-    scheduledDate: string;
-    scheduledTime: string;
-    address: string;
-    notes?: string;
-  }) => {
-    const response = await api.post('/bookings', data);
-    return response.data;
-  },
-  
+  create: (data: any) => createBooking(data),
   getMyBookings: async () => {
-    const response = await api.get('/bookings/my');
-    return response.data;
+    return fetchApi<any>('/bookings/my-bookings')
   },
-  
-  getUpcoming: async () => {
-    const response = await api.get('/bookings/my/upcoming');
-    return response.data;
-  },
-};
+}
 
-// Blog API
-export const blogApi = {
-  getAll: async (params?: { page?: number; limit?: number; tag?: string }) => {
-    const response = await api.get('/blog', { params });
-    return response.data;
+// Auth API
+export const authApi = {
+  login: async (email: string, password: string) => {
+    const response = await fetchApi<{ access_token: string; user: any }>('/auth/login', {
+      method: 'POST',
+      body: JSON.stringify({ email, password }),
+    })
+    if (response.access_token) {
+      setToken(response.access_token)
+      setUser(response.user)
+    }
+    return response
   },
-  
-  getBySlug: async (slug: string) => {
-    const response = await api.get(`/blog/${slug}`);
-    return response.data;
+  register: async (data: any) => {
+    const response = await fetchApi<{ access_token: string; user: any }>('/auth/register', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    })
+    if (response.access_token) {
+      setToken(response.access_token)
+      setUser(response.user)
+    }
+    return response
   },
-  
-  getRecent: async (limit: number = 3) => {
-    const response = await api.get('/blog', { params: { limit } });
-    return response.data;
+  getProfile: async () => {
+    return fetchApi<any>('/auth/me')
   },
-};
-
-// Admin API
-export const adminApi = {
-  getStats: async () => {
-    const response = await api.get('/admin/stats');
-    return response.data;
+  logout: () => {
+    removeToken()
   },
-};
-
-// Testimonials API (for public homepage)
-export const testimonialsApi = {
-  getAll: async () => {
-    const response = await api.get('/testimonials');
-    return response.data;
-  },
-};
-
-// Helper to check if user is authenticated
-export const isAuthenticated = (): boolean => {
-  return !!Cookies.get('auth_token');
-};
-
-// Helper to get auth token
-export const getAuthToken = (): string | undefined => {
-  return Cookies.get('auth_token');
-};
+}

@@ -6,9 +6,9 @@ import { CreateServiceDto, UpdateServiceDto } from './dto/service.dto';
 export class ServicesService {
   constructor(private prisma: PrismaService) {}
 
-  async findAll() {
+  async findAll(includeInactive = false) {
     return this.prisma.service.findMany({
-      where: { isActive: true },
+      where: includeInactive ? {} : { isActive: true },
       orderBy: { createdAt: 'asc' },
     });
   }
@@ -37,8 +37,12 @@ export class ServicesService {
         description: dto.description,
         price: dto.price,
         duration: dto.duration,
+        category: dto.category,
+        image: dto.image,
         icon: dto.icon,
+        features: dto.features || [],
         isActive: dto.isActive ?? true,
+        isFeatured: dto.isFeatured ?? false,
       },
     });
   }
@@ -47,7 +51,10 @@ export class ServicesService {
     await this.findOne(id);
     return this.prisma.service.update({
       where: { id },
-      data: dto,
+      data: {
+        ...dto,
+        features: dto.features || undefined,
+      },
     });
   }
 

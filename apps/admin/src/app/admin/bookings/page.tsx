@@ -1,18 +1,19 @@
 'use client'
 
 import * as React from 'react'
+import { useSearchParams } from 'next/navigation'
+import { Suspense } from 'react'
 import { motion } from 'framer-motion'
-import { Search, Filter, Download, Plus, Eye, X } from 'lucide-react'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Search, Download, Plus, Eye, X, Check, Clock, MapPin, User, FileText, Calendar } from 'lucide-react'
+import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Select } from '@/components/ui/select'
-import { Badge } from '@/components/ui/badge'
-import { Modal } from '@/components/admin/Modal'
+import { Modal, BookingDetailSection, BookingDetailRow, BookingActionButton, WhatsAppButton, StatusBadge, BookingStepProgress } from '@/components/admin/Modal'
 import { Pagination } from '@/components/admin/Pagination'
 import { DataTable } from '@/components/admin/DataTable'
-import { getBookings, updateBookingStatus } from '@/lib/api'
-import { formatCurrency, formatDate, formatDateTime, getStatusLabel } from '@/lib/utils'
+import { getBookings, getToken, updateBookingStatus } from '@/lib/api'
+import { formatCurrency, formatDate, formatDateTime } from '@/lib/utils'
 import { toast } from 'sonner'
 
 const STATUS_OPTIONS = [
@@ -36,21 +37,99 @@ const AREA_OPTIONS = [
   { value: 'Bekasi', label: 'Bekasi' },
 ]
 
-export default function BookingsPage() {
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api'
+
+export const dynamic = 'force-dynamic'
+
+function BookingsContent() {
+  const searchParams = useSearchParams()
+  const highlightId = searchParams.get('highlight')
+  
   const [bookings, setBookings] = React.useState<any[]>([])
   const [loading, setLoading] = React.useState(true)
   const [selectedBooking, setSelectedBooking] = React.useState<any>(null)
   const [isDetailOpen, setIsDetailOpen] = React.useState(false)
   const [pagination, setPagination] = React.useState({ page: 1, limit: 10, total: 0, totalPages: 0 })
+  const [highlightedRowId, setHighlightedRowId] = React.useState<string | null>(null)
+  const [actionLoading, setActionLoading] = React.useState(false)
+  
+  // Bulk selection state
+  const [selectedIds, setSelectedIds] = React.useState<string[]>([])
+  const [bulkStatusOpen, setBulkStatusOpen] = React.useState(false)
+  const [bulkStatus, setBulkStatus] = React.useState('completed')
+  
+  // Internal notes modal state
+  const [internalNotesOpen, setInternalNotesOpen] = React.useState(false)
+  const [internalNotes, setInternalNotes] = React.useState('')
+  const [currentBookingId, setCurrentBookingId] = React.useState<string>('')
 
   // Filters
   const [search, setSearch] = React.useState('')
   const [statusFilter, setStatusFilter] = React.useState('')
   const [areaFilter, setAreaFilter] = React.useState('')
 
+  // Fetch booking by ID for highlight
+  const fetchBookingById = React.useCallback(async (id: string) => {
+    const token = getToken()
+    if (!token) return null
+    
+    try {
+      const res = await fetch(`${API_BASE}/bookings/${id}`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      })
+      if (res.ok) {
+        return await res.json()
+      }
+    } catch (error) {
+      console.error('Failed to fetch booking:', error)
+    }
+    return null
+  }, [])
+
+  // Handle highlight param - fetch booking and open modal directly
   React.useEffect(() => {
-    fetchBookings()
-  }, [pagination.page, statusFilter, areaFilter, search])
+    if (highlightId) {
+      // First fetch bookings to populate table
+      fetchBookings()
+      
+      // Then fetch the specific booking and open modal
+      fetchBookingById(highlightId).then((booking) => {
+        if (booking) {
+          // Transform API response to match table format
+          const firstItem = booking.items?.[0]
+          const transformedBooking = {
+            id: booking.id,
+            customerId: booking.customerId,
+            customerName: booking.customer?.name || booking.guestName || 'Unknown',
+            customerEmail: booking.customer?.email || booking.guestEmail || '',
+            customerPhone: booking.customer?.phone || booking.guestPhone || '',
+            serviceId: firstItem?.service?.id || '',
+            serviceName: firstItem?.service?.name || 'Unknown Service',
+            servicePrice: firstItem ? Number(firstItem.price) : 0,
+            totalAmount: Number(booking.totalAmount) || 0,
+            area: booking.area || '',
+            address: booking.address || '',
+            scheduledDate: booking.serviceDate,
+            scheduledTime: booking.serviceTime,
+            status: booking.status?.toLowerCase() || 'pending',
+            notes: booking.notes || '',
+            createdAt: booking.createdAt,
+            items: booking.items,
+          }
+          setSelectedBooking(transformedBooking)
+          setIsDetailOpen(true)
+          setHighlightedRowId(highlightId)
+          // Clear highlight after 5 seconds
+          setTimeout(() => setHighlightedRowId(null), 5000)
+        }
+      })
+    } else {
+      fetchBookings()
+    }
+  }, [highlightId]) // eslint-disable-line react-hooks/exhaustive-deps
 
   async function fetchBookings() {
     setLoading(true)
@@ -76,13 +155,16 @@ export default function BookingsPage() {
   }
 
   async function handleStatusUpdate(bookingId: string, newStatus: string) {
+    setActionLoading(true)
     try {
       await updateBookingStatus(bookingId, newStatus)
-      toast.success('Booking status updated')
+      toast.success('Status booking berhasil diupdate')
       fetchBookings()
       setIsDetailOpen(false)
     } catch (error) {
-      toast.error('Failed to update booking status')
+      toast.error('Gagal update status booking')
+    } finally {
+      setActionLoading(false)
     }
   }
 
@@ -109,29 +191,110 @@ export default function BookingsPage() {
     setPagination((prev) => ({ ...prev, page: 1 }))
   }
 
-  function getStatusVariant(status: string) {
-    switch (status) {
-      case 'completed':
-        return 'success'
-      case 'pending':
-        return 'warning'
-      case 'cancelled':
-        return 'error'
-      case 'in_progress':
-        return 'info'
-      case 'confirmed':
-        return 'info'
-      default:
-        return 'default'
+  async function handleBulkStatusUpdate() {
+    if (selectedIds.length === 0) {
+      toast.error('Pilih booking yang akan diupdate')
+      return
     }
+    setActionLoading(true)
+    try {
+      const token = getToken()
+      const res = await fetch(`${API_BASE}/admin/bookings/bulk-status`, {
+        method: 'PUT',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ ids: selectedIds, status: bulkStatus }),
+      })
+      if (res.ok) {
+        toast.success(`${selectedIds.length} booking berhasil diupdate ke ${bulkStatus}`)
+        setSelectedIds([])
+        setBulkStatusOpen(false)
+        fetchBookings()
+      } else {
+        toast.error('Gagal bulk update')
+      }
+    } catch (error) {
+      toast.error('Gagal bulk update')
+    } finally {
+      setActionLoading(false)
+    }
+  }
+
+  async function handleUpdateInternalNotes() {
+    if (!currentBookingId) return
+    setActionLoading(true)
+    try {
+      const token = getToken()
+      const res = await fetch(`${API_BASE}/admin/bookings/${currentBookingId}`, {
+        method: 'PUT',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ internalNotes }),
+      })
+      if (res.ok) {
+        toast.success('Internal notes berhasil disimpan')
+        setInternalNotesOpen(false)
+        fetchBookings()
+      } else {
+        toast.error('Gagal menyimpan notes')
+      }
+    } catch (error) {
+      toast.error('Gagal menyimpan notes')
+    } finally {
+      setActionLoading(false)
+    }
+  }
+
+  function openInternalNotes(bookingId: string, currentNotes: string) {
+    setCurrentBookingId(bookingId)
+    setInternalNotes(currentNotes || '')
+    setInternalNotesOpen(true)
   }
 
   const columns = [
     {
+      key: 'checkbox',
+      label: (
+        <input
+          type="checkbox"
+          className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+          checked={selectedIds.length === bookings.length && bookings.length > 0}
+          onChange={(e) => {
+            if (e.target.checked) {
+              setSelectedIds(bookings.map(b => b.id))
+            } else {
+              setSelectedIds([])
+            }
+          }}
+        />
+      ),
+      render: (_: any, row: any) => (
+        <input
+          type="checkbox"
+          className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+          checked={selectedIds.includes(row.id)}
+          onChange={(e) => {
+            e.stopPropagation()
+            if (e.target.checked) {
+              setSelectedIds([...selectedIds, row.id])
+            } else {
+              setSelectedIds(selectedIds.filter(id => id !== row.id))
+            }
+          }}
+        />
+      ),
+    },
+    {
       key: 'id',
       label: 'Booking ID',
-      render: (value: string) => (
-        <span className="font-mono text-xs">#{value.slice(0, 8)}</span>
+      render: (value: string, row: any) => (
+        <span className={`font-mono text-xs ${highlightedRowId === value ? 'bg-emerald-100 text-emerald-700 px-2 py-1 rounded' : ''}`}>
+          #{value.slice(0, 8)}
+        </span>
       ),
     },
     {
@@ -172,7 +335,7 @@ export default function BookingsPage() {
       key: 'status',
       label: 'Status',
       render: (value: string) => (
-        <Badge variant={getStatusVariant(value)}>{getStatusLabel(value)}</Badge>
+        <StatusBadge status={value} />
       ),
     },
     {
@@ -198,11 +361,36 @@ export default function BookingsPage() {
           <h1 className="text-2xl font-bold text-gray-900">Bookings</h1>
           <p className="text-gray-500">Manage all cleaning service bookings</p>
         </div>
-        <Button>
-          <Plus className="mr-2 h-4 w-4" />
-          New Booking
-        </Button>
+        <div className="flex gap-2">
+          <Button onClick={handleExport}>
+            <Download className="mr-2 h-4 w-4" />
+            Export
+          </Button>
+          <Button>
+            <Plus className="mr-2 h-4 w-4" />
+            New Booking
+          </Button>
+        </div>
       </motion.div>
+
+      {/* Bulk Action Bar */}
+      {selectedIds.length > 0 && (
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="flex items-center gap-4 p-4 bg-blue-50 border border-blue-200 rounded-lg"
+        >
+          <span className="text-sm font-medium text-blue-700">
+            {selectedIds.length} booking(s) selected
+          </span>
+          <Button size="sm" variant="outline" onClick={() => setBulkStatusOpen(true)}>
+            Update Status
+          </Button>
+          <Button size="sm" variant="ghost" onClick={() => setSelectedIds([])}>
+            Cancel
+          </Button>
+        </motion.div>
+      )}
 
       {/* Filters */}
       <motion.div
@@ -267,134 +455,183 @@ export default function BookingsPage() {
       <Modal
         isOpen={isDetailOpen}
         onClose={() => setIsDetailOpen(false)}
-        title="Booking Details"
+        title="Detail Booking"
+        description={`Order #${selectedBooking?.id?.slice(0, 8) || ''}`}
         size="lg"
       >
         {selectedBooking && (
-          <div className="space-y-6">
-            {/* Header Info */}
-            <div className="flex items-start justify-between border-b pb-4">
-              <div>
-                <p className="text-sm text-gray-500">Booking ID</p>
-                <p className="font-mono font-medium">#{selectedBooking.id.slice(0, 8)}</p>
-              </div>
-              <Badge variant={getStatusVariant(selectedBooking.status)}>
-                {getStatusLabel(selectedBooking.status)}
-              </Badge>
-            </div>
+          <div className="p-6">
+            {/* Step Progress */}
+            <BookingStepProgress status={selectedBooking.status} />
 
-            {/* Customer Info */}
-            <div>
-              <h3 className="mb-3 text-sm font-medium text-gray-500">Customer Information</h3>
-              <div className="grid gap-2 rounded-lg bg-gray-50 p-4">
-                <div className="flex justify-between">
-                  <span className="text-gray-500">Name</span>
-                  <span className="font-medium">{selectedBooking.customerName}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-500">Email</span>
-                  <span className="text-sm">{selectedBooking.customerEmail}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-500">Phone</span>
-                  <span className="text-sm">{selectedBooking.customerPhone}</span>
-                </div>
+            {/* Status & Quick Actions Bar */}
+            <div className="flex flex-wrap items-center justify-between gap-4 p-4 mb-6 bg-gradient-to-r from-gray-50 to-gray-100/50 rounded-2xl border border-gray-100">
+              <div className="flex items-center gap-4">
+                <StatusBadge status={selectedBooking.status} />
+                <span className="text-sm text-gray-500">
+                  Dibuat: {formatDateTime(selectedBooking.createdAt)}
+                </span>
+              </div>
+              <div className="flex items-center gap-2">
+                <WhatsAppButton phone={selectedBooking.customerPhone} />
               </div>
             </div>
 
-            {/* Service Info */}
-            <div>
-              <h3 className="mb-3 text-sm font-medium text-gray-500">Service Details</h3>
-              <div className="grid gap-2 rounded-lg bg-gray-50 p-4">
-                <div className="flex justify-between">
-                  <span className="text-gray-500">Service</span>
-                  <span className="font-medium">{selectedBooking.serviceName}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-500">Price</span>
-                  <span className="font-medium text-primary">{formatCurrency(selectedBooking.servicePrice)}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-500">Area</span>
-                  <span>{selectedBooking.area}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-500">Address</span>
-                  <span className="text-right text-sm">{selectedBooking.address}</span>
-                </div>
+            {/* Main Content Grid */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              
+              {/* Left Column - Customer & Schedule */}
+              <div className="space-y-6">
+                {/* Customer Information */}
+                <BookingDetailSection title="Informasi Customer" icon={User}>
+                  <div className="space-y-1">
+                    <BookingDetailRow label="Nama" value={selectedBooking.customerName} />
+                    <BookingDetailRow label="Email" value={selectedBooking.customerEmail || '-'} />
+                    <BookingDetailRow label="Telepon" value={selectedBooking.customerPhone || '-'} />
+                    {selectedBooking.notes && (
+                      <div className="mt-4 pt-3 border-t border-gray-100">
+                        <p className="text-xs text-gray-500 mb-1">Catatan</p>
+                        <p className="text-sm text-gray-700">{selectedBooking.notes}</p>
+                      </div>
+                    )}
+                  </div>
+                </BookingDetailSection>
+
+                {/* Schedule Information */}
+                <BookingDetailSection title="Jadwal Layanan" icon={Calendar}>
+                  <div className="space-y-1">
+                    <BookingDetailRow label="Tanggal" value={formatDate(selectedBooking.scheduledDate)} highlight />
+                    <BookingDetailRow label="Jam" value={selectedBooking.scheduledTime} highlight />
+                  </div>
+                </BookingDetailSection>
+              </div>
+
+              {/* Right Column - Service & Location */}
+              <div className="space-y-6">
+                {/* Service Details */}
+                <BookingDetailSection title="Detail Layanan" icon={FileText}>
+                  <div className="space-y-1">
+                    <BookingDetailRow label="Layanan" value={selectedBooking.serviceName} />
+                    <BookingDetailRow label="Harga" value={formatCurrency(selectedBooking.servicePrice)} />
+                    <BookingDetailRow label="Total" value={formatCurrency(selectedBooking.totalAmount)} highlight />
+                  </div>
+                </BookingDetailSection>
+
+                {/* Location Details */}
+                <BookingDetailSection title="Lokasi" icon={MapPin}>
+                  <div className="space-y-1">
+                    <BookingDetailRow label="Area" value={selectedBooking.area} />
+                    <div className="pt-2">
+                      <p className="text-xs text-gray-500 mb-1">Alamat Lengkap</p>
+                      <p className="text-sm text-gray-700 bg-gray-50 p-3 rounded-xl">{selectedBooking.address}</p>
+                    </div>
+                  </div>
+                </BookingDetailSection>
               </div>
             </div>
 
-            {/* Schedule Info */}
-            <div>
-              <h3 className="mb-3 text-sm font-medium text-gray-500">Schedule</h3>
-              <div className="grid gap-2 rounded-lg bg-gray-50 p-4">
-                <div className="flex justify-between">
-                  <span className="text-gray-500">Date</span>
-                  <span className="font-medium">{formatDate(selectedBooking.scheduledDate)}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-500">Time</span>
-                  <span>{selectedBooking.scheduledTime}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-500">Created</span>
-                  <span className="text-sm">{formatDateTime(selectedBooking.createdAt)}</span>
-                </div>
+            {/* Action Buttons */}
+            <div className="mt-8 pt-6 border-t border-gray-200">
+              <div className="flex flex-wrap items-center gap-3">
+                {selectedBooking.status === 'pending' && (
+                  <>
+                    <BookingActionButton variant="success" onClick={() => handleStatusUpdate(selectedBooking.id, 'confirmed')} icon={Check} loading={actionLoading}>
+                      Konfirmasi Booking
+                    </BookingActionButton>
+                    <BookingActionButton variant="danger" onClick={() => handleStatusUpdate(selectedBooking.id, 'cancelled')} loading={actionLoading}>
+                      Batalkan
+                    </BookingActionButton>
+                  </>
+                )}
+                {selectedBooking.status === 'confirmed' && (
+                  <BookingActionButton variant="primary" onClick={() => handleStatusUpdate(selectedBooking.id, 'in_progress')} icon={Clock} loading={actionLoading}>
+                    Mulai Pengerjaan
+                  </BookingActionButton>
+                )}
+                {selectedBooking.status === 'in_progress' && (
+                  <BookingActionButton variant="success" onClick={() => handleStatusUpdate(selectedBooking.id, 'completed')} icon={Check} loading={actionLoading}>
+                    Tandai Selesai
+                  </BookingActionButton>
+                )}
+                {selectedBooking.status === 'completed' && (
+                  <div className="flex items-center gap-2 p-3 bg-emerald-50 rounded-xl border border-emerald-100">
+                    <Check className="h-5 w-5 text-emerald-600" />
+                    <span className="text-sm font-medium text-emerald-700">Booking ini sudah selesai</span>
+                  </div>
+                )}
+                {selectedBooking.status === 'cancelled' && (
+                  <div className="flex items-center gap-2 p-3 bg-red-50 rounded-xl border border-red-100">
+                    <X className="h-5 w-5 text-red-600" />
+                    <span className="text-sm font-medium text-red-700">Booking ini sudah dibatalkan</span>
+                  </div>
+                )}
+                <div className="flex-1" />
+                <BookingActionButton variant="outline" onClick={() => openInternalNotes(selectedBooking.id, selectedBooking.internalNotes)}>
+                  Internal Notes
+                </BookingActionButton>
+                <BookingActionButton variant="outline" onClick={() => setIsDetailOpen(false)}>
+                  Tutup
+                </BookingActionButton>
               </div>
-            </div>
-
-            {/* Notes */}
-            {selectedBooking.notes && (
-              <div>
-                <h3 className="mb-3 text-sm font-medium text-gray-500">Notes</h3>
-                <div className="rounded-lg bg-gray-50 p-4">
-                  <p className="text-sm">{selectedBooking.notes}</p>
-                </div>
-              </div>
-            )}
-
-            {/* Actions */}
-            <div className="flex flex-wrap gap-2 border-t pt-4">
-              {selectedBooking.status === 'pending' && (
-                <>
-                  <Button
-                    variant="success"
-                    onClick={() => handleStatusUpdate(selectedBooking.id, 'confirmed')}
-                  >
-                    Confirm Booking
-                  </Button>
-                  <Button
-                    variant="error"
-                    onClick={() => handleStatusUpdate(selectedBooking.id, 'cancelled')}
-                  >
-                    Cancel
-                  </Button>
-                </>
-              )}
-              {selectedBooking.status === 'confirmed' && (
-                <Button
-                  variant="secondary"
-                  onClick={() => handleStatusUpdate(selectedBooking.id, 'in_progress')}
-                >
-                  Start Progress
-                </Button>
-              )}
-              {selectedBooking.status === 'in_progress' && (
-                <Button
-                  variant="success"
-                  onClick={() => handleStatusUpdate(selectedBooking.id, 'completed')}
-                >
-                  Mark Complete
-                </Button>
-              )}
-              <Button variant="outline" onClick={() => setIsDetailOpen(false)}>
-                Close
-              </Button>
             </div>
           </div>
         )}
       </Modal>
+
+      {/* Bulk Status Update Modal */}
+      <Modal isOpen={bulkStatusOpen} onClose={() => setBulkStatusOpen(false)} title="Bulk Update Status">
+        <div className="space-y-4">
+          <p className="text-sm text-gray-600">
+            Update {selectedIds.length} booking(s) ke status:
+          </p>
+          <select
+            value={bulkStatus}
+            onChange={(e) => setBulkStatus(e.target.value)}
+            className="w-full p-2 border border-gray-300 rounded-lg"
+          >
+            <option value="pending">Pending</option>
+            <option value="confirmed">Confirmed</option>
+            <option value="in_progress">In Progress</option>
+            <option value="completed">Completed</option>
+            <option value="cancelled">Cancelled</option>
+          </select>
+          <div className="flex justify-end gap-2 pt-4">
+            <Button variant="outline" onClick={() => setBulkStatusOpen(false)}>Cancel</Button>
+            <Button onClick={handleBulkStatusUpdate} loading={actionLoading}>
+              Update {selectedIds.length} Booking
+            </Button>
+          </div>
+        </div>
+      </Modal>
+
+      {/* Internal Notes Modal */}
+      <Modal isOpen={internalNotesOpen} onClose={() => setInternalNotesOpen(false)} title="Internal Notes">
+        <div className="space-y-4">
+          <p className="text-sm text-gray-600">
+            Catatan internal hanya видим bagi admin. Tidak akan ditampilkan ke customer.
+          </p>
+          <textarea
+            value={internalNotes}
+            onChange={(e) => setInternalNotes(e.target.value)}
+            placeholder="Tambahkan catatan internal di sini..."
+            className="w-full p-3 border border-gray-300 rounded-lg h-32 resize-none"
+          />
+          <div className="flex justify-end gap-2 pt-4">
+            <Button variant="outline" onClick={() => setInternalNotesOpen(false)}>Cancel</Button>
+            <Button onClick={handleUpdateInternalNotes} loading={actionLoading}>
+              Simpan Notes
+            </Button>
+          </div>
+        </div>
+      </Modal>
     </div>
+  )
+}
+
+export default function BookingsPage() {
+  return (
+    <Suspense fallback={<div className="flex items-center justify-center py-20"><div className="h-8 w-8 animate-spin rounded-full border-4 border-gray-200 border-t-emerald-500" /></div>}>
+      <BookingsContent />
+    </Suspense>
   )
 }

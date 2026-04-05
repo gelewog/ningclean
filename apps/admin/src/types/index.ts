@@ -17,18 +17,30 @@ export interface Customer {
   totalBookings: number
   totalSpent: number
   createdAt: string
+  isVip?: boolean
+  notes?: string
+  addresses?: Array<{
+    label: string
+    address: string
+    city: string
+    phone: string
+  }>
+  source?: 'registered' | 'guest'
 }
 
 export interface Service {
   id: string
   name: string
+  slug: string
   description: string
   price: number
   duration: number
   category: string
   image?: string
   icon?: string
+  features?: string[]
   isActive: boolean
+  isFeatured?: boolean
   createdAt: string
 }
 
@@ -41,6 +53,7 @@ export interface Booking {
   serviceId: string
   serviceName: string
   servicePrice: number
+  totalAmount?: number
   area: string
   address: string
   scheduledDate: string
@@ -48,6 +61,7 @@ export interface Booking {
   status: 'pending' | 'confirmed' | 'in_progress' | 'completed' | 'cancelled'
   notes?: string
   createdAt: string
+  items?: any[]
 }
 
 export interface BlogPost {
@@ -60,6 +74,9 @@ export interface BlogPost {
   status: 'draft' | 'published'
   author: string
   tags?: string[]
+  categoryId?: string
+  category?: { id: string; name: string; slug: string }
+  isFeatured?: boolean
   createdAt: string
   updatedAt: string
 }
@@ -85,4 +102,120 @@ export interface PaginatedResponse<T> {
   page: number
   limit: number
   totalPages: number
+}
+
+export interface TeamMember {
+  id: string
+  name: string
+  position: string
+  department: string
+  bio?: string
+  avatar?: string
+  email?: string
+  phone?: string
+  isActive: boolean
+  order: number
+  socialLinks?: { linkedin?: string; twitter?: string; facebook?: string }
+  createdAt: string
+  updatedAt: string
+}
+
+export interface CompanyStat {
+  id: string
+  title: string
+  value: string
+  description?: string
+  icon?: string
+  order: number
+  isActive: boolean
+  createdAt: string
+  updatedAt: string
+}
+
+export interface GalleryItem {
+  id: string
+  title: string
+  description?: string
+  category: string
+  imageUrl: string
+  beforeImage?: string
+  afterImage?: string
+  location?: string
+  serviceId?: string
+  isFeatured: boolean
+  isActive: boolean
+  order: number
+  createdAt: string
+  updatedAt: string
+}
+
+export interface FAQ {
+  id: string
+  question: string
+  answer: string
+  category: string
+  order: number
+  isActive: boolean
+  createdAt: string
+  updatedAt: string
+}
+
+export interface ServiceArea {
+  id: string
+  city: string
+  slug: string
+  region: string
+  description?: string
+  coverage?: string[]
+  isActive: boolean
+  isFeatured: boolean
+  image?: string
+  createdAt: string
+  updatedAt: string
+}
+
+export interface JobListing {
+  id: string
+  title: string
+  department: string
+  location: string
+  type: string
+  description: string
+  requirements?: string[]
+  benefits?: string[]
+  salaryRange?: string
+  isActive: boolean
+  expiresAt?: string
+  createdAt: string
+  updatedAt: string
+}
+
+export interface PricingPlan {
+  id: string
+  name: string
+  slug: string
+  description: string
+  price: number
+  billingCycle: string
+  features?: string[]
+  isPopular: boolean
+  isActive: boolean
+  order: number
+  createdAt: string
+  updatedAt: string
+}
+
+export interface Testimonial {
+  id: string
+  name: string
+  role?: string
+  company?: string
+  content: string
+  rating: number
+  avatar?: string
+  isActive: boolean
+  isFeatured: boolean
+  order: number
+  createdAt: string
+  updatedAt: string
 }

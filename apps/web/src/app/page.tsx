@@ -5,9 +5,10 @@ import { Navigation } from '@/components/navigation';
 import { Footer } from '@/components/footer';
 import { HeroSection, FeaturesSection, ServicesSection, CTASection, TestimonialsSection, AreasSection, BlogSection, ImageShowcase } from '@/components/sections';
 import { SectionLoader } from '@/components/ui/Spinner';
-import { servicesApi, blogApi } from '@/lib/api';
+import { servicesApi, blogApi, getTestimonials } from '@/lib/api';
 import { mockServices, getFeaturedServices } from '@/lib/mock/services';
 import { Service, BlogPost } from '@/types/api';
+import { Testimonial } from '@/types/api';
 
 // Mock blog posts
 const mockBlogPosts: BlogPost[] = [
@@ -97,27 +98,33 @@ const mockBlogPosts: BlogPost[] = [
 export default function HomePage() {
   const [services, setServices] = useState<Service[]>([]);
   const [blogPosts, setBlogPosts] = useState<BlogPost[]>([]);
+  const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [servicesData, blogData] = await Promise.all([
+        const [servicesData, blogData, testimonialsData] = await Promise.all([
           servicesApi.getAll(),
           blogApi.getRecent(3),
+          getTestimonials(),
         ]);
-        
+
         // Use API data if available, otherwise use mock data
         if (servicesData.data && servicesData.data.length > 0) {
           setServices(servicesData.data);
         } else {
           setServices(mockServices);
         }
-        
+
         if (blogData.data && blogData.data.length > 0) {
           setBlogPosts(blogData.data);
         } else {
           setBlogPosts(mockBlogPosts);
+        }
+
+        if (testimonialsData && testimonialsData.length > 0) {
+          setTestimonials(testimonialsData.filter((t: any) => t.isActive));
         }
       } catch (error) {
         console.error('Failed to fetch data, using mock data:', error);
@@ -144,7 +151,7 @@ export default function HomePage() {
         <ImageShowcase />
         <ServicesSection services={services} />
         <CTASection />
-        <TestimonialsSection />
+        <TestimonialsSection testimonials={testimonials} />
         <AreasSection />
         <BlogSection posts={blogPosts} />
       </main>

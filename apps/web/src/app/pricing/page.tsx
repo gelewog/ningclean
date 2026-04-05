@@ -1,14 +1,17 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Navigation } from '@/components/navigation';
 import { Footer } from '@/components/footer';
+import { SectionLoader } from '@/components/ui/Spinner';
 import Button from '@/components/ui/Button';
 import { ArrowRight, Check, Clock, Sparkles, Home, Building, Star, Shield, Zap, Heart, X, ChevronDown, ChevronUp, Users } from 'lucide-react';
 import Link from 'next/link';
+import { getPricingPlans } from '@/lib/api';
 
-const pricingPlans = [
+// Keep addOns for now as static data
+const pricingPlansData = [
   {
     id: 'basic',
     name: '1 Jam',
@@ -82,6 +85,7 @@ const pricingPlans = [
   },
 ];
 
+// Add-ons data
 const addOns = [
   {
     id: 'extra-tech',
@@ -191,6 +195,22 @@ const item = {
 export default function PricingPage() {
   const [selectedPlan, setSelectedPlan] = useState<string>('standard');
   const [openFaq, setOpenFaq] = useState<number | null>(null);
+  const [plans, setPlans] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchPlans = async () => {
+      try {
+        const data = await getPricingPlans();
+        setPlans(data || []);
+      } catch (error) {
+        console.error('Failed to fetch pricing plans:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchPlans();
+  }, []);
 
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat('id-ID', {
@@ -200,9 +220,9 @@ export default function PricingPage() {
     }).format(price);
   };
 
-  const getPricePerHour = (price: number, hours: number) => {
-    return formatPrice(Math.round(price / hours));
-  };
+  if (loading) return <SectionLoader />;
+
+  const activePlans = plans.filter(p => p.isActive);
 
   return (
     <div className="min-h-screen page-bg">
@@ -232,8 +252,7 @@ export default function PricingPage() {
                 <em className="italic text-emerald-400">Kualitas Premium</em>
               </h1>
               <p className="text-[15px] page-text-muted leading-relaxed max-w-2xl mx-auto">
-                Pilihan harga fleksibel sesuai kebutuhan Anda. Mulai dari Rp 70.000 untuk pembersihan 1 jam. 
-                Tanpa biaya tersembunyi, harga sudah termasuk teknisi profesional dan peralatan lengkap.
+                Pilihan harga fleksibel sesuai kebutuhan Anda. Tanpa biaya tersembunyi, harga sudah termasuk teknisi profesional dan peralatan lengkap.
               </p>
             </motion.div>
           </div>
@@ -248,10 +267,9 @@ export default function PricingPage() {
               animate="show"
               className="grid md:grid-cols-3 gap-6"
             >
-              {pricingPlans.map((plan) => {
-                const Icon = plan.icon;
+              {activePlans.map((plan) => {
                 const isSelected = selectedPlan === plan.id;
-                
+
                 return (
                   <motion.div key={plan.id} variants={item}>
                     <div
@@ -262,8 +280,7 @@ export default function PricingPage() {
                           : 'page-card hover:border-emerald-500/20'
                       }`}
                     >
-                      {/* Popular Badge */}
-                      {plan.popular && (
+                      {plan.isPopular && (
                         <div className="absolute -top-3 left-1/2 -translate-x-1/2">
                           <div className="px-4 py-1 rounded-full bg-gradient-to-r from-emerald-500 to-emerald-400 text-white text-xs font-bold">
                             ⭐ PALING POPULER
@@ -271,29 +288,8 @@ export default function PricingPage() {
                         </div>
                       )}
 
-                      {/* Save Badge */}
-                      {plan.originalPrice && (
-                        <div className="absolute top-4 right-4">
-                          <span className="px-2 py-1 rounded-lg bg-red-500/20 text-red-400 text-xs font-semibold">
-                            HEMAT {formatPrice(plan.originalPrice - plan.price)}
-                          </span>
-                        </div>
-                      )}
-
                       {/* Header */}
                       <div className="text-center mb-6">
-                        <div className={`w-14 h-14 mx-auto mb-4 rounded-2xl flex items-center justify-center ${
-                          plan.color === 'emerald' ? 'bg-emerald-500/20' :
-                          plan.color === 'accent' ? 'bg-accent/20' :
-                          'bg-blue-500/20'
-                        }`}>
-                          <Icon className={`w-7 h-7 ${
-                            plan.color === 'emerald' ? 'text-emerald-400' :
-                            plan.color === 'accent' ? 'text-accent' :
-                            'text-blue-400'
-                          }`} />
-                        </div>
-                        
                         <h3 className="text-xl font-bold page-text mb-1">{plan.name}</h3>
                         <p className="text-[13px] page-text-muted">{plan.description}</p>
                       </div>
@@ -304,21 +300,13 @@ export default function PricingPage() {
                           <span className="text-[28px] font-bold page-text">
                             {formatPrice(plan.price)}
                           </span>
-                          <span className="page-text-muted text-sm">/ {plan.duration / 60} jam</span>
+                          <span className="page-text-muted text-sm">/{plan.billingCycle}</span>
                         </div>
-                        <p className="text-xs page-text-muted mt-1">
-                          {getPricePerHour(plan.price, plan.duration / 60)} / jam
-                        </p>
-                        {plan.originalPrice && (
-                          <p className="text-xs page-text-muted line-through mt-1">
-                            {formatPrice(plan.originalPrice)}
-                          </p>
-                        )}
                       </div>
 
                       {/* Features */}
                       <div className="space-y-3 mb-6">
-                        {plan.features.map((feature, idx) => (
+                        {plan.features?.map((feature: string, idx: number) => (
                           <div key={idx} className="flex items-start gap-3">
                             <div className="w-5 h-5 rounded-full bg-emerald-500/20 flex items-center justify-center flex-shrink-0 mt-0.5">
                               <Check className="w-3 h-3 text-emerald-400" />
@@ -328,25 +316,11 @@ export default function PricingPage() {
                         ))}
                       </div>
 
-                      {/* Not Included */}
-                      {plan.notIncluded.length > 0 && (
-                        <div className="space-y-2 mb-6 pt-4 border-t page-border">
-                          {plan.notIncluded.map((item, idx) => (
-                            <div key={idx} className="flex items-start gap-3">
-                              <div className="w-5 h-5 rounded-full bg-white/5 dark:bg-white/5 flex items-center justify-center flex-shrink-0 mt-0.5">
-                                <X className="w-3 h-3 text-white/25 dark:text-white/25" />
-                              </div>
-                              <span className="text-[12px] page-text-muted">{item}</span>
-                            </div>
-                          ))}
-                        </div>
-                      )}
-
                       {/* CTA Button */}
                       <Link href="/booking" className="block">
                         <Button
-                          variant={plan.popular ? 'primary' : 'outline'}
-                          className={`w-full ${plan.popular ? '' : 'btn-outline-dark'}`}
+                          variant={plan.isPopular ? 'primary' : 'outline'}
+                          className={`w-full ${plan.isPopular ? '' : 'btn-outline-dark'}`}
                         >
                           Pilih Paket Ini
                         </Button>
@@ -355,18 +329,6 @@ export default function PricingPage() {
                   </motion.div>
                 );
               })}
-            </motion.div>
-
-            {/* Price Note */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.4 }}
-              className="text-center mt-8"
-            >
-              <p className="text-[13px] page-text-muted">
-                * Harga dapat berubah sewaktu-waktu. Harga terbaru akan diinformasikan saat booking.
-              </p>
             </motion.div>
           </div>
         </section>

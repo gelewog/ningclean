@@ -2,47 +2,26 @@
 
 import * as React from 'react'
 import { motion } from 'framer-motion'
-import { Plus, Edit, Trash2, Search, Eye, Image as ImageIcon, Calendar, Tag } from 'lucide-react'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Plus, Edit, Trash2, Search, Eye, Image as ImageIcon, Calendar, FolderOpen, Star, ExternalLink } from 'lucide-react'
+import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { Textarea } from '@/components/ui/textarea'
 import { Badge } from '@/components/ui/badge'
-import { Modal } from '@/components/admin/Modal'
 import { Pagination } from '@/components/admin/Pagination'
-import { DataTable } from '@/components/admin/DataTable'
-import { getBlogPosts, createBlogPost, updateBlogPost, deleteBlogPost } from '@/lib/api'
-import { formatDate, truncate } from '@/lib/utils'
+import { getBlogPosts, deleteBlogPost } from '@/lib/api'
+import { BlogPost } from '@/types'
+import { formatDate } from '@/lib/utils'
 import { toast } from 'sonner'
-
-interface BlogFormData {
-  title: string
-  content: string
-  excerpt: string
-  coverImage: string
-  status: 'draft' | 'published'
-  tags: string
-}
+import Link from 'next/link'
 
 export default function BlogPage() {
-  const [posts, setPosts] = React.useState<any[]>([])
+  const [posts, setPosts] = React.useState<BlogPost[]>([])
   const [loading, setLoading] = React.useState(true)
-  const [isModalOpen, setIsModalOpen] = React.useState(false)
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = React.useState(false)
-  const [isPreviewOpen, setIsPreviewOpen] = React.useState(false)
-  const [selectedPost, setSelectedPost] = React.useState<any>(null)
-  const [isEditing, setIsEditing] = React.useState(false)
+  const [search, setSearch] = React.useState('')
   const [pagination, setPagination] = React.useState({ page: 1, limit: 10, total: 0, totalPages: 0 })
   const [statusFilter, setStatusFilter] = React.useState('')
-  const [formData, setFormData] = React.useState<BlogFormData>({
-    title: '',
-    content: '',
-    excerpt: '',
-    coverImage: '',
-    status: 'draft',
-    tags: '',
-  })
-  const [errors, setErrors] = React.useState<Partial<BlogFormData>>({})
+  const [deleteId, setDeleteId] = React.useState<string | null>(null)
+  const [deleting, setDeleting] = React.useState(false)
 
   React.useEffect(() => {
     fetchPosts()
@@ -63,207 +42,34 @@ export default function BlogPage() {
         totalPages: response.totalPages,
       }))
     } catch (error) {
-      toast.error('Failed to fetch blog posts')
+      toast.error('Gagal memuat posts')
     } finally {
       setLoading(false)
     }
   }
 
-  function openCreateModal() {
-    setIsEditing(false)
-    setSelectedPost(null)
-    setFormData({
-      title: '',
-      content: '',
-      excerpt: '',
-      coverImage: '',
-      status: 'draft',
-      tags: '',
-    })
-    setErrors({})
-    setIsModalOpen(true)
-  }
-
-  function openEditModal(post: any) {
-    setIsEditing(true)
-    setSelectedPost(post)
-    setFormData({
-      title: post.title,
-      content: post.content,
-      excerpt: post.excerpt || '',
-      coverImage: post.coverImage || '',
-      status: post.status,
-      tags: post.tags?.join(', ') || '',
-    })
-    setErrors({})
-    setIsModalOpen(true)
-  }
-
-  function openDeleteModal(post: any) {
-    setSelectedPost(post)
-    setIsDeleteModalOpen(true)
-  }
-
-  function openPreview(post: any) {
-    setSelectedPost(post)
-    setIsPreviewOpen(true)
-  }
-
-  function validateForm(): boolean {
-    const newErrors: Partial<BlogFormData> = {}
-    if (!formData.title.trim()) newErrors.title = 'Title is required'
-    if (!formData.content.trim()) newErrors.content = 'Content is required'
-    if (!formData.excerpt.trim()) newErrors.excerpt = 'Excerpt is required'
-    setErrors(newErrors)
-    return Object.keys(newErrors).length === 0
-  }
-
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault()
-    if (!validateForm()) return
-
-    const postData = {
-      title: formData.title,
-      content: formData.content,
-      excerpt: formData.excerpt,
-      coverImage: formData.coverImage,
-      status: formData.status,
-      tags: formData.tags.split(',').map((t) => t.trim()).filter(Boolean),
-    }
-
+  async function handleDelete(id: string) {
+    setDeleting(true)
     try {
-      if (isEditing && selectedPost) {
-        await updateBlogPost(selectedPost.id, postData)
-        toast.success('Blog post updated successfully')
-      } else {
-        await createBlogPost(postData)
-        toast.success('Blog post created successfully')
-      }
-      setIsModalOpen(false)
+      await deleteBlogPost(id)
+      toast.success('Post berhasil dihapus')
+      setDeleteId(null)
       fetchPosts()
-    } catch (error) {
-      toast.error(`Failed to ${isEditing ? 'update' : 'create'} blog post`)
+    } catch (error: any) {
+      toast.error(error.message || 'Gagal menghapus post')
+    } finally {
+      setDeleting(false)
     }
   }
 
-  async function handleDelete() {
-    if (!selectedPost) return
-    try {
-      await deleteBlogPost(selectedPost.id)
-      toast.success('Blog post deleted successfully')
-      setIsDeleteModalOpen(false)
-      fetchPosts()
-    } catch (error) {
-      toast.error('Failed to delete blog post')
-    }
-  }
-
-  async function handleToggleStatus(post: any) {
-    try {
-      const newStatus = post.status === 'published' ? 'draft' : 'published'
-      await updateBlogPost(post.id, { ...post, status: newStatus })
-      toast.success(`Post ${newStatus === 'published' ? 'published' : 'unpublished'}`)
-      fetchPosts()
-    } catch (error) {
-      toast.error('Failed to update post status')
-    }
-  }
-
-  const columns = [
-    {
-      key: 'title',
-      label: 'Title',
-      render: (value: string, row: any) => (
-        <div className="flex items-center gap-3">
-          {row.coverImage ? (
-            <img
-              src={row.coverImage}
-              alt=""
-              className="h-10 w-10 rounded-lg object-cover"
-            />
-          ) : (
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gray-100">
-              <ImageIcon className="h-5 w-5 text-gray-400" />
-            </div>
-          )}
-          <div>
-            <p className="font-medium text-gray-900">{truncate(value, 40)}</p>
-            <p className="text-xs text-gray-500">{row.author}</p>
-          </div>
-        </div>
-      ),
-    },
-    {
-      key: 'excerpt',
-      label: 'Excerpt',
-      render: (value: string) => (
-        <span className="text-sm text-gray-500">{truncate(value || '', 60)}</span>
-      ),
-    },
-    {
-      key: 'status',
-      label: 'Status',
-      render: (value: string) => (
-        <Badge variant={value === 'published' ? 'success' : 'default'}>
-          {value === 'published' ? 'Published' : 'Draft'}
-        </Badge>
-      ),
-    },
-    {
-      key: 'tags',
-      label: 'Tags',
-      render: (value: string[]) => (
-        <div className="flex flex-wrap gap-1">
-          {value?.slice(0, 2).map((tag, i) => (
-            <span key={i} className="inline-flex items-center rounded-full bg-gray-100 px-2 py-0.5 text-xs text-gray-600">
-              <Tag className="mr-1 h-3 w-3" />
-              {tag}
-            </span>
-          ))}
-          {value?.length > 2 && (
-            <span className="text-xs text-gray-400">+{value.length - 2}</span>
-          )}
-        </div>
-      ),
-    },
-    {
-      key: 'createdAt',
-      label: 'Date',
-      render: (value: string) => (
-        <div className="flex items-center gap-1 text-sm text-gray-500">
-          <Calendar className="h-3.5 w-3.5" />
-          {formatDate(value)}
-        </div>
-      ),
-    },
-    {
-      key: 'actions',
-      label: 'Actions',
-      render: (_: any, row: any) => (
-        <div className="flex items-center gap-1">
-          <Button variant="ghost" size="icon" onClick={() => openPreview(row)}>
-            <Eye className="h-4 w-4" />
-          </Button>
-          <Button variant="ghost" size="icon" onClick={() => openEditModal(row)}>
-            <Edit className="h-4 w-4" />
-          </Button>
-          <Button variant="ghost" size="icon" onClick={() => openDeleteModal(row)}>
-            <Trash2 className="h-4 w-4 text-error" />
-          </Button>
-        </div>
-      ),
-    },
-  ]
-
-  const STATUS_OPTIONS = [
-    { value: '', label: 'All Status' },
-    { value: 'published', label: 'Published' },
-    { value: 'draft', label: 'Draft' },
-  ]
+  const filteredPosts = posts.filter(post =>
+    post.title.toLowerCase().includes(search.toLowerCase()) ||
+    post.slug.toLowerCase().includes(search.toLowerCase())
+  )
 
   return (
     <div className="space-y-6">
-      {/* Page Header */}
+      {/* Header */}
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -271,12 +77,22 @@ export default function BlogPage() {
       >
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Blog</h1>
-          <p className="text-gray-500">Manage blog posts and articles</p>
+          <p className="text-gray-500">Kelola artikel blog</p>
         </div>
-        <Button onClick={openCreateModal}>
-          <Plus className="mr-2 h-4 w-4" />
-          New Post
-        </Button>
+        <div className="flex gap-3">
+          <Link href="/admin/blog/categories">
+            <Button variant="outline">
+              <FolderOpen className="mr-2 h-4 w-4" />
+              Kategori
+            </Button>
+          </Link>
+          <Link href="/admin/blog/new">
+            <Button className="bg-emerald-600 hover:bg-emerald-700">
+              <Plus className="mr-2 h-4 w-4" />
+              Post Baru
+            </Button>
+          </Link>
+        </div>
       </motion.div>
 
       {/* Filters */}
@@ -286,20 +102,27 @@ export default function BlogPage() {
         transition={{ delay: 0.1 }}
         className="flex flex-col gap-4 md:flex-row"
       >
+        <div className="relative flex-1">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+          <Input
+            placeholder="Cari post..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="pl-10"
+          />
+        </div>
         <select
           className="h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm"
           value={statusFilter}
-          onChange={(e) => { setStatusFilter(e.target.value); setPagination((prev) => ({ ...prev, page: 1 })); }}
+          onChange={(e) => { setStatusFilter(e.target.value); setPagination(prev => ({ ...prev, page: 1 })); }}
         >
-          {STATUS_OPTIONS.map((opt) => (
-            <option key={opt.value} value={opt.value}>
-              {opt.label}
-            </option>
-          ))}
+          <option value="">Semua Status</option>
+          <option value="published">Published</option>
+          <option value="draft">Draft</option>
         </select>
       </motion.div>
 
-      {/* Posts Table */}
+      {/* Posts List */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -307,186 +130,139 @@ export default function BlogPage() {
       >
         <Card>
           <CardContent className="p-0">
-            <DataTable
-              columns={columns}
-              data={posts}
-              loading={loading}
-              onRowClick={openPreview}
-            />
-            <Pagination
-              currentPage={pagination.page}
-              totalPages={pagination.totalPages}
-              onPageChange={(page) => setPagination((prev) => ({ ...prev, page }))}
-              totalItems={pagination.total}
-              itemsPerPage={pagination.limit}
-            />
-          </CardContent>
-        </Card>
-      </motion.div>
-
-      {/* Create/Edit Modal */}
-      <Modal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        title={isEditing ? 'Edit Post' : 'Create New Post'}
-        size="xl"
-      >
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <Input
-            label="Title"
-            placeholder="Enter post title"
-            value={formData.title}
-            onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-            error={errors.title}
-          />
-
-          <Textarea
-            label="Excerpt"
-            placeholder="Brief description of the post..."
-            className="h-20"
-            value={formData.excerpt}
-            onChange={(e) => setFormData({ ...formData, excerpt: e.target.value })}
-            error={errors.excerpt}
-          />
-
-          <Textarea
-            label="Content (Markdown supported)"
-            placeholder="Write your post content here..."
-            className="min-h-[200px]"
-            value={formData.content}
-            onChange={(e) => setFormData({ ...formData, content: e.target.value })}
-            error={errors.content}
-          />
-
-          <Input
-            label="Cover Image URL"
-            placeholder="https://images.unsplash.com/..."
-            value={formData.coverImage}
-            onChange={(e) => setFormData({ ...formData, coverImage: e.target.value })}
-            icon={<ImageIcon className="h-4 w-4" />}
-          />
-
-          <Input
-            label="Tags (comma separated)"
-            placeholder="tips, cleaning, home"
-            value={formData.tags}
-            onChange={(e) => setFormData({ ...formData, tags: e.target.value })}
-          />
-
-          <div>
-            <label className="mb-1.5 block text-sm font-medium text-gray-700">Status</label>
-            <div className="flex gap-4">
-              <label className="flex items-center gap-2">
-                <input
-                  type="radio"
-                  name="status"
-                  value="draft"
-                  checked={formData.status === 'draft'}
-                  onChange={() => setFormData({ ...formData, status: 'draft' })}
-                  className="h-4 w-4 text-primary"
-                />
-                <span className="text-sm">Draft</span>
-              </label>
-              <label className="flex items-center gap-2">
-                <input
-                  type="radio"
-                  name="status"
-                  value="published"
-                  checked={formData.status === 'published'}
-                  onChange={() => setFormData({ ...formData, status: 'published' })}
-                  className="h-4 w-4 text-primary"
-                />
-                <span className="text-sm">Published</span>
-              </label>
-            </div>
-          </div>
-
-          <div className="flex justify-end gap-2 border-t pt-4">
-            <Button type="button" variant="outline" onClick={() => setIsModalOpen(false)}>
-              Cancel
-            </Button>
-            <Button type="submit">{isEditing ? 'Update' : 'Create'}</Button>
-          </div>
-        </form>
-      </Modal>
-
-      {/* Preview Modal */}
-      <Modal
-        isOpen={isPreviewOpen}
-        onClose={() => setIsPreviewOpen(false)}
-        title="Post Preview"
-        size="xl"
-      >
-        {selectedPost && (
-          <div className="space-y-4">
-            {selectedPost.coverImage && (
-              <img
-                src={selectedPost.coverImage}
-                alt=""
-                className="h-48 w-full rounded-lg object-cover"
-              />
-            )}
-            <div className="flex items-center gap-2">
-              <Badge variant={selectedPost.status === 'published' ? 'success' : 'default'}>
-                {selectedPost.status === 'published' ? 'Published' : 'Draft'}
-              </Badge>
-              <span className="text-sm text-gray-500">
-                {formatDate(selectedPost.createdAt)}
-              </span>
-            </div>
-            <h1 className="text-2xl font-bold text-gray-900">{selectedPost.title}</h1>
-            {selectedPost.excerpt && (
-              <p className="text-lg text-gray-600">{selectedPost.excerpt}</p>
-            )}
-            <div className="prose max-w-none border-t pt-4">
-              <p className="whitespace-pre-wrap text-gray-700">{selectedPost.content}</p>
-            </div>
-            {selectedPost.tags && selectedPost.tags.length > 0 && (
-              <div className="flex flex-wrap gap-2 border-t pt-4">
-                {selectedPost.tags.map((tag: string, i: number) => (
-                  <span
-                    key={i}
-                    className="inline-flex items-center rounded-full bg-gray-100 px-3 py-1 text-sm text-gray-600"
+            {loading ? (
+              <div className="flex items-center justify-center py-20">
+                <div className="h-8 w-8 animate-spin rounded-full border-4 border-gray-200 border-t-emerald-500" />
+              </div>
+            ) : filteredPosts.length === 0 ? (
+              <div className="text-center py-20">
+                <div className="h-16 w-16 mx-auto mb-4 rounded-full bg-gray-100 flex items-center justify-center">
+                  <Eye className="h-8 w-8 text-gray-400" />
+                </div>
+                <p className="text-gray-500 mb-4">Belum ada post</p>
+                <Link href="/admin/blog/new">
+                  <Button variant="outline">
+                    <Plus className="mr-2 h-4 w-4" />
+                    Buat Post Pertama
+                  </Button>
+                </Link>
+              </div>
+            ) : (
+              <div className="divide-y divide-gray-100">
+                {filteredPosts.map((post) => (
+                  <div
+                    key={post.id}
+                    className="flex items-center gap-4 p-4 hover:bg-gray-50 transition-colors"
                   >
-                    {tag}
-                  </span>
+                    {/* Thumbnail */}
+                    <div className="h-16 w-24 rounded-lg overflow-hidden bg-gray-100 flex-shrink-0">
+                      {post.coverImage ? (
+                        <img
+                          src={post.coverImage}
+                          alt={post.title}
+                          className="h-full w-full object-cover"
+                        />
+                      ) : (
+                        <div className="h-full w-full flex items-center justify-center">
+                          <ImageIcon className="h-6 w-6 text-gray-300" />
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Content */}
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2 mb-1">
+                        <h3 className="font-medium text-gray-900 truncate">{post.title}</h3>
+                        {post.isFeatured && (
+                          <Star className="h-4 w-4 text-amber-500 flex-shrink-0" />
+                        )}
+                      </div>
+                      <div className="flex items-center gap-3 text-sm text-gray-500">
+                        <span className="flex items-center gap-1">
+                          <Calendar className="h-3 w-3" />
+                          {formatDate(post.createdAt)}
+                        </span>
+                        <Badge
+                          variant={post.status === 'published' ? 'success' : 'default'}
+                          className="text-xs"
+                        >
+                          {post.status}
+                        </Badge>
+                        {post.category && (
+                          <Badge variant="info" className="text-xs">
+                            {post.category.name}
+                          </Badge>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Actions */}
+                    <div className="flex items-center gap-2">
+                      <Link href={`/blog/${post.slug}`} target="_blank">
+                        <Button variant="ghost" size="sm" className="text-gray-400 hover:text-gray-600">
+                          <ExternalLink className="h-4 w-4" />
+                        </Button>
+                      </Link>
+                      <Link href={`/admin/blog/${post.id}`}>
+                        <Button variant="ghost" size="sm" className="text-gray-400 hover:text-emerald-600">
+                          <Edit className="h-4 w-4" />
+                        </Button>
+                      </Link>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => setDeleteId(post.id)}
+                        className="text-gray-400 hover:text-red-600"
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  </div>
                 ))}
               </div>
             )}
-            <div className="flex justify-end gap-2 border-t pt-4">
-              <Button variant="outline" onClick={() => setIsPreviewOpen(false)}>
-                Close
-              </Button>
-              <Button onClick={() => { setIsPreviewOpen(false); openEditModal(selectedPost); }}>
-                <Edit className="mr-2 h-4 w-4" />
-                Edit
-              </Button>
-            </div>
+          </CardContent>
+        </Card>
+
+        {/* Pagination */}
+        {pagination.totalPages > 1 && (
+          <div className="mt-4">
+            <Pagination
+              currentPage={pagination.page}
+              totalPages={pagination.totalPages}
+              onPageChange={(page) => setPagination(prev => ({ ...prev, page }))}
+            />
           </div>
         )}
-      </Modal>
+      </motion.div>
 
-      {/* Delete Confirmation Modal */}
-      <Modal
-        isOpen={isDeleteModalOpen}
-        onClose={() => setIsDeleteModalOpen(false)}
-        title="Delete Post"
-        size="sm"
-      >
-        <div className="space-y-4">
-          <p className="text-gray-600">
-            Are you sure you want to delete <strong>{selectedPost?.title}</strong>? This action cannot be undone.
-          </p>
-          <div className="flex justify-end gap-2">
-            <Button variant="outline" onClick={() => setIsDeleteModalOpen(false)}>
-              Cancel
-            </Button>
-            <Button variant="error" onClick={handleDelete}>
-              Delete
-            </Button>
-          </div>
+      {/* Delete Confirmation */}
+      {deleteId && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="bg-white rounded-2xl p-6 w-full max-w-md mx-4 shadow-2xl"
+          >
+            <h3 className="text-lg font-bold text-gray-900 mb-2">Hapus Post?</h3>
+            <p className="text-gray-600 mb-6">
+              Yakin ingin menghapus post ini? Tindakan ini tidak dapat dibatalkan.
+            </p>
+            <div className="flex justify-end gap-3">
+              <Button variant="outline" onClick={() => setDeleteId(null)}>
+                Batal
+              </Button>
+              <Button
+                onClick={() => handleDelete(deleteId)}
+                disabled={deleting}
+                className="bg-red-600 hover:bg-red-700"
+              >
+                {deleting ? 'Menghapus...' : 'Hapus'}
+              </Button>
+            </div>
+          </motion.div>
         </div>
-      </Modal>
+      )}
     </div>
   )
 }

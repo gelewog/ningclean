@@ -106,7 +106,7 @@ export default function Navigation() {
               {/* Theme Toggle */}
               <ThemeToggle />
 
-              {isLoggedIn ? (
+              {isLoggedIn && (
                 <Link
                   href="/dashboard"
                   className="px-5 py-2.5 rounded-xl font-semibold bg-gradient-to-r from-blue-600 to-blue-700 dark:from-blue-600 dark:to-blue-700 text-white hover:shadow-lg dark:hover:shadow-blue-900/50 hover:shadow-blue-200/50 transition-all duration-300"

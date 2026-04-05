@@ -3,9 +3,10 @@ import { Booking, Customer, Service, BlogPost, DashboardStats, PaginatedResponse
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api'
 
 interface FetchOptions extends RequestInit {
-  token?: string
+  token?: string | null
 }
 
+// Helper: fetch with auth
 async function fetchApi<T>(endpoint: string, options: FetchOptions = {}): Promise<T> {
   const { token, ...fetchOptions } = options
   
@@ -31,115 +32,114 @@ async function fetchApi<T>(endpoint: string, options: FetchOptions = {}): Promis
   return response.json()
 }
 
+// Token management
+const TOKEN_KEY = 'admin_token'
+const USER_KEY = 'admin_user'
+
+export function getToken(): string | null {
+  if (typeof window === 'undefined') return null
+  return localStorage.getItem(TOKEN_KEY)
+}
+
+export function setToken(token: string): void {
+  if (typeof window === 'undefined') return
+  localStorage.setItem(TOKEN_KEY, token)
+}
+
+export function removeToken(): void {
+  if (typeof window === 'undefined') return
+  localStorage.removeItem(TOKEN_KEY)
+  localStorage.removeItem(USER_KEY)
+}
+
+export function getUser(): { id: string; name: string; email: string; role: string } | null {
+  if (typeof window === 'undefined') return null
+  const user = localStorage.getItem(USER_KEY)
+  return user ? JSON.parse(user) : null
+}
+
+export function setUser(user: { id: string; name: string; email: string; role: string }): void {
+  if (typeof window === 'undefined') return
+  localStorage.setItem(USER_KEY, JSON.stringify(user))
+}
+
 // Auth
 export async function login(email: string, password: string) {
-  return fetchApi<{ token: string; user: any }>('/auth/login', {
-    method: 'POST',
-    body: JSON.stringify({ email, password }),
-  })
+  try {
+    const response = await fetchApi<{ access_token: string; user: any }>('/auth/login', {
+      method: 'POST',
+      body: JSON.stringify({ email, password }),
+    })
+    
+    if (response.access_token) {
+      setToken(response.access_token)
+      setUser(response.user)
+    }
+    
+    return response
+  } catch (error: any) {
+    throw new Error(error.message || 'Login failed')
+  }
 }
 
 export async function logout() {
-  return fetchApi('/auth/logout', { method: 'POST' })
+  removeToken()
 }
 
 // Dashboard
 export async function getDashboardStats(): Promise<DashboardStats> {
-  // Mock data for demo
+  const token = getToken()
+  const data = await fetchApi<any>('/admin/stats', { token })
+  
   return {
-    totalBookings: 1247,
-    totalRevenue: 156750000,
-    totalCustomers: 892,
-    pendingBookings: 23,
-    bookingsTrend: 12.5,
-    revenueTrend: 8.3,
+    totalBookings: data.bookings?.total || 0,
+    totalRevenue: data.revenue?.total || 0,
+    totalCustomers: data.users?.customers || 0,
+    pendingBookings: data.bookings?.pending || 0,
+    bookingsTrend: 0,
+    revenueTrend: 0,
   }
 }
 
 export async function getRecentBookings(limit = 5): Promise<Booking[]> {
-  // Mock data
-  return [
-    {
-      id: '1',
-      customerId: 'c1',
-      customerName: 'Budi Santoso',
-      customerEmail: 'budi@email.com',
-      customerPhone: '081234567890',
-      serviceId: 's1',
-      serviceName: 'Home Cleaning',
-      servicePrice: 250000,
-      area: 'Jakarta Selatan',
-      address: 'Jl. Sudirman No. 123',
-      scheduledDate: '2026-03-30',
-      scheduledTime: '09:00',
-      status: 'pending',
-      createdAt: '2026-03-29T10:00:00Z',
-    },
-    {
-      id: '2',
-      customerId: 'c2',
-      customerName: 'Ani Wijaya',
-      customerEmail: 'ani@email.com',
-      customerPhone: '081234567891',
-      serviceId: 's2',
-      serviceName: 'Office Cleaning',
-      servicePrice: 500000,
-      area: 'Jakarta Pusat',
-      address: 'Jl. Thamrin No. 456',
-      scheduledDate: '2026-03-30',
-      scheduledTime: '14:00',
-      status: 'confirmed',
-      createdAt: '2026-03-29T11:00:00Z',
-    },
-    {
-      id: '3',
-      customerId: 'c3',
-      customerName: 'Dewi Kusuma',
-      customerEmail: 'dewi@email.com',
-      customerPhone: '081234567892',
-      serviceId: 's3',
-      serviceName: 'Deep Cleaning',
-      servicePrice: 750000,
-      area: 'Tangerang',
-      address: 'BSD Sector 1',
-      scheduledDate: '2026-03-31',
-      scheduledTime: '10:00',
-      status: 'in_progress',
-      createdAt: '2026-03-28T09:00:00Z',
-    },
-    {
-      id: '4',
-      customerId: 'c4',
-      customerName: 'Eko Prasetyo',
-      customerEmail: 'eko@email.com',
-      customerPhone: '081234567893',
-      serviceId: 's1',
-      serviceName: 'Home Cleaning',
-      servicePrice: 250000,
-      area: 'Bogor',
-      address: 'Cibubur Residence',
-      scheduledDate: '2026-03-29',
-      scheduledTime: '08:00',
-      status: 'completed',
-      createdAt: '2026-03-27T14:00:00Z',
-    },
-    {
-      id: '5',
-      customerId: 'c5',
-      customerName: 'Fitri Handayani',
-      customerEmail: 'fitri@email.com',
-      customerPhone: '081234567894',
-      serviceId: 's4',
-      serviceName: 'Post-Construction Cleaning',
-      servicePrice: 1200000,
-      area: 'Depok',
-      address: 'Pondok Cina',
-      scheduledDate: '2026-03-28',
-      scheduledTime: '07:00',
-      status: 'completed',
-      createdAt: '2026-03-26T16:00:00Z',
-    },
-  ]
+  const token = getToken()
+  // Use the bookings endpoint with limit
+  const data = await fetchApi<{
+    data: any[]
+    total: number
+    page: number
+    limit: number
+    totalPages: number
+  }>(`/bookings?limit=${limit}`, { token })
+  
+  if (!data.data || !Array.isArray(data.data)) {
+    return []
+  }
+  
+  return data.data.map((b: any) => {
+    const firstItem = b.items?.[0]
+    const firstItemPrice = firstItem ? Number(firstItem.price) : 0
+    
+    return {
+      id: b.id,
+      customerId: b.customerId,
+      customerName: b.customer?.name || 'Unknown',
+      customerEmail: b.customer?.email || '',
+      customerPhone: b.customer?.phone || '',
+      serviceId: firstItem?.service?.id || '',
+      serviceName: firstItem?.service?.name || 'Unknown Service',
+      servicePrice: firstItemPrice,
+      totalAmount: Number(b.totalAmount) || 0,
+      area: b.area || '',
+      address: b.address || '',
+      scheduledDate: b.serviceDate,
+      scheduledTime: b.serviceTime,
+      status: b.status?.toLowerCase() || 'pending',
+      notes: b.notes || '',
+      createdAt: b.createdAt,
+      items: b.items,
+    }
+  })
 }
 
 // Bookings
@@ -152,259 +152,117 @@ export async function getBookings(params?: {
   dateFrom?: string
   dateTo?: string
 }): Promise<PaginatedResponse<Booking>> {
-  // Mock data
-  const allBookings: Booking[] = [
-    {
-      id: '1',
-      customerId: 'c1',
-      customerName: 'Budi Santoso',
-      customerEmail: 'budi@email.com',
-      customerPhone: '081234567890',
-      serviceId: 's1',
-      serviceName: 'Home Cleaning',
-      servicePrice: 250000,
-      area: 'Jakarta Selatan',
-      address: 'Jl. Sudirman No. 123',
-      scheduledDate: '2026-03-30',
-      scheduledTime: '09:00',
-      status: 'pending',
-      createdAt: '2026-03-29T10:00:00Z',
-    },
-    {
-      id: '2',
-      customerId: 'c2',
-      customerName: 'Ani Wijaya',
-      customerEmail: 'ani@email.com',
-      customerPhone: '081234567891',
-      serviceId: 's2',
-      serviceName: 'Office Cleaning',
-      servicePrice: 500000,
-      area: 'Jakarta Pusat',
-      address: 'Jl. Thamrin No. 456',
-      scheduledDate: '2026-03-30',
-      scheduledTime: '14:00',
-      status: 'confirmed',
-      createdAt: '2026-03-29T11:00:00Z',
-    },
-    {
-      id: '3',
-      customerId: 'c3',
-      customerName: 'Dewi Kusuma',
-      customerEmail: 'dewi@email.com',
-      customerPhone: '081234567892',
-      serviceId: 's3',
-      serviceName: 'Deep Cleaning',
-      servicePrice: 750000,
-      area: 'Tangerang',
-      address: 'BSD Sector 1',
-      scheduledDate: '2026-03-31',
-      scheduledTime: '10:00',
-      status: 'in_progress',
-      createdAt: '2026-03-28T09:00:00Z',
-    },
-    {
-      id: '4',
-      customerId: 'c4',
-      customerName: 'Eko Prasetyo',
-      customerEmail: 'eko@email.com',
-      customerPhone: '081234567893',
-      serviceId: 's1',
-      serviceName: 'Home Cleaning',
-      servicePrice: 250000,
-      area: 'Bogor',
-      address: 'Cibubur Residence',
-      scheduledDate: '2026-03-29',
-      scheduledTime: '08:00',
-      status: 'completed',
-      createdAt: '2026-03-27T14:00:00Z',
-    },
-    {
-      id: '5',
-      customerId: 'c5',
-      customerName: 'Fitri Handayani',
-      customerEmail: 'fitri@email.com',
-      customerPhone: '081234567894',
-      serviceId: 's4',
-      serviceName: 'Post-Construction Cleaning',
-      servicePrice: 1200000,
-      area: 'Depok',
-      address: 'Pondok Cina',
-      scheduledDate: '2026-03-28',
-      scheduledTime: '07:00',
-      status: 'completed',
-      createdAt: '2026-03-26T16:00:00Z',
-    },
-    {
-      id: '6',
-      customerId: 'c6',
-      customerName: 'Hendra Gunawan',
-      customerEmail: 'hendra@email.com',
-      customerPhone: '081234567895',
-      serviceId: 's2',
-      serviceName: 'Office Cleaning',
-      servicePrice: 500000,
-      area: 'Jakarta Barat',
-      address: 'Jl. Puri Indah',
-      scheduledDate: '2026-03-30',
-      scheduledTime: '13:00',
-      status: 'pending',
-      createdAt: '2026-03-29T08:00:00Z',
-    },
-    {
-      id: '7',
-      customerId: 'c7',
-      customerName: 'Ika Permatasari',
-      customerEmail: 'ika@email.com',
-      customerPhone: '081234567896',
-      serviceId: 's3',
-      serviceName: 'Deep Cleaning',
-      servicePrice: 750000,
-      area: 'Bekasi',
-      address: 'Kemang Pratama',
-      scheduledDate: '2026-03-29',
-      scheduledTime: '15:00',
-      status: 'cancelled',
-      createdAt: '2026-03-28T12:00:00Z',
-    },
-    {
-      id: '8',
-      customerId: 'c8',
-      customerName: 'Joko Widodo',
-      customerEmail: 'joko@email.com',
-      customerPhone: '081234567897',
-      serviceId: 's1',
-      serviceName: 'Home Cleaning',
-      servicePrice: 250000,
-      area: 'Jakarta Utara',
-      address: 'Kelapa Gading',
-      scheduledDate: '2026-03-31',
-      scheduledTime: '11:00',
-      status: 'confirmed',
-      createdAt: '2026-03-29T09:00:00Z',
-    },
-  ]
-
-  let filtered = [...allBookings]
-
-  if (params?.status) {
-    filtered = filtered.filter((b) => b.status === params.status)
-  }
-
-  if (params?.search) {
-    const search = params.search.toLowerCase()
-    filtered = filtered.filter(
-      (b) =>
-        b.customerName.toLowerCase().includes(search) ||
-        b.customerEmail.toLowerCase().includes(search) ||
-        b.serviceName.toLowerCase().includes(search)
-    )
-  }
-
-  if (params?.area) {
-    filtered = filtered.filter((b) => b.area === params.area)
-  }
-
-  const page = params?.page || 1
-  const limit = params?.limit || 10
-  const start = (page - 1) * limit
-  const end = start + limit
-
+  const token = getToken()
+  
+  const queryParams = new URLSearchParams()
+  if (params?.page) queryParams.set('page', params.page.toString())
+  if (params?.limit) queryParams.set('limit', params.limit.toString())
+  if (params?.status) queryParams.set('status', params.status)
+  if (params?.search) queryParams.set('search', params.search)
+  if (params?.area) queryParams.set('area', params.area)
+  if (params?.dateFrom) queryParams.set('dateFrom', params.dateFrom)
+  if (params?.dateTo) queryParams.set('dateTo', params.dateTo)
+  
+  const query = queryParams.toString()
+  const endpoint = `/bookings${query ? `?${query}` : ''}`
+  
+  const data = await fetchApi<{
+    data: any[]
+    total: number
+    page: number
+    limit: number
+    totalPages: number
+  }>(endpoint, { token })
+  
   return {
-    data: filtered.slice(start, end),
-    total: filtered.length,
-    page,
-    limit,
-    totalPages: Math.ceil(filtered.length / limit),
+    data: data.data.map((b: any) => {
+      // Get first item's service info for display
+      const firstItem = b.items?.[0]
+      const firstItemPrice = firstItem ? Number(firstItem.price) : 0
+      
+      return {
+        id: b.id,
+        customerId: b.customerId,
+        customerName: b.customer?.name || 'Unknown',
+        customerEmail: b.customer?.email || '',
+        customerPhone: b.customer?.phone || '',
+        serviceId: firstItem?.service?.id || '',
+        serviceName: firstItem?.service?.name || 'Unknown Service',
+        servicePrice: firstItemPrice,
+        totalAmount: Number(b.totalAmount) || 0,
+        area: b.area || '',
+        address: b.address || '',
+        scheduledDate: b.serviceDate,
+        scheduledTime: b.serviceTime,
+        status: b.status?.toLowerCase() || 'pending',
+        notes: b.notes || '',
+        createdAt: b.createdAt,
+        // Include full items array for detail view
+        items: b.items,
+      }
+    }),
+    total: data.total,
+    page: data.page,
+    limit: data.limit,
+    totalPages: data.totalPages,
   }
 }
 
 export async function updateBookingStatus(id: string, status: string) {
-  // Mock update
-  return { success: true, message: 'Booking status updated' }
+  const token = getToken()
+  return fetchApi<{ success: boolean; message: string }>(`/bookings/${id}/status`, {
+    method: 'PUT',
+    token,
+    body: JSON.stringify({ status: status.toUpperCase() }),
+  })
 }
 
 // Services
-export async function getServices(): Promise<Service[]> {
-  return [
-    {
-      id: '1',
-      name: 'Home Cleaning',
-      description: 'Pembersihan rumah lengkap termasuk debu, lantai, dan kamar mandi',
-      price: 250000,
-      duration: 180,
-      category: 'basic',
-      icon: 'Home',
-      isActive: true,
-      createdAt: '2026-01-01T00:00:00Z',
-    },
-    {
-      id: '2',
-      name: 'Office Cleaning',
-      description: 'Pembersihan kantor dan area kerja',
-      price: 500000,
-      duration: 240,
-      category: 'commercial',
-      icon: 'Building',
-      isActive: true,
-      createdAt: '2026-01-02T00:00:00Z',
-    },
-    {
-      id: '3',
-      name: 'Deep Cleaning',
-      description: 'Pembersihan intensif termasuk semua sudut dan area tersembunyi',
-      price: 750000,
-      duration: 360,
-      category: 'premium',
-      icon: 'Sparkles',
-      isActive: true,
-      createdAt: '2026-01-03T00:00:00Z',
-    },
-    {
-      id: '4',
-      name: 'Post-Construction Cleaning',
-      description: 'Pembersihan pasca konstruksi atau renovasi',
-      price: 1200000,
-      duration: 480,
-      category: 'specialty',
-      icon: 'HardHat',
-      isActive: true,
-      createdAt: '2026-01-04T00:00:00Z',
-    },
-    {
-      id: '5',
-      name: 'Carpet Cleaning',
-      description: 'Pembersihan karpet dan upholstery',
-      price: 350000,
-      duration: 180,
-      category: 'specialty',
-      icon: 'Sofa',
-      isActive: false,
-      createdAt: '2026-01-05T00:00:00Z',
-    },
-    {
-      id: '6',
-      name: 'Window Cleaning',
-      description: 'Pembersihan jendela interior dan eksterior',
-      price: 200000,
-      duration: 120,
-      category: 'addon',
-      icon: 'Square',
-      isActive: true,
-      createdAt: '2026-01-06T00:00:00Z',
-    },
-  ]
+export async function getServices(includeInactive = false): Promise<Service[]> {
+  const endpoint = includeInactive ? '/services?all=true' : '/services'
+  const data = await fetchApi<any[]>(endpoint)
+  
+  return data.map((s: any) => ({
+    id: s.id,
+    name: s.name,
+    slug: s.slug,
+    description: s.description,
+    price: Number(s.price),
+    duration: s.duration,
+    category: s.category || 'general',
+    image: s.image,
+    icon: s.icon,
+    features: s.features || [],
+    isActive: s.isActive,
+    isFeatured: s.isFeatured || false,
+    createdAt: s.createdAt,
+  }))
 }
 
 export async function createService(data: Partial<Service>) {
-  return { success: true, message: 'Service created', data: { ...data, id: Math.random().toString() } }
+  const token = getToken()
+  return fetchApi<{ success: boolean; message: string; data: Service }>('/services', {
+    method: 'POST',
+    token,
+    body: JSON.stringify(data),
+  })
 }
 
 export async function updateService(id: string, data: Partial<Service>) {
-  return { success: true, message: 'Service updated' }
+  const token = getToken()
+  return fetchApi<{ success: boolean; message: string }>(`/services/${id}`, {
+    method: 'PUT',
+    token,
+    body: JSON.stringify(data),
+  })
 }
 
 export async function deleteService(id: string) {
-  return { success: true, message: 'Service deleted' }
+  const token = getToken()
+  return fetchApi<{ success: boolean; message: string }>(`/services/${id}`, {
+    method: 'DELETE',
+    token,
+  })
 }
 
 // Customers
@@ -413,104 +271,39 @@ export async function getCustomers(params?: {
   limit?: number
   search?: string
 }): Promise<PaginatedResponse<Customer>> {
-  const customers: Customer[] = [
-    {
-      id: 'c1',
-      name: 'Budi Santoso',
-      email: 'budi@email.com',
-      phone: '081234567890',
-      address: 'Jl. Sudirman No. 123, Jakarta Selatan',
-      totalBookings: 12,
-      totalSpent: 3000000,
-      createdAt: '2026-01-15T00:00:00Z',
-    },
-    {
-      id: 'c2',
-      name: 'Ani Wijaya',
-      email: 'ani@email.com',
-      phone: '081234567891',
-      address: 'Jl. Thamrin No. 456, Jakarta Pusat',
-      totalBookings: 8,
-      totalSpent: 4000000,
-      createdAt: '2026-01-20T00:00:00Z',
-    },
-    {
-      id: 'c3',
-      name: 'Dewi Kusuma',
-      email: 'dewi@email.com',
-      phone: '081234567892',
-      address: 'BSD Sector 1, Tangerang',
-      totalBookings: 15,
-      totalSpent: 11250000,
-      createdAt: '2026-02-01T00:00:00Z',
-    },
-    {
-      id: 'c4',
-      name: 'Eko Prasetyo',
-      email: 'eko@email.com',
-      phone: '081234567893',
-      address: 'Cibubur Residence, Bogor',
-      totalBookings: 5,
-      totalSpent: 1250000,
-      createdAt: '2026-02-10T00:00:00Z',
-    },
-    {
-      id: 'c5',
-      name: 'Fitri Handayani',
-      email: 'fitri@email.com',
-      phone: '081234567894',
-      address: 'Pondok Cina, Depok',
-      totalBookings: 20,
-      totalSpent: 15000000,
-      createdAt: '2026-02-15T00:00:00Z',
-    },
-    {
-      id: 'c6',
-      name: 'Hendra Gunawan',
-      email: 'hendra@email.com',
-      phone: '081234567895',
-      address: 'Jl. Puri Indah, Jakarta Barat',
-      totalBookings: 3,
-      totalSpent: 750000,
-      createdAt: '2026-03-01T00:00:00Z',
-    },
-    {
-      id: 'c7',
-      name: 'Ika Permatasari',
-      email: 'ika@email.com',
-      phone: '081234567896',
-      address: 'Kemang Pratama, Bekasi',
-      totalBookings: 7,
-      totalSpent: 1750000,
-      createdAt: '2026-03-05T00:00:00Z',
-    },
-    {
-      id: 'c8',
-      name: 'Joko Widodo',
-      email: 'joko@email.com',
-      phone: '081234567897',
-      address: 'Kelapa Gading, Jakarta Utara',
-      totalBookings: 10,
-      totalSpent: 2500000,
-      createdAt: '2026-03-10T00:00:00Z',
-    },
-  ]
-
-  let filtered = [...customers]
+  const token = getToken()
+  
+  const data = await fetchApi<any[]>('/admin/customers', { token })
+  
+  let filtered = [...data]
+  
   if (params?.search) {
     const search = params.search.toLowerCase()
     filtered = filtered.filter(
-      (c) => c.name.toLowerCase().includes(search) || c.email.toLowerCase().includes(search)
+      (c) => c.name?.toLowerCase().includes(search) || c.email?.toLowerCase().includes(search)
     )
   }
-
+  
   const page = params?.page || 1
   const limit = params?.limit || 10
   const start = (page - 1) * limit
   const end = start + limit
-
+  
   return {
-    data: filtered.slice(start, end),
+    data: filtered.slice(start, end).map((c: any) => ({
+      id: c.id,
+      name: c.name,
+      email: c.email,
+      phone: c.phone || '',
+      address: '',
+      totalBookings: c._count?.bookings || 0,
+      totalSpent: 0,
+      createdAt: c.createdAt,
+      isVip: c.isVip,
+      notes: c.notes,
+      addresses: c.addresses,
+      source: c.source,
+    })),
     total: filtered.length,
     page,
     limit,
@@ -519,7 +312,40 @@ export async function getCustomers(params?: {
 }
 
 export async function getCustomerBookings(customerId: string): Promise<Booking[]> {
-  return getBookings().then((res) => res.data.filter((b) => b.customerId === customerId))
+  const token = getToken()
+  // Customer bookings via the bookings endpoint - non-admin sees only own
+  const data = await fetchApi<{
+    data: any[]
+    total: number
+    page: number
+    limit: number
+    totalPages: number
+  }>(`/bookings`, { token })
+  
+  return data.data.map((b: any) => {
+    const firstItem = b.items?.[0]
+    const firstItemPrice = firstItem ? Number(firstItem.price) : 0
+    
+    return {
+      id: b.id,
+      customerId: b.customerId,
+      customerName: b.customer?.name || 'Unknown',
+      customerEmail: b.customer?.email || '',
+      customerPhone: b.customer?.phone || '',
+      serviceId: firstItem?.service?.id || '',
+      serviceName: firstItem?.service?.name || 'Unknown Service',
+      servicePrice: firstItemPrice,
+      totalAmount: Number(b.totalAmount) || 0,
+      area: b.area || '',
+      address: b.address || '',
+      scheduledDate: b.serviceDate,
+      scheduledTime: b.serviceTime,
+      status: b.status?.toLowerCase() || 'pending',
+      notes: b.notes || '',
+      createdAt: b.createdAt,
+      items: b.items,
+    }
+  })
 }
 
 // Blog
@@ -528,87 +354,862 @@ export async function getBlogPosts(params?: {
   limit?: number
   status?: string
 }): Promise<PaginatedResponse<BlogPost>> {
-  const posts: BlogPost[] = [
-    {
-      id: '1',
-      title: 'Tips Membersihkan Rumah Setelah Liburan',
-      slug: 'tips-membersihkan-rumah-setelah-liburan',
-      content: 'Setelah pulang liburan, rumah pasti kotor dan berantakan...',
-      excerpt: 'Berikut tips membersihkan rumah dengan cepat setelah liburan panjang.',
-      coverImage: 'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=800',
-      status: 'published',
-      author: 'Admin',
-      tags: ['tips', 'home cleaning'],
-      createdAt: '2026-03-15T00:00:00Z',
-      updatedAt: '2026-03-15T00:00:00Z',
-    },
-    {
-      id: '2',
-      title: 'Keuntungan Menggunakan Jasa Cleaning Service Profesional',
-      slug: 'keuntungan-jasa-cleaning-service-profesional',
-      content: 'Menggunakan jasa cleaning service profesional memiliki banyak keuntungan...',
-      excerpt: 'Kenapa Anda harus memilih layanan cleaning service profesional?',
-      coverImage: 'https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=800',
-      status: 'published',
-      author: 'Admin',
-      tags: ['jasa cleaning', 'profesional'],
-      createdAt: '2026-03-20T00:00:00Z',
-      updatedAt: '2026-03-20T00:00:00Z',
-    },
-    {
-      id: '3',
-      title: '5 Areas yang Sering Terlewatkan Saat Membersihkan',
-      slug: '5-areas-sering-terlewatkan-saat-membersihkan',
-      content: 'Ada beberapa area di rumah yang sering terlewat...',
-      excerpt: 'Area-area ini sering terlewat saat cleaning, yuk cek!',
-      coverImage: 'https://images.unsplash.com/photo-1527515637462-cff94eecc1ac?w=800',
-      status: 'draft',
-      author: 'Admin',
-      tags: ['tips', 'deep cleaning'],
-      createdAt: '2026-03-25T00:00:00Z',
-      updatedAt: '2026-03-28T00:00:00Z',
-    },
-    {
-      id: '4',
-      title: 'Panduan Deep Cleaning untuk Rumah Baru',
-      slug: 'panduan-deep-cleaning-rumah-baru',
-      content: 'Rumah baru butuh deep cleaning sebelum ditinggali...',
-      excerpt: 'Langkah-langkah deep cleaning untuk rumah baru.',
-      status: 'draft',
-      author: 'Admin',
-      tags: ['deep cleaning', 'panduan'],
-      createdAt: '2026-03-28T00:00:00Z',
-      updatedAt: '2026-03-28T00:00:00Z',
-    },
-  ]
-
-  let filtered = [...posts]
+  const queryParams = new URLSearchParams()
+  if (params?.page) queryParams.set('page', params.page.toString())
+  if (params?.limit) queryParams.set('limit', params.limit.toString())
+  
+  const query = queryParams.toString()
+  const endpoint = `/blog${query ? `?${query}` : ''}`
+  
+  const data = await fetchApi<any[]>(endpoint)
+  
+  let posts: BlogPost[] = data.map((p: any) => ({
+    id: p.id,
+    title: p.title,
+    slug: p.slug,
+    content: p.content,
+    excerpt: p.excerpt,
+    coverImage: p.coverImage,
+    status: (p.publishedAt ? 'published' : 'draft') as 'draft' | 'published',
+    author: p.author,
+    tags: p.tags || [],
+    createdAt: p.createdAt,
+    updatedAt: p.updatedAt,
+  }))
+  
   if (params?.status) {
-    filtered = filtered.filter((p) => p.status === params.status)
+    posts = posts.filter((p) => p.status === params.status)
   }
-
-  const page = params?.page || 1
-  const limit = params?.limit || 10
-  const start = (page - 1) * limit
-  const end = start + limit
-
+  
   return {
-    data: filtered.slice(start, end),
-    total: filtered.length,
-    page,
-    limit,
-    totalPages: Math.ceil(filtered.length / limit),
+    data: posts,
+    total: posts.length,
+    page: 1,
+    limit: 10,
+    totalPages: 1,
   }
 }
 
 export async function createBlogPost(data: Partial<BlogPost>) {
-  return { success: true, message: 'Blog post created', data: { ...data, id: Math.random().toString() } }
+  const token = getToken()
+  return fetchApi<{ success: boolean; message: string; data: BlogPost }>('/blog', {
+    method: 'POST',
+    token,
+    body: JSON.stringify(data),
+  })
 }
 
 export async function updateBlogPost(id: string, data: Partial<BlogPost>) {
-  return { success: true, message: 'Blog post updated' }
+  const token = getToken()
+  return fetchApi<{ success: boolean; message: string }>(`/blog/${id}`, {
+    method: 'PUT',
+    token,
+    body: JSON.stringify(data),
+  })
 }
 
 export async function deleteBlogPost(id: string) {
-  return { success: true, message: 'Blog post deleted' }
+  const token = getToken()
+  return fetchApi<{ success: boolean; message: string }>(`/blog/${id}`, {
+    method: 'DELETE',
+    token,
+  })
+}
+
+export async function getBlogPostById(id: string): Promise<BlogPost> {
+  const token = getToken()
+  const data = await fetchApi<any>(`/blog/${id}`, { token })
+  return {
+    id: data.id,
+    title: data.title,
+    slug: data.slug,
+    content: data.content,
+    excerpt: data.excerpt,
+    coverImage: data.coverImage,
+    status: (data.publishedAt ? 'published' : 'draft') as 'draft' | 'published',
+    author: data.author,
+    tags: data.tags || [],
+    categoryId: data.categoryId,
+    category: data.category,
+    isFeatured: data.isFeatured || false,
+    createdAt: data.createdAt,
+    updatedAt: data.updatedAt,
+  }
+}
+
+// Testimonials
+export async function getTestimonials() {
+  const token = getToken()
+  try {
+    return await fetchApi<any[]>('/testimonials/admin/all', { token })
+  } catch {
+    return []
+  }
+}
+
+export async function createTestimonial(data: any) {
+  const token = getToken()
+  return fetchApi<{ success: boolean; message: string }>('/testimonials', {
+    method: 'POST',
+    token,
+    body: JSON.stringify(data),
+  })
+}
+
+export async function updateTestimonial(id: string, data: any) {
+  const token = getToken()
+  return fetchApi<{ success: boolean; message: string }>(`/testimonials/${id}`, {
+    method: 'PUT',
+    token,
+    body: JSON.stringify(data),
+  })
+}
+
+export async function deleteTestimonial(id: string) {
+  const token = getToken()
+  return fetchApi<{ success: boolean; message: string }>(`/testimonials/${id}`, {
+    method: 'DELETE',
+    token,
+  })
+}
+
+// Team Members
+export async function getTeamMembers() {
+  const token = getToken()
+  try {
+    return await fetchApi<any[]>('/team-members/admin/all', { token })
+  } catch {
+    return []
+  }
+}
+
+export async function createTeamMember(data: any) {
+  const token = getToken()
+  return fetchApi<{ success: boolean; message: string }>('/team-members', {
+    method: 'POST',
+    token,
+    body: JSON.stringify(data),
+  })
+}
+
+export async function updateTeamMember(id: string, data: any) {
+  const token = getToken()
+  return fetchApi<{ success: boolean; message: string }>(`/team-members/${id}`, {
+    method: 'PUT',
+    token,
+    body: JSON.stringify(data),
+  })
+}
+
+export async function deleteTeamMember(id: string) {
+  const token = getToken()
+  return fetchApi<{ success: boolean; message: string }>(`/team-members/${id}`, {
+    method: 'DELETE',
+    token,
+  })
+}
+
+// Company Stats
+export async function getCompanyStats() {
+  const token = getToken()
+  try {
+    return await fetchApi<any[]>('/company-stats/admin/all', { token })
+  } catch {
+    return []
+  }
+}
+
+export async function createCompanyStat(data: any) {
+  const token = getToken()
+  return fetchApi<{ success: boolean; message: string }>('/company-stats', {
+    method: 'POST',
+    token,
+    body: JSON.stringify(data),
+  })
+}
+
+export async function updateCompanyStat(id: string, data: any) {
+  const token = getToken()
+  return fetchApi<{ success: boolean; message: string }>(`/company-stats/${id}`, {
+    method: 'PUT',
+    token,
+    body: JSON.stringify(data),
+  })
+}
+
+export async function deleteCompanyStat(id: string) {
+  const token = getToken()
+  return fetchApi<{ success: boolean; message: string }>(`/company-stats/${id}`, {
+    method: 'DELETE',
+    token,
+  })
+}
+
+// Gallery
+export async function getGalleryItems() {
+  const token = getToken()
+  try {
+    return await fetchApi<any[]>('/gallery/admin/all', { token })
+  } catch {
+    return []
+  }
+}
+
+export async function createGalleryItem(data: any) {
+  const token = getToken()
+  return fetchApi<{ success: boolean; message: string }>('/gallery', {
+    method: 'POST',
+    token,
+    body: JSON.stringify(data),
+  })
+}
+
+export async function updateGalleryItem(id: string, data: any) {
+  const token = getToken()
+  return fetchApi<{ success: boolean; message: string }>(`/gallery/${id}`, {
+    method: 'PUT',
+    token,
+    body: JSON.stringify(data),
+  })
+}
+
+export async function deleteGalleryItem(id: string) {
+  const token = getToken()
+  return fetchApi<{ success: boolean; message: string }>(`/gallery/${id}`, {
+    method: 'DELETE',
+    token,
+  })
+}
+
+// FAQ
+export async function getFAQs() {
+  const token = getToken()
+  try {
+    return await fetchApi<any[]>('/faq/admin/all', { token })
+  } catch {
+    return []
+  }
+}
+
+export async function createFAQ(data: any) {
+  const token = getToken()
+  return fetchApi<{ success: boolean; message: string }>('/faq', {
+    method: 'POST',
+    token,
+    body: JSON.stringify(data),
+  })
+}
+
+export async function updateFAQ(id: string, data: any) {
+  const token = getToken()
+  return fetchApi<{ success: boolean; message: string }>(`/faq/${id}`, {
+    method: 'PUT',
+    token,
+    body: JSON.stringify(data),
+  })
+}
+
+export async function deleteFAQ(id: string) {
+  const token = getToken()
+  return fetchApi<{ success: boolean; message: string }>(`/faq/${id}`, {
+    method: 'DELETE',
+    token,
+  })
+}
+
+// Service Areas
+export async function getServiceAreas() {
+  const token = getToken()
+  try {
+    return await fetchApi<any[]>('/service-areas/admin/all', { token })
+  } catch {
+    return []
+  }
+}
+
+export async function createServiceArea(data: any) {
+  const token = getToken()
+  return fetchApi<{ success: boolean; message: string }>('/service-areas', {
+    method: 'POST',
+    token,
+    body: JSON.stringify(data),
+  })
+}
+
+export async function updateServiceArea(id: string, data: any) {
+  const token = getToken()
+  return fetchApi<{ success: boolean; message: string }>(`/service-areas/${id}`, {
+    method: 'PUT',
+    token,
+    body: JSON.stringify(data),
+  })
+}
+
+export async function deleteServiceArea(id: string) {
+  const token = getToken()
+  return fetchApi<{ success: boolean; message: string }>(`/service-areas/${id}`, {
+    method: 'DELETE',
+    token,
+  })
+}
+
+// Job Listings (Careers)
+export async function getJobListings() {
+  const token = getToken()
+  try {
+    return await fetchApi<any[]>('/careers/admin/all', { token })
+  } catch {
+    return []
+  }
+}
+
+export async function createJobListing(data: any) {
+  const token = getToken()
+  return fetchApi<{ success: boolean; message: string }>('/careers', {
+    method: 'POST',
+    token,
+    body: JSON.stringify(data),
+  })
+}
+
+export async function updateJobListing(id: string, data: any) {
+  const token = getToken()
+  return fetchApi<{ success: boolean; message: string }>(`/careers/${id}`, {
+    method: 'PUT',
+    token,
+    body: JSON.stringify(data),
+  })
+}
+
+export async function deleteJobListing(id: string) {
+  const token = getToken()
+  return fetchApi<{ success: boolean; message: string }>(`/careers/${id}`, {
+    method: 'DELETE',
+    token,
+  })
+}
+
+// Pricing Plans
+export async function getPricingPlans() {
+  const token = getToken()
+  try {
+    return await fetchApi<any[]>('/pricing-plans/admin/all', { token })
+  } catch {
+    return []
+  }
+}
+
+export async function createPricingPlan(data: any) {
+  const token = getToken()
+  return fetchApi<{ success: boolean; message: string }>('/pricing-plans', {
+    method: 'POST',
+    token,
+    body: JSON.stringify(data),
+  })
+}
+
+export async function updatePricingPlan(id: string, data: any) {
+  const token = getToken()
+  return fetchApi<{ success: boolean; message: string }>(`/pricing-plans/${id}`, {
+    method: 'PUT',
+    token,
+    body: JSON.stringify(data),
+  })
+}
+
+export async function deletePricingPlan(id: string) {
+  const token = getToken()
+  return fetchApi<{ success: boolean; message: string }>(`/pricing-plans/${id}`, {
+    method: 'DELETE',
+    token,
+  })
+}
+
+// Notification Settings
+export async function getNotificationSettings() {
+  const token = getToken()
+  try {
+    return await fetchApi<any>('/notifications/settings', { token })
+  } catch {
+    return null
+  }
+}
+
+export async function updateNotificationSettings(data: {
+  whatsappNumber?: string
+  whatsappMessage?: string
+  whatsappEnabled?: boolean
+  emailEnabled?: boolean
+  emailHost?: string
+  emailPort?: number
+  emailUser?: string
+  emailPassword?: string
+  emailFrom?: string
+  adminEmail?: string
+  twilioAccountSid?: string
+  twilioAuthToken?: string
+  twilioFromNumber?: string
+}) {
+  const token = getToken()
+  return fetchApi<{ success: boolean; message: string }>('/notifications/settings', {
+    method: 'PUT',
+    token,
+    body: JSON.stringify(data),
+  })
+}
+
+// Generic API methods for notifications
+export const api = {
+  async get(endpoint: string) {
+    const token = getToken()
+    return fetchApi<any>(endpoint, { token })
+  },
+  async post(endpoint: string, data?: any) {
+    const token = getToken()
+    return fetchApi<any>(endpoint, { method: 'POST', token, body: data ? JSON.stringify(data) : undefined })
+  },
+  async put(endpoint: string, data?: any) {
+    const token = getToken()
+    return fetchApi<any>(endpoint, { method: 'PUT', token, body: data ? JSON.stringify(data) : undefined })
+  },
+  async delete(endpoint: string) {
+    const token = getToken()
+    return fetchApi<any>(endpoint, { method: 'DELETE', token })
+  },
+}
+
+// Notifications
+export interface Notification {
+  id: string
+  type: 'BOOKING_NEW' | 'BOOKING_STATUS' | 'SYSTEM'
+  title: string
+  message: string
+  isRead: boolean
+  data?: any
+  createdAt: string
+  readAt?: string | null
+}
+
+export interface NotificationsResponse {
+  data: Notification[]
+  total: number
+  page: number
+  limit: number
+  totalPages: number
+  unreadCount: number
+}
+
+export async function getNotifications(params?: {
+  page?: number
+  limit?: number
+  unreadOnly?: boolean
+}): Promise<NotificationsResponse> {
+  const token = getToken()
+  
+  const queryParams = new URLSearchParams()
+  if (params?.page) queryParams.set('page', params.page.toString())
+  if (params?.limit) queryParams.set('limit', params.limit?.toString() || '20')
+  if (params?.unreadOnly) queryParams.set('unreadOnly', 'true')
+  
+  const query = queryParams.toString()
+  const endpoint = `/notifications${query ? `?${query}` : ''}`
+  
+  return fetchApi<NotificationsResponse>(endpoint, { token })
+}
+
+export async function getUnreadCount(): Promise<number> {
+  const token = getToken()
+  const data = await fetchApi<{ count: number }>('/notifications/unread-count', { token })
+  return data.count
+}
+
+export async function markNotificationAsRead(id: string): Promise<void> {
+  const token = getToken()
+  await fetchApi<{ success: boolean }>(`/notifications/${id}/read`, {
+    method: 'PUT',
+    token,
+  })
+}
+
+export async function markAllNotificationsAsRead(): Promise<void> {
+  const token = getToken()
+  await fetchApi<{ success: boolean }>('/notifications/read-all', {
+    method: 'PUT',
+    token,
+  })
+}
+
+// Site Settings
+export interface SiteSettings {
+  id: string
+  companyName: string
+  tagline: string | null
+  description: string | null
+  logo: string | null
+  favicon: string | null
+  logoDark: string | null
+  email: string | null
+  phone: string | null
+  whatsapp: string | null
+  address: string | null
+  city: string | null
+  province: string | null
+  postalCode: string | null
+  googleMapsUrl: string | null
+  facebook: string | null
+  instagram: string | null
+  twitter: string | null
+  youtube: string | null
+  linkedin: string | null
+  tiktok: string | null
+  metaTitle: string | null
+  metaDescription: string | null
+  ogImage: string | null
+  keywords: string | null
+  footerText: string | null
+  copyrightText: string | null
+  mondayOpen: string
+  mondayClose: string
+  tuesdayOpen: string
+  tuesdayClose: string
+  wednesdayOpen: string
+  wednesdayClose: string
+  thursdayOpen: string
+  thursdayClose: string
+  fridayOpen: string
+  fridayClose: string
+  saturdayOpen: string
+  saturdayClose: string
+  sundayOpen: string
+  sundayClose: string
+  is24Hours: boolean
+  minAdvanceDays: number
+  maxAdvanceDays: number
+  cancellationHours: number
+}
+
+export async function getSiteSettings(): Promise<SiteSettings | null> {
+  const token = getToken()
+  try {
+    return await fetchApi<SiteSettings>('/site-settings', { token })
+  } catch {
+    return null
+  }
+}
+
+export async function updateSiteSettings(data: Partial<SiteSettings>): Promise<SiteSettings> {
+  const token = getToken()
+  return fetchApi<SiteSettings>('/site-settings', {
+    method: 'PUT',
+    token,
+    body: JSON.stringify(data),
+  })
+}
+
+// Navigation Settings
+export interface NavLink {
+  label: string
+  href: string
+  order: number
+  isActive: boolean
+  isDropdown: boolean
+  dropdownItems?: NavLink[]
+}
+
+export interface NavigationSettings {
+  id: string
+  navLinks: NavLink[]
+  showServicesDropdown: boolean
+  servicesDropdownLabel: string
+  ctaButtonText: string
+  ctaButtonLink: string
+  showCtaButton: boolean
+  mobileMenuType: string
+  activeIndicatorStyle: string
+}
+
+export async function getNavigationSettings(): Promise<NavigationSettings | null> {
+  const token = getToken()
+  try {
+    return await fetchApi<NavigationSettings>('/navigation-settings', { token })
+  } catch {
+    return null
+  }
+}
+
+export async function updateNavigationSettings(data: Partial<NavigationSettings>): Promise<NavigationSettings> {
+  const token = getToken()
+  return fetchApi<NavigationSettings>('/navigation-settings', {
+    method: 'PUT',
+    token,
+    body: JSON.stringify(data),
+  })
+}
+
+// Homepage Settings
+export interface BeforeAfterSlide {
+  before: string
+  after: string
+  title: string
+}
+
+export interface HomepageSettings {
+  id: string
+  heroHeadline: string
+  heroSubheadline: string
+  heroImage: string | null
+  heroBadge: string
+  ctaPrimaryText: string
+  ctaPrimaryLink: string
+  ctaSecondaryText: string
+  ctaSecondaryLink: string
+  statsHomesCleaned: string
+  statsRating: string
+  statsSatisfaction: string
+  statsResponseTime: string
+  showFeaturesSection: boolean
+  showServicesSection: boolean
+  showTestimonialsSection: boolean
+  showAreasSection: boolean
+  showBlogSection: boolean
+  showImageShowcase: boolean
+  showCTASection: boolean
+  featuredServiceIds: string[]
+  beforeAfterSlides: BeforeAfterSlide[]
+}
+
+export async function getHomepageSettings(): Promise<HomepageSettings | null> {
+  const token = getToken()
+  try {
+    return await fetchApi<HomepageSettings>('/homepage-settings', { token })
+  } catch {
+    return null
+  }
+}
+
+export async function updateHomepageSettings(data: Partial<HomepageSettings>): Promise<HomepageSettings> {
+  const token = getToken()
+  return fetchApi<HomepageSettings>('/homepage-settings', {
+    method: 'PUT',
+    token,
+    body: JSON.stringify(data),
+  })
+}
+
+// Footer Settings
+export interface FooterColumn {
+  title: string
+  links: { label: string; href: string }[]
+}
+
+export interface SocialLink {
+  name: string
+  href: string
+  icon: string
+}
+
+export interface FooterSettings {
+  id: string
+  footerColumns: FooterColumn[]
+  showContact: boolean
+  contactEmail: string | null
+  contactPhone: string | null
+  contactWhatsapp: string | null
+  contactAddress: string | null
+  showSocials: boolean
+  socialLinks: SocialLink[]
+  showNewsletter: boolean
+  newsletterTitle: string
+  newsletterSubtitle: string | null
+  showStatusBadge: boolean
+  statusBadgeText: string
+  copyrightText: string
+}
+
+export async function getFooterSettings(): Promise<FooterSettings | null> {
+  const token = getToken()
+  try {
+    return await fetchApi<FooterSettings>('/footer-settings', { token })
+  } catch {
+    return null
+  }
+}
+
+export async function updateFooterSettings(data: Partial<FooterSettings>): Promise<FooterSettings> {
+  const token = getToken()
+  return fetchApi<FooterSettings>('/footer-settings', {
+    method: 'PUT',
+    token,
+    body: JSON.stringify(data),
+  })
+}
+
+// Blog Categories
+export interface BlogCategory {
+  id: string
+  name: string
+  slug: string
+  description: string | null
+  order: number
+  _count?: { posts: number }
+}
+
+export async function getBlogCategories(): Promise<BlogCategory[]> {
+  const token = getToken()
+  try {
+    return await fetchApi<BlogCategory[]>('/blog-categories', { token })
+  } catch {
+    return []
+  }
+}
+
+export async function createBlogCategory(data: { name: string; slug: string; description?: string; order?: number }): Promise<BlogCategory> {
+  const token = getToken()
+  return fetchApi<BlogCategory>('/blog-categories', {
+    method: 'POST',
+    token,
+    body: JSON.stringify(data),
+  })
+}
+
+export async function updateBlogCategory(id: string, data: { name?: string; slug?: string; description?: string; order?: number }): Promise<BlogCategory> {
+  const token = getToken()
+  return fetchApi<BlogCategory>(`/blog-categories/${id}`, {
+    method: 'PUT',
+    token,
+    body: JSON.stringify(data),
+  })
+}
+
+export async function deleteBlogCategory(id: string): Promise<void> {
+  const token = getToken()
+  return fetchApi<void>(`/blog-categories/${id}`, {
+    method: 'DELETE',
+    token,
+  })
+}
+
+export async function reorderBlogCategories(categories: { id: string; order: number }[]): Promise<void> {
+  const token = getToken()
+  return fetchApi<void>('/blog-categories/reorder', {
+    method: 'PUT',
+    token,
+    body: JSON.stringify(categories),
+  })
+}
+
+// Email Templates
+export interface EmailTemplate {
+  id: string
+  type: string
+  name: string
+  subject: string
+  body: string
+  smsBody: string | null
+  isActive: boolean
+}
+
+export async function getEmailTemplates(): Promise<EmailTemplate[]> {
+  const token = getToken()
+  try {
+    return await fetchApi<EmailTemplate[]>('/email-templates', { token })
+  } catch {
+    return []
+  }
+}
+
+export async function getEmailTemplateByType(type: string): Promise<EmailTemplate | null> {
+  const token = getToken()
+  try {
+    return await fetchApi<EmailTemplate>(`/email-templates/${type}`, { token })
+  } catch {
+    return null
+  }
+}
+
+export async function updateEmailTemplate(id: string, data: { subject?: string; body?: string; smsBody?: string; isActive?: boolean }): Promise<EmailTemplate> {
+  const token = getToken()
+  return fetchApi<EmailTemplate>(`/email-templates/${id}`, {
+    method: 'PUT',
+    token,
+    body: JSON.stringify(data),
+  })
+}
+
+// Invoices
+export interface InvoiceTemplate {
+  id: string
+  name: string
+  headerText: string
+  companyName: string
+  companyAddress: string | null
+  companyPhone: string | null
+  companyEmail: string | null
+  companyLogo: string | null
+  footerText: string | null
+  taxRate: number
+  notes: string | null
+  isDefault: boolean
+}
+
+export interface InvoiceData {
+  template: InvoiceTemplate
+  booking: any
+  invoice: {
+    number: string
+    date: string
+    customerName: string
+    customerEmail: string
+    customerPhone: string
+  }
+  items: {
+    name: string
+    description: string
+    quantity: number
+    price: number
+    total: number
+  }[]
+  summary: {
+    subtotal: number
+    taxRate: number
+    taxAmount: number
+    total: number
+  }
+  status: string
+}
+
+export async function getInvoiceTemplate(): Promise<InvoiceTemplate | null> {
+  const token = getToken()
+  try {
+    return await fetchApi<InvoiceTemplate>('/invoices/template', { token })
+  } catch {
+    return null
+  }
+}
+
+export async function updateInvoiceTemplate(id: string, data: Partial<InvoiceTemplate>): Promise<InvoiceTemplate> {
+  const token = getToken()
+  return fetchApi<InvoiceTemplate>(`/invoices/template/${id}`, {
+    method: 'PUT',
+    token,
+    body: JSON.stringify(data),
+  })
+}
+
+export async function getBookingInvoice(bookingId: string): Promise<InvoiceData | null> {
+  const token = getToken()
+  try {
+    return await fetchApi<InvoiceData>(`/invoices/booking/${bookingId}`, { token })
+  } catch {
+    return null
+  }
+}
+
+export async function updateCustomer(id: string, data: { isVip?: boolean; notes?: string; addresses?: any }): Promise<any> {
+  const token = getToken()
+  return fetchApi<any>(`/admin/customers/${id}`, {
+    method: 'PUT',
+    token,
+    body: JSON.stringify(data),
+  })
 }

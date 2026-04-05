@@ -1,719 +1,506 @@
 import { PrismaClient, Role, BookingStatus } from '@prisma/client';
-import bcrypt from 'bcrypt';
+import * as bcrypt from 'bcrypt';
 
 const prisma = new PrismaClient();
 
 async function main() {
-  console.log('🌱 Starting seed...');
+  console.log('Seeding database...');
 
-  // Clean existing data
-  await prisma.bookingItem.deleteMany();
-  await prisma.booking.deleteMany();
-  await prisma.blogPost.deleteMany();
-  await prisma.service.deleteMany();
-  await prisma.user.deleteMany();
-
-  // Create Admin User
-  const adminPassword = await bcrypt.hash('admin123', 10);
-  const admin = await prisma.user.create({
-    data: {
-      email: 'admin@ningclean.id',
-      name: 'Admin Ningclean',
-      phone: '081234567890',
-      password: adminPassword,
+  // Create admin user
+  const hashedPassword = await bcrypt.hash('admin123', 10);
+  const admin = await prisma.user.upsert({
+    where: { email: 'admin@ningclean.com' },
+    update: {},
+    create: {
+      email: 'admin@ningclean.com',
+      name: 'Admin NingClean',
+      password: hashedPassword,
       role: Role.ADMIN,
-      avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=admin',
     },
   });
-  console.log('✅ Created admin user');
+  console.log('Admin user created:', admin.email);
 
-  // Create Customer Users
-  const customerPassword = await bcrypt.hash('cust123', 10);
-  const customers = await Promise.all([
-    prisma.user.create({
-      data: {
-        email: 'customer1@ningclean.id',
-        name: 'Budi Santoso',
-        phone: '081234567891',
-        password: customerPassword,
-        role: Role.CUSTOMER,
-        avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=budi',
-      },
-    }),
-    prisma.user.create({
-      data: {
-        email: 'customer2@ningclean.id',
-        name: 'Siti Rahayu',
-        phone: '081234567892',
-        password: customerPassword,
-        role: Role.CUSTOMER,
-        avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=siti',
-      },
-    }),
-    prisma.user.create({
-      data: {
-        email: 'customer3@ningclean.id',
-        name: 'Ahmad Wijaya',
-        phone: '081234567893',
-        password: customerPassword,
-        role: Role.CUSTOMER,
-        avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=ahmad',
-      },
-    }),
-  ]);
-  console.log('✅ Created 3 customer users');
-
-  // Create Services
-  const services = await Promise.all([
-    prisma.service.create({
-      data: {
-        name: 'Home Cleaning',
-        slug: 'home-cleaning',
-        description: 'Layanan pembersihan rumah tangga harian. Termasuk menyapu, mengepel, membersihkan kamar mandi, dan menata ruangan. Cocok untuk maintenance kebersihan rumah secara rutin.',
-        price: 150000,
-        duration: 180,
-        icon: 'home',
-        isActive: true,
-      },
-    }),
-    prisma.service.create({
-      data: {
-        name: 'Deep Cleaning',
-        slug: 'deep-cleaning',
-        description: 'Pembersihan menyeluruh dan mendalam untuk seluruh rumah. Membersihkan area yang sulit dijangkau, membersikan noda membandel, dan消毒 seluruh permukaan. Ideal untuk rumah yang jarang dibersihkan atau sebelum/after acara besar.',
-        price: 300000,
-        duration: 360,
-        icon: 'sparkles',
-        isActive: true,
-      },
-    }),
-    prisma.service.create({
-      data: {
-        name: 'Move In/Out Cleaning',
-        slug: 'move-in-out-cleaning',
-        description: 'Layanan pembersihan khusus untuk rumah sebelum ditinggali atau setelah ditinggali. Pastikan rumah dalam kondisi bersih sempurna untuk penghuni baru atau saat menyerahkan kunci.',
-        price: 500000,
-        duration: 480,
-        icon: 'truck',
-        isActive: true,
-      },
-    }),
-    prisma.service.create({
-      data: {
-        name: 'Office Cleaning',
-        slug: 'office-cleaning',
-        description: 'Pembersihan kantor dan ruang kerja profesional. Termasuk pembersihan meja kerja, area bersama, kamar mandi kantor, dan dapur. Jadwal fleksibel bisa disesuaikan dengan jam operasional kantor.',
-        price: 200000,
-        duration: 240,
-        icon: 'building',
-        isActive: true,
-      },
-    }),
-  ]);
-  console.log('✅ Created 4 services');
-
-  // Create Blog Posts (in Bahasa Indonesia)
-  const blogPosts = await Promise.all([
-    prisma.blogPost.create({
-      data: {
-        slug: 'tips-membersihkan-rumah-cepat-dan-efektif',
-        title: '10 Tips Membersihkan Rumah dengan Cepat dan Efektif',
-        excerpt: '清理 rumah sering kali terasa melelahkan, tapi dengan strategi yang tepat, Anda bisa mendapatkan rumah bersih dalam waktu singkat. Berikut tips terbaik dari tim Ningclean.',
-        content: `清理 rumah doesn't have to be a daunting task. Dengan pendekatan yang sistematis, Anda bisa membersihkan seluruh rumah dalam waktu 1-2 jam saja.
-
-## 1. Buat Daftar Tugas
-Sebelum mulai, buat daftar areas yang perlu dibersihkan. Ini membantu Anda tetap fokus dan tidak terjebak dalam satu area terlalu lama.
-
-## 2. Mulai dari Atas ke Bawah
-Selalu mulai dari area tertinggi (seperti rak dan langit-langit) menuju ke bawah. Debu dan kotoran akan jatuh dan bisa dibersihkan terakhir.
-
-## 3. Gunakan Metode "Top to Bottom"
-Bersihkan rak terlebih dahulu, lalu meja, dan terakhir lantai. Ini mencegah membersihkan ulang area yang sudah bersih.
-
-## 4. Siapkan Semua Perlengkapan
-Pastikan Anda memiliki semua alat pembersih sebelum mulai. Tidak ada yang lebih menyebalkan daripada setengah jalan kemudian sadar Anda lupa membawa kain pel.
-
-## 5. Terapkan Metode 15 Menit
-Tetapkan timer 15 menit untuk setiap area. Tekanan waktu membantu Anda tetap efisien.
-
-## 6. Bersihkan Satu Ruangan Sekaligus
-Jangan beralih ke ruangan lain sebelum satu ruangan selesai. Ini memberi kepuasan visual yang memotivasi.
-
-## 7. Gunakan Musik sebagai Timer
-Pilih playlist dengan lagu-lagu 3-4 menit. Setiap lagu = satu tugas kecil selesai.
-
-## 8. Delegasi Jika Perlu
-Jika tinggal bersama keluarga, bagi tugas. Anak-anak bisa membantu merapihkan mainan, pasangan bisa mengepel.
-
-## 9. Maintenance Harian
-Lakukan sedikit pembersihan setiap hari. 10-15 menit sehari lebih baik daripada 2 jam di akhir pekan.
-
-## 10. Jasa Profesional
-Untuk hasil maksimal, gunakan jasa cleaning profesional seperti Ningclean. Tim kami terlatih dan menggunakan peralatan terbaik.
-
----
-
-清理 rumah dengan cepat membutuhkan latihan dan konsistensi. Mulailah dengan menerapkan tips di atas, dan tingkatkan efisiensi Anda dari waktu ke waktu!`,
-        coverImage: 'https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=800',
-        author: 'Tim Ningclean',
-        tags: ['tips', 'cleaning', 'rumah-tangga'],
-        readTime: 5,
-      },
-    }),
-    prisma.blogPost.create({
-      data: {
-        slug: 'perbedaan-home-cleaning-dan-deep-cleaning',
-        title: 'Apa Bedanya Home Cleaning dan Deep Cleaning?',
-        excerpt: 'Banyak yang bingung memilih antara home cleaning dan deep cleaning. Ningclean jelaskan perbedaannya agar Anda bisa memilih layanan yang tepat sesuai kebutuhan.',
-        content: `Ketika mencari jasa pembersihan rumah, Anda mungkin sering menemukan dua istilah: home cleaning dan deep cleaning. Keduanya terdengar mirip, tapi sebenarnya sangat berbeda.
-
-## Home Cleaning: Perawatan Rutin
-
-Home cleaning adalah layanan pembersihan rutin yang menjaga kebersihan rumah sehari-hari. Ini termasuk:
-
-- **Menyapu dan mengepel lantai**
-- **Membersihkan debu di permukaan**
-- **Merapikan ruangan**
-- **Membersihkan kamar mandi**
-- **Mengosongkan tempat sampah**
-- **Membersihkan dapur поверхностный**
-
-### Kapan Waktu yang Tepat?
-Home cleaning ideal untuk:
-- Mingguan atau dua minggu sekali
-- Sebelum atau dopo acara kecil
-- Maintenance kebersihan rumah
-
----
-
-## Deep Cleaning: Pembersihan Menyeluruh
-
-Deep cleaning adalah pembersihan intensif yang mencapai area yang sering terlewatkan. Ini termasuk:
-
-- **Membersihkan bagian belakang dan bawah perabotan**
-- **Menghilangkan noda membandel**
-- **Membersihkan ventilasi AC**
-- **Mencuci window (bagian dalam)**
-- **Membersihkan karpet dan sofa secara mendalam**
-- **Menghilangkan debu di sudut-sudut tersembunyi**
-- **Desinfektan menyeluruh**
-
-### Kapan Waktu yang Tepat?
-Deep cleaning diperlukan untuk:
-- Primero membersihkan rumah baru
--Setelah renovasi atau pembangunan
-- Musim hujan dove humidity tinggi
-- Sebelum acara besar atau setelah guests panjang
-- Rumah yang tidak berpenghuni lama
-
----
-
-## Perbandingan Ringkas
-
-| Aspek | Home Cleaning | Deep Cleaning |
-|-------|---------------|---------------|
-| Durasi | 2-3 jam | 4-8 jam |
-| Area cakupan | Permukaan terlihat | Seluruh rumah termasuk area tersembunyi |
-| Frekuensi ideal | Mingguan | Bulanan atau sesuai kebutuhan |
-| Harga | Lebih terjangkau | Lebih tinggi |
-| Peralatan | Basic | Specialized + chemical |
-
----
-
-## Rekomendasi dari Ningclean
-
-Untuk rumah tangga dengan anak kecil atau hewan peliharaan, kami sarankan:
-- **Home cleaning mingguan** untuk maintenance
-- **Deep cleaning bulanan** untuk kebersihan mendalam
-
-Dengan kombinasi keduanya, rumah Anda akan selalu dalam kondisi bersih dan sehat!
-
-Hubungi Ningclean di 0812-3456-7890 untuk konsultasi gratis.`,
-        coverImage: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800',
-        author: 'Tim Ningclean',
-        tags: ['deep-cleaning', 'home-cleaning', 'jasa-cleaning'],
-        readTime: 6,
-      },
-    }),
-    prisma.blogPost.create({
-      data: {
-        slug: 'tips-merawat-kebersihan-kamar-mandi',
-        title: '5 Tips Merawat Kebersihan Kamar Mandi yang Sering Dilewatkan',
-        excerpt: 'Kamar mandi adalah area palingjenuh bakteria di rumah. Berikut tips completa untuk menjaga kamar mandi tetap bersih dan sehat.',
-        content: `Kamar mandi adalah tempat paling lembab di rumah Anda, مما menjadikannya sarang ideal untuk bakteri, jamur, dan bau tidak sedap. Dengan perawatan yang tepat, Anda bisa menjaga kamar mandi tetap bersih dan higienis.
-
-## 1. Bersihkan grout (nat) Secara Rutin
-
-Grout atau nat adalaharea yang sering ditumbuhi jamur. Solusinya:
-- Gunakan campuran baking soda + cuka
-- Sikat dengan sikat gigi bekas setiap minggu
-- APLICEOn anti-jamur secara berkala
-
-## 2. Jaga Ventilasi Kamar Mandi
-
-Air genangan dan kelembaban tinggi adalah masalah utama. Pastikan:
-- Exhaust fan menyala saat dan dopo mandi
-- Buka jendel jika ada
-- Gunakan dehumidifier jika kamar mandi tanpa jendela
-- Lap dinding dan floor después de cada uso
-
-## 3. Bersihkan Shower Head
-
-Shower head sering kali penuh dengan endapan mineral dan bakteri:
-- Rendam dalam cuka selama 30 menit
-- Sikat bagian dalam dengan sikat kecil
-- Bilas dengan air bersih
-- Lakukan ini setiap bulan
-
-## 4. Jangan Lupakanembersihkan Dispenser Sabun
-
-Dispenser sabun cair bisa menjadi tempat perkembangbiakan bakteri:
-- Bersihkan bagian luar setiap minggu
-- Isi ulang dengan sabun segar secara berkala
-- Cuci container setiap kali refill
-- Pertimbangkan penggunaan soap dispenser otomatis
-
-## 5. Membersihkan WC dengan Benar
-
-Toilet adalah sumber bakteri utama:
-- Sikat bagian dalam setiap 2-3 hari
-- Bersihkan under rim setiap minggu
-- Gunakan tablet cleaner dalam tangki
-- Jangan lupa membersihkan flush handle
-- Semprot Disinfektan pada seat dan outer
-
----
-
-## Bonus: Checklist Kebersihan Kamar Mandi
-
-Harian:
-- [ ] Flush dan semprot permukaan
-- [ ] Lap counter dan sink
-- [ ] Gantung handuk dengan benar
-
-Mingguan:
-- [ ] Sikat toilet
-- [ ] Bersihkan mirror
-- [ ] Cuci floor dengan disinfektan
-- [ ] Bersihkan grout
-
-Bulanan:
-- [ ] Deep clean shower/tub
-- [ ] Bersihkan exhaust fan
-- [ ] Cuci curtain shower
-- [ ] inventory perlengkapan kamar mandi
-
----
-
-Dengan mengikuti tips ini, kamar mandi Anda akan selalu dalam kondisi bersih dan menyegarkan. Jika Anda tidak punya waktu untuk cleaning mendalam, Ningclean siap membantu dengan layanan deep cleaning khusus kamar mandi!`,
-        coverImage: 'https://images.unsplash.com/photo-1584622781564-1d987f7333c1?w=800',
-        author: 'Tim Ningclean',
-        tags: ['kamar-mandi', 'cleaning', 'higiene'],
-        readTime: 7,
-      },
-    }),
-    prisma.blogPost.create({
-      data: {
-        slug: 'manfaat-jasa-cleaning-profesional',
-        title: 'Kenapa Harus Pakai Jasa Cleaning Profesional? Ini 7 Manfaatnya!',
-        excerpt: '清理 sendiri atau panggil profesional? Berikut 7 alasan mengapa jasa cleaning profesional like Ningclean adalah investasi yang worth it для дома.',
-        content: `Di era yang sibuk ini, waktu adalah commodities paling valuable. Banyak orang mempertanyakan apakah menggunakan jasa cleaning profesional worth the investment. Jawabannya? Jelas iya! Berikut 7 manfaat menggunakan jasa cleaning profesional.
-
-## 1. Hemat Waktu dan Energi
-
-Dengan menggunakan jasa profesional, Anda bisa fokus pada hal-hal yang lebih penting:
-- Kerjaan yang produktif
-- Quality time bersama keluarga
-- Hobby dan self-improvement
-- Istirahat yang cukup
-
-Bayangkan: 4 jam cleaning weekend = 4 jam quality time dengan keluarga
-
-## 2. Hasil yang Lebih Bersih dan Mendalam
-
-Tim professional memiliki:
-- Pengalaman dan teknik yang terasah
-- Peralatan industry-grade
-- Cleaning solutions yang efektif
-- Standar operating procedures yang ketat
-
-Hasilnya? Rumah benar-benar bersih, bukan hanya terlihat bersih.
-
-## 3. Kesehatan yang Lebih Baik
-
-Rumah yang bersih = lingkungan yang lebih sehat:
-- Mengurangi alergen (debu, serbuk sari, bulu hewan)
-- Menghilangkan bakteri dan virus
-- Mencegah pertumbuhan jamur dan lumut
-- Kualitas udara dalam ruangan lebih baik
-
-## 4. Mengurangi Stres
-
-Tahukah Anda bahwa rumah berantakan meningkatkan cortisol (hormon stres)? Dengan rumah yang selalu bersih:
-- Pikiran lebih tenang
-- Fokus meningkat
-- Kualitas tidur lebih baik
-- Produktivitas meningkat
-
-## 5. Perawatan Proaktif
-
-Tim cleaning profesional bisa mendeteksi masalah awal:
-- Kebocoran air yang tersembunyi
-- Kerusakan permukaan yang perlu diperbaiki
-- Area yang butuh maintenance khusus
-- Potensi hazard keselamatan
-
-## 6. Fleksibilitas dan Konsistensi
-
-Jasa professional menawarkan:
-- Jadwal yang fleksibel (harian, mingguan, bulanan)
-- Customisasi layanan sesuai kebutuhan
-- Konsistensi kualitas
-- Garansi kepuasan
-
-## 7. Efisiensi Biaya
-
-Meskipun terlihat como biaya tambahan:
-- Tidak perlu beli peralatan cleaning mahal
-- Tidak perlu beli cleaning supplies berkualitas tinggi
-- Nilai tambah property lebih tinggi
-- Menghindari biaya perbaikan akibat kurang cleaning
-
----
-
-## Data yang Perlu Anda Tahu
-
-- Rata-rata orang menghabiskan **6 hours per minggu** untuk cleaning
-- 65% orang merasa stressed ketika rumah berantakan
-- Rumah yang bersih dapat meningkatkan productivity hingga **20%**
-- Jasa cleaning profesional bisa menghemat hingga **100+ hours per tahun**
-
----
-
-## Mulai Sekarang!
-
-Jangan biarkan cleaning menjadi beban. Biarkan profesional menangani enquanto Anda fokus pada hal-hal yang lebih penting.
-
-**Ningclean** menawarkan:
-- ✅ Team terlatih dan professional
-- ✅ Peralatan dan produk berkualitas
-- ✅ Harga transparan, tanpa biaya tersembunyi
-- ✅ Satisfaction guarantee
-- ✅ Konsultasi gratis
-
-Hubungi kami di 0812-3456-7890 atau visit ningclean.id untuk informasi lebih lanjut!
-
-清理 rumah bukan lagi beban. Biarkan profesional yang handle!`,
-        coverImage: 'https://images.unsplash.com/photo-1527515637462-cff94eecc1ac?w=800',
-        author: 'Tim Ningclean',
-        tags: ['jasa-cleaning', 'profesional', 'benefits'],
-        readTime: 6,
-      },
-    }),
-    prisma.blogPost.create({
-      data: {
-        slug: 'cleaning-rumah-sebelum-pindah',
-        title: 'Cleaning Rumah Sebelum Pindah: Checklist Lengkap yang Perlu Anda Siapkan',
-        excerpt: 'Bergerak ke rumah baru? Cleaning sebelum pergi非常重要! Berikut checklist lengkap agar rumah lama bersih sempurna dan Anda bisa serah terima dengan tenang.',
-        content: `Memindahkan rumah adalah proses yang melelahkan. Di antara semua tugas persiapan, cleaning rumah lama sering diabaikan. Padahal, rumah bersih saat ditinggalkan adalah etika dan akan memudahkan proses serah terima.
-
-## Checklist Cleaning Move-Out
-
-### Kitchen (Dapur) 🍳
-
-1. **Lemari dan Drawer**
-   - [ ] Kosongkan semua lemari
-   - [ ] Bersihkan shelf dengan disinfektan
-   - [ ] Hilangkan semua food items
-   - [ ] Bersihkan drawer dari remah dan kotoran
-
-2. **Equipment**
-   - [ ] Bersihkan stove/kompor
-   - [ ] Deep clean oven
-   - [ ] Bersihkan microwave
-   - [ ] Kuras dan bersihkan kulkas
-   - [ ] Bersihkan dishwasher (jika ada)
-   - [ ] Lap permukaan counter
-
-3. **Sink dan Faucet**
-   - [ ] Bersihkan wastafel
-   - [ ] Hilangkan noda waterhardness
-   - [ ] Pastikan faucet dalam kondisi baik
-
-### Kamar Mandi 🛁
-
-1. **Toilet**
-   - [ ] Sikat dan bersihkan thoroughly
-   - [ ] Gunakan tablet cleaner
-   - [ ] Bersihkan outer dan flush
-
-2. **Shower/Tub**
-   - [ ] Deep clean shower area
-   - [ ] Hilangkan jamur dan noda
-   - [ ] Bersihkan curtain/shower door
-
-3. **General**
-   - [ ] Bersihkan mirror
-   - [ ] Lap dinding dan floor
-   - [ ] Kosongkan dan bersihkan storage
-
-### Living Areas (Area Tamu) 🛋️
-
-1. **General**
-   - [ ] Singkirkan semua furniture
-   - [ ] Vakum seluruh lantai
-   - [ ] Mop semua lantai
-   - [ ] Bersihkan jendela (bagian dalam)
-
-2. **Detail**
-   - [ ] Bersihkan switch dan outlet covers
-   - [ ] Lap baseboards
-   - [ ] Hilangkan cobwebs
-   - [ ] Bersihkan ceiling fans (jika ada)
-
-### Kamar Tidur 🛏️
-
-1. **Space**
-   - [ ] Kosongkan closet
-   - [ ] Vakum carpet/ lantai
-   - [ ] Bersihkan wardrobes inside
-
-2. **Windows**
-   - [ ] Bersihkan windows
-   - [ ] Cuci curtains/blinds
-   - [ ] Lap sill windows
-
-### Outside Area (Area Luar) 🌳
-
-1. **Yard (if applicable)**
-   - [ ] Bersihkan leaves/debris
-   - [ ] Potong rumput
-   - [ ] Rapi kan tanaman
-
-2. **Garasi/Patio**
-   - [ ] Kosongkan dan sweep
-   - [ ] Bersihkan oil stains (jika ada)
-   - [ ] Rapikan tools
-
-### Final Walkthrough 🔍
-
-Sebelum serah terima final:
-- [ ] Ambil foto semua area
-- [ ] Buat video walkthrough
-- [ ] Pastikan semua kunci tersedia
-- [ ] Cabut semua utility accounts
-- [ ] Beri tahu neighbor tentang moving date
-
----
-
-## Tips Pro dari Ningclean
-
-1. **Mulai Early** - Jangan tunggu last minute. Mulai cleaning 1-2 minggu sebelum moving date.
-
-2. **Room by Room** - Fokus satu ruangan penuh sebelum pindah ke berikutnya.
-
-3. **Dokumentasi** - Ambil foto sebelum dan dopo cleaning untuk comparison.
-
-4. **Professional Help** - Untuk hasil terbaik, gunakan jasa deep cleaning profesional.
-
----
-
-## Kenapa Move-Out Cleaning Penting?
-
-- **Deposit Return** - Banyak landlord требует rumah bersih untuk refund deposit
-- **Etika** - Hormati penghuni berikutnya dengan rumah bersih
-- **Peace of Mind** - Anda bisa pindah dengan tenang tanpa kekhawatiran
-- **Reputation** - Rumah bersih meningkatkan reputation Anda sebagai penyewa
-
----
-
-## Layanan Ningclean untuk Move-Out
-
-Ningclean menawarkan special **Move In/Out Cleaning Package**:
-- ✅ Deep cleaning menyeluruh
-- ✅ Tim experienced dan professional
-- ✅ Peralatan lengkap
-- ✅ Garansi kepuasan
-- ✅ Harga transparan
-
-Untuk reservasi dan konsultasi, hubungi 0812-3456-7890 atau booking melalui website kami!
-
-Moving doesn't have to be stressful. Mulai dengan rumah bersih, akhiri dengan tenang!`,
-        coverImage: 'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=800',
-        author: 'Tim Ningclean',
-        tags: ['move-in-out', 'cleaning', 'pindah-rumah'],
-        readTime: 8,
-      },
-    }),
-  ]);
-  console.log('✅ Created 5 blog posts');
-
-  // Create Bookings (10 sample bookings with various statuses)
-  const orderNumbers = ['NC-2024-0001', 'NC-2024-0002', 'NC-2024-0003', 'NC-2024-0004', 'NC-2024-0005', 'NC-2024-0006', 'NC-2024-0007', 'NC-2024-0008', 'NC-2024-0009', 'NC-2024-0010'];
-  const statuses = [BookingStatus.COMPLETED, BookingStatus.COMPLETED, BookingStatus.COMPLETED, BookingStatus.CONFIRMED, BookingStatus.CONFIRMED, BookingStatus.IN_PROGRESS, BookingStatus.PENDING, BookingStatus.PENDING, BookingStatus.CANCELLED, BookingStatus.PENDING];
-
-  const bookingsData = [
+  // Seed Services
+  const services = [
     {
-      orderNumber: orderNumbers[0],
-      customerId: customers[0].id,
-      status: statuses[0],
-      serviceDate: new Date('2024-01-15'),
-      serviceTime: '09:00',
-      address: 'Jl. Melati No. 12, RT 01/RW 05, Jakarta Selatan',
-      area: '50 m²',
-      notes: 'Mohon arriving tepat waktu',
-      totalAmount: 300000,
-      items: [
-        { serviceId: services[1].id, quantity: 1, price: 300000 },
-      ],
+      name: 'General Cleaning',
+      slug: 'general-cleaning',
+      description: 'Comprehensive general cleaning service for homes and offices',
+      price: 250000,
+      duration: 120,
+      category: 'residential',
+      features: ['Dusting', 'Vacuuming', 'Mopping', 'Surface sanitization'],
+      isActive: true,
+      isFeatured: true,
     },
     {
-      orderNumber: orderNumbers[1],
-      customerId: customers[0].id,
-      status: statuses[1],
-      serviceDate: new Date('2024-01-22'),
-      serviceTime: '10:00',
-      address: 'Jl. Melati No. 12, RT 01/RW 05, Jakarta Selatan',
-      area: '50 m²',
-      notes: 'Weekly maintenance cleaning',
-      totalAmount: 150000,
-      items: [
-        { serviceId: services[0].id, quantity: 1, price: 150000 },
-      ],
+      name: 'Deep Cleaning',
+      slug: 'deep-cleaning',
+      description: 'Intensive deep cleaning for thorough sanitation',
+      price: 450000,
+      duration: 240,
+      category: 'residential',
+      features: ['Deep carpet cleaning', 'Grout cleaning', 'Appliance cleaning', 'Window cleaning'],
+      isActive: true,
+      isFeatured: true,
     },
     {
-      orderNumber: orderNumbers[2],
-      customerId: customers[1].id,
-      status: statuses[2],
-      serviceDate: new Date('2024-01-20'),
-      serviceTime: '08:00',
-      address: 'Jl. Anggrek Blok C3 No. 8, Bandung',
-      area: '75 m²',
-      notes: 'Deep cleaning sebelum acara keluarga',
-      totalAmount: 300000,
-      items: [
-        { serviceId: services[1].id, quantity: 1, price: 300000 },
-      ],
-    },
-    {
-      orderNumber: orderNumbers[3],
-      customerId: customers[2].id,
-      status: statuses[3],
-      serviceDate: new Date('2024-02-01'),
-      serviceTime: '13:00',
-      address: 'Jl. Sudirman No. 45, RT 02/RW 03, Surabaya',
-      area: '120 m²',
-      notes: 'Cleaning kantor lantai 2',
-      totalAmount: 400000,
-      items: [
-        { serviceId: services[3].id, quantity: 2, price: 200000 },
-      ],
-    },
-    {
-      orderNumber: orderNumbers[4],
-      customerId: customers[1].id,
-      status: statuses[4],
-      serviceDate: new Date('2024-02-05'),
-      serviceTime: '09:00',
-      address: 'Jl. Anggrek Blok C3 No. 8, Bandung',
-      area: '75 m²',
-      notes: 'Pembersihan setelah acara ulang tahun',
-      totalAmount: 500000,
-      items: [
-        { serviceId: services[2].id, quantity: 1, price: 500000 },
-      ],
-    },
-    {
-      orderNumber: orderNumbers[5],
-      customerId: customers[0].id,
-      status: statuses[5],
-      serviceDate: new Date('2024-02-10'),
-      serviceTime: '08:00',
-      address: 'Jl. Melati No. 12, RT 01/RW 05, Jakarta Selatan',
-      area: '50 m²',
-      notes: 'Monthly deep cleaning',
-      totalAmount: 300000,
-      items: [
-        { serviceId: services[1].id, quantity: 1, price: 300000 },
-      ],
-    },
-    {
-      orderNumber: orderNumbers[6],
-      customerId: customers[2].id,
-      status: statuses[6],
-      serviceDate: new Date('2024-02-15'),
-      serviceTime: '10:00',
-      address: 'Jl. Sudirman No. 45, RT 02/RW 03, Surabaya',
-      area: '120 m²',
-      notes: 'Kantor akan buka jam 8 pagi',
-      totalAmount: 200000,
-      items: [
-        { serviceId: services[3].id, quantity: 1, price: 200000 },
-      ],
-    },
-    {
-      orderNumber: orderNumbers[7],
-      customerId: customers[1].id,
-      status: statuses[7],
-      serviceDate: new Date('2024-02-20'),
-      serviceTime: '14:00',
-      address: 'Jl. Anggrek Blok C3 No. 8, Bandung',
-      area: '75 m²',
-      notes: 'Weekly home cleaning',
-      totalAmount: 150000,
-      items: [
-        { serviceId: services[0].id, quantity: 1, price: 150000 },
-      ],
-    },
-    {
-      orderNumber: orderNumbers[8],
-      customerId: customers[0].id,
-      status: statuses[8],
-      serviceDate: new Date('2024-01-10'),
-      serviceTime: '09:00',
-      address: 'Jl. Melati No. 12, RT 01/RW 05, Jakarta Selatan',
-      area: '50 m²',
-      notes: 'Cancelled due to scheduling conflict',
-      totalAmount: 150000,
-      items: [
-        { serviceId: services[0].id, quantity: 1, price: 150000 },
-      ],
-    },
-    {
-      orderNumber: orderNumbers[9],
-      customerId: customers[2].id,
-      status: statuses[9],
-      serviceDate: new Date('2024-02-25'),
-      serviceTime: '11:00',
-      address: 'Jl. Sudirman No. 45, RT 02/RW 03, Surabaya',
-      area: '120 m²',
-      notes: 'Move out cleaning - handover tanggal 26 Feb',
-      totalAmount: 500000,
-      items: [
-        { serviceId: services[2].id, quantity: 1, price: 500000 },
-      ],
+      name: 'Office Cleaning',
+      slug: 'office-cleaning',
+      description: 'Professional office cleaning services',
+      price: 350000,
+      duration: 180,
+      category: 'commercial',
+      features: ['Desk sanitization', 'Common area cleaning', 'Restroom cleaning', 'Trash removal'],
+      isActive: true,
+      isFeatured: true,
     },
   ];
 
-  for (const bookingData of bookingsData) {
-    const { items, ...booking } = bookingData;
-    await prisma.booking.create({
-      data: {
-        ...booking,
-        items: {
-          create: items,
-        },
-      },
+  for (const service of services) {
+    await prisma.service.upsert({
+      where: { slug: service.slug },
+      update: {},
+      create: service,
     });
   }
-  console.log('✅ Created 10 bookings with various statuses');
+  console.log('Services seeded');
 
-  console.log('🎉 Seed completed successfully!');
+  // Seed Blog Posts
+  const blogPosts = [
+    {
+      slug: 'tips-kebersihan-rumah',
+      title: '10 Tips Kebersihan Rumah yang Wajib Diketahui',
+      excerpt: 'Pelajari cara menjaga kebersihan rumah dengan tips praktis ini.',
+      content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+      author: 'NingClean Team',
+      tags: ['cleaning', 'tips', 'home'],
+      readTime: 5,
+    },
+    {
+      slug: 'manfaat-deep-cleaning',
+      title: 'Manfaat Deep Cleaning untuk Rumah Anda',
+      excerpt: 'Kenali manfaat deep cleaning untuk kesehatan dan kenyamanan keluarga.',
+      content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+      author: 'NingClean Team',
+      tags: ['deep-cleaning', 'health', 'home'],
+      readTime: 4,
+    },
+  ];
+
+  for (const post of blogPosts) {
+    await prisma.blogPost.upsert({
+      where: { slug: post.slug },
+      update: {},
+      create: post,
+    });
+  }
+  console.log('Blog posts seeded');
+
+  // Seed Testimonials
+  const testimonials = [
+    {
+      name: 'Budi Santoso',
+      role: 'Pemilik Rumah',
+      content: 'Pelayanan sangat profesional dan hasilnya memuaskan. Rumah saya jadi bersih dan wangi!',
+      rating: 5,
+      isActive: true,
+      isFeatured: true,
+      order: 1,
+    },
+    {
+      name: 'Siti Rahayu',
+      role: 'Ibu Rumah Tangga',
+      content: 'Tim NingClean sangat ramah dan teliti. Saya puas dengan hasil deep cleaning.',
+      rating: 5,
+      isActive: true,
+      isFeatured: true,
+      order: 2,
+    },
+    {
+      name: 'PT Maju Jaya',
+      company: 'PT Maju Jaya',
+      role: 'Manager',
+      content: 'Kantor kami selalu bersih berkat layanan regular dari NingClean. Highly recommended!',
+      rating: 5,
+      isActive: true,
+      isFeatured: true,
+      order: 3,
+    },
+  ];
+
+  for (const testimonial of testimonials) {
+    await prisma.testimonial.create({ data: testimonial });
+  }
+  console.log('Testimonials seeded');
+
+  // Create sample customer for bookings
+  const customerPassword = await bcrypt.hash('customer123', 10);
+  const customer = await prisma.user.upsert({
+    where: { email: 'customer@example.com' },
+    update: {},
+    create: {
+      email: 'customer@example.com',
+      name: 'John Doe',
+      password: customerPassword,
+      role: Role.CUSTOMER,
+      phone: '081234567890',
+    },
+  });
+  console.log('Customer user created:', customer.email);
+
+  // Seed Bookings
+  const allServices = await prisma.service.findMany({});
+  
+  const bookings = [
+    {
+      orderNumber: 'NC-2026-0001',
+      customerId: customer.id,
+      serviceDate: new Date('2026-04-02'),
+      serviceTime: '09:00',
+      address: 'Jl. Sudirman No. 123, Jakarta Selatan',
+      area: 'Jakarta Selatan',
+      status: 'PENDING',
+      totalAmount: 250000,
+      notes: 'Cleaning untuk rumah 3 kamar',
+    },
+    {
+      orderNumber: 'NC-2026-0002',
+      customerId: customer.id,
+      serviceDate: new Date('2026-03-28'),
+      serviceTime: '14:00',
+      address: 'Jl. Thamrin No. 456, Jakarta Pusat',
+      area: 'Jakarta Pusat',
+      status: 'COMPLETED',
+      totalAmount: 450000,
+      notes: 'Deep cleaning untuk seluruh rumah',
+    },
+    {
+      orderNumber: 'NC-2026-0003',
+      customerId: customer.id,
+      serviceDate: new Date('2026-04-05'),
+      serviceTime: '10:00',
+      address: 'Jl. Gatot Subroto, Jakarta Selatan',
+      area: 'Jakarta Selatan',
+      status: 'CONFIRMED',
+      totalAmount: 350000,
+      notes: 'Office cleaning',
+    },
+    {
+      orderNumber: 'NC-2026-0004',
+      customerId: customer.id,
+      serviceDate: new Date('2026-03-20'),
+      serviceTime: '08:00',
+      address: 'BSD Sector 1, Tangerang',
+      area: 'Tangerang',
+      status: 'COMPLETED',
+      totalAmount: 250000,
+      notes: '',
+    },
+    {
+      orderNumber: 'NC-2026-0005',
+      customerId: customer.id,
+      serviceDate: new Date('2026-04-08'),
+      serviceTime: '13:00',
+      address: 'Jl. Ahmad Yani, Bekasi',
+      area: 'Bekasi',
+      status: 'PENDING',
+      totalAmount: 450000,
+      notes: 'Deep cleaning apartemen',
+    },
+  ];
+
+  for (const booking of bookings) {
+    const created = await prisma.booking.create({
+      data: {
+        orderNumber: booking.orderNumber,
+        customerId: booking.customerId,
+        serviceDate: booking.serviceDate,
+        serviceTime: booking.serviceTime,
+        address: booking.address,
+        area: booking.area,
+        status: booking.status as any,
+        totalAmount: booking.totalAmount,
+        notes: booking.notes,
+      },
+    });
+
+    // Create booking item with first service
+    if (allServices.length > 0) {
+      await prisma.bookingItem.create({
+        data: {
+          bookingId: created.id,
+          serviceId: allServices[0].id,
+          quantity: 1,
+          price: allServices[0].price,
+        },
+      });
+    }
+  }
+  console.log('Bookings seeded:', bookings.length);
+
+  // Seed Team Members
+  const teamMembers = [
+    {
+      name: 'Ahmad Fauzi',
+      position: 'Cleaning Supervisor',
+      department: 'Operations',
+      bio: '10 tahun pengalaman dalam industri cleaning services',
+      email: 'ahmad@ningclean.com',
+      isActive: true,
+      order: 1,
+    },
+    {
+      name: 'Dewi Kusuma',
+      position: 'Customer Service Manager',
+      department: 'Customer Relations',
+      bio: 'Spesialis dalam melayani pelanggan dengan ramah dan profesional',
+      email: 'dewi@ningclean.com',
+      isActive: true,
+      order: 2,
+    },
+    {
+      name: 'Rudi Hartono',
+      position: 'Lead Technician',
+      department: 'Operations',
+      bio: 'Ahli dalam teknik cleaning modern dan equipment terbaru',
+      email: 'rudi@ningclean.com',
+      isActive: true,
+      order: 3,
+    },
+  ];
+
+  for (const member of teamMembers) {
+    await prisma.teamMember.create({ data: member });
+  }
+  console.log('Team members seeded');
+
+  // Seed Company Stats
+  const companyStats = [
+    { title: 'Years Experience', value: '10+', icon: 'Calendar', order: 1 },
+    { title: 'Happy Clients', value: '5000+', icon: 'Users', order: 2 },
+    { title: 'Team Members', value: '50+', icon: 'UserCheck', order: 3 },
+    { title: 'Services Completed', value: '25000+', icon: 'CheckCircle', order: 4 },
+  ];
+
+  for (const stat of companyStats) {
+    await prisma.companyStat.create({ data: stat });
+  }
+  console.log('Company stats seeded');
+
+  // Seed FAQ
+  const faqs = [
+    {
+      question: 'Apa saja layanan yang ditawarkan NingClean?',
+      answer: 'NingClean menawarkan berbagai layanan cleaning termasuk General Cleaning, Deep Cleaning, Office Cleaning, dan layanan khusus lainnya.',
+      category: 'General',
+      order: 1,
+    },
+    {
+      question: 'Berapa harga layanan cleaning?',
+      answer: 'Harga bervariasi tergantung jenis layanan dan luas area. Silakan hubungi kami untuk penawaran terbaik.',
+      category: 'Pricing',
+      order: 1,
+    },
+    {
+      question: 'Bagaimana cara membooking jadwal?',
+      answer: 'Anda dapat membooking melalui website kami atau menghubungi customer service di nomor yang tersedia.',
+      category: 'Booking',
+      order: 1,
+    },
+    {
+      question: 'Apakah tersedia layanan weekend?',
+      answer: 'Ya, kami menyediakan layanan 7 hari seminggu termasuk weekend dan hari libur nasional.',
+      category: 'Services',
+      order: 1,
+    },
+  ];
+
+  for (const faq of faqs) {
+    await prisma.fAQ.create({ data: faq });
+  }
+  console.log('FAQ seeded');
+
+  // Seed Service Areas
+  const serviceAreas = [
+    {
+      city: 'Surabaya',
+      slug: 'surabaya',
+      region: 'Jawa Timur',
+      description: 'Layanan cleaning profesional di Surabaya dan sekitarnya',
+      coverage: [
+        'Gubeng', 'Tegalsari', 'Dr. Sutomo', 'Tenggilis', 'Rungkut',
+        'Wonokromo', 'Wiyunga', 'Sukolilo', 'Mulyorejo', 'Simo',
+        'Tandes', 'Sukomanunggal', 'Asemrowo', 'Benowo', 'Pakal',
+        'Lakarsantri', 'Pabean Cantian', 'Bubutan', 'Krembangan', 'Semampir',
+        'Kota Surabaya', 'Sawahan', 'Genteng', 'Gubeng', 'Wonokromo',
+        'Karangpilang', 'Lakarsantri', 'Rungkut', 'Wonocolo', 'Wiyunga',
+        'Tenggilis Mejoyo', 'Babatan', 'Balongsari', 'Bangsri', ' Banyu URang',
+      ],
+      isActive: true,
+      isFeatured: true,
+    },
+    {
+      city: 'Sidoarjo',
+      slug: 'sidoarjo',
+      region: 'Jawa Timur',
+      description: 'Layanan cleaning profesional di Sidoarjo dan sekitarnya',
+      coverage: [
+        'Sidoarjo', 'Tanggulangin', 'Candi', 'Tulangan', 'Krembung',
+        'Porong', 'Kedungbendo', 'Ketapang', 'Krian', 'Balongbendo',
+        'Waru', 'Sedati', 'Gedangan', 'Budi', 'Jabon', 'Kasek',
+        'Panggreh', 'Jenggala', 'Kemang', 'Manukan', 'Buluk Batur',
+      ],
+      isActive: true,
+      isFeatured: true,
+    },
+    {
+      city: 'Gresik',
+      slug: 'gresik',
+      region: 'Jawa Timur',
+      description: 'Layanan cleaning profesional di Gresik dan sekitarnya',
+      coverage: [
+        'Gresik Kota', 'Duduk Sampeyan', 'Kebomas', 'Cerme', 'Benjeng',
+        'Menganti', 'Kawasan Industri KIEC', 'Kawasan Industri Kuwait', 'Bungah',
+        'Dukunttg', 'Sidayu', 'Dumljaya', 'Ganting', 'Kramat', 'Gulomantung',
+      ],
+      isActive: true,
+      isFeatured: true,
+    },
+  ];
+
+  for (const area of serviceAreas) {
+    await prisma.serviceArea.create({ data: area });
+  }
+  console.log('Service areas seeded');
+
+  // Seed Gallery Items
+  const galleryItems = [
+    {
+      title: 'Residential Deep Cleaning',
+      description: 'Hasil pembersihan mendalam di rumah client',
+      category: 'Residential',
+      imageUrl: 'https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=800',
+      location: 'Jakarta Selatan',
+      isActive: true,
+      isFeatured: true,
+      order: 1,
+    },
+    {
+      title: 'Office Space Sanitization',
+      description: 'Pembersihan dan sanitasi ruang kantor modern',
+      category: 'Commercial',
+      imageUrl: 'https://images.unsplash.com/photo-1497366216548-37526070297c?w=800',
+      location: 'Jakarta Barat',
+      isActive: true,
+      isFeatured: true,
+      order: 2,
+    },
+    {
+      title: 'Carpet & Upholstery Cleaning',
+      description: 'Pembersihan karpet dan furniture dengan teknik profesional',
+      category: 'Deep Cleaning',
+      imageUrl: 'https://images.unsplash.com/photo-1558317374-067fb5f30001?w=800',
+      location: 'Bandung',
+      isActive: true,
+      isFeatured: false,
+      order: 3,
+    },
+  ];
+
+  for (const item of galleryItems) {
+    await prisma.galleryItem.create({ data: item });
+  }
+  console.log('Gallery items seeded');
+
+  // Seed Pricing Plans
+  const pricingPlans = [
+    {
+      name: 'Basic',
+      slug: 'basic',
+      description: 'Ideal untuk perawatan rutin rumah atau apartemen kecil',
+      price: 250000,
+      billingCycle: 'one-time',
+      features: ['2 Hours Service', 'General Cleaning', '2 Cleaners', 'Basic Equipment'],
+      isActive: true,
+      order: 1,
+    },
+    {
+      name: 'Premium',
+      slug: 'premium',
+      description: 'Solusi lengkap untuk deep cleaning rumah atau kantor',
+      price: 500000,
+      billingCycle: 'one-time',
+      features: ['4 Hours Service', 'Deep Cleaning', '3 Cleaners', 'Premium Equipment', 'Disinfection'],
+      isPopular: true,
+      isActive: true,
+      order: 2,
+    },
+    {
+      name: 'Enterprise',
+      slug: 'enterprise',
+      description: 'Solusi cleaning kustom untuk bisnis dan gedung besar',
+      price: 1500000,
+      billingCycle: 'monthly',
+      features: ['Weekly Service', 'Full Building', 'Dedicated Team', 'Premium Equipment', 'Priority Support'],
+      isActive: true,
+      order: 3,
+    },
+  ];
+
+  for (const plan of pricingPlans) {
+    await prisma.pricingPlan.create({ data: plan });
+  }
+  console.log('Pricing plans seeded');
+
+  // Seed Job Listings
+  const jobListings = [
+    {
+      title: 'Cleaning Staff',
+      department: 'Operations',
+      location: 'Jakarta',
+      type: 'Full-time',
+      description: 'Bertanggung jawab untuk melakukan pembersihan di lokasi client dengan standar profesional.',
+      requirements: ['Pengalaman cleaning minimal 1 tahun', 'Rajin dan teliti', 'Bisa bekerja sama tim'],
+      benefits: ['Gaji kompetitif', 'Asuransi kesehatan', 'Pelatihan gratis'],
+      salaryRange: 'Rp 3.500.000 - 5.000.000',
+      isActive: true,
+    },
+    {
+      title: 'Supervisor Cleaning',
+      department: 'Operations',
+      location: 'Jakarta',
+      type: 'Full-time',
+      description: 'Memimpin tim cleaning dan memastikan kualitas layanan terbaik.',
+      requirements: ['Pengalaman 2+ tahun di bidang cleaning', 'Kemampuan leadership', 'Memiliki SIM'],
+      benefits: ['Gaji kompetitif', 'Bonus kinerja', 'Asuransi kesehatan', 'Pelatihan manajemen'],
+      salaryRange: 'Rp 5.000.000 - 7.000.000',
+      isActive: true,
+    },
+    {
+      title: 'Customer Service',
+      department: 'Customer Relations',
+      location: 'Jakarta',
+      type: 'Full-time',
+      description: 'Menangani inquiry dan booking dari customer dengan ramah dan profesional.',
+      requirements: ['Pengalaman CS minimal 1 tahun', 'Komunikasi yang baik', 'Familiar dengan komputer'],
+      benefits: ['Gaji kompetitif', 'Bonus kinerja', 'Asuransi kesehatan'],
+      salaryRange: 'Rp 4.000.000 - 6.000.000',
+      isActive: true,
+    },
+  ];
+
+  for (const job of jobListings) {
+    await prisma.jobListing.create({ data: job });
+  }
+  console.log('Job listings seeded');
+
+  console.log('\n✅ Seeding completed successfully!');
 }
 
 main()
   .catch((e) => {
-    console.error('❌ Seed failed:', e);
+    console.error(e);
     process.exit(1);
   })
   .finally(async () => {

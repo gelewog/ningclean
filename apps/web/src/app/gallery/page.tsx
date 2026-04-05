@@ -9,158 +9,67 @@ import { SectionLoader } from '@/components/ui/Spinner';
 import Button from '@/components/ui/Button';
 import { BeforeAfterSlider } from '@/components/gallery/BeforeAfterSlider';
 import { ChevronLeft, ChevronRight, Grid3X3, LayoutGrid, ZoomIn, X } from 'lucide-react';
+import { getGalleryItems } from '@/lib/api';
 
 // Gallery data
 const galleryCategories = [
   { id: 'all', label: 'Semua' },
-  { id: 'home', label: 'Home Cleaning' },
-  { id: 'deep', label: 'Deep Cleaning' },
-  { id: 'post-construction', label: 'Post Construction' },
-  { id: 'sofa', label: 'Sofa & Carpet' },
-  { id: 'office', label: 'Office Cleaning' },
-  { id: 'window', label: 'Window Cleaning' },
-];
-
-const galleryItems = [
-  {
-    id: '1',
-    category: 'home',
-    title: 'Ruang Tamu Minimalis',
-    location: 'Surabaya Timur',
-    beforeImage: 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=800&q=80',
-    afterImage: 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=800&q=80&sat=-100&brightness=1.3',
-    description: 'Pembersihan ruang tamu dengan debu dan noda yang menempel.',
-  },
-  {
-    id: '2',
-    category: 'deep',
-    title: 'Dapur Setelah Event',
-    location: 'Gedung Pernikahan, Surabaya',
-    beforeImage: 'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=800&q=80',
-    afterImage: 'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=800&q=80&sat=-100&brightness=1.3',
-    description: 'Deep cleaning dapur setelah acara catering besar.',
-  },
-  {
-    id: '3',
-    category: 'post-construction',
-    title: 'Rumah Baru Renovasi',
-    location: 'Sidoarjo',
-    beforeImage: 'https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=800&q=80',
-    afterImage: 'https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=800&q=80&sat=-100&brightness=1.3',
-    description: 'Pembersihan debu konstruksi dan sisa material bangunan.',
-  },
-  {
-    id: '4',
-    category: 'sofa',
-    title: 'Sofa Kulit Warna Tua',
-    location: 'Jakarta Selatan',
-    beforeImage: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=800&q=80',
-    afterImage: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=800&q=80&sat=-100&brightness=1.3',
-    description: 'Deep cleaning sofa kulit dengan noda kopi dan debu.',
-  },
-  {
-    id: '5',
-    category: 'office',
-    title: 'Ruang Meeting Kantor',
-    location: 'GEDUNG BOTANIA, Surabaya',
-    beforeImage: 'https://images.unsplash.com/photo-1497366216548-37526070297c?w=800&q=80',
-    afterImage: 'https://images.unsplash.com/photo-1497366216548-37526070297c?w=800&q=80&sat=-100&brightness=1.3',
-    description: 'Cleaning rutin ruang meeting dan area kerja.',
-  },
-  {
-    id: '6',
-    category: 'window',
-    title: 'Jendela Kantor Bertingkat',
-    location: 'Gedung Pavilion, Surabaya',
-    beforeImage: 'https://images.unsplash.com/photo-1486325212027-8081e485255e?w=800&q=80',
-    afterImage: 'https://images.unsplash.com/photo-1486325212027-8081e485255e?w=800&q=80&sat=-100&brightness=1.3',
-    description: 'Window cleaning eksterior lantai 5-10.',
-  },
-  {
-    id: '7',
-    category: 'home',
-    title: 'Kamar Tidur Master',
-    location: 'Pondok Indah, Surabaya Barat',
-    beforeImage: 'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=800&q=80',
-    afterImage: 'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=800&q=80&sat=-100&brightness=1.3',
-    description: 'Deep cleaning kamar tidur dengan AC dan mattress cleaning.',
-  },
-  {
-    id: '8',
-    category: 'deep',
-    title: 'Kamar Mandi Master Bathroom',
-    location: 'Apartemen Marimba, Sidoarjo',
-    beforeImage: 'https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?w=800&q=80',
-    afterImage: 'https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?w=800&q=80&sat=-100&brightness=1.3',
-    description: 'Deep cleaning kamar mandi dari kerak waterpass dan jamur.',
-  },
-  {
-    id: '9',
-    category: 'post-construction',
-    title: 'Lobby Gedung Apartemen',
-    location: 'East Coast, Surabaya',
-    beforeImage: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=800&q=80',
-    afterImage: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=800&q=80&sat=-100&brightness=1.3',
-    description: 'Post-construction cleaning lobby dan koridor.',
-  },
-  {
-    id: '10',
-    category: 'sofa',
-    title: 'Carpet Kantor Besar',
-    location: 'PT Sentosa Jaya, Surabaya',
-    beforeImage: 'https://images.unsplash.com/photo-1524758631624-e2822e304c36?w=800&q=80',
-    afterImage: 'https://images.unsplash.com/photo-1524758631624-e2822e304c36?w=800&q=80&sat=-100&brightness=1.3',
-    description: 'Carpet cleaning dengan mesin steam extraction.',
-  },
-  {
-    id: '11',
-    category: 'home',
-    title: 'Ruang Keluarga Terbuka',
-    location: 'Cluster Green Hills, Sidoarjo',
-    beforeImage: 'https://images.unsplash.com/photo-1600210492493-0946911123ea?w=800&q=80',
-    afterImage: 'https://images.unsplash.com/photo-1600210492493-0946911123ea?w=800&q=80&sat=-100&brightness=1.3',
-    description: 'Pembersihan ruang keluarga dengan sofa dan karpet.',
-  },
-  {
-    id: '12',
-    category: 'office',
-    title: 'Pantry & Dapur Kantor',
-    location: 'Digital Creative Hub, Surabaya',
-    beforeImage: 'https://images.unsplash.com/photo-1556911220-e15b29be8c8f?w=800&q=80',
-    afterImage: 'https://images.unsplash.com/photo-1556911220-e15b29be8c8f?w=800&q=80&sat=-100&brightness=1.3',
-    description: 'Weekly pantry cleaning dan disinfection.',
-  },
+  { id: 'Residential', label: 'Home Cleaning' },
+  { id: 'Deep Cleaning', label: 'Deep Cleaning' },
+  { id: 'Post Construction', label: 'Post Construction' },
+  { id: 'Commercial', label: 'Office Cleaning' },
 ];
 
 export default function GalleryPage() {
   const [loading, setLoading] = useState(true);
+  const [galleryItems, setGalleryItems] = useState<any[]>([]);
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [viewMode, setViewMode] = useState<'grid' | 'before-after'>('grid');
-  const [selectedItem, setSelectedItem] = useState<(typeof galleryItems)[0] | null>(null);
+  const [selectedItem, setSelectedItem] = useState<any | null>(null);
   const [selectedIndex, setSelectedIndex] = useState(0);
 
   useEffect(() => {
-    const timer = setTimeout(() => setLoading(false), 300);
-    return () => clearTimeout(timer);
+    const fetchGallery = async () => {
+      try {
+        const data = await getGalleryItems();
+        setGalleryItems(data || []);
+      } catch (error) {
+        console.error('Failed to fetch gallery:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchGallery();
   }, []);
 
   const filteredItems = selectedCategory === 'all'
-    ? galleryItems
-    : galleryItems.filter((item) => item.category === selectedCategory);
+    ? galleryItems.filter(item => item.isActive)
+    : galleryItems.filter((item) => item.category === selectedCategory && item.isActive);
+
+  // Transform API data to match BeforeAfterSlider expected format
+  const transformedItems = filteredItems.map(item => ({
+    id: item.id,
+    title: item.title,
+    location: item.location || '',
+    beforeImage: item.imageUrl,
+    afterImage: item.imageUrl,
+    description: item.description || '',
+    category: item.category,
+  }));
 
   const handlePrev = () => {
     if (!selectedItem) return;
-    const idx = filteredItems.findIndex((i) => i.id === selectedItem.id);
-    const newIdx = idx > 0 ? idx - 1 : filteredItems.length - 1;
-    setSelectedItem(filteredItems[newIdx]);
+    const idx = transformedItems.findIndex((i) => i.id === selectedItem.id);
+    const newIdx = idx > 0 ? idx - 1 : transformedItems.length - 1;
+    setSelectedItem(transformedItems[newIdx]);
     setSelectedIndex(newIdx);
   };
 
   const handleNext = () => {
     if (!selectedItem) return;
-    const idx = filteredItems.findIndex((i) => i.id === selectedItem.id);
-    const newIdx = idx < filteredItems.length - 1 ? idx + 1 : 0;
-    setSelectedItem(filteredItems[newIdx]);
+    const idx = transformedItems.findIndex((i) => i.id === selectedItem.id);
+    const newIdx = idx < transformedItems.length - 1 ? idx + 1 : 0;
+    setSelectedItem(transformedItems[newIdx]);
     setSelectedIndex(newIdx);
   };
 
@@ -277,12 +186,12 @@ export default function GalleryPage() {
                 animate={{ opacity: 1 }}
                 className="text-[13px] page-text-muted mb-6"
               >
-                Menampilkan {filteredItems.length} foto
+                Menampilkan {transformedItems.length} foto
               </motion.p>
 
               {/* Grid */}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-                {filteredItems.map((item, idx) => (
+                {transformedItems.map((item, idx) => (
                   <motion.div
                     key={item.id}
                     initial={{ opacity: 0, y: 20 }}
@@ -310,7 +219,7 @@ export default function GalleryPage() {
                       </div>
                       {/* Badge */}
                       <div className="absolute top-3 left-3 px-3 py-1 rounded-full bg-black/40 backdrop-blur-sm text-[11px] text-white/80">
-                        {galleryCategories.find((c) => c.id === item.category)?.label}
+                        {item.category}
                       </div>
                     </div>
 
@@ -331,11 +240,11 @@ export default function GalleryPage() {
                 animate={{ opacity: 1 }}
                 className="text-[13px] page-text-muted mb-6"
               >
-                {filteredItems.length} project dengan before/after
+                {transformedItems.length} project dengan before/after
               </motion.p>
 
               <div className="space-y-8">
-                {filteredItems.map((item, idx) => (
+                {transformedItems.map((item, idx) => (
                   <BeforeAfterSlider key={item.id} item={item} index={idx} />
                 ))}
               </div>
@@ -343,7 +252,7 @@ export default function GalleryPage() {
           )}
 
           {/* Empty state */}
-          {filteredItems.length === 0 && (
+          {transformedItems.length === 0 && (
             <div className="text-center py-20">
               <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-white dark:bg-white/[0.04] flex items-center justify-center">
                 <svg className="w-8 h-8 text-white/20 dark:text-white/20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -408,7 +317,7 @@ export default function GalleryPage() {
 
             {/* Counter */}
             <div className="absolute top-4 left-1/2 -translate-x-1/2 px-4 py-1.5 rounded-full bg-white/10 text-[12px] text-white/50 z-10">
-              {selectedIndex + 1} / {filteredItems.length}
+              {selectedIndex + 1} / {transformedItems.length}
             </div>
 
             {/* Prev/Next */}

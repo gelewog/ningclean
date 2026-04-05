@@ -13,6 +13,9 @@ interface ConfirmationStepProps {
   address: string;
   city: string;
   notes: string;
+  customerName: string;
+  customerEmail: string;
+  customerPhone: string;
   isSubmitting: boolean;
   onBack: () => void;
   onSubmit: () => void;
@@ -25,6 +28,9 @@ export default function ConfirmationStep({
   address,
   city,
   notes,
+  customerName,
+  customerEmail,
+  customerPhone,
   isSubmitting,
   onBack,
   onSubmit,
@@ -41,6 +47,14 @@ export default function ConfirmationStep({
           
           {/* Booking Summary */}
           <div className="space-y-4">
+            {/* Customer Info */}
+            <div className="bg-gray-50 rounded-lg p-4">
+              <p className="text-sm text-gray-500 mb-1">Data Diri</p>
+              <p className="font-semibold text-foreground">{customerName}</p>
+              <p className="text-sm text-gray-500">{customerEmail}</p>
+              <p className="text-sm text-gray-500">WA: {customerPhone}</p>
+            </div>
+
             {/* Service */}
             <div className="bg-gray-50 rounded-lg p-4">
               <p className="text-sm text-gray-500 mb-1">Layanan</p>

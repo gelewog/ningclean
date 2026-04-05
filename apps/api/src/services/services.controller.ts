@@ -7,6 +7,7 @@ import {
   Body,
   Param,
   UseGuards,
+  Query,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
@@ -21,9 +22,10 @@ export class ServicesController {
   constructor(private servicesService: ServicesService) {}
 
   @Get()
-  @ApiOperation({ summary: 'Get all services (public)' })
-  findAll() {
-    return this.servicesService.findAll();
+  @ApiOperation({ summary: 'Get all services (public - only active)' })
+  findAll(@Query('all') all?: string) {
+    // If 'all=true' is passed, return all services (for admin)
+    return this.servicesService.findAll(all === 'true');
   }
 
   @Get(':id')

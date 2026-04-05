@@ -4,6 +4,7 @@ import {
   IsNumber,
   IsOptional,
   IsBoolean,
+  IsArray,
   Min,
 } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
@@ -37,15 +38,36 @@ export class CreateServiceDto {
   @Type(() => Number)
   duration: number;
 
+  @ApiPropertyOptional({ example: 'Deep Cleaning' })
+  @IsOptional()
+  @IsString()
+  category?: string;
+
+  @ApiPropertyOptional({ example: 'https://images.unsplash.com/...' })
+  @IsOptional()
+  @IsString()
+  image?: string;
+
   @ApiPropertyOptional({ example: 'home' })
   @IsOptional()
   @IsString()
   icon?: string;
 
+  @ApiPropertyOptional({ example: ['Fitur 1', 'Fitur 2'] })
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
+  features?: string[];
+
   @ApiPropertyOptional({ example: true })
   @IsOptional()
   @IsBoolean()
   isActive?: boolean;
+
+  @ApiPropertyOptional({ example: false })
+  @IsOptional()
+  @IsBoolean()
+  isFeatured?: boolean;
 }
 
 export class UpdateServiceDto {
@@ -78,13 +100,34 @@ export class UpdateServiceDto {
   @Type(() => Number)
   duration?: number;
 
+  @ApiPropertyOptional({ example: 'Deep Cleaning' })
+  @IsOptional()
+  @IsString()
+  category?: string;
+
+  @ApiPropertyOptional({ example: 'https://images.unsplash.com/...' })
+  @IsOptional()
+  @IsString()
+  image?: string;
+
   @ApiPropertyOptional({ example: 'home' })
   @IsOptional()
   @IsString()
   icon?: string;
 
+  @ApiPropertyOptional({ example: ['Fitur 1', 'Fitur 2'] })
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
+  features?: string[];
+
   @ApiPropertyOptional({ example: true })
   @IsOptional()
   @IsBoolean()
   isActive?: boolean;
+
+  @ApiPropertyOptional({ example: false })
+  @IsOptional()
+  @IsBoolean()
+  isFeatured?: boolean;
 }

@@ -22,31 +22,31 @@ const motionItem = {
   show: { opacity: 1, y: 0, transition: { duration: 0.6 } },
 };
 
-const stats = [
+const defaultStats = [
   { value: '5+', label: 'Tahun Pengalaman', icon: Clock },
   { value: '1.250+', label: 'Pelanggan Dilayani', icon: Users },
   { value: '25+', label: 'Anggota Tim', icon: Award },
   { value: '3', label: 'Lokasi Area', icon: MapPin },
 ];
 
-const team = [
+const defaultTeam = [
   {
     name: 'Ahmad Wijaya',
-    role: 'CEO & Founder',
+    position: 'CEO & Founder',
     bio: 'Ahmad adalah founders dengan pengalaman 10+ tahun di industri cleaning service. Visi beliau adalah membawa layanan kebersihan profesional ke setiap rumah di Jawa Timur.',
-    image: '👨‍💼',
+    avatar: null,
   },
   {
     name: 'Siti Nurhaliza',
-    role: 'Head of Operations',
+    position: 'Head of Operations',
     bio: 'Siti memastikan setiap pekerjaan berjalan lancar dari awal hingga akhir. Dia adalah ahli dalam efisiensi operasional dan pelatihan tim.',
-    image: '👩‍💼',
+    avatar: null,
   },
   {
     name: 'Bayu Pratama',
-    role: 'Marketing Manager',
+    position: 'Marketing Manager',
     bio: 'Bayu menghubungkan Ningclean dengan pelanggan setia melalui strategi pemasaran yang inovatif dan hubungan masyarakat yang kuat.',
-    image: '👨‍ marketing',
+    avatar: null,
   },
 ];
 
@@ -108,7 +108,7 @@ export default function AboutPage() {
               animate="show"
               className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-16"
             >
-              {stats.map((stat, idx) => (
+              {defaultStats.map((stat, idx) => (
                 <motion.div
                   key={idx}
                   variants={motionItem}
@@ -276,17 +276,17 @@ export default function AboutPage() {
               viewport={{ once: true }}
               className="grid md:grid-cols-3 gap-6"
             >
-              {team.map((member, idx) => (
+              {defaultTeam.map((member, idx) => (
                 <motion.div
                   key={idx}
                   variants={motionItem}
                   className="page-section-card border rounded-3xl p-6 text-center hover:page-section-card transition-colors"
                 >
                   <div className="w-24 h-24 rounded-full bg-gradient-to-br from-emerald-500/20 to-blue-600/20 flex items-center justify-center mx-auto mb-5 text-5xl">
-                    {member.image}
+                    {member.avatar || member.name.charAt(0)}
                   </div>
                   <h3 className="text-lg font-semibold text-white mb-1">{member.name}</h3>
-                  <p className="text-[13px] text-emerald-400 font-medium mb-3">{member.role}</p>
+                  <p className="text-[13px] text-emerald-400 font-medium mb-3">{member.position}</p>
                   <p className="text-[13px] text-white/45 leading-relaxed">{member.bio}</p>
                 </motion.div>
               ))}

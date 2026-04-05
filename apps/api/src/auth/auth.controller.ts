@@ -1,5 +1,6 @@
-import { Controller, Post, Body, HttpCode, HttpStatus } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { Controller, Post, Body, HttpCode, HttpStatus, Get, UseGuards, Request } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
+import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
 import { RegisterDto, LoginDto } from './dto/auth.dto';
 
@@ -28,5 +29,23 @@ export class AuthController {
       return { statusCode: 401, message: 'Invalid credentials' };
     }
     return result;
+  }
+
+  @Get('me')
+  @UseGuards(AuthGuard('jwt'))
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Get current user profile' })
+  @ApiResponse({ status: 200, description: 'Profile retrieved successfully' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  async getProfile(@Request() req: any) {
+    return this.authService.getProfile(req.user.id);
+  }
+
+  @Post('logout')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Logout user' })
+  @ApiResponse({ status: 200, description: 'Logged out successfully' })
+  async logout() {
+    return { message: 'Logged out successfully' };
   }
 }

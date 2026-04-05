@@ -5,6 +5,7 @@ import {
   Put,
   Body,
   Param,
+  Query,
   UseGuards,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
@@ -16,32 +17,43 @@ import { User, Role, BookingStatus } from '@prisma/client';
 
 @ApiTags('Bookings')
 @Controller('bookings')
-@UseGuards(AuthGuard('jwt'))
-@ApiBearerAuth()
 export class BookingsController {
   constructor(private bookingsService: BookingsService) {}
 
   @Get()
+  @UseGuards(AuthGuard('jwt'))
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Get all bookings (customer: own, admin: all)' })
-  findAll(@CurrentUser() user: User) {
-    return this.bookingsService.findAll(user);
+  findAll(@CurrentUser() user: User, @Query() query: any) {
+    return this.bookingsService.findAll(user, {
+      page: query.page ? parseInt(query.page) : undefined,
+      limit: query.limit ? parseInt(query.limit) : undefined,
+      status: query.status,
+      area: query.area,
+      search: query.search,
+      dateFrom: query.dateFrom,
+      dateTo: query.dateTo,
+    });
   }
 
   @Get(':id')
+  @UseGuards(AuthGuard('jwt'))
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Get booking by ID' })
   findOne(@Param('id') id: string, @CurrentUser() user: User) {
     return this.bookingsService.findOne(id, user);
   }
 
   @Post()
-  @ApiOperation({ summary: 'Create a new booking' })
-  create(@Body() dto: CreateBookingDto, @CurrentUser() user: User) {
-    return this.bookingsService.create(dto, user);
+  @ApiOperation({ summary: 'Create a new booking (public)' })
+  create(@Body() dto: CreateBookingDto) {
+    return this.bookingsService.createPublic(dto);
   }
 
   @Put(':id/status')
-  @UseGuards(RolesGuard)
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
   @Roles(Role.ADMIN)
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Update booking status (admin only)' })
   updateStatus(
     @Param('id') id: string,

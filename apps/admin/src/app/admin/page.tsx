@@ -2,14 +2,13 @@
 
 import * as React from 'react'
 import { motion } from 'framer-motion'
-import { Calendar, DollarSign, Users, Clock, Plus, ArrowRight, AlertCircle } from 'lucide-react'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Calendar, DollarSign, Users, Clock, Plus, ArrowRight, AlertCircle, TrendingUp, Sparkles } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { StatCard } from '@/components/admin/StatCard'
 import { DataTable } from '@/components/admin/DataTable'
 import { getDashboardStats, getRecentBookings } from '@/lib/api'
-import { formatCurrency, formatDate, getStatusColor, getStatusLabel } from '@/lib/utils'
+import { formatCurrency, formatDate, getStatusLabel } from '@/lib/utils'
 import Link from 'next/link'
 
 export default function DashboardPage() {
@@ -40,9 +39,14 @@ export default function DashboardPage() {
       key: 'customerName',
       label: 'Customer',
       render: (value: string, row: any) => (
-        <div>
-          <p className="font-medium text-gray-900">{value}</p>
-          <p className="text-xs text-gray-500">{row.customerEmail}</p>
+        <div className="flex items-center gap-3">
+          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 text-xs font-semibold text-white">
+            {value.split(' ').map((n: string) => n[0]).join('').slice(0, 2).toUpperCase()}
+          </div>
+          <div>
+            <p className="font-medium text-gray-900">{value}</p>
+            <p className="text-xs text-gray-500">{row.customerEmail}</p>
+          </div>
         </div>
       ),
     },
@@ -51,8 +55,8 @@ export default function DashboardPage() {
       label: 'Service',
       render: (value: string, row: any) => (
         <div>
-          <p className="font-medium">{value}</p>
-          <p className="text-xs text-gray-500">{formatCurrency(row.servicePrice)}</p>
+          <p className="font-medium text-gray-900">{value}</p>
+          <p className="text-xs text-blue-600 font-medium">{formatCurrency(row.servicePrice)}</p>
         </div>
       ),
     },
@@ -61,7 +65,7 @@ export default function DashboardPage() {
       label: 'Schedule',
       render: (value: string, row: any) => (
         <div>
-          <p className="text-sm">{formatDate(value)}</p>
+          <p className="text-sm text-gray-900">{formatDate(value)}</p>
           <p className="text-xs text-gray-500">{row.scheduledTime}</p>
         </div>
       ),
@@ -69,13 +73,24 @@ export default function DashboardPage() {
     {
       key: 'area',
       label: 'Area',
+      render: (value: string) => (
+        <span className="inline-flex items-center rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-medium text-gray-700">
+          {value}
+        </span>
+      ),
     },
     {
       key: 'status',
       label: 'Status',
       render: (value: string) => {
-        const variant = value === 'completed' ? 'success' : value === 'pending' ? 'warning' : value === 'cancelled' ? 'error' : 'info'
-        return <Badge variant={variant}>{getStatusLabel(value)}</Badge>
+        const variants: Record<string, 'success' | 'warning' | 'error' | 'info' | 'default'> = {
+          completed: 'success',
+          pending: 'warning',
+          cancelled: 'error',
+          in_progress: 'info',
+          confirmed: 'info',
+        }
+        return <Badge variant={variants[value] || 'default'}>{getStatusLabel(value)}</Badge>
       },
     },
   ]
@@ -84,7 +99,7 @@ export default function DashboardPage() {
     hidden: { opacity: 0 },
     show: {
       opacity: 1,
-      transition: { staggerChildren: 0.1 },
+      transition: { staggerChildren: 0.08 },
     },
   }
 
@@ -102,19 +117,26 @@ export default function DashboardPage() {
         className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between"
       >
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
-          <p className="text-gray-500">Welcome back! Here&apos;s what&apos;s happening with Ningclean.</p>
+          <div className="flex items-center gap-3">
+            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-blue-500 to-blue-600 shadow-lg shadow-blue-500/30">
+              <Sparkles className="h-6 w-6 text-white" />
+            </div>
+            <div>
+              <h1 className="text-2xl font-bold tracking-tight text-gray-900">Dashboard</h1>
+              <p className="text-gray-500">Welcome back! Here&apos;s what&apos;s happening with Ningclean.</p>
+            </div>
+          </div>
         </div>
-        <div className="flex gap-2">
-          <Button variant="outline" asChild>
+        <div className="flex gap-3">
+          <Button variant="outline" className="rounded-xl gap-2" asChild>
             <Link href="/admin/bookings">
-              <Calendar className="mr-2 h-4 w-4" />
+              <Calendar className="h-4 w-4" />
               View Bookings
             </Link>
           </Button>
-          <Button asChild>
+          <Button className="rounded-xl gap-2 bg-gradient-to-r from-blue-500 to-blue-600 shadow-lg shadow-blue-500/25 hover:from-blue-600 hover:to-blue-700" asChild>
             <Link href="/admin/bookings">
-              <Plus className="mr-2 h-4 w-4" />
+              <Plus className="h-4 w-4" />
               New Booking
             </Link>
           </Button>
@@ -126,7 +148,7 @@ export default function DashboardPage() {
         variants={container}
         initial="hidden"
         animate="show"
-        className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4"
+        className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4"
       >
         <motion.div variants={item}>
           <StatCard
@@ -135,7 +157,7 @@ export default function DashboardPage() {
             change={stats?.bookingsTrend}
             changeLabel="vs last month"
             icon={Calendar}
-            iconColor="text-primary"
+            iconBg="bg-gradient-to-br from-blue-500 to-blue-600"
           />
         </motion.div>
         <motion.div variants={item}>
@@ -145,7 +167,7 @@ export default function DashboardPage() {
             change={stats?.revenueTrend}
             changeLabel="vs last month"
             icon={DollarSign}
-            iconColor="text-success"
+            iconBg="bg-gradient-to-br from-emerald-500 to-emerald-600"
             format="currency"
           />
         </motion.div>
@@ -154,7 +176,7 @@ export default function DashboardPage() {
             title="Total Customers"
             value={stats?.totalCustomers || 0}
             icon={Users}
-            iconColor="text-accent"
+            iconBg="bg-gradient-to-br from-purple-500 to-purple-600"
           />
         </motion.div>
         <motion.div variants={item}>
@@ -162,47 +184,50 @@ export default function DashboardPage() {
             title="Pending Bookings"
             value={stats?.pendingBookings || 0}
             icon={Clock}
-            iconColor="text-warning"
+            iconBg="bg-gradient-to-br from-amber-500 to-amber-600"
           />
         </motion.div>
       </motion.div>
 
-      {/* Quick Actions & Recent Bookings */}
+      {/* Quick Actions & Alerts */}
       <div className="grid gap-6 lg:grid-cols-3">
         {/* Quick Actions */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
+          className="rounded-2xl border border-gray-100/50 bg-white/80 p-6 shadow-sm backdrop-blur-sm"
         >
-          <Card>
-            <CardHeader>
-              <CardTitle>Quick Actions</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-3">
-              <Button variant="outline" className="w-full justify-start" asChild>
-                <Link href="/admin/bookings">
-                  <Calendar className="mr-2 h-4 w-4" />
+          <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-gray-500">Quick Actions</h3>
+          <div className="space-y-3">
+            <Button variant="outline" className="w-full justify-between rounded-xl border-gray-200 hover:bg-blue-50 hover:border-blue-200 hover:text-blue-600" asChild>
+              <Link href="/admin/bookings">
+                <span className="flex items-center gap-2">
+                  <Calendar className="h-4 w-4" />
                   Manage Bookings
-                  <ArrowRight className="ml-auto h-4 w-4" />
-                </Link>
-              </Button>
-              <Button variant="outline" className="w-full justify-start" asChild>
-                <Link href="/admin/services">
-                  <DollarSign className="mr-2 h-4 w-4" />
+                </span>
+                <ArrowRight className="h-4 w-4" />
+              </Link>
+            </Button>
+            <Button variant="outline" className="w-full justify-between rounded-xl border-gray-200 hover:bg-purple-50 hover:border-purple-200 hover:text-purple-600" asChild>
+              <Link href="/admin/services">
+                <span className="flex items-center gap-2">
+                  <DollarSign className="h-4 w-4" />
                   Update Services
-                  <ArrowRight className="ml-auto h-4 w-4" />
-                </Link>
-              </Button>
-              <Button variant="outline" className="w-full justify-start" asChild>
-                <Link href="/admin/blog">
-                  <Plus className="mr-2 h-4 w-4" />
+                </span>
+                <ArrowRight className="h-4 w-4" />
+              </Link>
+            </Button>
+            <Button variant="outline" className="w-full justify-between rounded-xl border-gray-200 hover:bg-emerald-50 hover:border-emerald-200 hover:text-emerald-600" asChild>
+              <Link href="/admin/blog">
+                <span className="flex items-center gap-2">
+                  <Plus className="h-4 w-4" />
                   Create Blog Post
-                  <ArrowRight className="ml-auto h-4 w-4" />
-                </Link>
-              </Button>
-            </CardContent>
-          </Card>
+                </span>
+                <ArrowRight className="h-4 w-4" />
+              </Link>
+            </Button>
+          </div>
         </motion.div>
 
         {/* Alerts */}
@@ -210,46 +235,65 @@ export default function DashboardPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4 }}
+          className="rounded-2xl border border-gray-100/50 bg-white/80 p-6 shadow-sm backdrop-blur-sm"
         >
-          <Card>
-            <CardHeader>
-              <CardTitle>Alerts</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-3">
-              <div className="flex items-start gap-3 rounded-lg border border-warning/20 bg-warning/5 p-3">
-                <AlertCircle className="mt-0.5 h-5 w-5 text-warning" />
-                <div>
-                  <p className="text-sm font-medium">3 bookings need confirmation</p>
-                  <p className="text-xs text-gray-500">Action required within 24 hours</p>
-                </div>
+          <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-gray-500">Alerts</h3>
+          <div className="space-y-3">
+            <div className="flex items-start gap-3 rounded-xl border border-amber-100 bg-amber-50/50 p-4">
+              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-amber-100">
+                <AlertCircle className="h-4 w-4 text-amber-600" />
               </div>
-              <div className="flex items-start gap-3 rounded-lg border border-error/20 bg-error/5 p-3">
-                <AlertCircle className="mt-0.5 h-5 w-5 text-error" />
-                <div>
-                  <p className="text-sm font-medium">2 bookings cancelled today</p>
-                  <p className="text-xs text-gray-500">Review cancellation reasons</p>
-                </div>
+              <div className="flex-1">
+                <p className="text-sm font-medium text-gray-900">3 bookings need confirmation</p>
+                <p className="text-xs text-gray-500">Action required within 24 hours</p>
               </div>
-            </CardContent>
-          </Card>
+            </div>
+            <div className="flex items-start gap-3 rounded-xl border border-red-100 bg-red-50/50 p-4">
+              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-red-100">
+                <AlertCircle className="h-4 w-4 text-red-600" />
+              </div>
+              <div className="flex-1">
+                <p className="text-sm font-medium text-gray-900">2 bookings cancelled today</p>
+                <p className="text-xs text-gray-500">Review cancellation reasons</p>
+              </div>
+            </div>
+          </div>
         </motion.div>
 
-        {/* Chart Placeholder */}
+        {/* Revenue Chart Placeholder */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5 }}
+          className="rounded-2xl border border-gray-100/50 bg-white/80 p-6 shadow-sm backdrop-blur-sm"
         >
-          <Card>
-            <CardHeader>
-              <CardTitle>Revenue Overview</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="flex h-40 items-center justify-center rounded-lg bg-gray-50">
-                <p className="text-sm text-gray-500">Chart integration placeholder</p>
-              </div>
-            </CardContent>
-          </Card>
+          <div className="mb-4 flex items-center justify-between">
+            <h3 className="text-sm font-semibold uppercase tracking-wider text-gray-500">Revenue Overview</h3>
+            <div className="flex items-center gap-1 text-xs text-emerald-600">
+              <TrendingUp className="h-3 w-3" />
+              +12.5%
+            </div>
+          </div>
+          <div className="flex h-36 items-end justify-between gap-2">
+            {[40, 65, 45, 80, 55, 90, 70].map((h, i) => (
+              <motion.div
+                key={i}
+                initial={{ height: 0 }}
+                animate={{ height: `${h}%` }}
+                transition={{ delay: 0.5 + i * 0.05, duration: 0.5 }}
+                className="w-full rounded-t-lg bg-gradient-to-t from-blue-500 to-blue-400"
+              />
+            ))}
+          </div>
+          <div className="mt-3 flex justify-between text-xs text-gray-400">
+            <span>Mon</span>
+            <span>Tue</span>
+            <span>Wed</span>
+            <span>Thu</span>
+            <span>Fri</span>
+            <span>Sat</span>
+            <span>Sun</span>
+          </div>
         </motion.div>
       </div>
 
@@ -257,27 +301,26 @@ export default function DashboardPage() {
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.5 }}
+        transition={{ delay: 0.6 }}
+        className="rounded-2xl border border-gray-100/50 bg-white/80 shadow-sm backdrop-blur-sm"
       >
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between">
-            <CardTitle>Recent Bookings</CardTitle>
-            <Button variant="ghost" size="sm" asChild>
-              <Link href="/admin/bookings">
-                View All
-                <ArrowRight className="ml-1 h-4 w-4" />
-              </Link>
-            </Button>
-          </CardHeader>
-          <CardContent>
-            <DataTable
-              columns={columns}
-              data={recentBookings}
-              loading={loading}
-              onRowClick={(row) => console.log('Row clicked:', row)}
-            />
-          </CardContent>
-        </Card>
+        <div className="flex items-center justify-between border-b border-gray-100 px-6 py-5">
+          <h3 className="text-lg font-semibold text-gray-900">Recent Bookings</h3>
+          <Button variant="ghost" size="sm" className="text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded-xl" asChild>
+            <Link href="/admin/bookings" className="flex items-center gap-1">
+              View All
+              <ArrowRight className="h-4 w-4" />
+            </Link>
+          </Button>
+        </div>
+        <div className="p-6">
+          <DataTable
+            columns={columns}
+            data={recentBookings}
+            loading={loading}
+            onRowClick={(row) => console.log('Row clicked:', row)}
+          />
+        </div>
       </motion.div>
     </div>
   )

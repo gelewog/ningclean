@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useEffect } from 'react';
+import { useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
 
 const featured = {
@@ -284,9 +284,16 @@ function TrustBar() {
   );
 }
 
-export default function TestimonialsSection() {
+interface TestimonialsSectionProps {
+  testimonials?: any[];
+}
+
+export default function TestimonialsSection({ testimonials = [] }: TestimonialsSectionProps) {
   const headerRef = useRef(null);
   const headerInView = useInView(headerRef, { once: true });
+
+  // If no testimonials provided, use static data
+  const hasExternalTestimonials = testimonials.length > 0;
 
   return (
     <section className="relative py-24 dark:bg-[#06060e] bg-slate-50 overflow-hidden">

@@ -1,8 +1,8 @@
 'use client'
 
 import * as React from 'react'
-import { motion } from 'framer-motion'
-import { Plus, Edit, Trash2, Home, Building, Sparkles, HardHat, Sofa, Square, ToggleLeft, ToggleRight, Image as ImageIcon } from 'lucide-react'
+import { motion, AnimatePresence } from 'framer-motion'
+import { Plus, Edit, Trash2, Home, Building, Sparkles, HardHat, Sofa, Image as ImageIcon, Star } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -20,24 +20,47 @@ const SERVICE_ICONS = [
   { name: 'Sparkles', component: Sparkles },
   { name: 'HardHat', component: HardHat },
   { name: 'Sofa', component: Sofa },
-  { name: 'Square', component: Square },
 ]
 
 const CATEGORY_OPTIONS = [
-  { value: 'basic', label: 'Basic' },
-  { value: 'commercial', label: 'Commercial' },
-  { value: 'premium', label: 'Premium' },
-  { value: 'specialty', label: 'Specialty' },
-  { value: 'addon', label: 'Add-on' },
+  { value: 'Deep Cleaning', label: 'Deep Cleaning' },
+  { value: 'Regular Cleaning', label: 'Regular Cleaning' },
+  { value: 'Post Construction', label: 'Post Construction' },
+  { value: 'Sofa Cleaning', label: 'Sofa Cleaning' },
+  { value: 'Office Cleaning', label: 'Office Cleaning' },
 ]
 
 interface ServiceFormData {
   name: string
+  slug: string
   description: string
   price: string
   duration: string
   category: string
   icon: string
+  image: string
+  features: string
+  isFeatured: boolean
+}
+
+// Switch Component
+function Switch({ checked, onChange, disabled = false }: { checked: boolean; onChange: () => void; disabled?: boolean }) {
+  return (
+    <button
+      type="button"
+      onClick={onChange}
+      disabled={disabled}
+      className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 ${
+        checked ? 'bg-success' : 'bg-gray-300'
+      } ${disabled ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'}`}
+    >
+      <span
+        className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+          checked ? 'translate-x-6' : 'translate-x-1'
+        }`}
+      />
+    </button>
+  )
 }
 
 export default function ServicesPage() {
@@ -47,13 +70,18 @@ export default function ServicesPage() {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = React.useState(false)
   const [selectedService, setSelectedService] = React.useState<any>(null)
   const [isEditing, setIsEditing] = React.useState(false)
+  const [filterActive, setFilterActive] = React.useState<'all' | 'active' | 'inactive'>('all')
   const [formData, setFormData] = React.useState<ServiceFormData>({
     name: '',
+    slug: '',
     description: '',
     price: '',
     duration: '',
-    category: 'basic',
+    category: 'Deep Cleaning',
     icon: 'Home',
+    image: '',
+    features: '',
+    isFeatured: false,
   })
   const [errors, setErrors] = React.useState<Partial<ServiceFormData>>({})
 
@@ -64,7 +92,8 @@ export default function ServicesPage() {
   async function fetchServices() {
     setLoading(true)
     try {
-      const data = await getServices()
+      // Get all services including inactive (admin sees all)
+      const data = await getServices(true)
       setServices(data)
     } catch (error) {
       toast.error('Failed to fetch services')
@@ -73,16 +102,24 @@ export default function ServicesPage() {
     }
   }
 
+  function generateSlug(name: string): string {
+    return name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')
+  }
+
   function openCreateModal() {
     setIsEditing(false)
     setSelectedService(null)
     setFormData({
       name: '',
+      slug: '',
       description: '',
       price: '',
       duration: '',
-      category: 'basic',
+      category: 'Deep Cleaning',
       icon: 'Home',
+      image: '',
+      features: '',
+      isFeatured: false,
     })
     setErrors({})
     setIsModalOpen(true)
@@ -93,11 +130,15 @@ export default function ServicesPage() {
     setSelectedService(service)
     setFormData({
       name: service.name,
+      slug: service.slug,
       description: service.description,
       price: service.price.toString(),
       duration: service.duration.toString(),
-      category: service.category,
+      category: service.category || 'Deep Cleaning',
       icon: service.icon || 'Home',
+      image: service.image || '',
+      features: service.features?.join('\n') || '',
+      isFeatured: service.isFeatured || false,
     })
     setErrors({})
     setIsModalOpen(true)
@@ -126,14 +167,19 @@ export default function ServicesPage() {
     e.preventDefault()
     if (!validateForm()) return
 
+    const slug = formData.slug || generateSlug(formData.name)
     const serviceData = {
       name: formData.name,
+      slug: slug,
       description: formData.description,
       price: Number(formData.price),
       duration: Number(formData.duration),
       category: formData.category,
       icon: formData.icon,
+      image: formData.image || undefined,
+      features: formData.features.split('\n').map(f => f.trim()).filter(f => f.length > 0),
       isActive: selectedService?.isActive ?? true,
+      isFeatured: formData.isFeatured,
     }
 
     try {
@@ -146,18 +192,30 @@ export default function ServicesPage() {
       }
       setIsModalOpen(false)
       fetchServices()
-    } catch (error) {
-      toast.error(`Failed to ${isEditing ? 'update' : 'create'} service`)
+    } catch (error: any) {
+      toast.error(`Failed to ${isEditing ? 'update' : 'create'} service: ${error.message}`)
     }
   }
 
+  // Optimistic update for toggle
   async function handleToggleActive(service: any) {
+    const newIsActive = !service.isActive
+    const serviceName = service.name
+    
+    // Optimistic update - update UI immediately
+    setServices(prev => prev.map(s => 
+      s.id === service.id ? { ...s, isActive: newIsActive } : s
+    ))
+    
     try {
-      await updateService(service.id, { ...service, isActive: !service.isActive })
-      toast.success(`Service ${service.isActive ? 'deactivated' : 'activated'}`)
-      fetchServices()
-    } catch (error) {
-      toast.error('Failed to update service status')
+      await updateService(service.id, { isActive: newIsActive })
+      toast.success(`Service "${serviceName}" ${newIsActive ? 'activated' : 'deactivated'}`)
+    } catch (error: any) {
+      // Revert on error
+      setServices(prev => prev.map(s => 
+        s.id === service.id ? { ...s, isActive: !newIsActive } : s
+      ))
+      toast.error(`Failed to update: ${error.message || 'Unknown error'}`)
     }
   }
 
@@ -180,14 +238,26 @@ export default function ServicesPage() {
 
   function getCategoryBadge(category: string) {
     const colors: Record<string, string> = {
-      basic: 'bg-blue-100 text-blue-800',
-      commercial: 'bg-purple-100 text-purple-800',
-      premium: 'bg-amber-100 text-amber-800',
-      specialty: 'bg-green-100 text-green-800',
-      addon: 'bg-gray-100 text-gray-800',
+      'Deep Cleaning': 'bg-blue-100 text-blue-800',
+      'Regular Cleaning': 'bg-green-100 text-green-800',
+      'Post Construction': 'bg-orange-100 text-orange-800',
+      'Sofa Cleaning': 'bg-purple-100 text-purple-800',
+      'Office Cleaning': 'bg-cyan-100 text-cyan-800',
     }
-    return colors[category] || colors.basic
+    return colors[category] || 'bg-gray-100 text-gray-800'
   }
+
+  // Filter services based on active status
+  const filteredServices = React.useMemo(() => {
+    switch (filterActive) {
+      case 'active':
+        return services.filter(s => s.isActive)
+      case 'inactive':
+        return services.filter(s => !s.isActive)
+      default:
+        return services
+    }
+  }, [services, filterActive])
 
   return (
     <div className="space-y-6">
@@ -201,11 +271,44 @@ export default function ServicesPage() {
           <h1 className="text-2xl font-bold text-gray-900">Services</h1>
           <p className="text-gray-500">Manage cleaning services and pricing</p>
         </div>
-        <Button onClick={openCreateModal}>
-          <Plus className="mr-2 h-4 w-4" />
-          Add Service
-        </Button>
+        <div className="flex gap-2">
+          <Button variant="outline" size="sm" onClick={fetchServices}>
+            Refresh
+          </Button>
+          <Button onClick={openCreateModal}>
+            <Plus className="mr-2 h-4 w-4" />
+            Add Service
+          </Button>
+        </div>
       </motion.div>
+
+      {/* Filter Tabs */}
+      <div className="flex gap-2">
+        <button
+          onClick={() => setFilterActive('all')}
+          className={`rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
+            filterActive === 'all' ? 'bg-primary text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+          }`}
+        >
+          All ({services.length})
+        </button>
+        <button
+          onClick={() => setFilterActive('active')}
+          className={`rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
+            filterActive === 'active' ? 'bg-success text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+          }`}
+        >
+          Active ({services.filter(s => s.isActive).length})
+        </button>
+        <button
+          onClick={() => setFilterActive('inactive')}
+          className={`rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
+            filterActive === 'inactive' ? 'bg-gray-500 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+          }`}
+        >
+          Inactive ({services.filter(s => !s.isActive).length})
+        </button>
+      </div>
 
       {/* Services Grid */}
       <motion.div
@@ -214,80 +317,112 @@ export default function ServicesPage() {
         transition={{ delay: 0.1 }}
         className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3"
       >
-        {loading
-          ? Array.from({ length: 6 }).map((_, i) => (
-              <Card key={i} className="overflow-hidden">
-                <CardHeader className="pb-2">
-                  <div className="skeleton mb-2 h-12 w-12 rounded-lg" />
-                  <div className="skeleton h-6 w-3/4 rounded" />
-                </CardHeader>
-                <CardContent>
-                  <div className="skeleton mb-2 h-4 w-full rounded" />
-                  <div className="skeleton h-4 w-2/3 rounded" />
-                </CardContent>
-              </Card>
-            ))
-          : services.map((service, index) => {
-              const IconComponent = getIconComponent(service.icon)
-              return (
-                <motion.div
-                  key={service.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.05 }}
-                >
-                  <Card className={`overflow-hidden transition-shadow hover:shadow-lg ${!service.isActive && 'opacity-60'}`}>
+        <AnimatePresence mode="popLayout">
+          {loading
+            ? Array.from({ length: 6 }).map((_, i) => (
+                <motion.div key={`skeleton-${i}`} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+                  <Card className="overflow-hidden">
                     <CardHeader className="pb-2">
-                      <div className="flex items-start justify-between">
-                        <div className="flex items-center gap-3">
-                          <div className={`rounded-lg p-3 ${service.isActive ? 'bg-primary/10' : 'bg-gray-100'}`}>
-                            <IconComponent className={`h-6 w-6 ${service.isActive ? 'text-primary' : 'text-gray-400'}`} />
-                          </div>
-                          <div>
-                            <CardTitle className="text-base">{service.name}</CardTitle>
-                            <span className={`inline-block rounded-full px-2 py-0.5 text-xs font-medium ${getCategoryBadge(service.category)}`}>
-                              {service.category}
-                            </span>
-                          </div>
-                        </div>
-                        <Badge variant={service.isActive ? 'success' : 'default'}>
-                          {service.isActive ? 'Active' : 'Inactive'}
-                        </Badge>
-                      </div>
+                      <div className="skeleton mb-2 h-12 w-12 rounded-lg" />
+                      <div className="skeleton h-6 w-3/4 rounded" />
                     </CardHeader>
                     <CardContent>
-                      <p className="mb-4 text-sm text-gray-500 line-clamp-2">{service.description}</p>
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <p className="text-lg font-bold text-primary">{formatCurrency(service.price)}</p>
-                          <p className="text-xs text-gray-400">{service.duration} minutes</p>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            onClick={() => handleToggleActive(service)}
-                          >
-                            {service.isActive ? (
-                              <ToggleRight className="h-5 w-5 text-success" />
-                            ) : (
-                              <ToggleLeft className="h-5 w-5 text-gray-400" />
-                            )}
-                          </Button>
-                          <Button variant="ghost" size="icon" onClick={() => openEditModal(service)}>
-                            <Edit className="h-4 w-4" />
-                          </Button>
-                          <Button variant="ghost" size="icon" onClick={() => openDeleteModal(service)}>
-                            <Trash2 className="h-4 w-4 text-error" />
-                          </Button>
-                        </div>
-                      </div>
+                      <div className="skeleton mb-2 h-4 w-full rounded" />
+                      <div className="skeleton h-4 w-2/3 rounded" />
                     </CardContent>
                   </Card>
                 </motion.div>
-              )
-            })}
+              ))
+            : filteredServices.map((service, index) => {
+                const IconComponent = getIconComponent(service.icon)
+                return (
+                  <motion.div
+                    key={service.id}
+                    layout
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, scale: 0.9 }}
+                    transition={{ delay: index * 0.05 }}
+                  >
+                    <Card className={`overflow-hidden transition-shadow hover:shadow-lg ${!service.isActive ? 'opacity-60 grayscale' : ''}`}>
+                      <div className="relative">
+                        {service.image ? (
+                          <img
+                            src={service.image}
+                            alt={service.name}
+                            className="h-40 w-full object-cover"
+                          />
+                        ) : (
+                          <div className="flex h-40 w-full items-center justify-center bg-gray-100">
+                            <IconComponent className="h-16 w-16 text-gray-300" />
+                          </div>
+                        )}
+                        {service.isFeatured && (
+                          <div className="absolute right-2 top-2">
+                            <Badge variant="warning" className="flex items-center gap-1">
+                              <Star className="h-3 w-3" />
+                              Featured
+                            </Badge>
+                          </div>
+                        )}
+                        {!service.isActive && (
+                          <div className="absolute left-2 top-2">
+                            <Badge variant="default">Inactive</Badge>
+                          </div>
+                        )}
+                      </div>
+                      <CardHeader className="pb-2">
+                        <div className="flex items-start justify-between">
+                          <div className="flex items-center gap-3">
+                            <div className={`rounded-lg p-3 ${service.isActive ? 'bg-primary/10' : 'bg-gray-200'}`}>
+                              <IconComponent className={`h-6 w-6 ${service.isActive ? 'text-primary' : 'text-gray-400'}`} />
+                            </div>
+                            <div>
+                              <CardTitle className="text-base">{service.name}</CardTitle>
+                              <span className={`inline-block rounded-full px-2 py-0.5 text-xs font-medium ${getCategoryBadge(service.category)}`}>
+                                {service.category}
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      </CardHeader>
+                      <CardContent>
+                        <p className="mb-4 text-sm text-gray-500 line-clamp-2">{service.description}</p>
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <p className="text-lg font-bold text-primary">{formatCurrency(service.price)}</p>
+                            <p className="text-xs text-gray-400">{service.duration} minutes</p>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <div className="flex items-center gap-2">
+                              <span className="text-xs text-gray-500">Active</span>
+                              <Switch
+                                checked={service.isActive}
+                                onChange={() => handleToggleActive(service)}
+                              />
+                            </div>
+                            <Button variant="ghost" size="icon" onClick={() => openEditModal(service)}>
+                              <Edit className="h-4 w-4" />
+                            </Button>
+                            <Button variant="ghost" size="icon" onClick={() => openDeleteModal(service)}>
+                              <Trash2 className="h-4 w-4 text-error" />
+                            </Button>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </motion.div>
+                )
+              })}
+        </AnimatePresence>
       </motion.div>
+
+      {/* Empty State */}
+      {!loading && filteredServices.length === 0 && (
+        <div className="py-12 text-center">
+          <p className="text-gray-500">No services found</p>
+        </div>
+      )}
 
       {/* Create/Edit Modal */}
       <Modal
@@ -303,6 +438,13 @@ export default function ServicesPage() {
             value={formData.name}
             onChange={(e) => setFormData({ ...formData, name: e.target.value })}
             error={errors.name}
+          />
+
+          <Input
+            label="Slug"
+            placeholder="e.g. home-cleaning"
+            value={formData.slug}
+            onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
           />
 
           <Textarea
@@ -332,42 +474,75 @@ export default function ServicesPage() {
             />
           </div>
 
-          <div>
-            <label className="mb-1.5 block text-sm font-medium text-gray-700">Category</label>
-            <select
-              className="flex h-10 w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm"
-              value={formData.category}
-              onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-            >
-              {CATEGORY_OPTIONS.map((opt) => (
-                <option key={opt.value} value={opt.value}>
-                  {opt.label}
-                </option>
-              ))}
-            </select>
+          <div className="grid gap-4 sm:grid-cols-2">
+            <div>
+              <label className="mb-1.5 block text-sm font-medium text-gray-700">Category</label>
+              <select
+                className="flex h-10 w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm"
+                value={formData.category}
+                onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+              >
+                {CATEGORY_OPTIONS.map((opt) => (
+                  <option key={opt.value} value={opt.value}>
+                    {opt.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div>
+              <label className="mb-1.5 block text-sm font-medium text-gray-700">Icon</label>
+              <div className="grid grid-cols-6 gap-2">
+                {SERVICE_ICONS.map((icon) => {
+                  const IconComponent = icon.component
+                  return (
+                    <button
+                      key={icon.name}
+                      type="button"
+                      onClick={() => setFormData({ ...formData, icon: icon.name })}
+                      className={`flex items-center justify-center rounded-lg p-2 transition-colors ${
+                        formData.icon === icon.name
+                          ? 'bg-primary text-white'
+                          : 'bg-gray-100 hover:bg-gray-200'
+                      }`}
+                    >
+                      <IconComponent className="h-4 w-4" />
+                    </button>
+                  )
+                })}
+              </div>
+            </div>
           </div>
 
-          <div>
-            <label className="mb-1.5 block text-sm font-medium text-gray-700">Icon</label>
-            <div className="grid grid-cols-6 gap-2">
-              {SERVICE_ICONS.map((icon) => {
-                const IconComponent = icon.component
-                return (
-                  <button
-                    key={icon.name}
-                    type="button"
-                    onClick={() => setFormData({ ...formData, icon: icon.name })}
-                    className={`flex items-center justify-center rounded-lg p-3 transition-colors ${
-                      formData.icon === icon.name
-                        ? 'bg-primary text-white'
-                        : 'bg-gray-100 hover:bg-gray-200'
-                    }`}
-                  >
-                    <IconComponent className="h-5 w-5" />
-                  </button>
-                )
-              })}
-            </div>
+          <Input
+            label="Image URL"
+            placeholder="https://images.unsplash.com/..."
+            value={formData.image}
+            onChange={(e) => setFormData({ ...formData, image: e.target.value })}
+            icon={<ImageIcon className="h-4 w-4" />}
+          />
+
+          <Textarea
+            label="Features (one per line)"
+            placeholder="Pembersihan dinding & langit-langit
+Sikat & vacuum karpet/sofa
+Sterilisasi kamar mandi"
+            value={formData.features}
+            onChange={(e) => setFormData({ ...formData, features: e.target.value })}
+            className="min-h-[100px]"
+          />
+
+          <div className="flex items-center gap-3">
+            <input
+              type="checkbox"
+              id="isFeatured"
+              checked={formData.isFeatured}
+              onChange={(e) => setFormData({ ...formData, isFeatured: e.target.checked })}
+              className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
+            />
+            <label htmlFor="isFeatured" className="text-sm font-medium text-gray-700">
+              Featured Service
+            </label>
           </div>
 
           <div className="flex justify-end gap-2 border-t pt-4">

@@ -6,7 +6,7 @@ import { cn } from '@/lib/utils'
 interface DataTableProps {
   columns: {
     key: string
-    label: string
+    label: string | React.ReactNode
     sortable?: boolean
     render?: (value: any, row: any) => React.ReactNode
   }[]
@@ -29,14 +29,14 @@ export function DataTable({
   loading,
   emptyState,
 }: DataTableProps) {
-  const [hoveredRow, setHoveredRow] = React.useState<string | null>(null)
+  const [hoveredRow, setHoveredRow] = React.useState<string | number | null>(null)
 
   if (!loading && data.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center py-12 text-center">
+      <div className="flex flex-col items-center justify-center py-16 text-center">
         {emptyState || (
           <>
-            <div className="rounded-full bg-gray-100 p-4">
+            <div className="mb-4 rounded-full bg-gray-100 p-4">
               <svg
                 className="h-8 w-8 text-gray-400"
                 fill="none"
@@ -51,7 +51,8 @@ export function DataTable({
                 />
               </svg>
             </div>
-            <p className="mt-4 text-sm text-gray-500">No data available</p>
+            <p className="text-sm font-medium text-gray-900">No data available</p>
+            <p className="mt-1 text-sm text-gray-500">Get started by creating a new record</p>
           </>
         )}
       </div>
@@ -62,20 +63,20 @@ export function DataTable({
     <div className="overflow-x-auto">
       <table className="w-full">
         <thead>
-          <tr className="border-b border-gray-200">
+          <tr className="border-b border-gray-100">
             {columns.map((column) => (
               <th
                 key={column.key}
                 className={cn(
-                  'px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500',
-                  column.sortable && 'cursor-pointer hover:bg-gray-50'
+                  'px-5 py-4 text-left text-xs font-semibold uppercase tracking-wider text-gray-500',
+                  column.sortable && 'cursor-pointer select-none transition-colors hover:text-gray-700'
                 )}
                 onClick={() => column.sortable && onSort?.(column.key, sortDirection === 'asc' ? 'desc' : 'asc')}
               >
-                <div className="flex items-center gap-1">
+                <div className="flex items-center gap-2">
                   {column.label}
                   {column.sortable && sortKey === column.key && (
-                    <span className="text-primary">
+                    <span className="text-blue-500">
                       {sortDirection === 'asc' ? '↑' : '↓'}
                     </span>
                   )}
@@ -87,10 +88,10 @@ export function DataTable({
         <tbody>
           {loading
             ? Array.from({ length: 5 }).map((_, i) => (
-                <tr key={i} className="border-b border-gray-100">
+                <tr key={i} className="border-b border-gray-50">
                   {columns.map((col) => (
-                    <td key={col.key} className="px-4 py-3">
-                      <div className="skeleton h-4 w-full rounded" />
+                    <td key={col.key} className="px-5 py-4">
+                      <div className="skeleton h-5 w-full rounded" />
                     </td>
                   ))}
                 </tr>
@@ -102,13 +103,13 @@ export function DataTable({
                   onMouseLeave={() => setHoveredRow(null)}
                   onClick={() => onRowClick?.(row)}
                   className={cn(
-                    'border-b border-gray-100 transition-colors',
+                    'group border-b border-gray-50 transition-all duration-200',
                     onRowClick && 'cursor-pointer',
-                    hoveredRow === (row.id || rowIndex) && 'bg-gray-50'
+                    hoveredRow === (row.id || rowIndex) && 'bg-blue-50/50'
                   )}
                 >
                   {columns.map((column) => (
-                    <td key={column.key} className="px-4 py-3 text-sm">
+                    <td key={column.key} className="px-5 py-4 text-sm text-gray-700">
                       {column.render
                         ? column.render(row[column.key], row)
                         : row[column.key]}
