@@ -4,6 +4,7 @@ import {
   IsOptional,
   IsArray,
   IsNumber,
+  IsBoolean,
   Min,
 } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
@@ -20,10 +21,10 @@ export class CreateBlogDto {
   @IsNotEmpty()
   title: string;
 
-  @ApiProperty({ example: '清理 rumah tidak perlu melelahkan...' })
+  @ApiPropertyOptional({ example: '清理 rumah tidak perlu melelahkan...' })
+  @IsOptional()
   @IsString()
-  @IsNotEmpty()
-  excerpt: string;
+  excerpt?: string;
 
   @ApiProperty({ example: 'Full article content in markdown...' })
   @IsString()
@@ -40,16 +41,28 @@ export class CreateBlogDto {
   @IsNotEmpty()
   author: string;
 
-  @ApiProperty({ example: ['tips', 'cleaning'] })
+  @ApiPropertyOptional({ example: ['tips', 'cleaning'] })
+  @IsOptional()
   @IsArray()
   @IsString({ each: true })
-  tags: string[];
+  tags?: string[];
 
-  @ApiProperty({ example: 5, description: 'Read time in minutes' })
+  @ApiPropertyOptional({ example: 5, description: 'Read time in minutes' })
+  @IsOptional()
   @IsNumber()
   @Min(1)
   @Type(() => Number)
-  readTime: number;
+  readTime?: number;
+
+  @ApiPropertyOptional({ example: 'uuid-of-category' })
+  @IsOptional()
+  @IsString()
+  categoryId?: string;
+
+  @ApiPropertyOptional({ example: false })
+  @IsOptional()
+  @IsBoolean()
+  isFeatured?: boolean;
 }
 
 export class UpdateBlogDto {
@@ -95,4 +108,14 @@ export class UpdateBlogDto {
   @Min(1)
   @Type(() => Number)
   readTime?: number;
+
+  @ApiPropertyOptional({ example: 'uuid-of-category' })
+  @IsOptional()
+  @IsString()
+  categoryId?: string;
+
+  @ApiPropertyOptional({ example: false })
+  @IsOptional()
+  @IsBoolean()
+  isFeatured?: boolean;
 }

@@ -8,6 +8,7 @@ export class BlogService {
 
   async findAll() {
     return this.prisma.blogPost.findMany({
+      where: { publishedAt: { not: null } },
       orderBy: { publishedAt: 'desc' },
       select: {
         id: true,
@@ -21,6 +22,7 @@ export class BlogService {
         readTime: true,
         createdAt: true,
         category: true,
+        isFeatured: true,
       },
     });
   }
@@ -48,12 +50,14 @@ export class BlogService {
       data: {
         slug: dto.slug,
         title: dto.title,
-        excerpt: dto.excerpt,
+        excerpt: dto.excerpt || '',
         content: dto.content,
         coverImage: dto.coverImage,
         author: dto.author,
-        tags: dto.tags,
-        readTime: dto.readTime,
+        tags: dto.tags || [],
+        readTime: dto.readTime || 5,
+        categoryId: dto.categoryId || null,
+        isFeatured: dto.isFeatured || false,
       },
     });
   }
