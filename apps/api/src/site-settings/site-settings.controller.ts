@@ -6,17 +6,16 @@ import { Roles } from '../common/decorators/roles.decorator';
 import { Role } from '@prisma/client';
 
 @Controller('site-settings')
-@UseGuards(JwtAuthGuard, RolesGuard)
 export class SiteSettingsController {
   constructor(private siteSettingsService: SiteSettingsService) {}
 
   @Get()
-  @Roles(Role.ADMIN)
   async getSettings() {
     return this.siteSettingsService.getSettings();
   }
 
   @Put()
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(Role.ADMIN)
   async updateSettings(data: any) {
     return this.siteSettingsService.updateSettings(data);

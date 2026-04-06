@@ -5,7 +5,7 @@ import { Navigation } from '@/components/navigation';
 import { Footer } from '@/components/footer';
 import { HeroSection, FeaturesSection, ServicesSection, CTASection, TestimonialsSection, AreasSection, BlogSection, ImageShowcase } from '@/components/sections';
 import { SectionLoader } from '@/components/ui/Spinner';
-import { servicesApi, blogApi, getTestimonials } from '@/lib/api';
+import { servicesApi, blogApi, getTestimonials, getGalleryItems, getServiceAreas, getHomepageSettings } from '@/lib/api';
 import { mockServices, getFeaturedServices } from '@/lib/mock/services';
 import { Service, BlogPost } from '@/types/api';
 import { Testimonial } from '@/types/api';
@@ -99,15 +99,21 @@ export default function HomePage() {
   const [services, setServices] = useState<Service[]>([]);
   const [blogPosts, setBlogPosts] = useState<BlogPost[]>([]);
   const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
+  const [galleryItems, setGalleryItems] = useState<any[]>([]);
+  const [serviceAreas, setServiceAreas] = useState<any[]>([]);
+  const [homepageSettings, setHomepageSettings] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [servicesData, blogData, testimonialsData] = await Promise.all([
+        const [servicesData, blogData, testimonialsData, galleryData, areasData, homeSettings] = await Promise.all([
           servicesApi.getAll(),
           blogApi.getRecent(3),
           getTestimonials(),
+          getGalleryItems(),
+          getServiceAreas(),
+          getHomepageSettings(),
         ]);
 
         // Use API data if available, otherwise use mock data
@@ -125,6 +131,18 @@ export default function HomePage() {
 
         if (testimonialsData && testimonialsData.length > 0) {
           setTestimonials(testimonialsData.filter((t: any) => t.isActive));
+        }
+
+        if (galleryData && galleryData.length > 0) {
+          setGalleryItems(galleryData.filter((g: any) => g.isActive));
+        }
+
+        if (areasData && areasData.length > 0) {
+          setServiceAreas(areasData.filter((a: any) => a.isActive));
+        }
+
+        if (homeSettings) {
+          setHomepageSettings(homeSettings);
         }
       } catch (error) {
         console.error('Failed to fetch data, using mock data:', error);
@@ -146,14 +164,30 @@ export default function HomePage() {
       <Navigation />
 
       <main>
-        <HeroSection />
-        <FeaturesSection />
-        <ImageShowcase />
-        <ServicesSection services={services} />
-        <CTASection />
-        <TestimonialsSection testimonials={testimonials} />
-        <AreasSection />
-        <BlogSection posts={blogPosts} />
+        <HeroSection
+          badge={homepageSettings?.heroBadge}
+          headline={homepageSettings?.heroHeadline ? `${homepageSettings.heroHeadline}|${homepageSettings.heroHeadlineSuffix || 'Bersih & Nyaman'}` : undefined}
+          subheadline={homepageSettings?.heroSubheadline}
+          ctaPrimaryText={homepageSettings?.ctaPrimaryText}
+          ctaPrimaryLink={homepageSettings?.ctaPrimaryLink}
+          ctaSecondaryText={homepageSettings?.ctaSecondaryText}
+          ctaSecondaryLink={homepageSettings?.ctaSecondaryLink}
+          heroImage={homepageSettings?.heroImage}
+          stats={{
+            homesCleaned: homepageSettings?.statsHomesCleaned,
+            rating: homepageSettings?.statsRating,
+            satisfaction: homepageSettings?.statsSatisfaction,
+            responseTime: homepageSettings?.statsResponseTime,
+          }}
+          beforeAfterSlides={homepageSettings?.beforeAfterSlides}
+        />
+        {homepageSettings?.showFeaturesSection !== false && <FeaturesSection />}
+        {homepageSettings?.showImageShowcase !== false && <ImageShowcase galleryItems={galleryItems} />}
+        {homepageSettings?.showServicesSection !== false && <ServicesSection services={services} />}
+        {homepageSettings?.showCTASection !== false && <CTASection />}
+        {homepageSettings?.showTestimonialsSection !== false && <TestimonialsSection testimonials={testimonials} />}
+        {homepageSettings?.showAreasSection !== false && <AreasSection serviceAreas={serviceAreas} />}
+        {homepageSettings?.showBlogSection !== false && <BlogSection posts={blogPosts} />}
       </main>
 
       <Footer />

@@ -20,6 +20,7 @@ export class BlogService {
         tags: true,
         readTime: true,
         createdAt: true,
+        category: true,
       },
     });
   }

@@ -186,6 +186,42 @@ export async function getTestimonials() {
   }
 }
 
+// Site Settings (Public)
+export async function getSiteSettings() {
+  try {
+    return await fetchApi<any>('/site-settings')
+  } catch {
+    return null
+  }
+}
+
+// Homepage Settings (Public)
+export async function getHomepageSettings() {
+  try {
+    return await fetchApi<any>('/homepage-settings')
+  } catch {
+    return null
+  }
+}
+
+// Navigation Settings (Public)
+export async function getNavigationSettings() {
+  try {
+    return await fetchApi<any>('/navigation-settings')
+  } catch {
+    return null
+  }
+}
+
+// Footer Settings (Public)
+export async function getFooterSettings() {
+  try {
+    return await fetchApi<any>('/footer-settings')
+  } catch {
+    return null
+  }
+}
+
 // Bookings
 export async function createBooking(data: any) {
   return fetchApi<{ success: boolean; message: string; data: any }>('/bookings', {

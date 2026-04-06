@@ -4,22 +4,43 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
-import { isAuthenticated } from '@/lib/api';
+import { isAuthenticated, getNavigationSettings } from '@/lib/api';
 import ThemeToggle from '@/components/ui/ThemeToggle';
 
-const navLinks = [
-  { href: '/', label: 'Beranda' },
-  { href: '/services', label: 'Layanan' },
-  { href: '/pricing', label: 'Harga' },
-  { href: '/gallery', label: 'Galeri' },
-  { href: '/blog', label: 'Blog' },
-  { href: '/booking', label: 'Booking' },
+interface NavLink {
+  label: string;
+  href: string;
+  order: number;
+  isActive: boolean;
+  isDropdown: boolean;
+}
+
+interface NavigationSettings {
+  navLinks: NavLink[];
+  showServicesDropdown: boolean;
+  servicesDropdownLabel: string;
+  ctaButtonText: string;
+  ctaButtonLink: string;
+  showCtaButton: boolean;
+  mobileMenuType: string;
+  activeIndicatorStyle: string;
+}
+
+// Default fallback
+const DEFAULT_NAV_LINKS = [
+  { label: 'Beranda', href: '/', order: 1, isActive: true, isDropdown: false },
+  { label: 'Layanan', href: '/services', order: 2, isActive: true, isDropdown: false },
+  { label: 'Harga', href: '/pricing', order: 3, isActive: true, isDropdown: false },
+  { label: 'Galeri', href: '/gallery', order: 4, isActive: true, isDropdown: false },
+  { label: 'Blog', href: '/blog', order: 5, isActive: true, isDropdown: false },
+  { label: 'Booking', href: '/booking', order: 6, isActive: true, isDropdown: false },
 ];
 
 export default function Navigation() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [navSettings, setNavSettings] = useState<NavigationSettings | null>(null);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -30,12 +51,33 @@ export default function Navigation() {
       setIsLoggedIn(isAuthenticated());
     };
 
+    const fetchNavSettings = async () => {
+      try {
+        const settings = await getNavigationSettings();
+        if (settings) {
+          setNavSettings(settings);
+        }
+      } catch {
+        // Use defaults
+      }
+    };
+
     window.addEventListener('scroll', handleScroll);
     checkAuth();
+    fetchNavSettings();
     handleScroll();
 
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  // Get sorted nav links
+  const navLinks = navSettings?.navLinks?.length
+    ? [...navSettings.navLinks].sort((a, b) => a.order - b.order).filter(link => link.isActive)
+    : DEFAULT_NAV_LINKS;
+
+  const ctaButtonText = navSettings?.ctaButtonText || 'Booking';
+  const ctaButtonLink = navSettings?.ctaButtonLink || '/booking';
+  const showCtaButton = navSettings?.showCtaButton !== false;
 
   return (
     <>
@@ -106,10 +148,19 @@ export default function Navigation() {
               {/* Theme Toggle */}
               <ThemeToggle />
 
+              {showCtaButton && (
+                <Link
+                  href={ctaButtonLink}
+                  className="px-5 py-2.5 rounded-xl font-semibold bg-gradient-to-r from-blue-600 to-blue-700 dark:from-blue-600 dark:to-blue-700 text-white hover:shadow-lg dark:hover:shadow-blue-900/50 hover:shadow-blue-200/50 transition-all duration-300"
+                >
+                  {ctaButtonText}
+                </Link>
+              )}
+
               {isLoggedIn && (
                 <Link
                   href="/dashboard"
-                  className="px-5 py-2.5 rounded-xl font-semibold bg-gradient-to-r from-blue-600 to-blue-700 dark:from-blue-600 dark:to-blue-700 text-white hover:shadow-lg dark:hover:shadow-blue-900/50 hover:shadow-blue-200/50 transition-all duration-300"
+                  className="px-5 py-2.5 rounded-xl font-semibold bg-gradient-to-r from-emerald-600 to-emerald-700 text-white hover:shadow-lg hover:shadow-emerald-900/50 transition-all duration-300"
                 >
                   Dashboard
                 </Link>
@@ -191,17 +242,24 @@ export default function Navigation() {
                     {link.label}
                   </Link>
                 ))}
-                <div className="border-t dark:border-white/10 border-slate-200 mt-4 pt-4 flex flex-col gap-2">
-                  {isLoggedIn && (
-                    <Link
-                      href="/dashboard"
-                      onClick={() => setIsMobileMenuOpen(false)}
-                      className="px-4 py-3 rounded-xl bg-gradient-to-r from-blue-600 to-blue-700 text-white font-semibold text-center"
-                    >
-                      Dashboard
-                    </Link>
-                  )}
-                </div>
+                {showCtaButton && (
+                  <Link
+                    href={ctaButtonLink}
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className="mt-2 px-4 py-3 rounded-xl bg-gradient-to-r from-blue-600 to-blue-700 text-white font-semibold text-center"
+                  >
+                    {ctaButtonText}
+                  </Link>
+                )}
+                {isLoggedIn && (
+                  <Link
+                    href="/dashboard"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className="px-4 py-3 rounded-xl bg-gradient-to-r from-emerald-600 to-emerald-700 text-white font-semibold text-center"
+                  >
+                    Dashboard
+                  </Link>
+                )}
               </div>
             </div>
           </motion.div>

@@ -1,43 +1,44 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
+import { getFooterSettings } from '@/lib/api';
 
-// ─── Data ──────────────────────────────────────────────────────────────────────
+interface SocialLink {
+  name: string;
+  href: string;
+  icon: string;
+}
 
-const footerLinks = {
-  layanan: [
-    { href: '/services', label: 'Semua Layanan' },
-    { href: '/pricing', label: 'Harga' },
-    { href: '/services#deep-cleaning', label: 'Deep Cleaning' },
-    { href: '/services#regular-cleaning', label: 'Regular Cleaning' },
-    { href: '/services#post-construction', label: 'Post Construction' },
-    { href: '/services#sofa-cleaning', label: 'Sofa Cleaning' },
-    { href: '/services#office-cleaning', label: 'Office Cleaning' },
-  ],
-  perusahaan: [
-    { href: '/about', label: 'Tentang Kami' },
-    { href: '/gallery', label: 'Galeri' },
-    { href: '/blog', label: 'Blog & Tips' },
-    { href: '/contact', label: 'Hubungi Kami' },
-    { href: '/faq', label: 'FAQ' },
-    { href: '/career', label: 'Karir' },
-  ],
-  legal: [
-    { href: '/privacy', label: 'Kebijakan Privasi' },
-    { href: '/terms', label: 'Syarat & Ketentuan' },
-    { href: '/refund', label: 'Kebijakan Refund' },
-  ],
-  area: [
-    { href: '/area/surabaya', label: 'Surabaya' },
-    { href: '/area/sidoarjo', label: 'Sidoarjo' },
-    { href: '/area/gresik', label: 'Gresik' },
-  ],
-};
+interface FooterLink {
+  label: string;
+  href: string;
+}
 
-// ─── SVG Icons ────────────────────────────────────────────────────────────────
+interface FooterColumn {
+  title: string;
+  links: FooterLink[];
+}
 
+interface FooterSettings {
+  footerColumns: FooterColumn[];
+  showContact: boolean;
+  contactEmail: string;
+  contactPhone: string;
+  contactWhatsapp: string;
+  contactAddress: string;
+  showSocials: boolean;
+  socialLinks: SocialLink[];
+  showNewsletter: boolean;
+  newsletterTitle: string;
+  newsletterSubtitle: string;
+  showStatusBadge: boolean;
+  statusBadgeText: string;
+  copyrightText: string;
+}
+
+// Fallback social icons
 const InstagramIcon = () => (
   <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
     <rect x="2" y="2" width="20" height="20" rx="5" stroke="currentColor" strokeWidth="1.8" />
@@ -64,47 +65,74 @@ const YouTubeIcon = () => (
   </svg>
 );
 
-const socialLinks = [
-  { name: 'Instagram', href: 'https://instagram.com/ningclean', Icon: InstagramIcon },
-  { name: 'WhatsApp', href: 'https://wa.me/6281234567890', Icon: WhatsAppIcon },
-  { name: 'TikTok', href: 'https://tiktok.com/@ningclean', Icon: TikTokIcon },
-  { name: 'YouTube', href: '#', Icon: YouTubeIcon },
-];
+const socialIconMap: Record<string, React.FC> = {
+  instagram: InstagramIcon,
+  whatsapp: WhatsAppIcon,
+  tiktok: TikTokIcon,
+  youtube: YouTubeIcon,
+  instagram_new: InstagramIcon,
+  link: InstagramIcon,
+};
 
-const contactItems = [
-  {
-    icon: (
-      <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-        <rect x="1" y="3" width="14" height="10" rx="2" stroke="currentColor" strokeWidth="1.2" />
-        <path d="M1 5l7 5 7-5" stroke="currentColor" strokeWidth="1.2" />
-      </svg>
-    ),
-    label: 'hello@ningclean.id',
-    href: 'mailto:hello@ningclean.id',
-  },
-  {
-    icon: (
-      <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-        <path d="M3 3.5a1 1 0 011-1h.5l1.5 3-.75.75a6.5 6.5 0 003.5 3.5l.75-.75 3 1.5v.5a1 1 0 01-1 1C6.268 12.5 3.5 9.732 3.5 6.5c0-.553.197-1.5.5-3z" stroke="currentColor" strokeWidth="1.2" strokeLinejoin="round" />
-      </svg>
-    ),
-    label: '+62 812-3456-7890',
-    href: 'https://wa.me/6281234567890',
-  },
-  {
-    icon: (
-      <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-        <path d="M8 1C5.24 1 3 3.24 3 6c0 3.75 5 9 5 9s5-5.25 5-9c0-2.76-2.24-5-5-5zm0 6.5a1.5 1.5 0 110-3 1.5 1.5 0 010 3z" stroke="currentColor" strokeWidth="1.2" />
-      </svg>
-    ),
-    label: 'Surabaya · Gresik · Sidoarjo',
-    href: undefined,
-  },
-];
+function SocialIcon({ name }: { name: string }) {
+  const Icon = socialIconMap[name.toLowerCase()] || InstagramIcon;
+  return <Icon />;
+}
 
-// ─── Newsletter (CTA Band) ─────────────────────────────────────────────────────
+// Default fallback data
+const DEFAULT_FOOTER = {
+  footerColumns: [
+    { title: 'Layanan', links: [
+      { href: '/services', label: 'Semua Layanan' },
+      { href: '/pricing', label: 'Harga' },
+      { href: '/services#deep-cleaning', label: 'Deep Cleaning' },
+      { href: '/services#regular-cleaning', label: 'Regular Cleaning' },
+      { href: '/services#post-construction', label: 'Post Construction' },
+      { href: '/services#sofa-cleaning', label: 'Sofa Cleaning' },
+      { href: '/services#office-cleaning', label: 'Office Cleaning' },
+    ]},
+    { title: 'Perusahaan', links: [
+      { href: '/about', label: 'Tentang Kami' },
+      { href: '/gallery', label: 'Galeri' },
+      { href: '/blog', label: 'Blog & Tips' },
+      { href: '/contact', label: 'Hubungi Kami' },
+      { href: '/faq', label: 'FAQ' },
+      { href: '/career', label: 'Karir' },
+    ]},
+    { title: 'Legal', links: [
+      { href: '/privacy', label: 'Kebijakan Privasi' },
+      { href: '/terms', label: 'Syarat & Ketentuan' },
+      { href: '/refund', label: 'Kebijakan Refund' },
+    ]},
+    { title: 'Area', links: [
+      { href: '/area/surabaya', label: 'Surabaya' },
+      { href: '/area/sidoarjo', label: 'Sidoarjo' },
+      { href: '/area/gresik', label: 'Gresik' },
+    ]},
+  ],
+  showContact: true,
+  contactEmail: 'hello@ningclean.id',
+  contactPhone: '+62 812-3456-7890',
+  contactWhatsapp: '6281234567890',
+  contactAddress: 'Surabaya · Gresik · Sidoarjo',
+  showSocials: true,
+  socialLinks: [
+    { name: 'Instagram', href: 'https://instagram.com/ningclean', icon: 'instagram' },
+    { name: 'WhatsApp', href: 'https://wa.me/6281234567890', icon: 'whatsapp' },
+    { name: 'TikTok', href: 'https://tiktok.com/@ningclean', icon: 'tiktok' },
+    { name: 'YouTube', href: '#', icon: 'youtube' },
+  ],
+  showNewsletter: true,
+  newsletterTitle: 'Dapat tips bersih setiap minggu',
+  newsletterSubtitle: 'Promo eksklusif, panduan perawatan rumah, dan info layanan baru langsung ke inbox kamu.',
+  showStatusBadge: true,
+  statusBadgeText: 'Semua layanan aktif',
+  copyrightText: 'All rights reserved.',
+};
 
-function NewsletterBand() {
+// ─── Newsletter ─────────────────────────────────────────────────────────────
+
+function NewsletterBand({ settings }: { settings: FooterSettings }) {
   const [email, setEmail] = useState('');
   const [status, setStatus] = useState<'idle' | 'loading' | 'done'>('idle');
 
@@ -115,22 +143,23 @@ function NewsletterBand() {
     setTimeout(() => setStatus('done'), 700);
   };
 
+  const title = settings.newsletterTitle || DEFAULT_FOOTER.newsletterTitle;
+  const subtitle = settings.newsletterSubtitle || DEFAULT_FOOTER.newsletterSubtitle;
+
   return (
     <div className="dark:border-slate-800 border-slate-200 py-14">
       <div className="container mx-auto px-6 max-w-5xl">
         <div className="grid md:grid-cols-2 gap-12 items-center">
-          {/* Left */}
           <div>
             <h3 className="font-serif text-[clamp(26px,3.5vw,40px)] font-normal leading-[1.1] dark:text-white text-slate-900">
-              Dapat tips bersih<br />
-              <em className="italic dark:text-emerald-400 text-emerald-600">setiap minggu</em>
+              {title.split(' ').slice(0, 2).join(' ')}<br />
+              <em className="italic dark:text-emerald-400 text-emerald-600">{title.split(' ').slice(2).join(' ')}</em>
             </h3>
             <p className="text-[14px] dark:text-white/40 text-slate-500 mt-3 leading-relaxed max-w-[340px]">
-              Promo eksklusif, panduan perawatan rumah, dan info layanan baru langsung ke inbox kamu.
+              {subtitle}
             </p>
           </div>
 
-          {/* Right */}
           <div className="flex flex-col gap-2.5">
             <AnimatePresence mode="wait">
               {status === 'done' ? (
@@ -201,7 +230,7 @@ function NewsletterBand() {
 
 // ─── Link column ─────────────────────────────────────────────────────────────
 
-function LinkColumn({ title, links }: { title: string; links: { href: string; label: string }[] }) {
+function LinkColumn({ title, links }: { title: string; links: FooterLink[] }) {
   return (
     <div>
       <h5 className="text-[10px] font-bold tracking-[.12em] uppercase dark:text-white/30 text-slate-400 mb-4">
@@ -223,9 +252,132 @@ function LinkColumn({ title, links }: { title: string; links: { href: string; la
   );
 }
 
+// ─── Contact items ───────────────────────────────────────────────────────────
+
+function ContactItems({ settings }: { settings: FooterSettings }) {
+  const items = [
+    {
+      icon: (
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+          <rect x="1" y="3" width="14" height="10" rx="2" stroke="currentColor" strokeWidth="1.2" />
+          <path d="M1 5l7 5 7-5" stroke="currentColor" strokeWidth="1.2" />
+        </svg>
+      ),
+      label: settings.contactEmail || DEFAULT_FOOTER.contactEmail,
+      href: `mailto:${settings.contactEmail || DEFAULT_FOOTER.contactEmail}`,
+    },
+    {
+      icon: (
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+          <path d="M3 3.5a1 1 0 011-1h.5l1.5 3-.75.75a6.5 6.5 0 003.5 3.5l.75-.75 3 1.5v.5a1 1 0 01-1 1C6.268 12.5 3.5 9.732 3.5 6.5c0-.553.197-1.5.5-3z" stroke="currentColor" strokeWidth="1.2" strokeLinejoin="round" />
+        </svg>
+      ),
+      label: settings.contactPhone || DEFAULT_FOOTER.contactPhone,
+      href: `https://wa.me/${settings.contactWhatsapp || DEFAULT_FOOTER.contactWhatsapp}`,
+    },
+    {
+      icon: (
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+          <path d="M8 1C5.24 1 3 3.24 3 6c0 3.75 5 9 5 9s5-5.25 5-9c0-2.76-2.24-5-5-5zm0 6.5a1.5 1.5 0 110-3 1.5 1.5 0 010 3z" stroke="currentColor" strokeWidth="1.2" />
+        </svg>
+      ),
+      label: settings.contactAddress || DEFAULT_FOOTER.contactAddress,
+      href: undefined,
+    },
+  ];
+
+  return (
+    <div className="flex flex-col gap-2">
+      {items.map((item) =>
+        item.href ? (
+          <a
+            key={item.label}
+            href={item.href}
+            className="inline-flex items-center gap-2 px-3 py-1.5 rounded-[10px] w-fit
+                       dark:bg-white/[0.03] dark:border-white/[0.06] dark:text-white/45
+                       bg-white border border-slate-200 text-slate-500
+                       hover:dark:bg-white/[0.07] hover:dark:text-white/75
+                       hover:bg-slate-50 hover:text-slate-700
+                       transition-all duration-200 text-[12px]"
+          >
+            <span className="dark:text-white/50 text-slate-400">{item.icon}</span>
+            {item.label}
+          </a>
+        ) : (
+          <div
+            key={item.label}
+            className="inline-flex items-center gap-2 px-3 py-1.5 rounded-[10px] w-fit
+                       dark:bg-white/[0.03] dark:border-white/[0.06] dark:text-white/45
+                       bg-white border border-slate-200 text-slate-500
+                       transition-all duration-200 text-[12px]"
+          >
+            <span className="dark:text-white/50 text-slate-400">{item.icon}</span>
+            {item.label}
+          </div>
+        )
+      )}
+    </div>
+  );
+}
+
+// ─── Social links ────────────────────────────────────────────────────────────
+
+function SocialLinks({ socialLinks }: { socialLinks: SocialLink[] }) {
+  return (
+    <div className="flex gap-2 mb-7">
+      {socialLinks.map((social) => (
+        <a
+          key={social.name}
+          href={social.href}
+          target="_blank"
+          rel="noopener noreferrer"
+          title={social.name}
+          className="w-9 h-9 rounded-[10px] flex items-center justify-center
+                     dark:bg-white/[0.04] dark:border-white/[0.08] dark:text-white/45
+                     bg-slate-100 border border-slate-200 text-slate-500
+                     hover:dark:bg-emerald-500/10 hover:dark:border-emerald-500/25 hover:dark:text-emerald-400
+                     hover:bg-emerald-50 hover:border-emerald-200 hover:text-emerald-600
+                     transition-all duration-200"
+        >
+          <SocialIcon name={social.icon || social.name} />
+        </a>
+      ))}
+    </div>
+  );
+}
+
 // ─── Main Footer ──────────────────────────────────────────────────────────────
 
 export default function Footer() {
+  const [settings, setSettings] = useState<FooterSettings | null>(null);
+
+  useEffect(() => {
+    const fetchFooterSettings = async () => {
+      try {
+        const data = await getFooterSettings();
+        if (data) {
+          setSettings(data);
+        }
+      } catch {
+        // Use defaults
+      }
+    };
+    fetchFooterSettings();
+  }, []);
+
+  // Merge with defaults
+  const footer: FooterSettings = settings ? {
+    ...DEFAULT_FOOTER,
+    ...settings,
+    footerColumns: settings.footerColumns?.length ? settings.footerColumns : DEFAULT_FOOTER.footerColumns,
+    socialLinks: settings.socialLinks?.length ? settings.socialLinks : DEFAULT_FOOTER.socialLinks,
+  } : DEFAULT_FOOTER;
+
+  const showContact = footer.showContact !== false;
+  const showSocials = footer.showSocials !== false;
+  const showNewsletter = footer.showNewsletter !== false;
+  const showStatusBadge = footer.showStatusBadge !== false;
+
   return (
     <footer className="relative dark:bg-[#09090f] bg-slate-50 text-white dark:text-white overflow-hidden">
       {/* Ambient orbs - dark mode only */}
@@ -235,7 +387,7 @@ export default function Footer() {
       </div>
 
       {/* Newsletter band */}
-      <NewsletterBand />
+      {showNewsletter && <NewsletterBand settings={footer} />}
 
       {/* Main grid */}
       <div className="relative container mx-auto px-6 max-w-5xl pt-16 pb-0">
@@ -265,75 +417,23 @@ export default function Footer() {
             </p>
 
             {/* Socials */}
-            <div className="flex gap-2 mb-7">
-              {socialLinks.map(({ name, href, Icon }) => (
-                <a
-                  key={name}
-                  href={href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  title={name}
-                  className="w-9 h-9 rounded-[10px] flex items-center justify-center
-                             dark:bg-white/[0.04] dark:border-white/[0.08] dark:text-white/45
-                             bg-slate-100 border border-slate-200 text-slate-500
-                             hover:dark:bg-emerald-500/10 hover:dark:border-emerald-500/25 hover:dark:text-emerald-400
-                             hover:bg-emerald-50 hover:border-emerald-200 hover:text-emerald-600
-                             transition-all duration-200"
-                >
-                  <Icon />
-                </a>
-              ))}
-            </div>
+            {showSocials && <SocialLinks socialLinks={footer.socialLinks} />}
 
-            {/* Contact pills */}
-            <div className="flex flex-col gap-2">
-              {contactItems.map((item) =>
-                item.href ? (
-                  <a
-                    key={item.label}
-                    href={item.href}
-                    className="inline-flex items-center gap-2 px-3 py-1.5 rounded-[10px] w-fit
-                               dark:bg-white/[0.03] dark:border-white/[0.06] dark:text-white/45
-                               bg-white border border-slate-200 text-slate-500
-                               hover:dark:bg-white/[0.07] hover:dark:text-white/75
-                               hover:bg-slate-50 hover:text-slate-700
-                               transition-all duration-200 text-[12px]"
-                  >
-                    <span className="dark:text-white/50 text-slate-400">{item.icon}</span>
-                    {item.label}
-                  </a>
-                ) : (
-                  <div
-                    key={item.label}
-                    className="inline-flex items-center gap-2 px-3 py-1.5 rounded-[10px] w-fit
-                               dark:bg-white/[0.03] dark:border-white/[0.06] dark:text-white/45
-                               bg-white border border-slate-200 text-slate-500
-                               transition-all duration-200 text-[12px]"
-                  >
-                    <span className="dark:text-white/50 text-slate-400">{item.icon}</span>
-                    {item.label}
-                  </div>
-                )
-              )}
-            </div>
+            {/* Contact */}
+            {showContact && <ContactItems settings={footer} />}
           </div>
 
           {/* Link columns */}
-          <LinkColumn title="Layanan" links={footerLinks.layanan} />
-          <LinkColumn title="Perusahaan" links={footerLinks.perusahaan} />
-
-          {/* Legal + Area stacked */}
-          <div className="flex flex-col gap-8">
-            <LinkColumn title="Legal" links={footerLinks.legal} />
-            <LinkColumn title="Area" links={footerLinks.area} />
-          </div>
+          {footer.footerColumns.map((column) => (
+            <LinkColumn key={column.title} title={column.title} links={column.links} />
+          ))}
         </div>
 
         {/* Bottom bar */}
         <div className="flex items-center justify-between flex-wrap gap-4 py-5">
           <div className="flex items-center flex-wrap gap-4">
             <span className="text-[12px] dark:text-white/28 text-slate-400">
-              © {new Date().getFullYear()} Ningclean. All rights reserved.
+              © {new Date().getFullYear()} Ningclean. {footer.copyrightText || 'All rights reserved.'}
             </span>
             <span className="w-px h-3.5 dark:bg-white/10 bg-slate-200 hidden sm:block" />
             {[['Privasi','/privacy'], ['Syarat','/terms'], ['Sitemap','/sitemap']].map(([label, href]) => (
@@ -348,12 +448,14 @@ export default function Footer() {
           </div>
 
           {/* Live status badge */}
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full
-                          dark:bg-emerald-500/[0.08] dark:border-emerald-500/[0.15] dark:text-emerald-400/80
-                          bg-emerald-50 border border-emerald-200 text-emerald-600 text-[11px] font-semibold">
-            <span className="w-1.5 h-1.5 rounded-full dark:bg-emerald-400 bg-emerald-500 animate-pulse" />
-            Semua layanan aktif
-          </div>
+          {showStatusBadge && (
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full
+                            dark:bg-emerald-500/[0.08] dark:border-emerald-500/[0.15] dark:text-emerald-400/80
+                            bg-emerald-50 border border-emerald-200 text-emerald-600 text-[11px] font-semibold">
+              <span className="w-1.5 h-1.5 rounded-full dark:bg-emerald-400 bg-emerald-500 animate-pulse" />
+              {footer.statusBadgeText || 'Semua layanan aktif'}
+            </div>
+          )}
         </div>
       </div>
     </footer>

@@ -5,15 +5,30 @@ import { motion, useScroll, useTransform, useSpring, AnimatePresence } from 'fra
 import Link from 'next/link';
 import Button from '@/components/ui/Button';
 
+interface BeforeAfterSlide {
+  before: string;
+  after: string;
+  title: string;
+}
+
+interface HeroStats {
+  homesCleaned: string;
+  rating: string;
+  satisfaction: string;
+  responseTime: string;
+}
+
 interface HeroSectionProps {
-  stats?: {
-    homesCleaned: number;
-    rating: string;
-    cities: number;
-    satisfactionRate?: number;
-    responseTime?: string;
-  };
-  featuredIn?: Array<{ name: string; logo: string }>;
+  badge?: string;
+  headline?: string;
+  subheadline?: string;
+  ctaPrimaryText?: string;
+  ctaPrimaryLink?: string;
+  ctaSecondaryText?: string;
+  ctaSecondaryLink?: string;
+  heroImage?: string;
+  stats?: HeroStats;
+  beforeAfterSlides?: BeforeAfterSlide[];
 }
 
 // Before/After Slider Component
@@ -102,9 +117,33 @@ function BeforeAfterSlider({ before, after, title }: { before: string; after: st
   );
 }
 
-export default function HeroSection({ stats, featuredIn }: HeroSectionProps) {
+export default function HeroSection({
+  badge = 'Dipercaya 1250+ Pelanggan',
+  headline = 'Transformasi Rumah Anda',
+  subheadline = 'Layanan kebersihan profesional dengan tim tersertifikasi. Hasil nyata yang bisa kamu lihat langsung — sebelum dan sesudah.',
+  ctaPrimaryText = 'Booking Sekarang',
+  ctaPrimaryLink = '/booking',
+  ctaSecondaryText = 'Lihat Layanan & Paket',
+  ctaSecondaryLink = '/services',
+  stats = { homesCleaned: '1250+', rating: '4.95', satisfaction: '99%', responseTime: '< 30m' },
+  beforeAfterSlides = [
+    { before: 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=800&q=80', after: 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=800&q=80&sat=-100&brightness=1.15', title: 'Deep Cleaning Ruang Tamu' },
+    { before: 'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=800&q=80', after: 'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=800&q=80&sat=-100&brightness=1.15', title: 'Pembersihan Dapur' },
+    { before: 'https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?w=800&q=80', after: 'https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?w=800&q=80&sat=-100&brightness=1.15', title: 'Kamar Mandi Kilat' },
+  ],
+}: HeroSectionProps) {
   const heroRef = useRef<HTMLDivElement>(null);
   const [isHovering, setIsHovering] = useState(false);
+  const [activeSlide, setActiveSlide] = useState(0);
+
+  // Auto-rotate slides
+  useEffect(() => {
+    if (!slides || slides.length === 0) return;
+    const interval = setInterval(() => {
+      setActiveSlide((prev) => (prev + 1) % slides.length);
+    }, 5000);
+    return () => clearInterval(interval);
+  }, [slides]);
 
   const { scrollYProgress } = useScroll({
     target: heroRef,
@@ -116,49 +155,17 @@ export default function HeroSection({ stats, featuredIn }: HeroSectionProps) {
   const heroOpacity = useSpring(useTransform(scrollYProgress, [0, 0.6], [1, 0]), springConfig);
 
   const data = {
-    homesCleaned: 1250,
-    rating: '4.95',
-    cities: 5,
-    satisfactionRate: 99,
-    responseTime: '< 30m',
-    ...stats
+    homesCleaned: stats.homesCleaned || '1250+',
+    rating: stats.rating || '4.95',
+    satisfaction: stats.satisfaction || '99%',
+    responseTime: stats.responseTime || '< 30m',
   };
 
-  // Service badges
-  const serviceBadges = [
-    { icon: '✓', text: 'Terlisensi & Terasuransi', color: 'from-green-500 to-emerald-500' },
-    { icon: '⚡', text: 'Respons Cepat 24/7', color: 'from-blue-500 to-cyan-500' },
-    { icon: '🔒', text: 'Garansi Kepuasan 100%', color: 'from-purple-500 to-pink-500' },
+  const slides = beforeAfterSlides && beforeAfterSlides.length > 0 ? beforeAfterSlides : [
+    { before: 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=800&q=80', after: 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=800&q=80&sat=-100&brightness=1.15', title: 'Deep Cleaning Ruang Tamu' },
+    { before: 'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=800&q=80', after: 'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=800&q=80&sat=-100&brightness=1.15', title: 'Pembersihan Dapur' },
+    { before: 'https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?w=800&q=80', after: 'https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?w=800&q=80&sat=-100&brightness=1.15', title: 'Kamar Mandi Kilat' },
   ];
-
-  // Before/after images
-  const beforeAfterSlides = [
-    {
-      before: 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=800&q=80',
-      after: 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=800&q=80&sat=-100&brightness=1.15',
-      title: 'Deep Cleaning Ruang Tamu',
-    },
-    {
-      before: 'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=800&q=80',
-      after: 'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=800&q=80&sat=-100&brightness=1.15',
-      title: 'Pembersihan Dapur',
-    },
-    {
-      before: 'https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?w=800&q=80',
-      after: 'https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?w=800&q=80&sat=-100&brightness=1.15',
-      title: 'Kamar Mandi Kilat',
-    },
-  ];
-
-  const [activeSlide, setActiveSlide] = useState(0);
-
-  // Auto-rotate slides
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setActiveSlide((prev) => (prev + 1) % beforeAfterSlides.length);
-    }, 5000);
-    return () => clearInterval(interval);
-  }, [beforeAfterSlides.length]);
 
   return (
     <section
@@ -190,7 +197,7 @@ export default function HeroSection({ stats, featuredIn }: HeroSectionProps) {
                          text-[12px] font-semibold tracking-widest uppercase mb-6"
             >
               <span className="w-1.5 h-1.5 rounded-full dark:bg-emerald-400 bg-emerald-500 animate-pulse" />
-              Dipercaya 1250+ Pelanggan
+              {badge}
             </motion.div>
 
             {/* Main Headline */}
@@ -200,9 +207,9 @@ export default function HeroSection({ stats, featuredIn }: HeroSectionProps) {
               transition={{ delay: 0.3 }}
               className="font-serif text-4xl md:text-5xl lg:text-[56px] leading-[1.07] font-normal dark:text-white text-slate-900 mb-6"
             >
-              Transformasi Rumah Anda
-              <br />
-              <em className="italic dark:text-emerald-400 text-emerald-600">Bersih & Nyaman</em>
+              {headline.split('|').map((part, i) => (
+                <span key={i}>{i > 0 ? <><br /><em className="italic dark:text-emerald-400 text-emerald-600">{part}</em></> : part}</span>
+              ))}
             </motion.h1>
 
             {/* Subheadline */}
@@ -212,8 +219,7 @@ export default function HeroSection({ stats, featuredIn }: HeroSectionProps) {
               transition={{ delay: 0.4 }}
               className="text-[15px] dark:text-white/45 text-slate-500 leading-relaxed mb-8 max-w-lg"
             >
-              Layanan kebersihan profesional dengan tim tersertifikasi.
-              Hasil nyata yang bisa kamu lihat langsung — sebelum dan sesudah.
+              {subheadline}
             </motion.p>
 
             {/* Service Badges */}
@@ -244,7 +250,7 @@ export default function HeroSection({ stats, featuredIn }: HeroSectionProps) {
               transition={{ delay: 0.6 }}
               className="flex flex-col sm:flex-row items-center gap-5 mb-12"
             >
-              <Link href="/booking" className="w-full sm:w-auto group">
+              <Link href={ctaPrimaryLink} className="w-full sm:w-auto group">
                 <Button
                   variant="accent"
                   size="lg"
@@ -262,10 +268,10 @@ export default function HeroSection({ stats, featuredIn }: HeroSectionProps) {
                     </motion.svg>
                   }
                 >
-                  Booking Sekarang
+                  {ctaPrimaryText}
                 </Button>
               </Link>
-              <Link href="/services" className="w-full sm:w-auto">
+              <Link href={ctaSecondaryLink} className="w-full sm:w-auto">
                 <Button
                   variant="outline"
                   size="lg"
@@ -273,7 +279,7 @@ export default function HeroSection({ stats, featuredIn }: HeroSectionProps) {
                              border-slate-300 text-slate-700 hover:bg-slate-100 hover:border-slate-400
                              backdrop-blur-sm transition-all duration-300"
                 >
-                  Lihat Layanan & Paket
+                  {ctaSecondaryText}
                 </Button>
               </Link>
             </motion.div>
@@ -326,7 +332,7 @@ export default function HeroSection({ stats, featuredIn }: HeroSectionProps) {
                              bg-white backdrop-blur-none border border-slate-200 rounded-3xl p-3 shadow-xl">
                 {/* Slide dots */}
                 <div className="flex justify-center gap-2 mb-3">
-                  {beforeAfterSlides.map((_, idx) => (
+                  {slides.map((_, idx) => (
                     <button
                       key={idx}
                       onClick={() => setActiveSlide(idx)}
@@ -349,9 +355,9 @@ export default function HeroSection({ stats, featuredIn }: HeroSectionProps) {
                     transition={{ duration: 0.5 }}
                   >
                     <BeforeAfterSlider
-                      before={beforeAfterSlides[activeSlide].before}
-                      after={beforeAfterSlides[activeSlide].after}
-                      title={beforeAfterSlides[activeSlide].title}
+                      before={slides[activeSlide].before}
+                      after={slides[activeSlide].after}
+                      title={slides[activeSlide].title}
                     />
                   </motion.div>
                 </AnimatePresence>
@@ -367,7 +373,7 @@ export default function HeroSection({ stats, featuredIn }: HeroSectionProps) {
                     className="mt-3 text-center"
                   >
                     <p className="text-[13px] dark:text-white/60 text-slate-600">
-                      {beforeAfterSlides[activeSlide].title}
+                      {slides[activeSlide].title}
                     </p>
                     <p className="text-[11px] dark:text-emerald-400 text-emerald-600 mt-0.5">
                       Real results from our customers
@@ -377,7 +383,7 @@ export default function HeroSection({ stats, featuredIn }: HeroSectionProps) {
 
                 {/* Mini thumbnails */}
                 <div className="flex justify-center gap-2 mt-3">
-                  {beforeAfterSlides.map((slide, idx) => (
+                  {slides.map((slide, idx) => (
                     <button
                       key={idx}
                       onClick={() => setActiveSlide(idx)}

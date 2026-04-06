@@ -6,14 +6,27 @@ import Link from 'next/link';
 import Button from '@/components/ui/Button';
 import { ArrowRight, ZoomIn } from 'lucide-react';
 
+interface GalleryItem {
+  id: string;
+  title: string;
+  description?: string;
+  imageUrl: string;
+  beforeImage?: string;
+  afterImage?: string;
+  location?: string;
+  category?: string;
+}
+
 interface ImageShowcaseProps {
   title?: string;
   subtitle?: string;
+  galleryItems?: GalleryItem[];
 }
 
-const showcaseImages = [
+// Fallback static data
+const FALLBACK_SHOWCASE: GalleryItem[] = [
   {
-    id: '1',
+    id: 'fallback-1',
     before: 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=800&q=80',
     after: 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=800&q=80&sat=-100&brightness=1.15',
     title: 'Ruang Tamu',
@@ -22,7 +35,7 @@ const showcaseImages = [
     description: 'Deep cleaning ruang tamu minimalis dengan hasil mengkilap.',
   },
   {
-    id: '2',
+    id: 'fallback-2',
     before: 'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=800&q=80',
     after: 'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=800&q=80&sat=-100&brightness=1.15',
     title: 'Dapur',
@@ -31,7 +44,7 @@ const showcaseImages = [
     description: 'Pembersihan dapur setelah acara catering besar.',
   },
   {
-    id: '3',
+    id: 'fallback-3',
     before: 'https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?w=800&q=80',
     after: 'https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?w=800&q=80&sat=-100&brightness=1.15',
     title: 'Kamar Mandi',
@@ -40,7 +53,7 @@ const showcaseImages = [
     description: 'Kamar mandi bebas kerak dan jamur.',
   },
   {
-    id: '4',
+    id: 'fallback-4',
     before: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=800&q=80',
     after: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=800&q=80&sat=-100&brightness=1.15',
     title: 'Sofa',
@@ -49,7 +62,7 @@ const showcaseImages = [
     description: 'Sofa kulit kembali seperti baru.',
   },
   {
-    id: '5',
+    id: 'fallback-5',
     before: 'https://images.unsplash.com/photo-1497366216548-37526070297c?w=800&q=80',
     after: 'https://images.unsplash.com/photo-1497366216548-37526070297c?w=800&q=80&sat=-100&brightness=1.15',
     title: 'Ruang Meeting',
@@ -58,7 +71,7 @@ const showcaseImages = [
     description: 'Office cleaning mingguan dengan hasil premium.',
   },
   {
-    id: '6',
+    id: 'fallback-6',
     before: 'https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=800&q=80',
     after: 'https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=800&q=80&sat=-100&brightness=1.15',
     title: 'Rumah Baru',
@@ -68,7 +81,7 @@ const showcaseImages = [
   },
 ];
 
-function ComparisonCard({ image, index }: { image: typeof showcaseImages[0]; index: number }) {
+function ComparisonCard({ image, index }: { image: GalleryItem; index: number }) {
   const [showAfter, setShowAfter] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true, margin: '-50px' });
@@ -135,8 +148,11 @@ function ComparisonCard({ image, index }: { image: typeof showcaseImages[0]; ind
 
 export default function ImageShowcase({
   title = "Hasil Nyata",
-  subtitle = "Bukti hasil kerja tim profesional kami. Setiap foto adalah real customer results."
+  subtitle = "Bukti hasil kerja tim profesional kami. Setiap foto adalah real customer results.",
+  galleryItems = [],
 }: ImageShowcaseProps) {
+  // Use API data if available, otherwise use fallback
+  const displayItems = galleryItems.length > 0 ? galleryItems : FALLBACK_SHOWCASE;
   const sectionRef = useRef<HTMLElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
   const isInView = useInView(sectionRef, { once: true, margin: '-100px' });
@@ -215,7 +231,7 @@ export default function ImageShowcase({
 
           {/* Scrollable grid */}
           <div className="flex gap-5 overflow-x-auto pb-4 scrollbar-hide" style={{ scrollSnapType: 'x mandatory' }}>
-            {showcaseImages.map((image, idx) => (
+            {displayItems.map((image, idx) => (
               <div key={image.id} className="flex-shrink-0 w-[300px]" style={{ scrollSnapAlign: 'start' }}>
                 <ComparisonCard image={image} index={idx} />
               </div>

@@ -69,9 +69,13 @@ export interface Testimonial {
   name: string;
   avatar?: string;
   rating: number;
-  comment: string;
-  service: string;
-  createdAt: string;
+  content: string;
+  role?: string;
+  company?: string;
+  service?: string;
+  isActive?: boolean;
+  isFeatured?: boolean;
+  createdAt?: string;
 }
 
 export interface ApiResponse<T> {

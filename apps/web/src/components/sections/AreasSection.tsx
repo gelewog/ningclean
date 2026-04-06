@@ -2,19 +2,52 @@
 
 import { useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
+import Link from 'next/link';
+
+interface ServiceArea {
+  id: string;
+  city: string;
+  slug: string;
+  region: string;
+  description?: string;
+  coverage?: string[];
+  isFeatured?: boolean;
+  image?: string;
+}
+
+interface AreasSectionProps {
+  serviceAreas?: ServiceArea[];
+}
+
+// Fallback static data
+const FALLBACK_AREAS: ServiceArea[] = [
+  {
+    id: 'fallback-1',
+    city: 'Surabaya',
+    slug: 'surabaya',
+    region: 'Jawa Timur',
+    description: 'Layanan lengkap tersedia di seluruh wilayah',
+    isFeatured: true,
+  },
+  {
+    id: 'fallback-2',
+    city: 'Sidoarjo',
+    slug: 'sidoarjo',
+    region: 'Jawa Timur',
+    description: 'Cepat & responsif, tim siap hari ini',
+    isFeatured: false,
+  },
+  {
+    id: 'fallback-3',
+    city: 'Gresik',
+    slug: 'gresik',
+    region: 'Jawa Timur',
+    description: 'Tim terdekat, jadwal fleksibel',
+    isFeatured: false,
+  },
+];
 
 // ─── Data ──────────────────────────────────────────────────────────────────────
-
-const featured = {
-  num: '01',
-  label: 'Kota Utama',
-  city: 'Surabaya',
-  desc: 'Layanan lengkap tersedia di seluruh wilayah',
-  services: ['Deep Cleaning', 'Regular', 'Post Construction', 'Office', 'Sofa'],
-  serviceColor: 'green',
-  stats: ['300+ Rumah Dilayani', 'Respons < 1 jam'],
-  cta: 'Lihat jadwal tersedia',
-};
 
 const secondaryCities = [
   {
@@ -135,7 +168,7 @@ function MapIllustration() {
   );
 }
 
-function FeaturedCard() {
+function FeaturedCard({ area }: { area: ServiceArea }) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 24 }}
@@ -153,21 +186,21 @@ function FeaturedCard() {
 
       <div className="relative z-10">
         <p className="text-[11px] font-bold tracking-[.12em] uppercase dark:text-white/30 text-slate-400 mb-1.5">
-          {featured.num} — {featured.label}
+          01 — Kota Utama
         </p>
         <h3 className="font-serif text-[clamp(28px,3.5vw,42px)] font-normal leading-[1.08] dark:text-white text-slate-900">
-          {featured.city}
+          {area.city}
         </h3>
-        <p className="text-[13px] dark:text-white/45 text-slate-500 mt-1.5">{featured.desc}</p>
+        <p className="text-[13px] dark:text-white/45 text-slate-500 mt-1.5">{area.description || area.region || ''}</p>
 
         <div className="flex flex-wrap gap-1.5 mt-5">
-          {featured.services.map((s) => (
-            <Chip key={s} label={s} color={featured.serviceColor} />
+          {['Deep Cleaning', 'Regular', 'Post Construction', 'Office', 'Sofa'].map((s) => (
+            <Chip key={s} label={s} color="green" />
           ))}
         </div>
 
         <div className="flex flex-wrap gap-2.5 mt-4">
-          {featured.stats.map((s) => (
+          {['300+ Rumah Dilayani', 'Respons < 1 jam'].map((s) => (
             <div
               key={s}
               className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full
@@ -180,7 +213,7 @@ function FeaturedCard() {
           ))}
         </div>
 
-        <ArrowCta label={featured.cta} />
+        <ArrowCta label="Lihat jadwal tersedia" />
       </div>
     </motion.div>
   );
@@ -250,9 +283,23 @@ function CoverageBar() {
   );
 }
 
-export default function AreasSection() {
+export default function AreasSection({ serviceAreas = [] }: AreasSectionProps) {
   const headerRef = useRef(null);
   const headerInView = useInView(headerRef, { once: true });
+
+  // Use API data if available, otherwise use fallback
+  const displayAreas = serviceAreas.length > 0 ? serviceAreas : FALLBACK_AREAS;
+  const featuredArea = displayAreas.find(a => a.isFeatured) || displayAreas[0];
+  const secondaryAreas = displayAreas.filter(a => a !== featuredArea).slice(0, 2);
+
+  // Map secondary areas to the static card format
+  const secondaryCityCards = secondaryAreas.length > 0
+    ? secondaryAreas.map((area, i) => ({
+        ...secondaryCities[i],
+        city: area.city,
+        desc: area.description || secondaryCities[i]?.desc || '',
+      }))
+    : secondaryCities;
 
   return (
     <section className="relative py-24 dark:bg-[#06060e] bg-white overflow-hidden">
@@ -280,7 +327,7 @@ export default function AreasSection() {
           </div>
           <h2 className="font-serif text-4xl md:text-5xl xl:text-[52px] font-normal leading-[1.08] dark:text-white text-slate-900">
             Kami hadir<br />
-            di <em className="italic dark:text-emerald-400 text-emerald-600">3 kota</em> terdekat
+            di <em className="italic dark:text-emerald-400 text-emerald-600">{displayAreas.length} kota</em> terdekat
           </h2>
           <p className="text-[15px] dark:text-white/45 text-slate-500 mt-3.5 max-w-md leading-relaxed">
             Jangkauan layanan kami terus berkembang. Pilih kota dan temukan tim terdekat.
@@ -289,9 +336,9 @@ export default function AreasSection() {
 
         {/* City grid */}
         <div className="grid md:grid-cols-2 gap-5">
-          <FeaturedCard />
+          {featuredArea && <FeaturedCard area={featuredArea} />}
           <div className="grid gap-5">
-            {secondaryCities.map((city, i) => (
+            {secondaryCityCards.map((city, i) => (
               <SmallCard key={city.city} city={city} index={i} />
             ))}
           </div>
