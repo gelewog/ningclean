@@ -229,11 +229,6 @@ export async function getBookings(params?: {
     }
   }
 }
-    page: data.page,
-    limit: data.limit,
-    totalPages: data.totalPages,
-  }
-}
 
 export async function updateBookingStatus(id: string, status: string) {
   const token = getToken()
