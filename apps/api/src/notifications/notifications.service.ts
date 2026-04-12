@@ -14,6 +14,7 @@ export interface BookingNotificationData {
   serviceTime: string;
   address: string;
   totalAmount: string;
+  notes?: string;
 }
 
 @Injectable()
@@ -121,6 +122,7 @@ export class NotificationsService implements OnModuleInit {
 🏠 *Alamat:* {address}
 🧹 *Layanan:* {serviceName}
 💰 *Total:* {totalAmount}
+📝 *Catatan:* {notes}
 
 ---
 Dikirim otomatis dari NingClean`;
@@ -134,7 +136,8 @@ Dikirim otomatis dari NingClean`;
       .replace(/{serviceDate}/g, data.serviceDate)
       .replace(/{serviceTime}/g, data.serviceTime)
       .replace(/{address}/g, data.address)
-      .replace(/{totalAmount}/g, data.totalAmount);
+      .replace(/{totalAmount}/g, data.totalAmount)
+      .replace(/{notes}/g, data.notes || 'Tidak ada catatan');
   }
 
   /**
@@ -157,6 +160,7 @@ Dikirim otomatis dari NingClean`;
     .content { background: #f9fafb; padding: 20px; border-radius: 0 0 10px 10px; }
     .detail { margin: 10px 0; padding: 10px; background: white; border-radius: 8px; }
     .label { font-weight: bold; color: #10b981; }
+    .notes { background: #fffbeb; border-left: 4px solid #f59e0b; }
     .footer { text-align: center; margin-top: 20px; color: #6b7280; font-size: 12px; }
   </style>
 </head>
@@ -176,6 +180,7 @@ Dikirim otomatis dari NingClean`;
       <div class="detail"><span class="label">Alamat:</span> ${data.address}</div>
       <div class="detail"><span class="label">Layanan:</span> ${data.serviceName}</div>
       <div class="detail"><span class="label">Total:</span> <strong>${data.totalAmount}</strong></div>
+      ${data.notes ? `<div class="detail notes"><span class="label">Catatan Customer:</span><br/>${data.notes}</div>` : ''}
     </div>
     <div class="footer">
       <p>Dikirim otomatis dari NingClean</p>
