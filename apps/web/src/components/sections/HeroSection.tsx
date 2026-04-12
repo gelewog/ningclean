@@ -138,12 +138,12 @@ export default function HeroSection({
 
   // Auto-rotate slides
   useEffect(() => {
-    if (!slides || slides.length === 0) return;
+    if (!beforeAfterSlides || beforeAfterSlides.length === 0) return;
     const interval = setInterval(() => {
-      setActiveSlide((prev) => (prev + 1) % slides.length);
+      setActiveSlide((prev) => (prev + 1) % beforeAfterSlides.length);
     }, 5000);
     return () => clearInterval(interval);
-  }, [slides]);
+  }, [beforeAfterSlides]);
 
   const { scrollYProgress } = useScroll({
     target: heroRef,
@@ -222,27 +222,6 @@ export default function HeroSection({
               {subheadline}
             </motion.p>
 
-            {/* Service Badges */}
-            <motion.div
-              initial={{ opacity: 0, x: -30 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.5 }}
-              className="flex flex-wrap gap-2 mb-10"
-            >
-              {serviceBadges.map((badge, idx) => (
-                <div
-                  key={idx}
-                  className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full
-                             dark:bg-white/[0.03] dark:border-white/[0.08] dark:text-white/50
-                             bg-slate-100 border border-slate-200 text-slate-600
-                             text-[12px]"
-                >
-                  <span className={`w-1.5 h-1.5 rounded-full bg-gradient-to-r ${badge.color}`} />
-                  {badge.text}
-                </div>
-              ))}
-            </motion.div>
-
             {/* CTA Buttons */}
             <motion.div
               initial={{ opacity: 0, x: -30 }}
@@ -295,7 +274,7 @@ export default function HeroSection({
               {[
                 { value: `${data.homesCleaned}+`, label: 'Rumah Dilayani', icon: '🏠' },
                 { value: data.rating, label: 'Rating', icon: '⭐' },
-                { value: `${data.satisfactionRate}%`, label: 'Kepuasan', icon: '💯' },
+                { value: `${data.satisfaction}%`, label: 'Kepuasan', icon: '💯' },
                 { value: data.responseTime, label: 'Respon', icon: '⚡' },
               ].map((stat, idx, arr) => (
                 <div key={idx} className="flex items-center">

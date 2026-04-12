@@ -1,0 +1,450 @@
+'use client'
+
+import * as React from 'react'
+import { motion } from 'framer-motion'
+import { Plus, Edit, Trash2, TrendingUp, Calendar, Activity } from 'lucide-react'
+import { Card, CardContent } from '@/components/ui/card'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Textarea } from '@/components/ui/textarea'
+import { Badge } from '@/components/ui/badge'
+import { Modal } from '@/components/admin/Modal'
+import { DataTable } from '@/components/admin/DataTable'
+import { getCompanyStats, createCompanyStat, updateCompanyStat, deleteCompanyStat } from '@/lib/api'
+import { CompanyStat } from '@/types'
+import { formatDate } from '@/lib/utils'
+import { toast } from 'sonner'
+
+interface CompanyStatFormData {
+  title: string
+  value: string
+  description: string
+  icon: string
+  order: number
+  isActive: boolean
+}
+
+const iconOptions = [
+  { value: 'Calendar', label: 'Calendar' },
+  { value: 'Users', label: 'Users' },
+  { value: 'UserCheck', label: 'User Check' },
+  { value: 'CheckCircle', label: 'Check Circle' },
+  { value: 'TrendingUp', label: 'Trending Up' },
+  { value: 'Award', label: 'Award' },
+  { value: 'Star', label: 'Star' },
+  { value: 'Heart', label: 'Heart' },
+  { value: 'Zap', label: 'Zap' },
+  { value: 'Shield', label: 'Shield' },
+  { value: 'Clock', label: 'Clock' },
+  { value: 'MapPin', label: 'Map Pin' },
+]
+
+export default function CompanyStatsPage() {
+  const [stats, setStats] = React.useState<CompanyStat[]>([])
+  const [loading, setLoading] = React.useState(true)
+  const [isModalOpen, setIsModalOpen] = React.useState(false)
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = React.useState(false)
+  const [selectedStat, setSelectedStat] = React.useState<CompanyStat | null>(null)
+  const [isEditing, setIsEditing] = React.useState(false)
+  const [formData, setFormData] = React.useState<CompanyStatFormData>({
+    title: '',
+    value: '',
+    description: '',
+    icon: 'TrendingUp',
+    order: 0,
+    isActive: true,
+  })
+  const [errors, setErrors] = React.useState<Partial<CompanyStatFormData>>({})
+
+  React.useEffect(() => {
+    fetchStats()
+  }, [])
+
+  async function fetchStats() {
+    setLoading(true)
+    try {
+      const data = await getCompanyStats()
+      setStats(data)
+    } catch (error) {
+      toast.error('Failed to fetch company stats')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  function openCreateModal() {
+    setIsEditing(false)
+    setSelectedStat(null)
+    setFormData({
+      title: '',
+      value: '',
+      description: '',
+      icon: 'TrendingUp',
+      order: stats.length,
+      isActive: true,
+    })
+    setErrors({})
+    setIsModalOpen(true)
+  }
+
+  function openEditModal(stat: CompanyStat) {
+    setIsEditing(true)
+    setSelectedStat(stat)
+    setFormData({
+      title: stat.title,
+      value: stat.value,
+      description: stat.description || '',
+      icon: stat.icon || 'TrendingUp',
+      order: stat.order,
+      isActive: stat.isActive,
+    })
+    setErrors({})
+    setIsModalOpen(true)
+  }
+
+  function openDeleteModal(stat: CompanyStat) {
+    setSelectedStat(stat)
+    setIsDeleteModalOpen(true)
+  }
+
+  function validateForm(): boolean {
+    const newErrors: Partial<CompanyStatFormData> = {}
+    if (!formData.title.trim()) newErrors.title = 'Title is required'
+    if (!formData.value.trim()) newErrors.value = 'Value is required'
+    setErrors(newErrors)
+    return Object.keys(newErrors).length === 0
+  }
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault()
+    if (!validateForm()) return
+
+    const statData = {
+      title: formData.title,
+      value: formData.value,
+      description: formData.description || undefined,
+      icon: formData.icon,
+      order: formData.order,
+      isActive: formData.isActive,
+    }
+
+    try {
+      if (isEditing && selectedStat) {
+        await updateCompanyStat(selectedStat.id, statData)
+        toast.success('Company stat updated successfully')
+      } else {
+        await createCompanyStat(statData)
+        toast.success('Company stat created successfully')
+      }
+      setIsModalOpen(false)
+      fetchStats()
+    } catch (error) {
+      toast.error(`Failed to ${isEditing ? 'update' : 'create'} company stat`)
+    }
+  }
+
+  async function handleDelete() {
+    if (!selectedStat) return
+    try {
+      await deleteCompanyStat(selectedStat.id)
+      toast.success('Company stat deleted successfully')
+      setIsDeleteModalOpen(false)
+      fetchStats()
+    } catch (error) {
+      toast.error('Failed to delete company stat')
+    }
+  }
+
+  const columns = [
+    {
+      key: 'title',
+      label: 'Stat',
+      render: (value: string, row: CompanyStat) => (
+        <div className="flex items-center gap-3">
+          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-emerald-100">
+            <TrendingUp className="h-5 w-5 text-emerald-600" />
+          </div>
+          <div>
+            <p className="font-medium text-gray-900">{value}</p>
+            {row.description && (
+              <p className="text-xs text-gray-500">{row.description}</p>
+            )}
+          </div>
+        </div>
+      ),
+    },
+    {
+      key: 'value',
+      label: 'Value',
+      render: (value: string) => (
+        <span className="text-2xl font-bold text-emerald-600">{value}</span>
+      ),
+    },
+    {
+      key: 'icon',
+      label: 'Icon',
+      render: (value: string) => (
+        <Badge variant="secondary" className="font-mono text-xs">
+          {value || 'TrendingUp'}
+        </Badge>
+      ),
+    },
+    {
+      key: 'order',
+      label: 'Order',
+      render: (value: number) => (
+        <span className="text-sm text-gray-600">{value}</span>
+      ),
+    },
+    {
+      key: 'isActive',
+      label: 'Status',
+      render: (value: boolean) => (
+        <Badge
+          variant={value ? 'default' : 'secondary'}
+          className={value ? 'bg-emerald-100 text-emerald-700 hover:bg-emerald-100' : ''}
+        >
+          {value ? 'Active' : 'Inactive'}
+        </Badge>
+      ),
+    },
+    {
+      key: 'createdAt',
+      label: 'Created',
+      render: (value: string) => (
+        <div className="flex items-center gap-1 text-sm text-gray-500">
+          <Calendar className="h-3.5 w-3.5" />
+          {formatDate(value)}
+        </div>
+      ),
+    },
+    {
+      key: 'actions',
+      label: '',
+      render: (_: any, row: CompanyStat) => (
+        <div className="flex items-center gap-1">
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => openEditModal(row)}
+            className="h-8 w-8 p-0"
+          >
+            <Edit className="h-4 w-4" />
+          </Button>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => openDeleteModal(row)}
+            className="h-8 w-8 p-0 text-red-600 hover:text-red-700"
+          >
+            <Trash2 className="h-4 w-4" />
+          </Button>
+        </div>
+      ),
+    },
+  ]
+
+  return (
+    <div className="min-h-screen bg-gray-50 dark:bg-slate-900 text-gray-900 dark:text-slate-100">
+      {/* Topbar */}
+      <div className="sticky top-0 z-20 bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl border-b border-gray-200 dark:border-slate-700 px-6 py-3 flex items-center justify-between">
+        <div className="flex items-center gap-2 text-xs text-gray-400 dark:text-slate-500">
+          <span>NingClean Admin</span>
+          <span>/</span>
+          <span className="text-gray-600 dark:text-slate-300">Company Stats</span>
+        </div>
+        <div className="flex items-center gap-3">
+          <div className="flex items-center gap-1.5">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+            <span className="text-[11px] text-gray-400">Live</span>
+          </div>
+        </div>
+      </div>
+
+      <div className="max-w-screen px-6 py-8 space-y-6">
+        {/* Page Header */}
+        <motion.div
+          initial={{ opacity: 0, y: -16 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"
+        >
+          <div>
+            <h1 className="text-2xl font-bold tracking-tight text-gray-900">Company Stats</h1>
+            <p className="text-sm text-gray-500 mt-0.5">
+              Manage company statistics displayed on the website
+            </p>
+          </div>
+          <Button onClick={openCreateModal} className="bg-emerald-600 hover:bg-emerald-700">
+            <Plus className="w-4 h-4 mr-2" />
+            New Stat
+          </Button>
+        </motion.div>
+
+        {/* Stat Cards */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+          <Card>
+            <CardContent className="p-5">
+              <p className="text-[11px] uppercase tracking-widest text-gray-400 mb-2">Total Stats</p>
+              <p className="text-3xl font-bold text-gray-900">{stats.length}</p>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardContent className="p-5">
+              <p className="text-[11px] uppercase tracking-widest text-gray-400 mb-2">Active</p>
+              <p className="text-3xl font-bold text-emerald-600">
+                {stats.filter((s) => s.isActive).length}
+              </p>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardContent className="p-5">
+              <p className="text-[11px] uppercase tracking-widest text-gray-400 mb-2">Inactive</p>
+              <p className="text-3xl font-bold text-gray-600">
+                {stats.filter((s) => !s.isActive).length}
+              </p>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardContent className="p-5">
+              <p className="text-[11px] uppercase tracking-widest text-gray-400 mb-2">Featured</p>
+              <p className="text-3xl font-bold text-amber-600">
+                {stats.filter((s) => s.order <= 4).length}
+              </p>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Table */}
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.15 }}
+        >
+          <Card>
+            <CardContent className="p-0">
+              <DataTable columns={columns} data={stats} loading={loading} />
+            </CardContent>
+          </Card>
+        </motion.div>
+      </div>
+
+      {/* Create/Edit Modal */}
+      <Modal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        title={isEditing ? 'Edit Company Stat' : 'New Company Stat'}
+        size="lg"
+      >
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-gray-700">Title *</label>
+              <Input
+                placeholder="e.g., Years Experience"
+                value={formData.title}
+                onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+              />
+              {errors.title && (
+                <p className="text-xs text-red-500">{errors.title}</p>
+              )}
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-gray-700">Value *</label>
+              <Input
+                placeholder="e.g., 10+"
+                value={formData.value}
+                onChange={(e) => setFormData({ ...formData, value: e.target.value })}
+              />
+              {errors.value && (
+                <p className="text-xs text-red-500">{errors.value}</p>
+              )}
+            </div>
+          </div>
+
+          <div className="space-y-2">
+            <label className="text-sm font-medium text-gray-700">Description (optional)</label>
+            <Textarea
+              placeholder="Brief description of this stat"
+              rows={2}
+              value={formData.description}
+              onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+            />
+          </div>
+
+          <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-gray-700">Icon</label>
+              <select
+                className="w-full h-10 px-3 rounded-md border border-gray-200 bg-white text-sm"
+                value={formData.icon}
+                onChange={(e) => setFormData({ ...formData, icon: e.target.value })}
+              >
+                {iconOptions.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-gray-700">Display Order</label>
+              <Input
+                type="number"
+                placeholder="0"
+                value={formData.order}
+                onChange={(e) =>
+                  setFormData({ ...formData, order: Number(e.target.value) })
+                }
+              />
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <input
+              type="checkbox"
+              id="isActive"
+              checked={formData.isActive}
+              onChange={(e) => setFormData({ ...formData, isActive: e.target.checked })}
+              className="h-4 w-4 rounded border-gray-300 text-emerald-600"
+            />
+            <label htmlFor="isActive" className="text-sm font-medium text-gray-700">
+              Active
+            </label>
+          </div>
+
+          <div className="flex justify-end gap-2 pt-4 border-t">
+            <Button type="button" variant="outline" onClick={() => setIsModalOpen(false)}>
+              Cancel
+            </Button>
+            <Button type="submit" className="bg-emerald-600 hover:bg-emerald-700">
+              {isEditing ? 'Update' : 'Create'}
+            </Button>
+          </div>
+        </form>
+      </Modal>
+
+      {/* Delete Modal */}
+      <Modal
+        isOpen={isDeleteModalOpen}
+        onClose={() => setIsDeleteModalOpen(false)}
+        title="Delete Company Stat"
+        size="sm"
+      >
+        <div className="space-y-4">
+          <p className="text-gray-600">
+            Are you sure you want to delete{' '}
+            <strong>{selectedStat?.title}</strong>?
+          </p>
+          <div className="flex justify-end gap-2">
+            <Button variant="outline" onClick={() => setIsDeleteModalOpen(false)}>
+              Cancel
+            </Button>
+            <Button variant="destructive" onClick={handleDelete}>
+              Delete
+            </Button>
+          </div>
+        </div>
+      </Modal>
+    </div>
+  )
+}

@@ -22,50 +22,44 @@ export class TwilioService {
 
   private async loadSettings() {
     try {
-      // Use lowercase column names that match the actual database schema
-      interface SettingsRow {
-        twilioaccountsid: string | null;
-        twilioauthtoken: string | null;
-        twiliofromnumber: string | null;
-        whatsappNumber: string | null;
-        whatsappEnabled: boolean;
-        whatsappMessage: string | null;
-        emailEnabled: boolean;
-        emailHost: string | null;
-        emailPort: number | null;
-        emailUser: string | null;
-        emailPassword: string | null;
-        emailFrom: string | null;
-        adminEmail: string | null;
-      }
-      
-      // Use column names matching the Prisma schema
+      // Read from JSONB config and secrets fields
       const result = await this.prisma.$queryRawUnsafe(`
         SELECT 
-          "twilioaccountsid",
-          "twilioauthtoken",
-          "twiliofromnumber",
-          "whatsappNumber",
-          "whatsappEnabled",
-          "whatsappMessage",
-          "emailEnabled",
-          "emailHost",
-          "emailPort",
-          "emailUser",
-          "emailPassword",
-          "emailFrom",
-          "adminEmail"
+          "config",
+          "secrets"
         FROM "notification_settings" 
         LIMIT 1
-      `) as SettingsRow[];
+      `) as { config: any; secrets: any }[];
       
-      this.settings = result && result.length > 0 ? result[0] : null;
+      if (result && result.length > 0) {
+        const row = result[0];
+        this.settings = {
+          // Twilio config from config JSONB
+          twilioAccountSid: row.config?.twilio?.accountSid || null,
+          twilioFromNumber: row.config?.twilio?.fromNumber || row.config?.whatsapp?.number || null,
+          whatsappNumber: row.config?.whatsapp?.number || null,
+          whatsappEnabled: row.config?.whatsapp?.enabled || false,
+          whatsappMessage: row.config?.whatsapp?.defaultMessage || null,
+          // Email config
+          emailEnabled: row.config?.email?.enabled || false,
+          emailHost: row.config?.email?.host || null,
+          emailPort: row.config?.email?.port || null,
+          emailUser: row.config?.email?.user || null,
+          emailFrom: row.config?.email?.from || null,
+          adminEmail: row.config?.email?.adminEmail || null,
+          // Secrets from secrets JSONB
+          twilioAuthToken: row.secrets?.twilioAuthToken || null,
+          emailPassword: row.secrets?.emailPassword || null,
+        };
+      } else {
+        this.settings = null;
+      }
       
-      // Also load Twilio config from env if available
+      // Also load Twilio config from env if available (fallback)
       if (process.env.TWILIO_ACCOUNT_SID && process.env.TWILIO_AUTH_TOKEN) {
-        this.settings = this.settings || {} as SettingsRow;
-        this.settings.twilioaccountsid = process.env.TWILIO_ACCOUNT_SID;
-        this.settings.twilioauthtoken = process.env.TWILIO_AUTH_TOKEN;
+        this.settings = this.settings || {};
+        this.settings.twilioAccountSid = process.env.TWILIO_ACCOUNT_SID;
+        this.settings.twilioAuthToken = process.env.TWILIO_AUTH_TOKEN;
       }
     } catch (error) {
       console.error('Failed to load settings for Twilio:', error);
@@ -79,14 +73,14 @@ export class TwilioService {
   }
 
   private initializeClient() {
-    // Use lowercase column names from database
-    if (this.settings?.twilioaccountsid && this.settings?.twilioauthtoken) {
+    // Use camelCase property names from settings object
+    if (this.settings?.twilioAccountSid && this.settings?.twilioAuthToken) {
       try {
         this.client = twilio(
-          this.settings.twilioaccountsid,
-          this.settings.twilioauthtoken
+          this.settings.twilioAccountSid,
+          this.settings.twilioAuthToken
         );
-        this.fromNumber = this.settings.twiliofromnumber || this.settings.whatsappNumber || '';
+        this.fromNumber = this.settings.twilioFromNumber || this.settings.whatsappNumber || '';
         console.log('Twilio client initialized');
       } catch (error) {
         console.error('Failed to initialize Twilio client:', error);

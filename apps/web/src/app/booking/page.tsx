@@ -95,6 +95,7 @@ export default function BookingPage() {
     scheduledTime: '',
     address: '',
     city: 'Surabaya',
+    area: '',
     notes: '',
     customerName: '',
     customerEmail: '',
@@ -229,12 +230,14 @@ export default function BookingPage() {
                   key="step3"
                   address={formData.address}
                   city={formData.city}
+                  area={formData.area}
                   notes={formData.notes}
                   customerName={formData.customerName}
                   customerEmail={formData.customerEmail}
                   customerPhone={formData.customerPhone}
                   onAddressChange={(address) => setFormData({ ...formData, address })}
                   onCityChange={(city) => setFormData({ ...formData, city })}
+                  onAreaChange={(area) => setFormData({ ...formData, area })}
                   onNotesChange={(notes) => setFormData({ ...formData, notes })}
                   onCustomerNameChange={(name) => setFormData({ ...formData, customerName: name })}
                   onCustomerEmailChange={(email) => setFormData({ ...formData, customerEmail: email })}
@@ -252,6 +255,7 @@ export default function BookingPage() {
                   scheduledTime={formData.scheduledTime}
                   address={formData.address}
                   city={formData.city}
+                  area={formData.area}
                   notes={formData.notes}
                   customerName={formData.customerName}
                   customerEmail={formData.customerEmail}

@@ -21,6 +21,20 @@ enum BookingStatus {
   CANCELLED
 }
 
+enum NotificationType {
+  BOOKING_NEW
+  BOOKING_STATUS
+  SYSTEM
+}
+
+enum TemplateType {
+  BOOKING_CONFIRMED
+  BOOKING_STATUS_UPDATED
+  BOOKING_REMINDER
+  BOOKING_CANCELLED
+  CUSTOMER_WELCOME
+}
+
 model User {
   id        String   @id @default(uuid())
   email     String   @unique
@@ -42,18 +56,13 @@ model Customer {
   phone       String?
   isVip       Boolean  @default(false)
   notes       String?  @db.Text
-  addresses   Json     @default("[]") // [{label, address, city, phone}]
-  
-  // Source tracking
-  source      String   @default("guest") // "registered" = has user account, "guest" = booking only
-  
-  // If registered user, link to user account
+  addresses   Json     @default("[]")
+  source      String   @default("guest")
   userId      String?  @unique
-  
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
-  bookings    Booking[]
+  bookings Booking[]
 
   @@map("customers")
 }
@@ -81,24 +90,23 @@ model Service {
 }
 
 model Booking {
-  id          String        @id @default(uuid())
-  orderNumber String        @unique
-  customerId  String?
-  status      BookingStatus @default(PENDING)
-  serviceDate DateTime
-  serviceTime String
-  address     String
-  area        String
-  notes       String?
-  internalNotes String?      // Admin-only internal notes
-  totalAmount Decimal       @db.Decimal(10, 2)
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt
+  id            String        @id @default(uuid())
+  orderNumber   String        @unique
+  customerId    String?
+  status        BookingStatus @default(PENDING)
+  serviceDate   DateTime
+  serviceTime   String
+  address       String
+  area          String
+  notes         String?
+  internalNotes String?
+  totalAmount   Decimal       @db.Decimal(10, 2)
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
 
-  customer Customer?   @relation(fields: [customerId], references: [id])
+  customer Customer? @relation(fields: [customerId], references: [id])
   items    BookingItem[]
 
-  // Guest booking fields (used when customerId is null)
   guestName    String?
   guestEmail   String?
   guestPhone   String?
@@ -157,11 +165,11 @@ model BlogCategory {
 model Testimonial {
   id         String   @id @default(uuid())
   name       String
-  role       String?  // e.g., "Homeowner", "Business Owner"
+  role       String?
   company    String?
   content    String   @db.Text
-  rating     Int      @default(5) // 1-5 stars
-  avatar     String?  // Changed from 'image' to 'avatar'
+  rating     Int      @default(5)
+  avatar     String?
   isActive   Boolean  @default(true)
   isFeatured Boolean  @default(false)
   order      Int      @default(0)
@@ -175,14 +183,14 @@ model TeamMember {
   id          String   @id @default(uuid())
   name        String
   position    String
-  department  String   // e.g., "Cleaning", "Management", "Support"
+  department  String
   bio         String?  @db.Text
-  avatar      String?  // Image URL - Supabase Storage
+  avatar      String?
   email       String?
   phone       String?
   isActive    Boolean  @default(true)
-  order       Int      @default(0) // Display order
-  socialLinks Json?    // { linkedin, twitter, facebook }
+  order       Int      @default(0)
+  socialLinks Json?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
@@ -191,10 +199,10 @@ model TeamMember {
 
 model CompanyStat {
   id          String   @id @default(uuid())
-  title       String   // e.g., "Years Experience", "Happy Clients"
-  value       String   // e.g., "10+", "5000+"
+  title       String
+  value       String
   description String?
-  icon        String?  // Lucide icon name
+  icon        String?
   order       Int      @default(0)
   isActive    Boolean  @default(true)
   createdAt   DateTime @default(now())
@@ -207,12 +215,12 @@ model GalleryItem {
   id          String   @id @default(uuid())
   title       String
   description String?  @db.Text
-  category    String   // e.g., "Residential", "Commercial", "Deep Cleaning"
-  imageUrl    String   // Supabase Storage URL
-  beforeImage String?  // Optional before/after - Supabase Storage
-  afterImage  String?  // Optional before/after - Supabase Storage
-  location    String?  // Where the work was done
-  serviceId   String?  // Link to related service
+  category    String
+  imageUrl    String
+  beforeImage String?
+  afterImage  String?
+  location    String?
+  serviceId   String?
   isFeatured  Boolean  @default(false)
   isActive    Boolean  @default(true)
   order       Int      @default(0)
@@ -228,7 +236,7 @@ model FAQ {
   id          String   @id @default(uuid())
   question    String
   answer      String   @db.Text
-  category    String   // e.g., "General", "Services", "Pricing", "Booking"
+  category    String
   order       Int      @default(0)
   isActive    Boolean  @default(true)
   createdAt   DateTime @default(now())
@@ -241,12 +249,12 @@ model ServiceArea {
   id          String   @id @default(uuid())
   city        String
   slug        String   @unique
-  region      String   // Province/State
+  region      String
   description String?  @db.Text
-  coverage   String[] // Array of village/kelurahan names
+  coverage    String[]
   isActive    Boolean  @default(true)
   isFeatured  Boolean  @default(false)
-  image       String?  // City image - Supabase Storage
+  image       String?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
@@ -258,11 +266,11 @@ model JobListing {
   title        String
   department   String
   location     String
-  type         String   // "Full-time", "Part-time", "Contract"
+  type         String
   description  String   @db.Text
-  requirements String[] // Array of requirements
-  benefits     String[] // Array of benefits
-  salaryRange  String?  // e.g., "Rp 5.000.000 - 8.000.000"
+  requirements String[]
+  benefits     String[]
+  salaryRange  String?
   isActive     Boolean  @default(true)
   expiresAt    DateTime?
   createdAt    DateTime @default(now())
@@ -273,12 +281,12 @@ model JobListing {
 
 model PricingPlan {
   id           String   @id @default(uuid())
-  name         String   // e.g., "Basic", "Premium", "Enterprise"
+  name         String
   slug         String   @unique
   description  String
   price        Decimal  @db.Decimal(10, 2)
-  billingCycle String   // "monthly", "one-time", "yearly"
-  features     String[] // Array of features
+  billingCycle String
+  features     String[]
   isPopular    Boolean  @default(false)
   isActive     Boolean  @default(true)
   order        Int      @default(0)
@@ -289,268 +297,190 @@ model PricingPlan {
 }
 
 model NotificationSettings {
-  id              String   @id @default(uuid())
-  whatsappNumber  String?  // Format: 6281234567890 (with country code, no +)
-  whatsappMessage String?  @db.Text // Template message for WA
-  whatsappEnabled Boolean  @default(false) // Enable/disable WhatsApp notifications
-  emailEnabled    Boolean  @default(false)
-  emailHost       String?  // SMTP host e.g., smtp.gmail.com
-  emailPort       Int?     // SMTP port e.g., 587
-  emailUser       String?  // SMTP username (email)
-  emailPassword   String?  // SMTP password (app password)
-  emailFrom       String?  // From name e.g., "NingClean <hello@ningclean.id>"
-  adminEmail      String?  // Admin email to receive notifications
-  twilioaccountsid  String? // Twilio Account SID
-  twilioauthtoken   String? // Twilio Auth Token
-  twiliofromnumber  String? // Twilio WhatsApp sender number (e.g., +14155238886)
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  id      String @id @default(uuid())
+  name    String @unique @default("default")  // Identifier untuk settings (default, production, dll)
+  config  Json   @default("{}")              // Semua pengaturan: whatsapp, email, twilio, dll
+  secrets Json?                              // Secrets terpisah: twilioAuthToken, emailPassword, dll
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@map("notification_settings")
 }
 
-enum NotificationType {
-  BOOKING_NEW
-  BOOKING_STATUS
-  SYSTEM
-}
-
 model Notification {
-  id        String   @id @default(uuid())
+  id        String           @id @default(uuid())
   type      NotificationType @default(BOOKING_NEW)
   title     String
-  message   String   @db.Text
-  isRead    Boolean  @default(false)
-  data      Json?    // Additional data like bookingId, customerId, etc.
-  createdAt DateTime @default(now())
+  message   String
+  isRead    Boolean          @default(false)
+  data      Json?
+  createdAt DateTime         @default(now())
   readAt    DateTime?
 
   @@map("notifications")
 }
 
 model SiteSettings {
-  id          String   @id @default(uuid())
-  
-  // Company Info
-  companyName     String   @default("NingClean")
-  tagline         String?  @db.Text
-  description     String?  @db.Text
-  logo            String?  // Main logo URL
-  favicon         String?  // Favicon URL
-  logoDark        String?  // Dark mode logo
-  
-  // Contact Info
-  email           String?
-  phone           String?
-  whatsapp        String?  // WhatsApp number with country code
-  address         String?  @db.Text
-  city            String?
-  province        String?
-  postalCode      String?
-  googleMapsUrl   String?  @db.Text
-  
-  // Social Media
-  facebook        String?
-  instagram       String?
-  twitter         String?
-  youtube         String?
-  linkedin        String?
-  tiktok          String?
-  
-  // SEO
-  metaTitle       String?
-  metaDescription String?  @db.Text
-  ogImage         String?
-  keywords        String?  @db.Text
-  
-  // Footer
-  footerText      String?  @db.Text
-  copyrightText   String?
-  
-  // Working Hours
-  mondayOpen      String   @default("08:00")
-  mondayClose     String   @default("18:00")
-  tuesdayOpen     String   @default("08:00")
-  tuesdayClose    String   @default("18:00")
-  wednesdayOpen   String   @default("08:00")
-  wednesdayClose  String   @default("18:00")
-  thursdayOpen    String   @default("08:00")
-  thursdayClose   String   @default("18:00")
-  fridayOpen      String   @default("08:00")
-  fridayClose     String   @default("18:00")
-  saturdayOpen    String   @default("09:00")
-  saturdayClose   String   @default("17:00")
-  sundayOpen      String   @default("09:00")
-  sundayClose     String   @default("15:00")
-  is24Hours       Boolean  @default(false)
-  
-  // Booking Rules
-  minAdvanceDays  Int      @default(1)
-  maxAdvanceDays  Int      @default(30)
-  cancellationHours Int    @default(24)
-  
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  id                String   @id @default(uuid())
+  companyName       String   @default("NingClean")
+  tagline           String?
+  description       String?
+  logo              String?
+  favicon           String?
+  logoDark          String?
+  email             String?
+  phone             String?
+  whatsapp          String?
+  address           String?
+  city              String?
+  province          String?
+  postalCode        String?
+  googleMapsUrl     String?
+  facebook          String?
+  instagram         String?
+  twitter           String?
+  youtube           String?
+  linkedin          String?
+  tiktok            String?
+  metaTitle         String?
+  metaDescription   String?
+  ogImage           String?
+  keywords          String?
+  footerText        String?
+  copyrightText     String?
+  mondayOpen        String   @default("08:00")
+  mondayClose       String   @default("18:00")
+  tuesdayOpen       String   @default("08:00")
+  tuesdayClose      String   @default("18:00")
+  wednesdayOpen     String   @default("08:00")
+  wednesdayClose    String   @default("18:00")
+  thursdayOpen      String   @default("08:00")
+  thursdayClose     String   @default("18:00")
+  fridayOpen        String   @default("08:00")
+  fridayClose       String   @default("18:00")
+  saturdayOpen      String   @default("09:00")
+  saturdayClose     String   @default("17:00")
+  sundayOpen        String   @default("09:00")
+  sundayClose       String   @default("15:00")
+  is24Hours         Boolean  @default(false)
+  minAdvanceDays    Int      @default(1)
+  maxAdvanceDays    Int      @default(30)
+  cancellationHours Int      @default(24)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
 
   @@map("site_settings")
 }
 
 model NavigationSettings {
-  id              String   @id @default(uuid())
-  
-  // Navbar links stored as JSON array
-  // Each link: { label, href, order, isActive, icon, isDropdown, dropdownItems }
-  navLinks        Json     @default("[]")
-  
-  // Dropdown for Services menu
-  showServicesDropdown  Boolean @default(true)
+  id                   String   @id @default(uuid())
+  navLinks             Json     @default("[]")
+  showServicesDropdown Boolean  @default(true)
   servicesDropdownLabel String  @default("Layanan")
-  
-  // CTA Button
-  ctaButtonText   String   @default("Booking")
-  ctaButtonLink   String   @default("/booking")
-  showCtaButton   Boolean  @default(true)
-  
-  // Mobile Menu
-  mobileMenuType  String   @default("slide") // "slide" | "full"
-  
-  // Active link highlighting
-  activeIndicatorStyle String @default("dot") // "dot" | "underline" | "background"
-  
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  ctaButtonText        String   @default("Booking")
+  ctaButtonLink        String   @default("/booking")
+  showCtaButton        Boolean  @default(true)
+  mobileMenuType       String   @default("slide")
+  activeIndicatorStyle String   @default("dot")
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
 
   @@map("navigation_settings")
 }
 
 model HomepageSettings {
-  id              String   @id @default(uuid())
-  
-  // Hero Section
-  heroHeadline    String   @default("Transformasi Rumah Anda")
-  heroSubheadline String   @default("Layanan kebersihan profesional dengan tim tersertifikasi. Hasil nyata yang bisa kamu lihat langsung.")
-  heroImage       String?  // Main hero image URL
-  heroBadge       String   @default("Dipercaya 1250+ Pelanggan")
-  
-  // Hero CTA Buttons
-  ctaPrimaryText  String   @default("Booking Sekarang")
-  ctaPrimaryLink  String   @default("/booking")
-  ctaSecondaryText String  @default("Lihat Layanan & Paket")
-  ctaSecondaryLink String  @default("/services")
-  
-  // Stats
-  statsHomesCleaned String @default("1250+")
-  statsRating       String @default("4.95")
-  statsSatisfaction String @default("99%")
-  statsResponseTime String @default("< 30m")
-  
-  // Section Visibility
-  showFeaturesSection Boolean @default(true)
-  showServicesSection Boolean @default(true)
-  showTestimonialsSection Boolean @default(true)
-  showAreasSection   Boolean @default(true)
-  showBlogSection    Boolean @default(true)
-  showImageShowcase  Boolean @default(true)
-  showCTASection     Boolean @default(true)
-  
-  // Featured Services (array of service IDs)
-  featuredServiceIds Json @default("[]")
-  
-  // Before/After Slides
-  beforeAfterSlides Json @default("[]")
-  
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  id                      String   @id @default(uuid())
+  heroHeadline            String   @default("Transformasi Rumah Anda")
+  heroSubheadline         String   @default("Layanan kebersihan profesional dengan tim tersertifikasi. Hasil nyata yang bisa kamu lihat langsung.")
+  heroImage               String?
+  heroBadge               String   @default("Dipercaya 1250+ Pelanggan")
+  ctaPrimaryText          String   @default("Booking Sekarang")
+  ctaPrimaryLink          String   @default("/booking")
+  ctaSecondaryText        String   @default("Lihat Layanan & Paket")
+  ctaSecondaryLink        String   @default("/services")
+  statsHomesCleaned       String   @default("1250+")
+  statsRating             String   @default("4.95")
+  statsSatisfaction       String   @default("99%")
+  statsResponseTime       String   @default("< 30m")
+  showFeaturesSection     Boolean  @default(true)
+  showServicesSection     Boolean  @default(true)
+  showTestimonialsSection Boolean  @default(true)
+  showAreasSection        Boolean  @default(true)
+  showBlogSection         Boolean  @default(true)
+  showImageShowcase       Boolean  @default(true)
+  showCTASection          Boolean  @default(true)
+  featuredServiceIds      Json     @default("[]")
+  beforeAfterSlides       Json     @default("[]")
+  createdAt               DateTime @default(now())
+  updatedAt               DateTime @updatedAt
 
   @@map("homepage_settings")
 }
 
 model FooterSettings {
-  id              String   @id @default(uuid())
-  
-  // Footer Columns (JSON array)
-  // { title, links: [{label, href}] }
-  footerColumns   Json     @default("[]")
-  
-  // Quick Contact
-  showContact     Boolean  @default(true)
-  contactEmail    String?
-  contactPhone    String?
-  contactWhatsapp String?
-  contactAddress   String?
-  
-  // Social Links
-  showSocials     Boolean  @default(true)
-  socialLinks     Json     @default("[]") // [{name, href, icon}]
-  
-  // Newsletter
-  showNewsletter  Boolean  @default(true)
-  newsletterTitle String   @default("Dapat tips bersih setiap minggu")
-  newsletterSubtitle String? @default("Promo eksklusif dan info layanan baru langsung ke inbox kamu.")
-  
-  // Bottom bar
-  showStatusBadge Boolean  @default(true)
-  statusBadgeText String   @default("Semua layanan aktif")
-  
-  // Copyright
-  copyrightText   String   @default("All rights reserved.")
-  
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  id                 String   @id @default(uuid())
+  footerColumns      Json     @default("[]")
+  showContact        Boolean  @default(true)
+  contactEmail       String?
+  contactPhone       String?
+  contactWhatsapp    String?
+  contactAddress     String?
+  showSocials        Boolean  @default(true)
+  socialLinks        Json     @default("[]")
+  showNewsletter     Boolean  @default(true)
+  newsletterTitle    String   @default("Dapat tips bersih setiap minggu")
+  newsletterSubtitle String?
+  showStatusBadge    Boolean  @default(true)
+  statusBadgeText    String   @default("Semua layanan aktif")
+  copyrightText      String   @default("All rights reserved.")
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
 
   @@map("footer_settings")
 }
 
-enum TemplateType {
-  BOOKING_CONFIRMED
-  BOOKING_STATUS_UPDATED
-  BOOKING_REMINDER
-  BOOKING_CANCELLED
-  CUSTOMER_WELCOME
-}
-
 model EmailTemplate {
-  id          String   @id @default(uuid())
-  type        TemplateType @unique
-  name        String   // Human-readable name
-  subject     String   // Email subject
-  body        String   @db.Text // Email body (HTML/Markdown)
-  smsBody     String?  @db.Text // SMS version (short)
-  isActive    Boolean  @default(true)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id        String       @id @default(uuid())
+  type      TemplateType @unique
+  name      String
+  subject   String
+  body      String
+  smsBody   String?
+  isActive  Boolean      @default(true)
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
 
   @@map("email_templates")
 }
 
 model InvoiceTemplate {
-  id        String   @id @default(uuid())
-  name      String   @default("Default")
-  headerText String  @default("INVOICE")
-  companyName String @default("NingClean")
-  companyAddress String? @db.Text
-  companyPhone String?
-  companyEmail String?
-  companyLogo String?
-  footerText String? @db.Text
-  taxRate    Decimal  @db.Decimal(5, 2) @default(0)
-  notes      String?  @db.Text
-  isDefault  Boolean  @default(false)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id             String   @id @default(uuid())
+  name           String   @default("Default")
+  headerText     String   @default("INVOICE")
+  companyName    String   @default("NingClean")
+  companyAddress String?
+  companyPhone   String?
+  companyEmail   String?
+  companyLogo    String?
+  footerText     String?
+  taxRate        Decimal  @default(0) @db.Decimal(5, 2)
+  notes          String?
+  isDefault      Boolean  @default(false)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
 
   @@map("invoice_templates")
 }
 
 model AuditLog {
-  id          String   @id @default(uuid())
-  action      String   // e.g., "CREATE", "UPDATE", "DELETE"
-  entityType  String   // e.g., "Booking", "User", "Service"
-  entityId    String
-  userId      String?
-  userEmail   String?
-  changes     Json?    // Before/after values
-  createdAt   DateTime @default(now())
+  id         String   @id @default(uuid())
+  action     String
+  entityType String
+  entityId   String
+  userId     String?
+  userEmail  String?
+  changes    Json?
+  createdAt  DateTime @default(now())
 
   @@map("audit_logs")
 }

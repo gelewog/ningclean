@@ -10,7 +10,7 @@ interface GalleryItem {
   id: string;
   title: string;
   description?: string;
-  imageUrl: string;
+  imageUrl?: string;
   beforeImage?: string;
   afterImage?: string;
   location?: string;
@@ -27,8 +27,8 @@ interface ImageShowcaseProps {
 const FALLBACK_SHOWCASE: GalleryItem[] = [
   {
     id: 'fallback-1',
-    before: 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=800&q=80',
-    after: 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=800&q=80&sat=-100&brightness=1.15',
+    beforeImage: 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=800&q=80',
+    afterImage: 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=800&q=80&sat=-100&brightness=1.15',
     title: 'Ruang Tamu',
     location: 'Surabaya',
     category: 'Home Cleaning',
@@ -36,8 +36,8 @@ const FALLBACK_SHOWCASE: GalleryItem[] = [
   },
   {
     id: 'fallback-2',
-    before: 'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=800&q=80',
-    after: 'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=800&q=80&sat=-100&brightness=1.15',
+    beforeImage: 'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=800&q=80',
+    afterImage: 'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=800&q=80&sat=-100&brightness=1.15',
     title: 'Dapur',
     location: 'Sidoarjo',
     category: 'Deep Cleaning',
@@ -45,8 +45,8 @@ const FALLBACK_SHOWCASE: GalleryItem[] = [
   },
   {
     id: 'fallback-3',
-    before: 'https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?w=800&q=80',
-    after: 'https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?w=800&q=80&sat=-100&brightness=1.15',
+    beforeImage: 'https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?w=800&q=80',
+    afterImage: 'https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?w=800&q=80&sat=-100&brightness=1.15',
     title: 'Kamar Mandi',
     location: 'Surabaya',
     category: 'Deep Cleaning',
@@ -54,8 +54,8 @@ const FALLBACK_SHOWCASE: GalleryItem[] = [
   },
   {
     id: 'fallback-4',
-    before: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=800&q=80',
-    after: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=800&q=80&sat=-100&brightness=1.15',
+    beforeImage: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=800&q=80',
+    afterImage: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=800&q=80&sat=-100&brightness=1.15',
     title: 'Sofa',
     location: 'Gresik',
     category: 'Sofa Cleaning',
@@ -63,8 +63,8 @@ const FALLBACK_SHOWCASE: GalleryItem[] = [
   },
   {
     id: 'fallback-5',
-    before: 'https://images.unsplash.com/photo-1497366216548-37526070297c?w=800&q=80',
-    after: 'https://images.unsplash.com/photo-1497366216548-37526070297c?w=800&q=80&sat=-100&brightness=1.15',
+    beforeImage: 'https://images.unsplash.com/photo-1497366216548-37526070297c?w=800&q=80',
+    afterImage: 'https://images.unsplash.com/photo-1497366216548-37526070297c?w=800&q=80&sat=-100&brightness=1.15',
     title: 'Ruang Meeting',
     location: 'Surabaya',
     category: 'Office Cleaning',
@@ -72,8 +72,8 @@ const FALLBACK_SHOWCASE: GalleryItem[] = [
   },
   {
     id: 'fallback-6',
-    before: 'https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=800&q=80',
-    after: 'https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=800&q=80&sat=-100&brightness=1.15',
+    beforeImage: 'https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=800&q=80',
+    afterImage: 'https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=800&q=80&sat=-100&brightness=1.15',
     title: 'Rumah Baru',
     location: 'Sidoarjo',
     category: 'Post Construction',
@@ -97,7 +97,7 @@ function ComparisonCard({ image, index }: { image: GalleryItem; index: number })
       <div className="relative aspect-[4/3] rounded-2xl overflow-hidden dark:bg-white/[0.03] bg-slate-100">
         {/* Image */}
         <img
-          src={showAfter ? image.after : image.before}
+          src={showAfter ? image.afterImage : image.beforeImage}
           alt={image.title}
           className="w-full h-full object-cover transition-all duration-700 group-hover:scale-105"
         />

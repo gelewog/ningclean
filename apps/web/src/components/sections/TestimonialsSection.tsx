@@ -9,6 +9,8 @@ interface Testimonial {
   avatar?: string;
   rating: number;
   content: string;
+  comment?: string;
+  service?: string;
   role?: string;
   company?: string;
   isActive?: boolean;

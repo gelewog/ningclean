@@ -8,7 +8,7 @@ export class BlogService {
 
   async findAll() {
     return this.prisma.blogPost.findMany({
-      where: { publishedAt: { not: null } },
+      where: { NOT: { publishedAt: null } },
       orderBy: { publishedAt: 'desc' },
       select: {
         id: true,

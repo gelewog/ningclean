@@ -34,46 +34,39 @@ export class NotificationsService implements OnModuleInit {
 
   private async loadSettings() {
     try {
-      // Use raw SQL - note: Postgres stores column names in lowercase
-      interface SettingsRow {
-        id: string;
-        whatsappNumber: string | null;
-        whatsappMessage: string | null;
-        whatsappEnabled: boolean;
-        emailEnabled: boolean;
-        emailHost: string | null;
-        emailPort: number | null;
-        emailUser: string | null;
-        emailPassword: string | null;
-        emailFrom: string | null;
-        adminEmail: string | null;
-        twilioaccountsid: string | null;
-        twilioauthtoken: string | null;
-        twiliofromnumber: string | null;
-      }
-      
-      // Use lowercase column names that match the actual database schema
+      // Read from JSONB config and secrets fields
       const result = await this.prisma.$queryRawUnsafe(`
         SELECT 
-          "id",
-          "whatsappNumber",
-          "whatsappMessage",
-          "whatsappEnabled",
-          "emailEnabled",
-          "emailHost",
-          "emailPort",
-          "emailUser",
-          "emailPassword",
-          "emailFrom",
-          "adminEmail",
-          "twilioaccountsid",
-          "twilioauthtoken",
-          "twiliofromnumber"
+          "config",
+          "secrets"
         FROM "notification_settings" 
         LIMIT 1
-      `) as SettingsRow[];
+      `) as { config: any; secrets: any }[];
       
-      this.settings = result && result.length > 0 ? result[0] : null;
+      if (result && result.length > 0) {
+        const row = result[0];
+        this.settings = {
+          // WhatsApp
+          whatsappNumber: row.config?.whatsapp?.number || null,
+          whatsappEnabled: row.config?.whatsapp?.enabled || false,
+          whatsappMessage: row.config?.whatsapp?.defaultMessage || null,
+          // Email
+          emailEnabled: row.config?.email?.enabled || false,
+          emailHost: row.config?.email?.host || null,
+          emailPort: row.config?.email?.port || null,
+          emailUser: row.config?.email?.user || null,
+          emailFrom: row.config?.email?.from || null,
+          adminEmail: row.config?.email?.adminEmail || null,
+          // Twilio
+          twilioAccountSid: row.config?.twilio?.accountSid || null,
+          twilioFromNumber: row.config?.twilio?.fromNumber || null,
+          // Secrets
+          emailPassword: row.secrets?.emailPassword || null,
+          twilioAuthToken: row.secrets?.twilioAuthToken || null,
+        };
+      } else {
+        this.settings = null;
+      }
     } catch (error) {
       console.error('Failed to load notification settings:', error);
       this.settings = null;
@@ -81,7 +74,7 @@ export class NotificationsService implements OnModuleInit {
   }
 
   private initializeTransporter() {
-    if (this.settings?.emailEnabled && this.settings?.emailHost) {
+    if (this.settings?.emailEnabled && this.settings?.emailHost && this.settings?.emailPassword) {
       this.transporter = nodemailer.createTransport({
         host: this.settings.emailHost,
         port: this.settings.emailPort || 587,
@@ -109,12 +102,8 @@ export class NotificationsService implements OnModuleInit {
       return null;
     }
 
-    // Clean number: remove + if present
-    let number = this.settings.whatsappNumber.replace(/\+/g, '');
-    
-    // Encode message
+    const number = this.settings.whatsappNumber.replace(/\+/g, '');
     const encodedMessage = encodeURIComponent(message);
-    
     return `https://wa.me/${number}?text=${encodedMessage}`;
   }
 
@@ -136,18 +125,16 @@ export class NotificationsService implements OnModuleInit {
 ---
 Dikirim otomatis dari NingClean`;
 
-    // Replace placeholders with actual data
-    message = message.replace(/{orderNumber}/g, data.orderNumber);
-    message = message.replace(/{customerName}/g, data.customerName);
-    message = message.replace(/{customerEmail}/g, data.customerEmail || '-');
-    message = message.replace(/{customerPhone}/g, data.customerPhone || '-');
-    message = message.replace(/{serviceName}/g, data.serviceName);
-    message = message.replace(/{serviceDate}/g, data.serviceDate);
-    message = message.replace(/{serviceTime}/g, data.serviceTime);
-    message = message.replace(/{address}/g, data.address);
-    message = message.replace(/{totalAmount}/g, data.totalAmount);
-
-    return message;
+    return message
+      .replace(/{orderNumber}/g, data.orderNumber)
+      .replace(/{customerName}/g, data.customerName)
+      .replace(/{customerEmail}/g, data.customerEmail || '-')
+      .replace(/{customerPhone}/g, data.customerPhone || '-')
+      .replace(/{serviceName}/g, data.serviceName)
+      .replace(/{serviceDate}/g, data.serviceDate)
+      .replace(/{serviceTime}/g, data.serviceTime)
+      .replace(/{address}/g, data.address)
+      .replace(/{totalAmount}/g, data.totalAmount);
   }
 
   /**
@@ -171,7 +158,6 @@ Dikirim otomatis dari NingClean`;
     .detail { margin: 10px 0; padding: 10px; background: white; border-radius: 8px; }
     .label { font-weight: bold; color: #10b981; }
     .footer { text-align: center; margin-top: 20px; color: #6b7280; font-size: 12px; }
-    .button { display: inline-block; background: #10b981; color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; margin-top: 15px; }
   </style>
 </head>
 <body>
@@ -196,8 +182,7 @@ Dikirim otomatis dari NingClean`;
     </div>
   </div>
 </body>
-</html>
-`;
+</html>`;
 
     try {
       await this.transporter.sendMail({
@@ -215,7 +200,7 @@ Dikirim otomatis dari NingClean`;
   }
 
   /**
-   * Send WhatsApp notification using Twilio (primary) or Baileys (fallback)
+   * Send WhatsApp notification using Twilio only
    */
   async sendWhatsAppNotification(data: BookingNotificationData): Promise<{ success: boolean; messageId?: string; error?: string }> {
     if (!this.settings?.whatsappEnabled) {
@@ -230,45 +215,31 @@ Dikirim otomatis dari NingClean`;
       return { success: false, error: 'WhatsApp number not configured' };
     }
 
-    // Try Twilio first (preferred) - use lowercase column names
-    if (this.settings?.twilioaccountsid && this.settings?.twilioauthtoken) {
-      console.log('Sending via Twilio...');
-      const result = await this.twilioService.sendWhatsAppMessage(targetNumber, message);
-      if (result.success) {
-        return result;
-      }
-      console.log('Twilio failed, trying Baileys fallback:', result.error);
+    // Check if Twilio is configured
+    if (!this.settings?.twilioAccountSid || !this.settings?.twilioAuthToken) {
+      return { success: false, error: 'Twilio not configured. Please set up Twilio credentials.' };
     }
 
-    // Fallback to Baileys if Twilio not configured or failed
-    if (this.whatsAppService.isConnected()) {
-      console.log('Sending via Baileys...');
-      return await this.whatsAppService.sendMessage(targetNumber, message);
-    }
-
-    return { success: false, error: 'No WhatsApp provider connected. Configure Twilio or connect Baileys.' };
+    // Use TwilioService to send WhatsApp message
+    console.log('Sending WhatsApp via Twilio...');
+    return this.twilioService.sendWhatsAppMessage(targetNumber, message);
   }
 
   /**
-   * Send booking notification (both WhatsApp direct message and email)
+   * Send booking notification (both WhatsApp and email)
    */
   async notifyNewBooking(data: BookingNotificationData): Promise<{ 
     waSent: boolean; 
     waMessageId?: string;
     waError?: string;
     emailSent: boolean;
-    waLink?: string | null; // For backward compatibility
+    waLink?: string | null;
   }> {
-    await this.loadSettings(); // Refresh settings
+    await this.loadSettings();
 
-    // Send WhatsApp direct message
     const waResult = await this.sendWhatsAppNotification(data);
-
-    // Also generate click-to-chat link (for backward compatibility / fallback)
     const waMessage = this.formatWhatsAppMessage(data);
     const waLink = this.getWhatsAppLink(waMessage);
-
-    // Send email
     const emailSent = await this.sendEmailNotification(data);
 
     return {
@@ -286,29 +257,23 @@ Dikirim otomatis dari NingClean`;
   async getSettings() {
     await this.loadSettings();
     
-    // Return settings without sensitive data
-    if (this.settings) {
-      return {
-        whatsappNumber: this.settings.whatsappNumber,
-        whatsappMessage: this.settings.whatsappMessage,
-        whatsappEnabled: this.settings.whatsappEnabled,
-        emailEnabled: this.settings.emailEnabled,
-        emailHost: this.settings.emailHost,
-        emailPort: this.settings.emailPort,
-        emailUser: this.settings.emailUser,
-        emailFrom: this.settings.emailFrom,
-        adminEmail: this.settings.adminEmail,
-        // Twilio settings - use lowercase column names from database
-        twilioAccountSid: this.settings.twilioaccountsid || '',
-        twilioAuthToken: '', // Don't expose
-        twilioFromNumber: this.settings.twiliofromnumber || '',
-        hasTwilio: !!this.settings.twilioauthtoken,
-        // Don't expose password
-        hasPassword: !!this.settings.emailPassword,
-      };
-    }
-    
-    return null;
+    if (!this.settings) return null;
+
+    return {
+      whatsappNumber: this.settings.whatsappNumber,
+      whatsappMessage: this.settings.whatsappMessage,
+      whatsappEnabled: this.settings.whatsappEnabled,
+      emailEnabled: this.settings.emailEnabled,
+      emailHost: this.settings.emailHost,
+      emailPort: this.settings.emailPort,
+      emailUser: this.settings.emailUser,
+      emailFrom: this.settings.emailFrom,
+      adminEmail: this.settings.adminEmail,
+      twilioAccountSid: this.settings.twilioAccountSid || '',
+      twilioFromNumber: this.settings.twilioFromNumber || '',
+      hasTwilio: !!this.settings.twilioAuthToken,
+      hasPassword: !!this.settings.emailPassword,
+    };
   }
 
   /**
@@ -329,88 +294,56 @@ Dikirim otomatis dari NingClean`;
     twilioAuthToken?: string;
     twilioFromNumber?: string;
   }) {
-    const updateData: any = {};
-    
-    // Only include provided fields
-    if (data.whatsappNumber !== undefined) updateData.whatsappNumber = data.whatsappNumber;
-    if (data.whatsappMessage !== undefined) updateData.whatsappMessage = data.whatsappMessage;
-    if (data.whatsappEnabled !== undefined) updateData.whatsappEnabled = data.whatsappEnabled;
-    if (data.emailEnabled !== undefined) updateData.emailEnabled = data.emailEnabled;
-    if (data.emailHost !== undefined) updateData.emailHost = data.emailHost;
-    if (data.emailPort !== undefined) updateData.emailPort = data.emailPort;
-    if (data.emailUser !== undefined) updateData.emailUser = data.emailUser;
-    if (data.emailFrom !== undefined) updateData.emailFrom = data.emailFrom;
-    if (data.adminEmail !== undefined) updateData.adminEmail = data.adminEmail;
-    
-    // Only update password if provided (don't delete existing)
-    if (data.emailPassword) {
-      updateData.emailPassword = data.emailPassword;
-    }
+    // Build config JSON
+    const config: any = {
+      whatsapp: {},
+      email: {},
+      twilio: {},
+    };
+    const secrets: any = {};
 
-    // Twilio settings - use lowercase column names
-    if (data.twilioAccountSid !== undefined) updateData.twilioAccountSid = data.twilioAccountSid;
-    if (data.twilioAuthToken !== undefined) updateData.twilioAuthToken = data.twilioAuthToken;
-    if (data.twilioFromNumber !== undefined) updateData.twilioFromNumber = data.twilioFromNumber;
+    if (data.whatsappNumber !== undefined) config.whatsapp.number = data.whatsappNumber;
+    if (data.whatsappMessage !== undefined) config.whatsapp.defaultMessage = data.whatsappMessage;
+    if (data.whatsappEnabled !== undefined) config.whatsapp.enabled = data.whatsappEnabled;
+    
+    if (data.emailEnabled !== undefined) config.email.enabled = data.emailEnabled;
+    if (data.emailHost !== undefined) config.email.host = data.emailHost;
+    if (data.emailPort !== undefined) config.email.port = data.emailPort;
+    if (data.emailUser !== undefined) config.email.user = data.emailUser;
+    if (data.emailFrom !== undefined) config.email.from = data.emailFrom;
+    if (data.adminEmail !== undefined) config.email.adminEmail = data.adminEmail;
+    
+    if (data.twilioAccountSid !== undefined) config.twilio.accountSid = data.twilioAccountSid;
+    if (data.twilioFromNumber !== undefined) config.twilio.fromNumber = data.twilioFromNumber;
 
-    // Use raw SQL to update with lowercase column names (Postgres stores them as lowercase)
+    if (data.emailPassword) secrets.emailPassword = data.emailPassword;
+    if (data.twilioAuthToken) secrets.twilioAuthToken = data.twilioAuthToken;
+
     try {
-      // Build dynamic update - only include password if explicitly provided
-      let sql = `
-        UPDATE "notification_settings" SET
-          "whatsappNumber" = COALESCE($1, "whatsappNumber"),
-          "whatsappMessage" = COALESCE($2, "whatsappMessage"),
-          "whatsappEnabled" = COALESCE($3, "whatsappEnabled"),
-          "emailEnabled" = COALESCE($4, "emailEnabled"),
-          "emailHost" = COALESCE($5, "emailHost"),
-          "emailPort" = COALESCE($6, "emailPort"),
-          "emailUser" = COALESCE($7, "emailUser"),
-          "emailFrom" = COALESCE($8, "emailFrom"),
-          "adminEmail" = COALESCE($9, "adminEmail"),
-          "twilioaccountsid" = COALESCE($10, "twilioaccountsid"),
-          "twiliofromnumber" = COALESCE($11, "twiliofromnumber")
-      `;
-      
-      // Only include emailPassword and twilioauthtoken if explicitly provided
-      let paramIndex = 12;
-      if (data.emailPassword) {
-        sql += `, "emailPassword" = $${paramIndex}`;
-        paramIndex++;
-      }
-      if (data.twilioAuthToken) {
-        sql += `, "twilioauthtoken" = $${paramIndex}`;
-        paramIndex++;
+      // Check if settings exist
+      const existing = await this.prisma.$queryRawUnsafe(`
+        SELECT id FROM "notification_settings" LIMIT 1
+      `) as { id: string }[];
+
+      if (existing.length > 0) {
+        // Update existing - merge config
+        await this.prisma.$executeRawUnsafe(`
+          UPDATE "notification_settings" 
+          SET 
+            "config" = "config" || $1::jsonb,
+            "secrets" = COALESCE("secrets", '{}'::jsonb) || $2::jsonb,
+            "updatedAt" = NOW()
+          WHERE id = $3
+        `, JSON.stringify(config), JSON.stringify(secrets), existing[0].id);
+      } else {
+        // Create new
+        await this.prisma.$executeRawUnsafe(`
+          INSERT INTO "notification_settings" (id, name, config, secrets, "createdAt", "updatedAt")
+          VALUES (gen_random_uuid(), 'default', $1::jsonb, $2::jsonb, NOW(), NOW())
+        `, JSON.stringify(config), JSON.stringify(secrets));
       }
       
-      sql += ` WHERE "id" = $${paramIndex}`;
-      
-      // Build params array
-      const params: any[] = [
-        data.whatsappNumber ?? null,
-        data.whatsappMessage ?? null,
-        data.whatsappEnabled ?? null,
-        data.emailEnabled ?? null,
-        data.emailHost ?? null,
-        data.emailPort ?? null,
-        data.emailUser ?? null,
-        data.emailFrom ?? null,
-        data.adminEmail ?? null,
-        data.twilioAccountSid ?? null,
-        data.twilioFromNumber ?? null,
-      ];
-      
-      if (data.emailPassword) {
-        params.push(data.emailPassword);
-      }
-      if (data.twilioAuthToken) {
-        params.push(data.twilioAuthToken);
-      }
-      params.push(this.settings?.id || '');
-      
-      await this.prisma.$executeRawUnsafe(sql, ...params);
-      
-      // Refresh settings cache
       await this.refreshSettings();
-      
       return { success: true };
     } catch (error) {
       console.error('Failed to update notification settings:', error);
@@ -420,17 +353,12 @@ Dikirim otomatis dari NingClean`;
 
   // ============ Notification CRUD Methods ============
 
-  /**
-   * Get notifications with pagination
-   */
   async getNotifications(params: { page?: number; limit?: number; unreadOnly?: boolean }) {
     const { page = 1, limit = 20, unreadOnly = false } = params;
     const skip = (page - 1) * limit;
 
     const where: any = {};
-    if (unreadOnly) {
-      where.isRead = false;
-    }
+    if (unreadOnly) where.isRead = false;
 
     const [notifications, total] = await Promise.all([
       this.prisma.notification.findMany({
@@ -452,80 +380,45 @@ Dikirim otomatis dari NingClean`;
     };
   }
 
-  /**
-   * Get unread notification count
-   */
   async getUnreadCount(): Promise<number> {
     return this.prisma.notification.count({
       where: { isRead: false },
     });
   }
 
-  /**
-   * Mark a notification as read
-   */
   async markAsRead(id: string) {
-    const notification = await this.prisma.notification.findUnique({ where: { id } });
-    if (!notification) {
-      throw new Error('Notification not found');
-    }
-
     return this.prisma.notification.update({
       where: { id },
-      data: {
-        isRead: true,
-        readAt: new Date(),
-      },
+      data: { isRead: true, readAt: new Date() },
     });
   }
 
-  /**
-   * Mark a notification as unread
-   */
   async markAsUnread(id: string) {
     return this.prisma.notification.update({
       where: { id },
-      data: {
-        isRead: false,
-        readAt: null,
-      },
+      data: { isRead: false, readAt: null },
     });
   }
 
-  /**
-   * Mark all notifications as read
-   */
   async markAllAsRead() {
     await this.prisma.notification.updateMany({
       where: { isRead: false },
-      data: {
-        isRead: true,
-        readAt: new Date(),
-      },
+      data: { isRead: true, readAt: new Date() },
     });
     return { success: true };
   }
 
-  /**
-   * Delete old notifications (older than specified days)
-   */
   async deleteOldNotifications(days: number = 30) {
     const cutoffDate = new Date();
     cutoffDate.setDate(cutoffDate.getDate() - days);
 
     const result = await this.prisma.notification.deleteMany({
-      where: {
-        createdAt: { lt: cutoffDate },
-        isRead: true, // Only delete read notifications
-      },
+      where: { createdAt: { lt: cutoffDate }, isRead: true },
     });
 
     return { deleted: result.count };
   }
 
-  /**
-   * Create a notification (for internal use)
-   */
   async createNotification(params: {
     type?: 'BOOKING_NEW' | 'BOOKING_STATUS' | 'SYSTEM';
     title: string;
