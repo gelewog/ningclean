@@ -1,4 +1,4 @@
-import { Controller, Get, Put, UseGuards } from '@nestjs/common';
+import { Controller, Get, Put, UseGuards, Body } from '@nestjs/common';
 import { SiteSettingsService } from './site-settings.service';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { RolesGuard } from '../common/guards/roles.guard';
@@ -17,7 +17,7 @@ export class SiteSettingsController {
   @Put()
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(Role.ADMIN)
-  async updateSettings(data: any) {
+  async updateSettings(@Body() data: any) {
     return this.siteSettingsService.updateSettings(data);
   }
 }
