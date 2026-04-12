@@ -27,6 +27,49 @@ const DAY_LABELS: Record<string, string> = {
   sunday: 'Minggu',
 }
 
+// Toggle Switch Component - defined outside to prevent re-mounting
+function Toggle({ checked, onChange }: { checked: boolean; onChange: (v: boolean) => void }) {
+  return (
+    <label className="relative inline-flex items-center cursor-pointer">
+      <input type="checkbox" checked={checked} onChange={e => onChange(e.target.checked)} className="sr-only peer" />
+      <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-emerald-100 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-600"></div>
+    </label>
+  )
+}
+
+// Section Header Component - defined outside to prevent re-mounting
+function SectionHeader({ icon: Icon, title, subtitle, badge, badgeColor = 'bg-emerald-100 text-emerald-700' }: { icon: any; title: string; subtitle: string; badge?: string; badgeColor?: string }) {
+  return (
+    <div className="flex items-center gap-4 mb-6">
+      <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-gray-100 to-gray-50 border border-gray-100">
+        <Icon className="h-5 w-5 text-gray-700" />
+      </div>
+      <div className="flex-1">
+        <div className="flex items-center gap-2">
+          <h2 className="text-lg font-semibold text-gray-900">{title}</h2>
+          {badge && (
+            <span className={`inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-medium ${badgeColor || 'bg-emerald-100 text-emerald-700'}`}>
+              {badge}
+            </span>
+          )}
+        </div>
+        <p className="text-sm text-gray-500">{subtitle}</p>
+      </div>
+    </div>
+  )
+}
+
+// Form Field Component - defined outside to prevent re-mounting
+function FormField({ label, children, description }: { label: string; children: React.ReactNode; description?: string }) {
+  return (
+    <div className="space-y-2">
+      <label className="text-sm font-medium text-gray-700">{label}</label>
+      {children}
+      {description && <p className="text-xs text-gray-400">{description}</p>}
+    </div>
+  )
+}
+
 export default function SettingsPage() {
   const [settings, setSettings] = React.useState<Partial<SiteSettings>>({})
   const [notificationSettings, setNotificationSettings] = React.useState<Record<string, any>>({
@@ -182,43 +225,6 @@ export default function SettingsPage() {
     { id: 'homepage', label: 'Homepage', icon: Home },
     { id: 'notifications', label: 'Notifikasi', icon: Bell },
   ]
-
-  // Toggle Switch Component
-  const Toggle = ({ checked, onChange }: { checked: boolean; onChange: (v: boolean) => void }) => (
-    <label className="relative inline-flex items-center cursor-pointer">
-      <input type="checkbox" checked={checked} onChange={e => onChange(e.target.checked)} className="sr-only peer" />
-      <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-emerald-100 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-600"></div>
-    </label>
-  )
-
-  // Section Header Component
-  const SectionHeader = ({ icon: Icon, title, subtitle, badge, badgeColor = 'bg-emerald-100 text-emerald-700' }: { icon: any; title: string; subtitle: string; badge?: string; badgeColor?: string }) => (
-    <div className="flex items-center gap-4 mb-6">
-      <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-gray-100 to-gray-50 border border-gray-100">
-        <Icon className="h-5 w-5 text-gray-700" />
-      </div>
-      <div className="flex-1">
-        <div className="flex items-center gap-2">
-          <h2 className="text-lg font-semibold text-gray-900">{title}</h2>
-          {badge && (
-            <span className={`inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-medium ${badgeColor || 'bg-emerald-100 text-emerald-700'}`}>
-              {badge}
-            </span>
-          )}
-        </div>
-        <p className="text-sm text-gray-500">{subtitle}</p>
-      </div>
-    </div>
-  )
-
-  // Form Field Component
-  const FormField = ({ label, children, description }: { label: string; children: React.ReactNode; description?: string }) => (
-    <div className="space-y-2">
-      <label className="text-sm font-medium text-gray-700">{label}</label>
-      {children}
-      {description && <p className="text-xs text-gray-400">{description}</p>}
-    </div>
-  )
 
   return (
     <div className="space-y-6">
