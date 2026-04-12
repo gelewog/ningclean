@@ -180,7 +180,6 @@ export default function SettingsPage() {
     { id: 'booking', label: 'Booking Rules', icon: Calendar },
     { id: 'navigation', label: 'Navigation', icon: Menu },
     { id: 'homepage', label: 'Homepage', icon: Home },
-    { id: 'footer', label: 'Footer', icon: FileText },
     { id: 'notifications', label: 'Notifikasi', icon: Bell },
   ]
 
