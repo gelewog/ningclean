@@ -166,187 +166,198 @@ export default function NotificationsPage() {
   }
 
   return (
-    <div className="space-y-6">
-      {/* Header */}
-      <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900">Notifikasi</h1>
-          <p className="mt-1 text-sm text-gray-500">
-            {unreadCount > 0 ? `${unreadCount} notifikasi belum dibaca` : 'Semua notifikasi sudah dibaca'}
-          </p>
+    <div className="min-h-screen bg-gray-50 text-gray-900">
+      {/* Topbar */}
+      <div className="sticky top-0 z-20 bg-white/80 backdrop-blur-xl border-b border-gray-100 px-4 md:px-6 py-3 flex items-center justify-between">
+        <div className="flex items-center gap-2 text-xs text-gray-500">
+          <span>NingClean Admin</span>
+          <span>/</span>
+          <span className="text-gray-700">Notifications</span>
         </div>
-        <div className="flex items-center gap-3">
-          {/* Filter */}
-          <div className="flex items-center gap-2 rounded-xl border border-gray-200 bg-white p-1">
-            <button
-              onClick={() => { setFilter('all'); fetchNotifications(1, 'all') }}
-              className={`flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
-                filter === 'all'
-                  ? 'bg-gray-900 text-white'
-                  : 'text-gray-600 hover:bg-gray-100'
-              }`}
-            >
-              <Filter className="h-4 w-4" />
-              Semua
-            </button>
-            <button
-              onClick={() => { setFilter('unread'); fetchNotifications(1, 'unread') }}
-              className={`flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
-                filter === 'unread'
-                  ? 'bg-gray-900 text-white'
-                  : 'text-gray-600 hover:bg-gray-100'
-              }`}
-            >
-              <Bell className="h-4 w-4" />
-              Belum Dibaca
-              {unreadCount > 0 && (
-                <span className="flex h-5 min-w-[1.25rem] items-center justify-center rounded-full bg-emerald-500 px-1.5 text-[10px] font-bold text-white">
-                  {unreadCount}
-                </span>
-              )}
-            </button>
-          </div>
+      </div>
 
-          {/* Mark all as read */}
-          {unreadCount > 0 && (
+      <div className="w-full px-4 md:px-6 py-6 space-y-6">
+        {/* Header */}
+        <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+          <div>
+            <h1 className="text-2xl font-bold tracking-tight text-gray-900">Notifikasi</h1>
+            <p className="mt-1 text-sm text-gray-500">
+              {unreadCount > 0 ? `${unreadCount} notifikasi belum dibaca` : 'Semua notifikasi sudah dibaca'}
+            </p>
+          </div>
+          <div className="flex items-center gap-3">
+            {/* Filter */}
+            <div className="flex items-center gap-2 rounded-xl border border-gray-200 bg-white p-1">
+              <button
+                onClick={() => { setFilter('all'); fetchNotifications(1, 'all') }}
+                className={`flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
+                  filter === 'all'
+                    ? 'bg-emerald-600 text-white'
+                    : 'text-gray-600 hover:bg-gray-100'
+                }`}
+              >
+                <Filter className="h-4 w-4" />
+                Semua
+              </button>
+              <button
+                onClick={() => { setFilter('unread'); fetchNotifications(1, 'unread') }}
+                className={`flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
+                  filter === 'unread'
+                    ? 'bg-emerald-600 text-white'
+                    : 'text-gray-600 hover:bg-gray-100'
+                }`}
+              >
+                <Bell className="h-4 w-4" />
+                Belum Dibaca
+                {unreadCount > 0 && (
+                  <span className="flex h-5 min-w-[1.25rem] items-center justify-center rounded-full bg-emerald-500 px-1.5 text-[10px] font-bold text-white">
+                    {unreadCount}
+                  </span>
+                )}
+              </button>
+            </div>
+
+            {/* Mark all as read */}
+            {unreadCount > 0 && (
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleMarkAllAsRead}
+                disabled={actionLoading === 'all'}
+                className="gap-2"
+              >
+                <CheckCheck className="h-4 w-4" />
+                Tandai Semua Dibaca
+              </Button>
+            )}
+          </div>
+        </div>
+
+        {/* Notifications List */}
+        <div className="rounded-2xl border border-gray-100 bg-white overflow-hidden shadow-sm">
+          {loading ? (
+            <div className="flex items-center justify-center py-20">
+              <div className="h-8 w-8 animate-spin rounded-full border-4 border-gray-200 border-t-emerald-500" />
+            </div>
+          ) : notifications.length === 0 ? (
+            <div className="flex flex-col items-center justify-center py-20">
+              <div className="flex h-16 w-16 items-center justify-center rounded-full bg-gray-100">
+                <Bell className="h-8 w-8 text-gray-400" />
+              </div>
+              <h3 className="mt-4 text-lg font-semibold text-gray-900">Tidak ada notifikasi</h3>
+              <p className="mt-1 text-sm text-gray-500">
+                {filter === 'unread'
+                  ? 'Semua notifikasi sudah dibaca'
+                  : 'Notifikasi baru akan muncul di sini'}
+              </p>
+            </div>
+          ) : (
+            <div className="divide-y divide-gray-100">
+              {notifications.map((notification) => (
+                <motion.div
+                  key={notification.id}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  className={`flex gap-4 p-5 transition-colors hover:bg-gray-50/50 ${
+                    !notification.isRead ? 'bg-emerald-50/30' : ''
+                  }`}
+                >
+                  {/* Icon */}
+                  <div className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl ${
+                    !notification.isRead ? 'bg-emerald-100' : 'bg-gray-100'
+                  }`}>
+                    {getNotificationIcon(notification.type)}
+                  </div>
+
+                  {/* Content */}
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-start justify-between gap-4">
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2 mb-1">
+                          {!notification.isRead && (
+                            <div className="h-2 w-2 rounded-full bg-emerald-500" />
+                          )}
+                          <h3 className={`text-sm ${!notification.isRead ? 'font-semibold text-gray-900' : 'font-medium text-gray-700'}`}>
+                            {notification.title}
+                          </h3>
+                          <span className="text-[10px] font-medium text-gray-400 px-2 py-0.5 rounded-full bg-gray-100">
+                            {getTypeLabel(notification.type)}
+                          </span>
+                        </div>
+                        <p className="text-sm text-gray-600 mt-1">
+                          {notification.message}
+                        </p>
+                        <div className="flex items-center gap-4 mt-2">
+                          <span className="text-xs text-gray-400">
+                            {formatDate(notification.createdAt)}
+                          </span>
+                          {notification.data?.bookingId && (
+                            <span className="text-xs text-gray-400">
+                              ID: {notification.data.bookingId.slice(0, 8)}...
+                            </span>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* Actions */}
+                      <div className="flex items-center gap-2 shrink-0">
+                        {notification.isRead ? (
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => handleMarkAsUnread(notification.id)}
+                            disabled={actionLoading === notification.id}
+                            className="gap-1 text-xs text-gray-500 hover:text-gray-700"
+                          >
+                            <Check className="h-3 w-3" />
+                            Tandai Belum Dibaca
+                          </Button>
+                        ) : (
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => handleMarkAsRead(notification.id)}
+                            disabled={actionLoading === notification.id}
+                            className="gap-1 text-xs text-emerald-600 hover:text-emerald-700"
+                          >
+                            <Check className="h-3 w-3" />
+                            Tandai Dibaca
+                          </Button>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* Pagination */}
+        {totalPages > 1 && (
+          <div className="flex items-center justify-center gap-2">
             <Button
               variant="outline"
               size="sm"
-              onClick={handleMarkAllAsRead}
-              disabled={actionLoading === 'all'}
-              className="gap-2"
+              onClick={() => fetchNotifications(page - 1)}
+              disabled={page <= 1}
             >
-              <CheckCheck className="h-4 w-4" />
-              Tandai Semua Dibaca
+              Previous
             </Button>
-          )}
-        </div>
-      </div>
-
-      {/* Notifications List */}
-      <div className="rounded-2xl border border-gray-200 bg-white overflow-hidden">
-        {loading ? (
-          <div className="flex items-center justify-center py-20">
-            <div className="h-8 w-8 animate-spin rounded-full border-4 border-gray-200 border-t-emerald-500" />
-          </div>
-        ) : notifications.length === 0 ? (
-          <div className="flex flex-col items-center justify-center py-20">
-            <div className="flex h-16 w-16 items-center justify-center rounded-full bg-gray-100">
-              <Bell className="h-8 w-8 text-gray-400" />
-            </div>
-            <h3 className="mt-4 text-lg font-semibold text-gray-900">Tidak ada notifikasi</h3>
-            <p className="mt-1 text-sm text-gray-500">
-              {filter === 'unread' 
-                ? 'Semua notifikasi sudah dibaca' 
-                : 'Notifikasi baru akan muncul di sini'}
-            </p>
-          </div>
-        ) : (
-          <div className="divide-y divide-gray-100">
-            {notifications.map((notification) => (
-              <motion.div
-                key={notification.id}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                className={`flex gap-4 p-5 transition-colors hover:bg-gray-50/50 ${
-                  !notification.isRead ? 'bg-emerald-50/30' : ''
-                }`}
-              >
-                {/* Icon */}
-                <div className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl ${
-                  !notification.isRead ? 'bg-emerald-100' : 'bg-gray-100'
-                }`}>
-                  {getNotificationIcon(notification.type)}
-                </div>
-
-                {/* Content */}
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-start justify-between gap-4">
-                    <div className="flex-1">
-                      <div className="flex items-center gap-2 mb-1">
-                        {!notification.isRead && (
-                          <div className="h-2 w-2 rounded-full bg-emerald-500" />
-                        )}
-                        <h3 className={`text-sm ${!notification.isRead ? 'font-semibold text-gray-900' : 'font-medium text-gray-700'}`}>
-                          {notification.title}
-                        </h3>
-                        <span className="text-[10px] font-medium text-gray-400 px-2 py-0.5 rounded-full bg-gray-100">
-                          {getTypeLabel(notification.type)}
-                        </span>
-                      </div>
-                      <p className="text-sm text-gray-600 mt-1">
-                        {notification.message}
-                      </p>
-                      <div className="flex items-center gap-4 mt-2">
-                        <span className="text-xs text-gray-400">
-                          {formatDate(notification.createdAt)}
-                        </span>
-                        {notification.data?.bookingId && (
-                          <span className="text-xs text-gray-400">
-                            ID: {notification.data.bookingId.slice(0, 8)}...
-                          </span>
-                        )}
-                      </div>
-                    </div>
-
-                    {/* Actions */}
-                    <div className="flex items-center gap-2 shrink-0">
-                      {notification.isRead ? (
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => handleMarkAsUnread(notification.id)}
-                          disabled={actionLoading === notification.id}
-                          className="gap-1 text-xs text-gray-500 hover:text-gray-700"
-                        >
-                          <Check className="h-3 w-3" />
-                          Tandai Belum Dibaca
-                        </Button>
-                      ) : (
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => handleMarkAsRead(notification.id)}
-                          disabled={actionLoading === notification.id}
-                          className="gap-1 text-xs text-emerald-600 hover:text-emerald-700"
-                        >
-                          <Check className="h-3 w-3" />
-                          Tandai Dibaca
-                        </Button>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              </motion.div>
-            ))}
+            <span className="text-sm text-gray-500">
+              Halaman {page} dari {totalPages}
+            </span>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => fetchNotifications(page + 1)}
+              disabled={page >= totalPages}
+            >
+              Next
+            </Button>
           </div>
         )}
       </div>
-
-      {/* Pagination */}
-      {totalPages > 1 && (
-        <div className="flex items-center justify-center gap-2">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => fetchNotifications(page - 1)}
-            disabled={page <= 1}
-          >
-            Previous
-          </Button>
-          <span className="text-sm text-gray-500">
-            Halaman {page} dari {totalPages}
-          </span>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => fetchNotifications(page + 1)}
-            disabled={page >= totalPages}
-          >
-            Next
-          </Button>
-        </div>
-      )}
     </div>
   )
 }

@@ -3,7 +3,6 @@
 import * as React from 'react'
 import { motion } from 'framer-motion'
 import { Plus, Edit, Trash2, DollarSign, Calendar, Check, Star } from 'lucide-react'
-import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
@@ -268,37 +267,48 @@ export default function PricingPage() {
   ]
 
   return (
-    <div className="space-y-6">
-      <motion.div
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between"
-      >
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900">Pricing Plans</h1>
-          <p className="text-gray-500">Manage pricing tiers and plans</p>
+    <div className="min-h-screen bg-gray-50 text-gray-900">
+      {/* Topbar */}
+      <div className="sticky top-0 z-20 bg-white/80 backdrop-blur-xl border-b border-gray-100 px-4 md:px-6 py-3 flex items-center justify-between">
+        <div className="flex items-center gap-2 text-xs text-gray-500">
+          <span>NingClean Admin</span>
+          <span>/</span>
+          <span className="text-gray-700">Pricing</span>
         </div>
-        <Button onClick={openCreateModal}>
-          <Plus className="mr-2 h-4 w-4" />
-          New Pricing Plan
-        </Button>
-      </motion.div>
+      </div>
 
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.2 }}
-      >
-        <Card>
-          <CardContent className="p-0">
+      <div className="w-full px-4 md:px-6 py-6 space-y-6">
+        {/* Page Header */}
+        <motion.div
+          initial={{ opacity: 0, y: -16 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"
+        >
+          <div>
+            <h1 className="text-2xl font-bold tracking-tight text-gray-900">Pricing Plans</h1>
+            <p className="text-sm text-gray-500 mt-0.5">Manage pricing tiers and plans</p>
+          </div>
+          <Button onClick={openCreateModal}>
+            <Plus className="mr-2 h-4 w-4" />
+            New Pricing Plan
+          </Button>
+        </motion.div>
+
+        {/* Table */}
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.15 }}
+        >
+          <div className="bg-white border border-gray-100 rounded-2xl overflow-hidden shadow-sm">
             <DataTable
               columns={columns}
               data={items}
               loading={loading}
             />
-          </CardContent>
-        </Card>
-      </motion.div>
+          </div>
+        </motion.div>
+      </div>
 
       <Modal
         isOpen={isModalOpen}

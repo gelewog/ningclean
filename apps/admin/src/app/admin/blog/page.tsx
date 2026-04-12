@@ -3,7 +3,6 @@
 import * as React from 'react'
 import { motion } from 'framer-motion'
 import { Plus, Edit, Trash2, Search, Eye, Image as ImageIcon, Calendar, FolderOpen, Star, ExternalLink } from 'lucide-react'
-import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Badge } from '@/components/ui/badge'
@@ -68,68 +67,83 @@ export default function BlogPage() {
   )
 
   return (
-    <div className="space-y-6">
-      {/* Header */}
-      <motion.div
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between"
-      >
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900">Blog</h1>
-          <p className="text-gray-500">Kelola artikel blog</p>
+    <div className="min-h-screen bg-gray-50 text-gray-900">
+      {/* Topbar */}
+      <div className="sticky top-0 z-20 bg-white/80 backdrop-blur-xl border-b border-gray-100 px-4 md:px-6 py-3 flex items-center justify-between">
+        <div className="flex items-center gap-2 text-xs text-gray-500">
+          <span>NingClean Admin</span>
+          <span>/</span>
+          <span className="text-gray-700">Blog</span>
         </div>
-        <div className="flex gap-3">
-          <Link href="/admin/blog/categories">
-            <Button variant="outline">
-              <FolderOpen className="mr-2 h-4 w-4" />
-              Kategori
-            </Button>
-          </Link>
-          <Link href="/admin/blog/new">
-            <Button className="bg-emerald-600 hover:bg-emerald-700">
-              <Plus className="mr-2 h-4 w-4" />
-              Post Baru
-            </Button>
-          </Link>
+        <div className="flex items-center gap-3">
+          <div className="flex items-center gap-1.5">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+            <span className="text-[11px] text-gray-500">Live</span>
+          </div>
         </div>
-      </motion.div>
+      </div>
 
-      {/* Filters */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.1 }}
-        className="flex flex-col gap-4 md:flex-row"
-      >
-        <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-          <Input
-            placeholder="Cari post..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="pl-10"
-          />
-        </div>
-        <select
-          className="h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm"
-          value={statusFilter}
-          onChange={(e) => { setStatusFilter(e.target.value); setPagination(prev => ({ ...prev, page: 1 })); }}
+      <div className="w-full px-4 md:px-6 py-6 space-y-6">
+        {/* Page Header */}
+        <motion.div
+          initial={{ opacity: 0, y: -16 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"
         >
-          <option value="">Semua Status</option>
-          <option value="published">Published</option>
-          <option value="draft">Draft</option>
-        </select>
-      </motion.div>
+          <div>
+            <h1 className="text-2xl font-bold tracking-tight text-gray-900">Blog</h1>
+            <p className="text-sm text-gray-500 mt-0.5">Kelola artikel blog</p>
+          </div>
+          <div className="flex gap-3">
+            <Link href="/admin/blog/categories">
+              <Button variant="outline">
+                <FolderOpen className="mr-2 h-4 w-4" />
+                Kategori
+              </Button>
+            </Link>
+            <Link href="/admin/blog/new">
+              <Button className="bg-emerald-600 hover:bg-emerald-700">
+                <Plus className="mr-2 h-4 w-4" />
+                Post Baru
+              </Button>
+            </Link>
+          </div>
+        </motion.div>
 
-      {/* Posts List */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.2 }}
-      >
-        <Card>
-          <CardContent className="p-0">
+        {/* Filters */}
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1 }}
+          className="flex flex-col gap-3 sm:flex-row"
+        >
+          <div className="relative flex-1">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+            <Input
+              placeholder="Cari post..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="pl-10 bg-white"
+            />
+          </div>
+          <select
+            className="h-10 rounded-xl border border-gray-200 bg-white px-3 text-sm"
+            value={statusFilter}
+            onChange={(e) => { setStatusFilter(e.target.value); setPagination(prev => ({ ...prev, page: 1 })); }}
+          >
+            <option value="">Semua Status</option>
+            <option value="published">Published</option>
+            <option value="draft">Draft</option>
+          </select>
+        </motion.div>
+
+        {/* Posts List */}
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.15 }}
+        >
+          <div className="bg-white border border-gray-100 rounded-2xl overflow-hidden shadow-sm">
             {loading ? (
               <div className="flex items-center justify-center py-20">
                 <div className="h-8 w-8 animate-spin rounded-full border-4 border-gray-200 border-t-emerald-500" />
@@ -221,20 +235,19 @@ export default function BlogPage() {
                 ))}
               </div>
             )}
-          </CardContent>
-        </Card>
-
-        {/* Pagination */}
-        {pagination.totalPages > 1 && (
-          <div className="mt-4">
-            <Pagination
-              currentPage={pagination.page}
-              totalPages={pagination.totalPages}
-              onPageChange={(page) => setPagination(prev => ({ ...prev, page }))}
-            />
+            {/* Pagination */}
+            {pagination.totalPages > 1 && (
+              <div className="border-t border-gray-100 px-4 py-3">
+                <Pagination
+                  currentPage={pagination.page}
+                  totalPages={pagination.totalPages}
+                  onPageChange={(page) => setPagination(prev => ({ ...prev, page }))}
+                />
+              </div>
+            )}
           </div>
-        )}
-      </motion.div>
+        </motion.div>
+      </div>
 
       {/* Delete Confirmation */}
       {deleteId && (

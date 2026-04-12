@@ -36,13 +36,13 @@ export function AdminLayout({ children }: AdminLayoutProps) {
 
       <motion.div
         initial={false}
-        animate={{ marginLeft: sidebarCollapsed ? 88 : 280 }}
+        animate={{ marginLeft: sidebarCollapsed ? 68 : 256 }}
         transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
         className="flex min-h-screen flex-col"
       >
         <Header onMenuClick={() => setSidebarCollapsed(!sidebarCollapsed)} />
 
-        <main className="flex-1 p-4 md:p-6 lg:p-8">
+        <main className="flex-1">
           <AnimatePresence mode="wait">
             <motion.div
               key={pathname}

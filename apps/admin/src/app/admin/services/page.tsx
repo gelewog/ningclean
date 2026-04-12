@@ -201,18 +201,18 @@ export default function ServicesPage() {
   async function handleToggleActive(service: any) {
     const newIsActive = !service.isActive
     const serviceName = service.name
-    
+
     // Optimistic update - update UI immediately
-    setServices(prev => prev.map(s => 
+    setServices(prev => prev.map(s =>
       s.id === service.id ? { ...s, isActive: newIsActive } : s
     ))
-    
+
     try {
       await updateService(service.id, { isActive: newIsActive })
       toast.success(`Service "${serviceName}" ${newIsActive ? 'activated' : 'deactivated'}`)
     } catch (error: any) {
       // Revert on error
-      setServices(prev => prev.map(s => 
+      setServices(prev => prev.map(s =>
         s.id === service.id ? { ...s, isActive: !newIsActive } : s
       ))
       toast.error(`Failed to update: ${error.message || 'Unknown error'}`)
@@ -260,169 +260,180 @@ export default function ServicesPage() {
   }, [services, filterActive])
 
   return (
-    <div className="space-y-6">
-      {/* Page Header */}
-      <motion.div
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between"
-      >
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900">Services</h1>
-          <p className="text-gray-500">Manage cleaning services and pricing</p>
+    <div className="min-h-screen bg-gray-50 text-gray-900">
+      {/* Topbar */}
+      <div className="sticky top-0 z-20 bg-white/80 backdrop-blur-xl border-b border-gray-100 px-4 md:px-6 py-3 flex items-center justify-between">
+        <div className="flex items-center gap-2 text-xs text-gray-500">
+          <span>NingClean Admin</span>
+          <span>/</span>
+          <span className="text-gray-700">Services</span>
         </div>
-        <div className="flex gap-2">
-          <Button variant="outline" size="sm" onClick={fetchServices}>
-            Refresh
-          </Button>
-          <Button onClick={openCreateModal}>
-            <Plus className="mr-2 h-4 w-4" />
-            Add Service
-          </Button>
-        </div>
-      </motion.div>
-
-      {/* Filter Tabs */}
-      <div className="flex gap-2">
-        <button
-          onClick={() => setFilterActive('all')}
-          className={`rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
-            filterActive === 'all' ? 'bg-primary text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-          }`}
-        >
-          All ({services.length})
-        </button>
-        <button
-          onClick={() => setFilterActive('active')}
-          className={`rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
-            filterActive === 'active' ? 'bg-success text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-          }`}
-        >
-          Active ({services.filter(s => s.isActive).length})
-        </button>
-        <button
-          onClick={() => setFilterActive('inactive')}
-          className={`rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
-            filterActive === 'inactive' ? 'bg-gray-500 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-          }`}
-        >
-          Inactive ({services.filter(s => !s.isActive).length})
-        </button>
       </div>
 
-      {/* Services Grid */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.1 }}
-        className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3"
-      >
-        <AnimatePresence mode="popLayout">
-          {loading
-            ? Array.from({ length: 6 }).map((_, i) => (
-                <motion.div key={`skeleton-${i}`} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-                  <Card className="overflow-hidden">
-                    <CardHeader className="pb-2">
-                      <div className="skeleton mb-2 h-12 w-12 rounded-lg" />
-                      <div className="skeleton h-6 w-3/4 rounded" />
-                    </CardHeader>
-                    <CardContent>
-                      <div className="skeleton mb-2 h-4 w-full rounded" />
-                      <div className="skeleton h-4 w-2/3 rounded" />
-                    </CardContent>
-                  </Card>
-                </motion.div>
-              ))
-            : filteredServices.map((service, index) => {
-                const IconComponent = getIconComponent(service.icon)
-                return (
-                  <motion.div
-                    key={service.id}
-                    layout
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, scale: 0.9 }}
-                    transition={{ delay: index * 0.05 }}
-                  >
-                    <Card className={`overflow-hidden transition-shadow hover:shadow-lg ${!service.isActive ? 'opacity-60 grayscale' : ''}`}>
-                      <div className="relative">
-                        {service.image ? (
-                          <img
-                            src={service.image}
-                            alt={service.name}
-                            className="h-40 w-full object-cover"
-                          />
-                        ) : (
-                          <div className="flex h-40 w-full items-center justify-center bg-gray-100">
-                            <IconComponent className="h-16 w-16 text-gray-300" />
-                          </div>
-                        )}
-                        {service.isFeatured && (
-                          <div className="absolute right-2 top-2">
-                            <Badge variant="warning" className="flex items-center gap-1">
-                              <Star className="h-3 w-3" />
-                              Featured
-                            </Badge>
-                          </div>
-                        )}
-                        {!service.isActive && (
-                          <div className="absolute left-2 top-2">
-                            <Badge variant="default">Inactive</Badge>
-                          </div>
-                        )}
-                      </div>
+      <div className="w-full px-4 md:px-6 py-6 space-y-6">
+        {/* Page Header */}
+        <motion.div
+          initial={{ opacity: 0, y: -16 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"
+        >
+          <div>
+            <h1 className="text-2xl font-bold tracking-tight text-gray-900">Services</h1>
+            <p className="text-sm text-gray-500 mt-0.5">Manage cleaning services and pricing</p>
+          </div>
+          <div className="flex gap-2">
+            <Button variant="outline" size="sm" onClick={fetchServices}>
+              Refresh
+            </Button>
+            <Button onClick={openCreateModal}>
+              <Plus className="mr-2 h-4 w-4" />
+              Add Service
+            </Button>
+          </div>
+        </motion.div>
+
+        {/* Filter Tabs */}
+        <div className="flex gap-2">
+          <button
+            onClick={() => setFilterActive('all')}
+            className={`rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
+              filterActive === 'all' ? 'bg-primary text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+            }`}
+          >
+            All ({services.length})
+          </button>
+          <button
+            onClick={() => setFilterActive('active')}
+            className={`rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
+              filterActive === 'active' ? 'bg-success text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+            }`}
+          >
+            Active ({services.filter(s => s.isActive).length})
+          </button>
+          <button
+            onClick={() => setFilterActive('inactive')}
+            className={`rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
+              filterActive === 'inactive' ? 'bg-gray-500 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+            }`}
+          >
+            Inactive ({services.filter(s => !s.isActive).length})
+          </button>
+        </div>
+
+        {/* Services Grid */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.1 }}
+          className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3"
+        >
+          <AnimatePresence mode="popLayout">
+            {loading
+              ? Array.from({ length: 6 }).map((_, i) => (
+                  <motion.div key={`skeleton-${i}`} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+                    <Card className="overflow-hidden">
                       <CardHeader className="pb-2">
-                        <div className="flex items-start justify-between">
-                          <div className="flex items-center gap-3">
-                            <div className={`rounded-lg p-3 ${service.isActive ? 'bg-primary/10' : 'bg-gray-200'}`}>
-                              <IconComponent className={`h-6 w-6 ${service.isActive ? 'text-primary' : 'text-gray-400'}`} />
-                            </div>
-                            <div>
-                              <CardTitle className="text-base">{service.name}</CardTitle>
-                              <span className={`inline-block rounded-full px-2 py-0.5 text-xs font-medium ${getCategoryBadge(service.category)}`}>
-                                {service.category}
-                              </span>
-                            </div>
-                          </div>
-                        </div>
+                        <div className="skeleton mb-2 h-12 w-12 rounded-lg" />
+                        <div className="skeleton h-6 w-3/4 rounded" />
                       </CardHeader>
                       <CardContent>
-                        <p className="mb-4 text-sm text-gray-500 line-clamp-2">{service.description}</p>
-                        <div className="flex items-center justify-between">
-                          <div>
-                            <p className="text-lg font-bold text-primary">{formatCurrency(service.price)}</p>
-                            <p className="text-xs text-gray-400">{service.duration} minutes</p>
-                          </div>
-                          <div className="flex items-center gap-2">
-                            <div className="flex items-center gap-2">
-                              <span className="text-xs text-gray-500">Active</span>
-                              <Switch
-                                checked={service.isActive}
-                                onChange={() => handleToggleActive(service)}
-                              />
-                            </div>
-                            <Button variant="ghost" size="icon" onClick={() => openEditModal(service)}>
-                              <Edit className="h-4 w-4" />
-                            </Button>
-                            <Button variant="ghost" size="icon" onClick={() => openDeleteModal(service)}>
-                              <Trash2 className="h-4 w-4 text-error" />
-                            </Button>
-                          </div>
-                        </div>
+                        <div className="skeleton mb-2 h-4 w-full rounded" />
+                        <div className="skeleton h-4 w-2/3 rounded" />
                       </CardContent>
                     </Card>
                   </motion.div>
-                )
-              })}
-        </AnimatePresence>
-      </motion.div>
+                ))
+              : filteredServices.map((service, index) => {
+                  const IconComponent = getIconComponent(service.icon)
+                  return (
+                    <motion.div
+                      key={service.id}
+                      layout
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, scale: 0.9 }}
+                      transition={{ delay: index * 0.05 }}
+                    >
+                      <Card className={`overflow-hidden transition-shadow hover:shadow-lg ${!service.isActive ? 'opacity-60 grayscale' : ''}`}>
+                        <div className="relative">
+                          {service.image ? (
+                            <img
+                              src={service.image}
+                              alt={service.name}
+                              className="h-40 w-full object-cover"
+                            />
+                          ) : (
+                            <div className="flex h-40 w-full items-center justify-center bg-gray-100">
+                              <IconComponent className="h-16 w-16 text-gray-300" />
+                            </div>
+                          )}
+                          {service.isFeatured && (
+                            <div className="absolute right-2 top-2">
+                              <Badge variant="warning" className="flex items-center gap-1">
+                                <Star className="h-3 w-3" />
+                                Featured
+                              </Badge>
+                            </div>
+                          )}
+                          {!service.isActive && (
+                            <div className="absolute left-2 top-2">
+                              <Badge variant="default">Inactive</Badge>
+                            </div>
+                          )}
+                        </div>
+                        <CardHeader className="pb-2">
+                          <div className="flex items-start justify-between">
+                            <div className="flex items-center gap-3">
+                              <div className={`rounded-lg p-3 ${service.isActive ? 'bg-primary/10' : 'bg-gray-200'}`}>
+                                <IconComponent className={`h-6 w-6 ${service.isActive ? 'text-primary' : 'text-gray-400'}`} />
+                              </div>
+                              <div>
+                                <CardTitle className="text-base">{service.name}</CardTitle>
+                                <span className={`inline-block rounded-full px-2 py-0.5 text-xs font-medium ${getCategoryBadge(service.category)}`}>
+                                  {service.category}
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+                        </CardHeader>
+                        <CardContent>
+                          <p className="mb-4 text-sm text-gray-500 line-clamp-2">{service.description}</p>
+                          <div className="flex items-center justify-between">
+                            <div>
+                              <p className="text-lg font-bold text-primary">{formatCurrency(service.price)}</p>
+                              <p className="text-xs text-gray-400">{service.duration} minutes</p>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <div className="flex items-center gap-2">
+                                <span className="text-xs text-gray-500">Active</span>
+                                <Switch
+                                  checked={service.isActive}
+                                  onChange={() => handleToggleActive(service)}
+                                />
+                              </div>
+                              <Button variant="ghost" size="icon" onClick={() => openEditModal(service)}>
+                                <Edit className="h-4 w-4" />
+                              </Button>
+                              <Button variant="ghost" size="icon" onClick={() => openDeleteModal(service)}>
+                                <Trash2 className="h-4 w-4 text-error" />
+                              </Button>
+                            </div>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    </motion.div>
+                  )
+                })}
+          </AnimatePresence>
+        </motion.div>
 
-      {/* Empty State */}
-      {!loading && filteredServices.length === 0 && (
-        <div className="py-12 text-center">
-          <p className="text-gray-500">No services found</p>
-        </div>
-      )}
+        {/* Empty State */}
+        {!loading && filteredServices.length === 0 && (
+          <div className="py-12 text-center">
+            <p className="text-gray-500">No services found</p>
+          </div>
+        )}
+      </div>
 
       {/* Create/Edit Modal */}
       <Modal
@@ -524,9 +535,7 @@ export default function ServicesPage() {
 
           <Textarea
             label="Features (one per line)"
-            placeholder="Pembersihan dinding & langit-langit
-Sikat & vacuum karpet/sofa
-Sterilisasi kamar mandi"
+            placeholder="Pembersihan dinding & langit-langit&#10;Sikat & vacuum karpet/sofa&#10;Sterilisasi kamar mandi"
             value={formData.features}
             onChange={(e) => setFormData({ ...formData, features: e.target.value })}
             className="min-h-[100px]"

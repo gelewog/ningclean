@@ -3,7 +3,6 @@
 import * as React from 'react'
 import { motion } from 'framer-motion'
 import { Mail, MessageSquare, Edit, Save, RotateCcw, FileText, Send } from 'lucide-react'
-import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
@@ -80,21 +79,36 @@ export default function EmailTemplatesPage() {
   }
 
   return (
-    <div className="space-y-6">
-      {/* Header */}
-      <motion.div
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-      >
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900">Email & SMS Templates</h1>
-          <p className="text-gray-500">Kelola template email dan SMS untuk notifikasi</p>
+    <div className="min-h-screen bg-gray-50 text-gray-900">
+      {/* Topbar */}
+      <div className="sticky top-0 z-20 bg-white/80 backdrop-blur-xl border-b border-gray-100 px-4 md:px-6 py-3 flex items-center justify-between">
+        <div className="flex items-center gap-2 text-xs text-gray-500">
+          <span>NingClean Admin</span>
+          <span>/</span>
+          <span className="text-gray-700">Email & SMS Templates</span>
         </div>
-      </motion.div>
+        <div className="flex items-center gap-3">
+          <div className="flex items-center gap-1.5">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+            <span className="text-[11px] text-gray-500">Live</span>
+          </div>
+        </div>
+      </div>
 
-      {/* Variables Info */}
-      <Card className="bg-amber-50 border-amber-200">
-        <CardContent className="p-4">
+      <div className="w-full px-4 md:px-6 py-6 space-y-6">
+        {/* Header */}
+        <motion.div
+          initial={{ opacity: 0, y: -16 }}
+          animate={{ opacity: 1, y: 0 }}
+        >
+          <div>
+            <h1 className="text-2xl font-bold tracking-tight text-gray-900">Email & SMS Templates</h1>
+            <p className="text-sm text-gray-500 mt-0.5">Kelola template email dan SMS untuk notifikasi</p>
+          </div>
+        </motion.div>
+
+        {/* Variables Info */}
+        <div className="bg-amber-50 border border-amber-200 rounded-xl p-4">
           <div className="flex items-start gap-3">
             <FileText className="w-5 h-5 text-amber-600 mt-0.5" />
             <div>
@@ -104,162 +118,162 @@ export default function EmailTemplatesPage() {
               </p>
             </div>
           </div>
-        </CardContent>
-      </Card>
+        </div>
 
-      {/* Templates List */}
-      <div className="space-y-4">
-        {loading ? (
-          <div className="flex items-center justify-center py-20">
-            <div className="h-8 w-8 animate-spin rounded-full border-4 border-gray-200 border-t-emerald-500" />
-          </div>
-        ) : (
-          templates.map((template) => {
-            const info = TEMPLATE_INFO[template.type] || { label: template.type, description: '', icon: '📄' }
-            const isEditing = editingId === template.id
-            const data = editData[template.id]
+        {/* Templates List */}
+        <div className="space-y-4">
+          {loading ? (
+            <div className="flex items-center justify-center py-20">
+              <div className="h-8 w-8 animate-spin rounded-full border-4 border-gray-200 border-t-emerald-500" />
+            </div>
+          ) : (
+            templates.map((template) => {
+              const info = TEMPLATE_INFO[template.type] || { label: template.type, description: '', icon: '📄' }
+              const isEditing = editingId === template.id
+              const data = editData[template.id]
 
-            return (
-              <motion.div
-                key={template.id}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-              >
-                <Card>
-                  <CardContent className="p-6">
-                    {/* Header */}
-                    <div className="flex items-start justify-between mb-4">
-                      <div className="flex items-center gap-3">
-                        <span className="text-2xl">{info.icon}</span>
-                        <div>
-                          <div className="flex items-center gap-2">
-                            <h3 className="font-semibold text-gray-900">{info.label}</h3>
-                            {!template.isActive && (
-                              <Badge variant="default">Disabled</Badge>
-                            )}
+              return (
+                <motion.div
+                  key={template.id}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                >
+                  <div className="bg-white border border-gray-100 rounded-2xl overflow-hidden shadow-sm">
+                    <div className="p-6">
+                      {/* Header */}
+                      <div className="flex items-start justify-between mb-4">
+                        <div className="flex items-center gap-3">
+                          <span className="text-2xl">{info.icon}</span>
+                          <div>
+                            <div className="flex items-center gap-2">
+                              <h3 className="font-semibold text-gray-900">{info.label}</h3>
+                              {!template.isActive && (
+                                <Badge variant="default">Disabled</Badge>
+                              )}
+                            </div>
+                            <p className="text-sm text-gray-500">{info.description}</p>
                           </div>
-                          <p className="text-sm text-gray-500">{info.description}</p>
                         </div>
-                      </div>
-                      {!isEditing ? (
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => startEdit(template)}
-                          className="gap-2"
-                        >
-                          <Edit className="w-4 h-4" />
-                          Edit
-                        </Button>
-                      ) : (
-                        <div className="flex gap-2">
+                        {!isEditing ? (
                           <Button
                             variant="outline"
                             size="sm"
-                            onClick={cancelEdit}
+                            onClick={() => startEdit(template)}
                             className="gap-2"
                           >
-                            <RotateCcw className="w-4 h-4" />
-                            Batal
+                            <Edit className="w-4 h-4" />
+                            Edit
                           </Button>
-                          <Button
-                            size="sm"
-                            onClick={() => saveEdit(template)}
-                            disabled={saving}
-                            className="gap-2 bg-emerald-600 hover:bg-emerald-700"
-                          >
-                            <Save className="w-4 h-4" />
-                            {saving ? 'Saving...' : 'Simpan'}
-                          </Button>
-                        </div>
-                      )}
-                    </div>
-
-                    {/* Content */}
-                    {isEditing && data ? (
-                      <div className="space-y-4">
-                        {/* Subject */}
-                        <div className="space-y-2">
-                          <label className="text-sm font-medium text-gray-700 flex items-center gap-2">
-                            <Mail className="w-4 h-4" />
-                            Subject
-                          </label>
-                          <Input
-                            value={data.subject}
-                            onChange={(e) => setEditData({
-                              ...editData,
-                              [template.id]: { ...data, subject: e.target.value }
-                            })}
-                            placeholder="Email subject..."
-                          />
-                        </div>
-
-                        {/* Email Body */}
-                        <div className="space-y-2">
-                          <label className="text-sm font-medium text-gray-700 flex items-center gap-2">
-                            <Mail className="w-4 h-4" />
-                            Email Body
-                          </label>
-                          <Textarea
-                            value={data.body}
-                            onChange={(e) => setEditData({
-                              ...editData,
-                              [template.id]: { ...data, body: e.target.value }
-                            })}
-                            rows={10}
-                            className="font-mono text-sm"
-                            placeholder="Email body..."
-                          />
-                        </div>
-
-                        {/* SMS Body */}
-                        <div className="space-y-2">
-                          <label className="text-sm font-medium text-gray-700 flex items-center gap-2">
-                            <MessageSquare className="w-4 h-4" />
-                            SMS Body
-                            <Badge variant="default" className="text-xs">{data.smsBody?.length || 0}/160</Badge>
-                          </label>
-                          <Textarea
-                            value={data.smsBody}
-                            onChange={(e) => setEditData({
-                              ...editData,
-                              [template.id]: { ...data, smsBody: e.target.value }
-                            })}
-                            rows={3}
-                            className="font-mono text-sm"
-                            placeholder="SMS version (max 160 chars)..."
-                          />
-                        </div>
-                      </div>
-                    ) : (
-                      <div className="space-y-3">
-                        {/* Preview */}
-                        <div className="p-4 bg-gray-50 rounded-xl">
-                          <p className="text-xs font-medium text-gray-500 mb-1">Subject:</p>
-                          <p className="text-sm text-gray-900">{template.subject}</p>
-                        </div>
-                        <div className="p-4 bg-gray-50 rounded-xl">
-                          <p className="text-xs font-medium text-gray-500 mb-1">Email Body Preview:</p>
-                          <p className="text-sm text-gray-700 whitespace-pre-wrap line-clamp-4">
-                            {template.body}
-                          </p>
-                        </div>
-                        {template.smsBody && (
-                          <div className="p-4 bg-blue-50 rounded-xl">
-                            <p className="text-xs font-medium text-blue-500 mb-1 flex items-center gap-1">
-                              <Send className="w-3 h-3" /> SMS:
-                            </p>
-                            <p className="text-sm text-blue-700">{template.smsBody}</p>
+                        ) : (
+                          <div className="flex gap-2">
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={cancelEdit}
+                              className="gap-2"
+                            >
+                              <RotateCcw className="w-4 h-4" />
+                              Batal
+                            </Button>
+                            <Button
+                              size="sm"
+                              onClick={() => saveEdit(template)}
+                              disabled={saving}
+                              className="gap-2 bg-emerald-600 hover:bg-emerald-700"
+                            >
+                              <Save className="w-4 h-4" />
+                              {saving ? 'Saving...' : 'Simpan'}
+                            </Button>
                           </div>
                         )}
                       </div>
-                    )}
-                  </CardContent>
-                </Card>
-              </motion.div>
-            )
-          })
-        )}
+
+                      {/* Content */}
+                      {isEditing && data ? (
+                        <div className="space-y-4">
+                          {/* Subject */}
+                          <div className="space-y-2">
+                            <label className="text-sm font-medium text-gray-700 flex items-center gap-2">
+                              <Mail className="w-4 h-4" />
+                              Subject
+                            </label>
+                            <Input
+                              value={data.subject}
+                              onChange={(e) => setEditData({
+                                ...editData,
+                                [template.id]: { ...data, subject: e.target.value }
+                              })}
+                              placeholder="Email subject..."
+                            />
+                          </div>
+
+                          {/* Email Body */}
+                          <div className="space-y-2">
+                            <label className="text-sm font-medium text-gray-700 flex items-center gap-2">
+                              <Mail className="w-4 h-4" />
+                              Email Body
+                            </label>
+                            <Textarea
+                              value={data.body}
+                              onChange={(e) => setEditData({
+                                ...editData,
+                                [template.id]: { ...data, body: e.target.value }
+                              })}
+                              rows={10}
+                              className="font-mono text-sm"
+                              placeholder="Email body..."
+                            />
+                          </div>
+
+                          {/* SMS Body */}
+                          <div className="space-y-2">
+                            <label className="text-sm font-medium text-gray-700 flex items-center gap-2">
+                              <MessageSquare className="w-4 h-4" />
+                              SMS Body
+                              <Badge variant="default" className="text-xs">{data.smsBody?.length || 0}/160</Badge>
+                            </label>
+                            <Textarea
+                              value={data.smsBody}
+                              onChange={(e) => setEditData({
+                                ...editData,
+                                [template.id]: { ...data, smsBody: e.target.value }
+                              })}
+                              rows={3}
+                              className="font-mono text-sm"
+                              placeholder="SMS version (max 160 chars)..."
+                            />
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="space-y-3">
+                          {/* Preview */}
+                          <div className="p-4 bg-gray-50 rounded-xl">
+                            <p className="text-xs font-medium text-gray-500 mb-1">Subject:</p>
+                            <p className="text-sm text-gray-900">{template.subject}</p>
+                          </div>
+                          <div className="p-4 bg-gray-50 rounded-xl">
+                            <p className="text-xs font-medium text-gray-500 mb-1">Email Body Preview:</p>
+                            <p className="text-sm text-gray-700 whitespace-pre-wrap line-clamp-4">
+                              {template.body}
+                            </p>
+                          </div>
+                          {template.smsBody && (
+                            <div className="p-4 bg-blue-50 rounded-xl">
+                              <p className="text-xs font-medium text-blue-500 mb-1 flex items-center gap-1">
+                                <Send className="w-3 h-3" /> SMS:
+                              </p>
+                              <p className="text-sm text-blue-700">{template.smsBody}</p>
+                            </div>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </motion.div>
+              )
+            })
+          )}
+        </div>
       </div>
     </div>
   )

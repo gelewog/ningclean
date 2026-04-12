@@ -109,39 +109,55 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="space-y-8">
-      {/* Page Header */}
-      <motion.div
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between"
-      >
-        <div>
-          <div className="flex items-center gap-3">
-            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-blue-500 to-blue-600 shadow-lg shadow-blue-500/30">
-              <Sparkles className="h-6 w-6 text-white" />
-            </div>
-            <div>
-              <h1 className="text-2xl font-bold tracking-tight text-gray-900">Dashboard</h1>
-              <p className="text-gray-500">Welcome back! Here&apos;s what&apos;s happening with Ningclean.</p>
-            </div>
+    <div className="min-h-screen bg-gray-50 text-gray-900">
+      {/* Topbar */}
+      <div className="sticky top-0 z-20 bg-white/80 backdrop-blur-xl border-b border-gray-100 px-4 md:px-6 py-3 flex items-center justify-between">
+        <div className="flex items-center gap-2 text-xs text-gray-500">
+          <span>NingClean Admin</span>
+          <span>/</span>
+          <span className="text-gray-700">Dashboard</span>
+        </div>
+        <div className="flex items-center gap-3">
+          <div className="flex items-center gap-1.5">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+            <span className="text-[11px] text-gray-500">Live</span>
           </div>
         </div>
-        <div className="flex gap-3">
-          <Button variant="outline" className="rounded-xl gap-2" asChild>
-            <Link href="/admin/bookings">
-              <Calendar className="h-4 w-4" />
-              View Bookings
-            </Link>
-          </Button>
-          <Button className="rounded-xl gap-2 bg-gradient-to-r from-blue-500 to-blue-600 shadow-lg shadow-blue-500/25 hover:from-blue-600 hover:to-blue-700" asChild>
-            <Link href="/admin/bookings">
-              <Plus className="h-4 w-4" />
-              New Booking
-            </Link>
-          </Button>
-        </div>
-      </motion.div>
+      </div>
+
+      <div className="w-full px-4 md:px-6 py-6 space-y-6">
+        {/* Page Header */}
+        <motion.div
+          initial={{ opacity: 0, y: -16 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"
+        >
+          <div>
+            <div className="flex items-center gap-3">
+              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-blue-500 to-blue-600 shadow-lg shadow-blue-500/30">
+                <Sparkles className="h-6 w-6 text-white" />
+              </div>
+              <div>
+                <h1 className="text-2xl font-bold tracking-tight text-gray-900">Dashboard</h1>
+                <p className="text-sm text-gray-500">Welcome back! Here&apos;s what&apos;s happening with Ningclean.</p>
+              </div>
+            </div>
+          </div>
+          <div className="flex gap-3">
+            <Button variant="outline" className="rounded-xl gap-2" asChild>
+              <Link href="/admin/bookings">
+                <Calendar className="h-4 w-4" />
+                View Bookings
+              </Link>
+            </Button>
+            <Button className="rounded-xl gap-2 bg-gradient-to-r from-blue-500 to-blue-600 shadow-lg shadow-blue-500/25 hover:from-blue-600 hover:to-blue-700" asChild>
+              <Link href="/admin/bookings">
+                <Plus className="h-4 w-4" />
+                New Booking
+              </Link>
+            </Button>
+          </div>
+        </motion.div>
 
       {/* Stats Cards */}
       <motion.div
@@ -322,6 +338,7 @@ export default function DashboardPage() {
           />
         </div>
       </motion.div>
+      </div>
     </div>
   )
 }

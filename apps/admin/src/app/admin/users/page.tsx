@@ -3,7 +3,6 @@
 import * as React from 'react'
 import { motion } from 'framer-motion'
 import { Search, Mail, Shield, Calendar, Edit3, Save, X, Key } from 'lucide-react'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Badge } from '@/components/ui/badge'
@@ -154,89 +153,104 @@ export default function UsersPage() {
   ]
 
   return (
-    <div className="space-y-6">
-      {/* Header */}
-      <motion.div
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-      >
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900">Users</h1>
-          <p className="text-sm text-gray-500">Manage admin and staff accounts</p>
+    <div className="min-h-screen bg-gray-50 text-gray-900">
+      {/* Topbar */}
+      <div className="sticky top-0 z-20 bg-white/80 backdrop-blur-xl border-b border-gray-100 px-4 md:px-6 py-3 flex items-center justify-between">
+        <div className="flex items-center gap-2 text-xs text-gray-500">
+          <span>NingClean Admin</span>
+          <span>/</span>
+          <span className="text-gray-700">Users</span>
         </div>
-      </motion.div>
+      </div>
 
-      {/* Stats */}
-      <div className="grid gap-4 md:grid-cols-3">
-        <Card>
-          <CardContent className="pt-6">
+      <div className="w-full px-4 md:px-6 py-6 space-y-6">
+        {/* Header */}
+        <motion.div
+          initial={{ opacity: 0, y: -16 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"
+        >
+          <div>
+            <h1 className="text-2xl font-bold tracking-tight text-gray-900">Users</h1>
+            <p className="text-sm text-gray-500 mt-0.5">Manage admin and staff accounts</p>
+          </div>
+        </motion.div>
+
+        {/* Stats */}
+        <div className="grid gap-4 md:grid-cols-3">
+          <div className="relative bg-white border border-gray-100 rounded-2xl p-5 overflow-hidden shadow-sm">
+            <div className="absolute top-0 left-0 right-0 h-[2px] rounded-t-2xl bg-gradient-to-r from-blue-600 to-blue-400" />
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-500">Total Users</p>
+                <p className="text-[11px] uppercase tracking-widest text-gray-500 mb-2">Total Users</p>
                 <p className="text-3xl font-bold text-gray-900">{users.length}</p>
               </div>
               <div className="h-12 w-12 rounded-full bg-blue-100 flex items-center justify-center">
                 <Shield className="h-6 w-6 text-blue-600" />
               </div>
             </div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="pt-6">
+          </div>
+          <div className="relative bg-white border border-gray-100 rounded-2xl p-5 overflow-hidden shadow-sm">
+            <div className="absolute top-0 left-0 right-0 h-[2px] rounded-t-2xl bg-gradient-to-r from-purple-600 to-purple-400" />
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-500">Admins</p>
+                <p className="text-[11px] uppercase tracking-widest text-gray-500 mb-2">Admins</p>
                 <p className="text-3xl font-bold text-purple-600">{users.filter(u => u.role === 'ADMIN').length}</p>
               </div>
               <div className="h-12 w-12 rounded-full bg-purple-100 flex items-center justify-center">
                 <Shield className="h-6 w-6 text-purple-600" />
               </div>
             </div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="pt-6">
+          </div>
+          <div className="relative bg-white border border-gray-100 rounded-2xl p-5 overflow-hidden shadow-sm">
+            <div className="absolute top-0 left-0 right-0 h-[2px] rounded-t-2xl bg-gradient-to-r from-gray-600 to-gray-400" />
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-500">Staff</p>
+                <p className="text-[11px] uppercase tracking-widest text-gray-500 mb-2">Staff</p>
                 <p className="text-3xl font-bold text-gray-600">{users.filter(u => u.role === 'STAFF').length}</p>
               </div>
               <div className="h-12 w-12 rounded-full bg-gray-100 flex items-center justify-center">
                 <Mail className="h-6 w-6 text-gray-600" />
               </div>
             </div>
-          </CardContent>
-        </Card>
-      </div>
-
-      {/* Search */}
-      <div className="flex items-center gap-4">
-        <div className="relative flex-1 max-w-md">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-          <Input
-            placeholder="Search users..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="pl-10"
-          />
+          </div>
         </div>
-      </div>
 
-      {/* Users Table */}
-      <Card>
-        <CardHeader>
-          <CardTitle>All Users</CardTitle>
-        </CardHeader>
-        <CardContent>
-          {loading ? (
-            <div className="flex items-center justify-center h-32">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-            </div>
-          ) : (
-            <DataTable columns={columns} data={filteredUsers} />
-          )}
-        </CardContent>
-      </Card>
+        {/* Search */}
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1 }}
+          className="flex items-center gap-4"
+        >
+          <div className="relative flex-1 max-w-md">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+            <Input
+              placeholder="Search users..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="pl-10"
+            />
+          </div>
+        </motion.div>
+
+        {/* Table */}
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.15 }}
+        >
+          <div className="bg-white border border-gray-100 rounded-2xl overflow-hidden shadow-sm">
+            {loading ? (
+              <div className="flex items-center justify-center h-32">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+              </div>
+            ) : (
+              <DataTable columns={columns} data={filteredUsers} />
+            )}
+          </div>
+        </motion.div>
+      </div>
 
       {/* Edit User Modal */}
       <Modal

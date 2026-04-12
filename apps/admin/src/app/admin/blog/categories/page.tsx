@@ -116,31 +116,51 @@ export default function BlogCategoriesPage() {
   }
 
   return (
-    <div className="space-y-6">
-      {/* Header */}
-      <motion.div
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="flex items-center justify-between"
-      >
-        <div className="flex items-center gap-4">
-          <Link href="/admin/blog" className="p-2 hover:bg-gray-100 rounded-lg transition-colors">
-            <ArrowLeft className="w-5 h-5 text-gray-500" />
-          </Link>
-          <div>
-            <h1 className="text-2xl font-bold text-gray-900">Kategori Blog</h1>
-            <p className="text-gray-500">Kelola kategori untuk blog posts</p>
+    <div className="min-h-screen bg-gray-50 text-gray-900">
+      {/* Topbar */}
+      <div className="sticky top-0 z-20 bg-white/80 backdrop-blur-xl border-b border-gray-100 px-4 md:px-6 py-3 flex items-center justify-between">
+        <div className="flex items-center gap-2 text-xs text-gray-500">
+          <span>NingClean Admin</span>
+          <span>/</span>
+          <span className="text-gray-700">Blog Categories</span>
+        </div>
+        <div className="flex items-center gap-3">
+          <div className="flex items-center gap-1.5">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+            <span className="text-[11px] text-gray-500">Live</span>
           </div>
         </div>
-        <Button onClick={openCreateModal} className="bg-emerald-600 hover:bg-emerald-700">
-          <Plus className="w-4 h-4 mr-2" />
-          Tambah Kategori
-        </Button>
-      </motion.div>
+      </div>
 
-      {/* Categories List */}
-      <Card>
-        <CardContent className="p-6">
+      <div className="w-full px-4 md:px-6 py-6 space-y-6">
+        {/* Header */}
+        <motion.div
+          initial={{ opacity: 0, y: -16 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="flex items-center justify-between"
+        >
+          <div className="flex items-center gap-4">
+            <Link href="/admin/blog" className="p-2 hover:bg-gray-100 rounded-lg transition-colors">
+              <ArrowLeft className="w-5 h-5 text-gray-500" />
+            </Link>
+            <div>
+              <h1 className="text-2xl font-bold tracking-tight text-gray-900">Kategori Blog</h1>
+              <p className="text-sm text-gray-500">Kelola kategori untuk blog posts</p>
+            </div>
+          </div>
+          <Button onClick={openCreateModal} className="bg-emerald-600 hover:bg-emerald-700">
+            <Plus className="w-4 h-4 mr-2" />
+            Tambah Kategori
+          </Button>
+        </motion.div>
+
+        {/* Categories List */}
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.15 }}
+        >
+          <div className="bg-white border border-gray-100 rounded-2xl overflow-hidden shadow-sm">
           {loading ? (
             <div className="flex items-center justify-center py-12">
               <div className="h-8 w-8 animate-spin rounded-full border-4 border-gray-200 border-t-emerald-500" />
@@ -198,8 +218,8 @@ export default function BlogCategoriesPage() {
               ))}
             </div>
           )}
-        </CardContent>
-      </Card>
+          </div>
+        </motion.div>
 
       {/* Create/Edit Modal */}
       <Modal

@@ -3,7 +3,6 @@
 import * as React from 'react'
 import { motion } from 'framer-motion'
 import { Search, Mail, Phone, MapPin, Calendar, DollarSign, Eye, Star, Edit, Save, X, Plus, Trash2 } from 'lucide-react'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Badge } from '@/components/ui/badge'
@@ -208,61 +207,72 @@ export default function CustomersPage() {
   ]
 
   return (
-    <div className="space-y-6">
-      {/* Page Header */}
-      <motion.div
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between"
-      >
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900">Customers</h1>
-          <p className="text-gray-500">Manage and view customer information</p>
+    <div className="min-h-screen bg-gray-50 text-gray-900">
+      {/* Topbar */}
+      <div className="sticky top-0 z-20 bg-white/80 backdrop-blur-xl border-b border-gray-100 px-4 md:px-6 py-3 flex items-center justify-between">
+        <div className="flex items-center gap-2 text-xs text-gray-500">
+          <span>NingClean Admin</span>
+          <span>/</span>
+          <span className="text-gray-700">Customers</span>
         </div>
-      </motion.div>
+      </div>
 
-      {/* Search */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.1 }}
-        className="flex flex-col gap-4 md:flex-row"
-      >
-        <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
-          <Input
-            placeholder="Search by name or email..."
-            className="pl-10"
-            value={search}
-            onChange={(e) => handleSearch(e.target.value)}
-          />
-        </div>
-      </motion.div>
+      <div className="w-full px-4 md:px-6 py-6 space-y-6">
+        {/* Page Header */}
+        <motion.div
+          initial={{ opacity: 0, y: -16 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"
+        >
+          <div>
+            <h1 className="text-2xl font-bold tracking-tight text-gray-900">Customers</h1>
+            <p className="text-sm text-gray-500 mt-0.5">Manage and view customer information</p>
+          </div>
+        </motion.div>
 
-      {/* Customers Table */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.2 }}
-      >
-        <Card>
-          <CardContent className="p-0">
+        {/* Search */}
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1 }}
+          className="flex flex-col gap-3 sm:flex-row"
+        >
+          <div className="relative flex-1">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+            <Input
+              placeholder="Search by name or email..."
+              className="pl-10"
+              value={search}
+              onChange={(e) => handleSearch(e.target.value)}
+            />
+          </div>
+        </motion.div>
+
+        {/* Table */}
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.15 }}
+        >
+          <div className="bg-white border border-gray-100 rounded-2xl overflow-hidden shadow-sm">
             <DataTable
               columns={columns}
               data={customers}
               loading={loading}
               onRowClick={openCustomerDetail}
             />
-            <Pagination
-              currentPage={pagination.page}
-              totalPages={pagination.totalPages}
-              onPageChange={(page) => setPagination((prev) => ({ ...prev, page }))}
-              totalItems={pagination.total}
-              itemsPerPage={pagination.limit}
-            />
-          </CardContent>
-        </Card>
-      </motion.div>
+            <div className="border-t border-gray-100">
+              <Pagination
+                currentPage={pagination.page}
+                totalPages={pagination.totalPages}
+                onPageChange={(page) => setPagination((prev) => ({ ...prev, page }))}
+                totalItems={pagination.total}
+                itemsPerPage={pagination.limit}
+              />
+            </div>
+          </div>
+        </motion.div>
+      </div>
 
       {/* Customer Detail Modal */}
       <Modal
