@@ -154,6 +154,17 @@ export async function getBookings(params?: {
 }): Promise<PaginatedResponse<Booking>> {
   const token = getToken()
   
+  if (!token) {
+    console.error('No auth token found')
+    return {
+      data: [],
+      total: 0,
+      page: params?.page || 1,
+      limit: params?.limit || 10,
+      totalPages: 0,
+    }
+  }
+  
   const queryParams = new URLSearchParams()
   if (params?.page) queryParams.set('page', params.page.toString())
   if (params?.limit) queryParams.set('limit', params.limit.toString())
@@ -166,42 +177,58 @@ export async function getBookings(params?: {
   const query = queryParams.toString()
   const endpoint = `/bookings${query ? `?${query}` : ''}`
   
-  const data = await fetchApi<{
-    data: any[]
-    total: number
-    page: number
-    limit: number
-    totalPages: number
-  }>(endpoint, { token })
-  
-  return {
-    data: data.data.map((b: any) => {
-      // Get first item's service info for display
-      const firstItem = b.items?.[0]
-      const firstItemPrice = firstItem ? Number(firstItem.price) : 0
-      
-      return {
-        id: b.id,
-        customerId: b.customerId,
-        customerName: b.customer?.name || 'Unknown',
-        customerEmail: b.customer?.email || '',
-        customerPhone: b.customer?.phone || '',
-        serviceId: firstItem?.service?.id || '',
-        serviceName: firstItem?.service?.name || 'Unknown Service',
-        servicePrice: firstItemPrice,
-        totalAmount: Number(b.totalAmount) || 0,
-        area: b.area || '',
-        address: b.address || '',
-        scheduledDate: b.serviceDate,
-        scheduledTime: b.serviceTime,
-        status: b.status?.toLowerCase() || 'pending',
-        notes: b.notes || '',
-        createdAt: b.createdAt,
-        // Include full items array for detail view
-        items: b.items,
-      }
-    }),
-    total: data.total,
+  try {
+    const data = await fetchApi<{
+      data: any[]
+      total: number
+      page: number
+      limit: number
+      totalPages: number
+    }>(endpoint, { token })
+    
+    return {
+      data: data.data.map((b: any) => {
+        // Get first item's service info for display
+        const firstItem = b.items?.[0]
+        const firstItemPrice = firstItem ? Number(firstItem.price) : 0
+        
+        return {
+          id: b.id,
+          orderNumber: b.orderNumber,
+          customerId: b.customerId,
+          customerName: b.customer?.name || b.guestName || 'Guest',
+          customerEmail: b.customer?.email || b.guestEmail || '',
+          customerPhone: b.customer?.phone || b.guestPhone || '',
+          serviceId: firstItem?.service?.id || '',
+          serviceName: firstItem?.service?.name || 'Unknown Service',
+          servicePrice: firstItemPrice,
+          totalAmount: Number(b.totalAmount) || 0,
+          area: b.area || '',
+          address: b.address || '',
+          scheduledDate: b.serviceDate,
+          scheduledTime: b.serviceTime,
+          status: b.status?.toLowerCase() || 'pending',
+          notes: b.notes || '',
+          createdAt: b.createdAt,
+          items: b.items,
+        }
+      }),
+      total: data.total,
+      page: data.page,
+      limit: data.limit,
+      totalPages: data.totalPages,
+    }
+  } catch (error) {
+    console.error('Failed to fetch bookings:', error)
+    return {
+      data: [],
+      total: 0,
+      page: params?.page || 1,
+      limit: params?.limit || 10,
+      totalPages: 0,
+    }
+  }
+}
     page: data.page,
     limit: data.limit,
     totalPages: data.totalPages,
