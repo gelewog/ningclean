@@ -250,6 +250,14 @@ export class BookingsService {
     const phone = dto.customerPhone?.trim();
     const name = dto.customerName?.trim() || 'Guest';
 
+    // Build address object for customer
+    const newAddress = {
+      label: 'Alamat Booking',
+      address: dto.address || '',
+      city: '',
+      phone: phone || '',
+    };
+
     if (email) {
       // Check if customer already exists
       let customer = await this.prisma.customer.findFirst({
@@ -263,7 +271,7 @@ export class BookingsService {
         });
 
         if (existingUser) {
-          // Create customer linked to user
+          // Create customer linked to user with address
           customer = await this.prisma.customer.create({
             data: {
               name: name,
@@ -271,33 +279,58 @@ export class BookingsService {
               phone: phone || existingUser.phone,
               source: 'registered',
               userId: existingUser.id,
-              addresses: '[]',
+              addresses: [newAddress], // Prisma handles Json type automatically
             },
           });
         } else {
-          // Create guest customer
+          // Create guest customer with address
           customer = await this.prisma.customer.create({
             data: {
               name: name,
               email: email,
               phone: phone,
               source: 'guest',
-              addresses: '[]',
+              addresses: [newAddress], // Prisma handles Json type automatically
             },
+          });
+        }
+      } else {
+        // Customer exists - add new address if not duplicate
+        let existingAddresses: any[] = [];
+        if (typeof customer.addresses === 'string') {
+          try {
+            existingAddresses = JSON.parse(customer.addresses) || [];
+          } catch {
+            existingAddresses = [];
+          }
+        } else if (Array.isArray(customer.addresses)) {
+          existingAddresses = customer.addresses;
+        }
+
+        // Check if address already exists (prevent duplicates)
+        const addressExists = existingAddresses.some(
+          (addr: any) => addr.address === newAddress.address
+        );
+
+        if (!addressExists && newAddress.address) {
+          existingAddresses.push(newAddress);
+          await this.prisma.customer.update({
+            where: { id: customer.id },
+            data: { addresses: existingAddresses }, // Prisma handles Json type
           });
         }
       }
 
       customerId = customer.id;
     } else {
-      // Create anonymous customer for bookings without email
+      // Create anonymous customer for bookings without email with address
       const anonymousCustomer = await this.prisma.customer.create({
         data: {
           name: name,
           email: `guest-${Date.now()}@temp.local`,
           phone: phone,
           source: 'guest',
-          addresses: '[]',
+          addresses: [newAddress], // Prisma handles Json type automatically
         },
       });
       customerId = anonymousCustomer.id;
