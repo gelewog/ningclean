@@ -166,13 +166,13 @@ export default function TeamPage() {
           {row.avatar ? (
             <img src={row.avatar} alt="" className="h-10 w-10 rounded-full object-cover" />
           ) : (
-            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
+            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 dark:bg-emerald-900/30">
               <User className="h-5 w-5 text-primary" />
             </div>
           )}
           <div>
-            <p className="font-medium text-gray-900">{value}</p>
-            <p className="text-xs text-gray-500">{row.position}</p>
+            <p className="font-medium text-gray-900 dark:text-white">{value}</p>
+            <p className="text-xs text-gray-500 dark:text-slate-400">{row.position}</p>
           </div>
         </div>
       ),
@@ -190,7 +190,7 @@ export default function TeamPage() {
       render: (value: string) => (
         <div className="flex flex-col gap-0.5">
           {value && (
-            <span className="text-xs flex items-center gap-1 text-gray-500">
+            <span className="text-xs flex items-center gap-1 text-gray-500 dark:text-slate-400">
               <Mail className="h-3 w-3" /> {value}
             </span>
           )}
@@ -202,7 +202,7 @@ export default function TeamPage() {
       label: 'Order',
       render: (value: number) => (
         <div className="flex items-center gap-1">
-          <GripVertical className="h-4 w-4 text-gray-400" />
+          <GripVertical className="h-4 w-4 text-gray-400 dark:text-slate-500" />
           <span className="text-sm">{value}</span>
         </div>
       ),
@@ -220,7 +220,7 @@ export default function TeamPage() {
       key: 'createdAt',
       label: 'Created',
       render: (value: string) => (
-        <div className="flex items-center gap-1 text-sm text-gray-500">
+        <div className="flex items-center gap-1 text-sm text-gray-500 dark:text-slate-400">
           <Calendar className="h-3.5 w-3.5" />
           {formatDate(value)}
         </div>
@@ -243,13 +243,13 @@ export default function TeamPage() {
   ]
 
   return (
-    <div className="min-h-screen bg-gray-50 text-gray-900">
+    <div className="min-h-screen bg-gray-50 dark:bg-slate-800 text-gray-900 dark:text-white">
       {/* Topbar */}
-      <div className="sticky top-0 z-20 bg-white/80 backdrop-blur-xl border-b border-gray-100 px-4 md:px-6 py-3 flex items-center justify-between">
-        <div className="flex items-center gap-2 text-xs text-gray-500">
+      <div className="sticky top-0 z-20 bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl border-b border-gray-100 dark:border-slate-700 px-4 md:px-6 py-3 flex items-center justify-between">
+        <div className="flex items-center gap-2 text-xs text-gray-500 dark:text-slate-400">
           <span>NingClean Admin</span>
           <span>/</span>
-          <span className="text-gray-700">Team</span>
+          <span className="text-gray-700 dark:text-slate-200">Team</span>
         </div>
       </div>
 
@@ -261,8 +261,8 @@ export default function TeamPage() {
           className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"
         >
           <div>
-            <h1 className="text-2xl font-bold tracking-tight text-gray-900">Team Members</h1>
-            <p className="text-sm text-gray-500 mt-0.5">Manage team members and staff</p>
+            <h1 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Team Members</h1>
+            <p className="text-sm text-gray-500 dark:text-slate-400 mt-0.5">Manage team members and staff</p>
           </div>
           <Button onClick={openCreateModal}>
             <Plus className="mr-2 h-4 w-4" />
@@ -276,7 +276,7 @@ export default function TeamPage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.15 }}
         >
-          <div className="bg-white border border-gray-100 rounded-2xl overflow-hidden shadow-sm">
+          <div className="bg-white border border-gray-100 dark:border-slate-700 rounded-2xl overflow-hidden shadow-sm dark:shadow-slate-900/50">
             <DataTable
               columns={columns}
               data={items}
@@ -312,7 +312,7 @@ export default function TeamPage() {
 
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-1.5">
-              <label className="block text-sm font-medium text-gray-700">Department</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-slate-200">Department</label>
               <select
                 value={formData.department}
                 onChange={(e) => setFormData({ ...formData, department: e.target.value })}
@@ -336,7 +336,7 @@ export default function TeamPage() {
           <Textarea
             label="Bio (optional)"
             placeholder="Enter short bio..."
-            className="min-h-[80px]"
+            className="min-h-[80px] bg-white dark:bg-slate-800 border-gray-200 dark:border-slate-700 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-slate-500 focus:border-emerald-500 dark:focus:border-emerald-400 focus-visible:ring-emerald-500 dark:focus-visible:ring-emerald-400"
             value={formData.bio}
             onChange={(e) => setFormData({ ...formData, bio: e.target.value })}
           />
@@ -392,7 +392,7 @@ export default function TeamPage() {
         size="sm"
       >
         <div className="space-y-4">
-          <p className="text-gray-600">
+          <p className="text-gray-600 dark:text-slate-300">
             Are you sure you want to delete <strong>{selectedItem?.name}</strong>? This action cannot be undone.
           </p>
           <div className="flex justify-end gap-2">

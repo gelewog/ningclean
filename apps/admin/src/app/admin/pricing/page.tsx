@@ -198,12 +198,12 @@ export default function PricingPage() {
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <p className="font-medium text-gray-900">{value}</p>
+              <p className="font-medium text-gray-900 dark:text-white">{value}</p>
               {row.isPopular && (
                 <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
               )}
             </div>
-            <p className="text-xs text-gray-500">{row.billingCycle}</p>
+            <p className="text-xs text-gray-500 dark:text-slate-400">{row.billingCycle}</p>
           </div>
         </div>
       ),
@@ -212,7 +212,7 @@ export default function PricingPage() {
       key: 'price',
       label: 'Price',
       render: (value: number) => (
-        <span className="font-semibold text-gray-900">
+        <span className="font-semibold text-gray-900 dark:text-white">
           Rp {value.toLocaleString('id-ID')}
         </span>
       ),
@@ -221,7 +221,7 @@ export default function PricingPage() {
       key: 'features',
       label: 'Features',
       render: (value: string[]) => (
-        <span className="text-sm text-gray-500">
+        <span className="text-sm text-gray-500 dark:text-slate-400">
           {value?.length || 0} features
         </span>
       ),
@@ -244,7 +244,7 @@ export default function PricingPage() {
       key: 'createdAt',
       label: 'Created',
       render: (value: string) => (
-        <div className="flex items-center gap-1 text-sm text-gray-500">
+        <div className="flex items-center gap-1 text-sm text-gray-500 dark:text-slate-400">
           <Calendar className="h-3.5 w-3.5" />
           {formatDate(value)}
         </div>
@@ -267,13 +267,13 @@ export default function PricingPage() {
   ]
 
   return (
-    <div className="min-h-screen bg-gray-50 text-gray-900">
+    <div className="min-h-screen bg-gray-50 dark:bg-slate-900 text-gray-900 dark:text-white">
       {/* Topbar */}
-      <div className="sticky top-0 z-20 bg-white/80 backdrop-blur-xl border-b border-gray-100 px-4 md:px-6 py-3 flex items-center justify-between">
-        <div className="flex items-center gap-2 text-xs text-gray-500">
+      <div className="sticky top-0 z-20 bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border-b border-gray-100 dark:border-slate-700 px-4 md:px-6 py-3 flex items-center justify-between">
+        <div className="flex items-center gap-2 text-xs text-gray-500 dark:text-slate-400">
           <span>NingClean Admin</span>
           <span>/</span>
-          <span className="text-gray-700">Pricing</span>
+          <span className="text-gray-700 dark:text-slate-200">Pricing</span>
         </div>
       </div>
 
@@ -285,8 +285,8 @@ export default function PricingPage() {
           className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"
         >
           <div>
-            <h1 className="text-2xl font-bold tracking-tight text-gray-900">Pricing Plans</h1>
-            <p className="text-sm text-gray-500 mt-0.5">Manage pricing tiers and plans</p>
+            <h1 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Pricing Plans</h1>
+            <p className="text-sm text-gray-500 dark:text-slate-400 mt-0.5">Manage pricing tiers and plans</p>
           </div>
           <Button onClick={openCreateModal}>
             <Plus className="mr-2 h-4 w-4" />
@@ -300,7 +300,7 @@ export default function PricingPage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.15 }}
         >
-          <div className="bg-white border border-gray-100 rounded-2xl overflow-hidden shadow-sm">
+          <div className="bg-white border border-gray-100 dark:border-slate-700 rounded-2xl overflow-hidden shadow-sm dark:shadow-slate-900/50">
             <DataTable
               columns={columns}
               data={items}
@@ -337,7 +337,7 @@ export default function PricingPage() {
           <Textarea
             label="Description"
             placeholder="Enter plan description..."
-            className="min-h-[80px]"
+            className="min-h-[80px] bg-white dark:bg-slate-900 border-gray-200 dark:border-slate-700 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-slate-500 focus:border-emerald-500 dark:focus:border-emerald-400 focus-visible:ring-emerald-500 dark:focus-visible:ring-emerald-400"
             value={formData.description}
             onChange={(e) => setFormData({ ...formData, description: e.target.value })}
             error={errors.description}
@@ -354,11 +354,11 @@ export default function PricingPage() {
               icon={<DollarSign className="h-4 w-4" />}
             />
             <div className="space-y-1.5">
-              <label className="block text-sm font-medium text-gray-700">Billing Cycle</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-slate-200">Billing Cycle</label>
               <select
                 value={formData.billingCycle}
                 onChange={(e) => setFormData({ ...formData, billingCycle: e.target.value })}
-                className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+                className="w-full rounded-lg border border-gray-300 dark:border-slate-600 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
               >
                 {billingCycles.map(cycle => (
                   <option key={cycle} value={cycle}>{cycle}</option>
@@ -377,7 +377,7 @@ export default function PricingPage() {
           <Textarea
             label="Features (one per line)"
             placeholder="e.g., Full house cleaning&#10;Weekend availability&#10;Priority support"
-            className="min-h-[100px]"
+            className="min-h-[100px] bg-white dark:bg-slate-900 border-gray-200 dark:border-slate-700 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-slate-500 focus:border-emerald-500 dark:focus:border-emerald-400 focus-visible:ring-emerald-500 dark:focus-visible:ring-emerald-400"
             value={formData.features}
             onChange={(e) => setFormData({ ...formData, features: e.target.value })}
           />
@@ -388,7 +388,7 @@ export default function PricingPage() {
                 type="checkbox"
                 checked={formData.isPopular}
                 onChange={(e) => setFormData({ ...formData, isPopular: e.target.checked })}
-                className="h-4 w-4 rounded border-gray-300 text-primary"
+                className="h-4 w-4 rounded border-gray-300 dark:border-slate-600 text-primary"
               />
               <span className="text-sm">Mark as popular/recommended</span>
             </label>
@@ -397,7 +397,7 @@ export default function PricingPage() {
                 type="checkbox"
                 checked={formData.isActive}
                 onChange={(e) => setFormData({ ...formData, isActive: e.target.checked })}
-                className="h-4 w-4 rounded border-gray-300 text-primary"
+                className="h-4 w-4 rounded border-gray-300 dark:border-slate-600 text-primary"
               />
               <span className="text-sm">Active</span>
             </label>
@@ -419,7 +419,7 @@ export default function PricingPage() {
         size="sm"
       >
         <div className="space-y-4">
-          <p className="text-gray-600">
+          <p className="text-gray-600 dark:text-slate-300">
             Are you sure you want to delete <strong>{selectedItem?.name}</strong>? This action cannot be undone.
           </p>
           <div className="flex justify-end gap-2">

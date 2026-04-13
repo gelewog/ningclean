@@ -203,7 +203,7 @@ export default function FAQPage() {
   ]
 
   return (
-    <div className="min-h-screen bg-gray-50 text-gray-900">
+    <div className="min-h-screen bg-gray-50 dark:bg-slate-800 text-gray-900 dark:text-white">
       {/* Topbar */}
       <div className="sticky top-0 z-20 bg-white/80 backdrop-blur-xl border-b border-gray-100 px-4 md:px-6 py-3 flex items-center justify-between">
         <div className="flex items-center gap-2 text-xs text-gray-500">
@@ -291,7 +291,7 @@ export default function FAQPage() {
           <Textarea
             label="Answer"
             placeholder="Enter the answer..."
-            className="min-h-[120px]"
+            className="min-h-[120px] bg-white dark:bg-slate-800 border-gray-200 dark:border-slate-700 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-slate-500 focus:border-emerald-500 dark:focus:border-emerald-400 focus-visible:ring-emerald-500 dark:focus-visible:ring-emerald-400"
             value={formData.answer}
             onChange={(e) => setFormData({ ...formData, answer: e.target.value })}
             error={errors.answer}

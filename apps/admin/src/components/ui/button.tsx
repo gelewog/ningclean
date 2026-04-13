@@ -15,8 +15,8 @@ const buttonVariants = cva(
         success: 'bg-gradient-to-r from-emerald-500 to-emerald-600 text-white shadow-lg shadow-emerald-500/25 hover:from-emerald-600 hover:to-emerald-700 hover:shadow-xl hover:shadow-emerald-500/30',
         warning: 'bg-gradient-to-r from-amber-500 to-amber-600 text-white shadow-lg shadow-amber-500/25 hover:from-amber-600 hover:to-amber-700 hover:shadow-xl hover:shadow-amber-500/30',
         error: 'bg-gradient-to-r from-red-500 to-red-600 text-white shadow-lg shadow-red-500/25 hover:from-red-600 hover:to-red-700 hover:shadow-xl hover:shadow-red-500/30',
-        outline: 'border-2 border-gray-200 text-gray-700 hover:bg-gray-50 hover:border-gray-300',
-        ghost: 'hover:bg-gray-100 text-gray-700',
+        outline: 'border-2 border-gray-200 text-gray-700 dark:text-slate-200 dark:border-slate-700 hover:bg-gray-50 dark:hover:bg-slate-800 hover:border-gray-300 dark:hover:border-slate-600',
+        ghost: 'hover:bg-gray-100 dark:hover:bg-slate-800 text-gray-700 dark:text-slate-200',
         link: 'text-blue-600 underline-offset-4 hover:underline',
       },
       size: {

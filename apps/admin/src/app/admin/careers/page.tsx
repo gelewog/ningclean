@@ -176,8 +176,8 @@ export default function CareersPage() {
             <Briefcase className="h-5 w-5 text-primary" />
           </div>
           <div>
-            <p className="font-medium text-gray-900">{value}</p>
-            <p className="text-xs text-gray-500">{row.department}</p>
+            <p className="font-medium text-gray-900 dark:text-white">{value}</p>
+            <p className="text-xs text-gray-500 dark:text-slate-400">{row.department}</p>
           </div>
         </div>
       ),
@@ -186,7 +186,7 @@ export default function CareersPage() {
       key: 'location',
       label: 'Location',
       render: (value: string) => (
-        <span className="flex items-center gap-1 text-sm text-gray-500">
+        <span className="flex items-center gap-1 text-sm text-gray-500 dark:text-slate-400">
           <MapPin className="h-3.5 w-3.5" /> {value}
         </span>
       ),
@@ -202,7 +202,7 @@ export default function CareersPage() {
       key: 'salaryRange',
       label: 'Salary',
       render: (value: string) => (
-        <span className="flex items-center gap-1 text-sm text-gray-500">
+        <span className="flex items-center gap-1 text-sm text-gray-500 dark:text-slate-400">
           {value ? <><DollarSign className="h-3.5 w-3.5" /> {value}</> : '-'}
         </span>
       ),
@@ -220,7 +220,7 @@ export default function CareersPage() {
       key: 'createdAt',
       label: 'Posted',
       render: (value: string) => (
-        <div className="flex items-center gap-1 text-sm text-gray-500">
+        <div className="flex items-center gap-1 text-sm text-gray-500 dark:text-slate-400">
           <Calendar className="h-3.5 w-3.5" />
           {formatDate(value)}
         </div>
@@ -243,18 +243,18 @@ export default function CareersPage() {
   ]
 
   return (
-    <div className="min-h-screen bg-gray-50 text-gray-900">
+    <div className="min-h-screen bg-gray-50 dark:bg-slate-900 text-gray-900 dark:text-white">
       {/* Topbar */}
-      <div className="sticky top-0 z-20 bg-white/80 backdrop-blur-xl border-b border-gray-100 px-4 md:px-6 py-3 flex items-center justify-between">
-        <div className="flex items-center gap-2 text-xs text-gray-500">
+      <div className="sticky top-0 z-20 bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border-b border-gray-100 dark:border-slate-700 px-4 md:px-6 py-3 flex items-center justify-between">
+        <div className="flex items-center gap-2 text-xs text-gray-500 dark:text-slate-400">
           <span>NingClean Admin</span>
           <span>/</span>
-          <span className="text-gray-700">Careers</span>
+          <span className="text-gray-700 dark:text-slate-200">Careers</span>
         </div>
         <div className="flex items-center gap-3">
           <div className="flex items-center gap-1.5">
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-            <span className="text-[11px] text-gray-500">Live</span>
+            <span className="text-[11px] text-gray-500 dark:text-slate-400">Live</span>
           </div>
         </div>
       </div>
@@ -267,8 +267,8 @@ export default function CareersPage() {
           className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"
         >
           <div>
-            <h1 className="text-2xl font-bold tracking-tight text-gray-900">Careers</h1>
-            <p className="text-sm text-gray-500 mt-0.5">Manage job listings and openings</p>
+            <h1 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Careers</h1>
+            <p className="text-sm text-gray-500 dark:text-slate-400 mt-0.5">Manage job listings and openings</p>
           </div>
           <Button onClick={openCreateModal} className="bg-emerald-600 hover:bg-emerald-700">
             <Plus className="mr-2 h-4 w-4" />
@@ -282,7 +282,7 @@ export default function CareersPage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.15 }}
         >
-          <div className="bg-white border border-gray-100 rounded-2xl overflow-hidden shadow-sm">
+          <div className="bg-white border border-gray-100 dark:border-slate-700 rounded-2xl overflow-hidden shadow-sm dark:shadow-slate-900/50">
             <DataTable
               columns={columns}
               data={items}
@@ -322,11 +322,11 @@ export default function CareersPage() {
               error={errors.location}
             />
             <div className="space-y-1.5">
-              <label className="block text-sm font-medium text-gray-700">Job Type</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-slate-200">Job Type</label>
               <select
                 value={formData.type}
                 onChange={(e) => setFormData({ ...formData, type: e.target.value })}
-                className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+                className="w-full rounded-lg border border-gray-300 dark:border-slate-600 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
               >
                 {jobTypes.map(type => (
                   <option key={type} value={type}>{type}</option>
@@ -339,7 +339,7 @@ export default function CareersPage() {
           <Textarea
             label="Job Description"
             placeholder="Enter detailed job description..."
-            className="min-h-[100px]"
+            className="min-h-[100px] bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-700 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-slate-500 focus:border-emerald-500 dark:focus:border-emerald-400 focus:ring-1 dark:focus:ring-emerald-400/30"
             value={formData.description}
             onChange={(e) => setFormData({ ...formData, description: e.target.value })}
             error={errors.description}
@@ -348,7 +348,7 @@ export default function CareersPage() {
           <Textarea
             label="Requirements (one per line)"
             placeholder="e.g., Minimum 2 years experience&#10;Familiar with cleaning equipment&#10;Good communication skills"
-            className="min-h-[80px]"
+            className="min-h-[80px] bg-white dark:bg-slate-900 border-gray-200 dark:border-slate-700 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-slate-500 focus:border-emerald-500 dark:focus:border-emerald-400 focus-visible:ring-emerald-500 dark:focus-visible:ring-emerald-400"
             value={formData.requirements}
             onChange={(e) => setFormData({ ...formData, requirements: e.target.value })}
           />
@@ -356,7 +356,7 @@ export default function CareersPage() {
           <Textarea
             label="Benefits (one per line)"
             placeholder="e.g., Competitive salary&#10;Health insurance&#10;Professional development"
-            className="min-h-[80px]"
+            className="min-h-[80px] bg-white dark:bg-slate-900 border-gray-200 dark:border-slate-700 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-slate-500 focus:border-emerald-500 dark:focus:border-emerald-400 focus-visible:ring-emerald-500 dark:focus-visible:ring-emerald-400"
             value={formData.benefits}
             onChange={(e) => setFormData({ ...formData, benefits: e.target.value })}
           />
@@ -374,7 +374,7 @@ export default function CareersPage() {
               type="checkbox"
               checked={formData.isActive}
               onChange={(e) => setFormData({ ...formData, isActive: e.target.checked })}
-              className="h-4 w-4 rounded border-gray-300 text-primary"
+              className="h-4 w-4 rounded border-gray-300 dark:border-slate-600 text-primary"
             />
             <span className="text-sm">Active (visible to applicants)</span>
           </label>
@@ -395,7 +395,7 @@ export default function CareersPage() {
         size="sm"
       >
         <div className="space-y-4">
-          <p className="text-gray-600">
+          <p className="text-gray-600 dark:text-slate-300">
             Are you sure you want to delete <strong>{selectedItem?.title}</strong>? This action cannot be undone.
           </p>
           <div className="flex justify-end gap-2">

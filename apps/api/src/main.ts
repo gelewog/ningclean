@@ -6,10 +6,15 @@ import { AppModule } from './app.module';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
+  // CORS configuration - allow all origins for development/tunnel
   app.enableCors({
-    origin: '*',
+    origin: (origin, callback) => {
+      // Allow all origins (including null for same-origin requests)
+      callback(null, true);
+    },
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     credentials: true,
+    allowedHeaders: 'Content-Type, Authorization, Accept',
   });
 
   app.useGlobalPipes(

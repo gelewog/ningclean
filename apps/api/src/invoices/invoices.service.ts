@@ -85,9 +85,9 @@ export class InvoicesService {
       invoice: {
         number: `INV-${booking.orderNumber}`,
         date: invoiceDate,
-        customerName: booking.guestName || booking.customer?.name || 'Guest',
-        customerEmail: booking.guestEmail || booking.customer?.email || '',
-        customerPhone: booking.guestPhone || booking.customer?.phone || '',
+        customerName: booking.customer?.name || 'Guest',
+        customerEmail: booking.customer?.email || '',
+        customerPhone: booking.customer?.phone || '',
       },
       items: booking.items.map((item) => ({
         name: item.service.name,

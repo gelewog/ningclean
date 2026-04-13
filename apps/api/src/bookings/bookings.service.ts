@@ -244,40 +244,70 @@ export class BookingsService {
     }
     const orderNumber = `NC-${new Date().getFullYear()}-${nextNumber.toString().padStart(4, '0')}`;
 
-    // Determine customer info: use registered user or guest
-    let customerId: string | undefined;
-    let customerName: string;
-    let customerEmail: string;
-    let customerPhone: string | undefined;
+    // Auto-create or find customer
+    let customerId: string;
+    const email = dto.customerEmail?.toLowerCase().trim();
+    const phone = dto.customerPhone?.trim();
+    const name = dto.customerName?.trim() || 'Guest';
 
-    if (dto.customerEmail) {
-      // Try to find existing user by email
-      const existingUser = await this.prisma.user.findUnique({
-        where: { email: dto.customerEmail },
+    if (email) {
+      // Check if customer already exists
+      let customer = await this.prisma.customer.findFirst({
+        where: { email: email },
       });
 
-      if (existingUser) {
-        customerId = existingUser.id;
-        customerName = dto.customerName || existingUser.name;
-        customerEmail = existingUser.email;
-        customerPhone = dto.customerPhone || existingUser.phone || undefined;
-      } else {
-        // Guest booking - no customerId
-        customerName = dto.customerName || 'Guest';
-        customerEmail = dto.customerEmail;
-        customerPhone = dto.customerPhone;
+      if (!customer) {
+        // Check if there's a registered user with this email
+        const existingUser = await this.prisma.user.findUnique({
+          where: { email: email },
+        });
+
+        if (existingUser) {
+          // Create customer linked to user
+          customer = await this.prisma.customer.create({
+            data: {
+              name: name,
+              email: email,
+              phone: phone || existingUser.phone,
+              source: 'registered',
+              userId: existingUser.id,
+              addresses: '[]',
+            },
+          });
+        } else {
+          // Create guest customer
+          customer = await this.prisma.customer.create({
+            data: {
+              name: name,
+              email: email,
+              phone: phone,
+              source: 'guest',
+              addresses: '[]',
+            },
+          });
+        }
       }
+
+      customerId = customer.id;
     } else {
-      customerName = dto.customerName || 'Guest';
-      customerEmail = '';
-      customerPhone = dto.customerPhone;
+      // Create anonymous customer for bookings without email
+      const anonymousCustomer = await this.prisma.customer.create({
+        data: {
+          name: name,
+          email: `guest-${Date.now()}@temp.local`,
+          phone: phone,
+          source: 'guest',
+          addresses: '[]',
+        },
+      });
+      customerId = anonymousCustomer.id;
     }
 
-    // Create booking
+    // Create booking with customer
     const booking = await this.prisma.booking.create({
       data: {
         orderNumber,
-        customerId: customerId || null,
+        customerId: customerId,
         serviceDate: new Date(dto.serviceDate),
         serviceTime: dto.serviceTime,
         address: dto.address,
@@ -285,9 +315,6 @@ export class BookingsService {
         notes: dto.notes,
         totalAmount,
         status: BookingStatus.PENDING,
-        guestName: !customerId ? customerName : undefined,
-        guestEmail: !customerId ? customerEmail : undefined,
-        guestPhone: !customerId ? customerPhone : undefined,
         items: {
           create: itemsData,
         },

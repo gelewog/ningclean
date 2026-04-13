@@ -91,12 +91,12 @@ export default function NewBlogPostPage() {
         className="flex items-center justify-between"
       >
         <div className="flex items-center gap-4">
-          <Link href="/admin/blog" className="p-2 hover:bg-gray-100 rounded-lg transition-colors">
-            <ArrowLeft className="w-5 h-5 text-gray-500" />
+          <Link href="/admin/blog" className="p-2 hover:bg-gray-100 dark:hover:bg-slate-800 dark:bg-slate-800 rounded-lg transition-colors">
+            <ArrowLeft className="w-5 h-5 text-gray-500 dark:text-slate-400" />
           </Link>
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">Buat Post Baru</h1>
-            <p className="text-gray-500">Tulis artikel blog baru</p>
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Buat Post Baru</h1>
+            <p className="text-gray-500 dark:text-slate-400">Tulis artikel blog baru</p>
           </div>
         </div>
         <div className="flex gap-3">
@@ -124,7 +124,7 @@ export default function NewBlogPostPage() {
                 placeholder="Judul artikel..."
                 value={formData.title}
                 onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                className="text-xl font-semibold border-0 p-0 h-auto focus:ring-0 placeholder:text-gray-300"
+                className="text-xl font-semibold border-0 p-0 h-auto focus:ring-0 placeholder:text-gray-300 dark:text-slate-600"
                 style={{ fontSize: '24px', fontWeight: 600 }}
               />
               {errors.title && <p className="text-sm text-red-500 mt-2">{errors.title}</p>}
@@ -134,7 +134,7 @@ export default function NewBlogPostPage() {
           {/* Cover Image */}
           <Card>
             <CardContent className="p-6">
-              <label className="text-sm font-medium text-gray-700 mb-3 block">Cover Image</label>
+              <label className="text-sm font-medium text-gray-700 dark:text-slate-200 mb-3 block">Cover Image</label>
               {formData.coverImage ? (
                 <div className="relative rounded-xl overflow-hidden">
                   <img
@@ -152,11 +152,11 @@ export default function NewBlogPostPage() {
               ) : (
                 <div
                   onClick={() => setFormData({ ...formData, coverImage: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800' })}
-                  className="border-2 border-dashed border-gray-200 rounded-xl p-12 text-center cursor-pointer hover:border-emerald-500 hover:bg-emerald-50/50 transition-colors"
+                  className="border-2 border-dashed border-gray-200 dark:border-slate-700 rounded-xl p-12 text-center cursor-pointer hover:border-emerald-500 hover:bg-emerald-50/50 dark:hover:bg-emerald-900/20 transition-colors"
                 >
-                  <ImageIcon className="w-12 h-12 text-gray-300 mx-auto mb-3" />
-                  <p className="text-gray-500">Klik untuk set cover image (demo)</p>
-                  <p className="text-xs text-gray-400 mt-1">atau paste URL image</p>
+                  <ImageIcon className="w-12 h-12 text-gray-300 dark:text-slate-600 mx-auto mb-3" />
+                  <p className="text-gray-500 dark:text-slate-400">Klik untuk set cover image (demo)</p>
+                  <p className="text-xs text-gray-400 dark:text-slate-500 mt-1">atau paste URL image</p>
                 </div>
               )}
               <Input
@@ -171,13 +171,13 @@ export default function NewBlogPostPage() {
           {/* Excerpt */}
           <Card>
             <CardContent className="p-6">
-              <label className="text-sm font-medium text-gray-700 mb-2 block">Excerpt</label>
+              <label className="text-sm font-medium text-gray-700 dark:text-slate-200 mb-2 block">Excerpt</label>
               <Textarea
                 placeholder="Ringkasan singkat artikel..."
                 value={formData.excerpt}
                 onChange={(e) => setFormData({ ...formData, excerpt: e.target.value })}
                 rows={3}
-                className={errors.excerpt ? 'border-red-500' : ''}
+                className={`w-full bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-xl text-sm text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-slate-500 focus:outline-none focus:border-emerald-500 dark:focus:border-emerald-400 focus:ring-1 focus:ring-emerald-500/20 dark:focus:ring-1 dark:focus:ring-emerald-400/30 resize-none ${errors.excerpt ? 'border-red-500 dark:border-red-500' : ''}`}
               />
               {errors.excerpt && <p className="text-sm text-red-500 mt-2">{errors.excerpt}</p>}
             </CardContent>
@@ -186,13 +186,13 @@ export default function NewBlogPostPage() {
           {/* Content */}
           <Card>
             <CardContent className="p-6">
-              <label className="text-sm font-medium text-gray-700 mb-2 block">Content (Markdown supported)</label>
+              <label className="text-sm font-medium text-gray-700 dark:text-slate-200 mb-2 block">Content (Markdown supported)</label>
               <Textarea
                 placeholder="Tulis konten artikel di sini... Markdown formatting didukung."
                 value={formData.content}
                 onChange={(e) => setFormData({ ...formData, content: e.target.value })}
                 rows={20}
-                className={`font-mono text-sm ${errors.content ? 'border-red-500' : ''}`}
+                className={`w-full font-mono text-sm bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-xl text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-slate-500 focus:outline-none focus:border-emerald-500 dark:focus:border-emerald-400 focus:ring-1 focus:ring-emerald-500/20 dark:focus:ring-1 dark:focus:ring-emerald-400/30 resize-none ${errors.content ? 'border-red-500 dark:border-red-500' : ''}`}
               />
               {errors.content && <p className="text-sm text-red-500 mt-2">{errors.content}</p>}
             </CardContent>
@@ -204,10 +204,10 @@ export default function NewBlogPostPage() {
           {/* Publish */}
           <Card>
             <CardContent className="p-6">
-              <h3 className="font-semibold text-gray-900 mb-4">Publish</h3>
+              <h3 className="font-semibold text-gray-900 dark:text-white mb-4">Publish</h3>
               <div className="space-y-4">
                 <div>
-                  <label className="text-sm font-medium text-gray-700 mb-2 block">Status</label>
+                  <label className="text-sm font-medium text-gray-700 dark:text-slate-200 mb-2 block">Status</label>
                   <div className="flex gap-4">
                     <label className="flex items-center gap-2 cursor-pointer">
                       <input
@@ -247,14 +247,14 @@ export default function NewBlogPostPage() {
           {/* Category */}
           <Card>
             <CardContent className="p-6">
-              <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
+              <h3 className="font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
                 <FolderOpen className="w-4 h-4" />
                 Kategori
               </h3>
               <select
                 value={formData.categoryId}
                 onChange={(e) => setFormData({ ...formData, categoryId: e.target.value })}
-                className="w-full h-10 px-3 rounded-lg border border-gray-200 text-sm"
+                className="w-full h-10 px-3 rounded-lg border border-gray-200 dark:border-slate-700 text-sm dark:bg-slate-800 dark:text-slate-200"
               >
                 <option value="">Tidak ada kategori</option>
                 {categories.map(cat => (
@@ -270,7 +270,7 @@ export default function NewBlogPostPage() {
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <Star className="w-4 h-4 text-amber-500" />
-                  <span className="font-medium text-gray-900">Featured Post</span>
+                  <span className="font-medium text-gray-900 dark:text-white">Featured Post</span>
                 </div>
                 <input
                   type="checkbox"
@@ -279,20 +279,20 @@ export default function NewBlogPostPage() {
                   className="h-5 w-5 rounded border-gray-300 text-emerald-600 focus:ring-emerald-500"
                 />
               </div>
-              <p className="text-xs text-gray-500 mt-2">Post ini akan ditampilkan di homepage</p>
+              <p className="text-xs text-gray-500 dark:text-slate-400 mt-2">Post ini akan ditampilkan di homepage</p>
             </CardContent>
           </Card>
 
           {/* Tags */}
           <Card>
             <CardContent className="p-6">
-              <h3 className="font-semibold text-gray-900 mb-4">Tags</h3>
+              <h3 className="font-semibold text-gray-900 dark:text-white mb-4">Tags</h3>
               <Input
                 placeholder="tips, cleaning, rumah (pisah dengan koma)"
                 value={formData.tags}
                 onChange={(e) => setFormData({ ...formData, tags: e.target.value })}
               />
-              <p className="text-xs text-gray-400 mt-2">Pisahkan dengan koma</p>
+              <p className="text-xs text-gray-400 dark:text-slate-500 mt-2">Pisahkan dengan koma</p>
             </CardContent>
           </Card>
         </div>

@@ -166,13 +166,13 @@ export default function NotificationsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 text-gray-900">
+    <div className="min-h-screen bg-gray-50 dark:bg-slate-900 text-gray-900 dark:text-white">
       {/* Topbar */}
-      <div className="sticky top-0 z-20 bg-white/80 backdrop-blur-xl border-b border-gray-100 px-4 md:px-6 py-3 flex items-center justify-between">
-        <div className="flex items-center gap-2 text-xs text-gray-500">
+      <div className="sticky top-0 z-20 bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border-b border-gray-100 dark:border-slate-700 px-4 md:px-6 py-3 flex items-center justify-between">
+        <div className="flex items-center gap-2 text-xs text-gray-500 dark:text-slate-400">
           <span>NingClean Admin</span>
           <span>/</span>
-          <span className="text-gray-700">Notifications</span>
+          <span className="text-gray-700 dark:text-slate-200">Notifications</span>
         </div>
       </div>
 
@@ -180,20 +180,20 @@ export default function NotificationsPage() {
         {/* Header */}
         <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
           <div>
-            <h1 className="text-2xl font-bold tracking-tight text-gray-900">Notifikasi</h1>
-            <p className="mt-1 text-sm text-gray-500">
+            <h1 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Notifikasi</h1>
+            <p className="mt-1 text-sm text-gray-500 dark:text-slate-400">
               {unreadCount > 0 ? `${unreadCount} notifikasi belum dibaca` : 'Semua notifikasi sudah dibaca'}
             </p>
           </div>
           <div className="flex items-center gap-3">
             {/* Filter */}
-            <div className="flex items-center gap-2 rounded-xl border border-gray-200 bg-white p-1">
+            <div className="flex items-center gap-2 rounded-xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-1">
               <button
                 onClick={() => { setFilter('all'); fetchNotifications(1, 'all') }}
                 className={`flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
                   filter === 'all'
                     ? 'bg-emerald-600 text-white'
-                    : 'text-gray-600 hover:bg-gray-100'
+                    : 'text-gray-600 dark:text-slate-300 hover:bg-gray-100 dark:hover:bg-slate-700'
                 }`}
               >
                 <Filter className="h-4 w-4" />
@@ -204,7 +204,7 @@ export default function NotificationsPage() {
                 className={`flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
                   filter === 'unread'
                     ? 'bg-emerald-600 text-white'
-                    : 'text-gray-600 hover:bg-gray-100'
+                    : 'text-gray-600 dark:text-slate-300 hover:bg-gray-100 dark:hover:bg-slate-700'
                 }`}
               >
                 <Bell className="h-4 w-4" />
@@ -234,37 +234,37 @@ export default function NotificationsPage() {
         </div>
 
         {/* Notifications List */}
-        <div className="rounded-2xl border border-gray-100 bg-white overflow-hidden shadow-sm">
+        <div className="rounded-2xl border border-gray-100 dark:border-slate-700 bg-white dark:bg-slate-900 overflow-hidden shadow-sm dark:shadow-slate-900/50">
           {loading ? (
             <div className="flex items-center justify-center py-20">
               <div className="h-8 w-8 animate-spin rounded-full border-4 border-gray-200 border-t-emerald-500" />
             </div>
           ) : notifications.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-20">
-              <div className="flex h-16 w-16 items-center justify-center rounded-full bg-gray-100">
-                <Bell className="h-8 w-8 text-gray-400" />
+              <div className="flex h-16 w-16 items-center justify-center rounded-full bg-gray-100 dark:bg-slate-800">
+                <Bell className="h-8 w-8 text-gray-400 dark:text-slate-500" />
               </div>
-              <h3 className="mt-4 text-lg font-semibold text-gray-900">Tidak ada notifikasi</h3>
-              <p className="mt-1 text-sm text-gray-500">
+              <h3 className="mt-4 text-lg font-semibold text-gray-900 dark:text-white">Tidak ada notifikasi</h3>
+              <p className="mt-1 text-sm text-gray-500 dark:text-slate-400">
                 {filter === 'unread'
                   ? 'Semua notifikasi sudah dibaca'
                   : 'Notifikasi baru akan muncul di sini'}
               </p>
             </div>
           ) : (
-            <div className="divide-y divide-gray-100">
+            <div className="divide-y divide-gray-100 dark:divide-slate-700">
               {notifications.map((notification) => (
                 <motion.div
                   key={notification.id}
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
-                  className={`flex gap-4 p-5 transition-colors hover:bg-gray-50/50 ${
+                  className={`flex gap-4 p-5 transition-colors hover:bg-gray-50/50 dark:hover:bg-slate-800 ${
                     !notification.isRead ? 'bg-emerald-50/30' : ''
                   }`}
                 >
                   {/* Icon */}
                   <div className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl ${
-                    !notification.isRead ? 'bg-emerald-100' : 'bg-gray-100'
+                    !notification.isRead ? 'bg-emerald-100' : 'bg-gray-100 dark:bg-slate-800'
                   }`}>
                     {getNotificationIcon(notification.type)}
                   </div>
@@ -277,22 +277,22 @@ export default function NotificationsPage() {
                           {!notification.isRead && (
                             <div className="h-2 w-2 rounded-full bg-emerald-500" />
                           )}
-                          <h3 className={`text-sm ${!notification.isRead ? 'font-semibold text-gray-900' : 'font-medium text-gray-700'}`}>
+                          <h3 className={`text-sm ${!notification.isRead ? 'font-semibold text-gray-900 dark:text-white' : 'font-medium text-gray-700 dark:text-slate-200'}`}>
                             {notification.title}
                           </h3>
-                          <span className="text-[10px] font-medium text-gray-400 px-2 py-0.5 rounded-full bg-gray-100">
+                          <span className="text-[10px] font-medium text-gray-400 dark:text-slate-500 px-2 py-0.5 rounded-full bg-gray-100 dark:bg-slate-800">
                             {getTypeLabel(notification.type)}
                           </span>
                         </div>
-                        <p className="text-sm text-gray-600 mt-1">
+                        <p className="text-sm text-gray-600 dark:text-slate-300 mt-1">
                           {notification.message}
                         </p>
                         <div className="flex items-center gap-4 mt-2">
-                          <span className="text-xs text-gray-400">
+                          <span className="text-xs text-gray-400 dark:text-slate-500">
                             {formatDate(notification.createdAt)}
                           </span>
                           {notification.data?.bookingId && (
-                            <span className="text-xs text-gray-400">
+                            <span className="text-xs text-gray-400 dark:text-slate-500">
                               ID: {notification.data.bookingId.slice(0, 8)}...
                             </span>
                           )}
@@ -307,7 +307,7 @@ export default function NotificationsPage() {
                             size="sm"
                             onClick={() => handleMarkAsUnread(notification.id)}
                             disabled={actionLoading === notification.id}
-                            className="gap-1 text-xs text-gray-500 hover:text-gray-700"
+                            className="gap-1 text-xs text-gray-500 dark:text-slate-400 hover:text-gray-700 dark:text-slate-200"
                           >
                             <Check className="h-3 w-3" />
                             Tandai Belum Dibaca
@@ -344,7 +344,7 @@ export default function NotificationsPage() {
             >
               Previous
             </Button>
-            <span className="text-sm text-gray-500">
+            <span className="text-sm text-gray-500 dark:text-slate-400">
               Halaman {page} dari {totalPages}
             </span>
             <Button

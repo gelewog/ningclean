@@ -61,18 +61,18 @@ export default function AuditLogPage() {
   )
 
   return (
-    <div className="min-h-screen bg-gray-50 text-gray-900">
+    <div className="min-h-screen bg-gray-50 dark:bg-slate-900 text-gray-900 dark:text-white">
       {/* Topbar */}
-      <div className="sticky top-0 z-20 bg-white/80 backdrop-blur-xl border-b border-gray-100 px-4 md:px-6 py-3 flex items-center justify-between">
-        <div className="flex items-center gap-2 text-xs text-gray-500">
+      <div className="sticky top-0 z-20 bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border-b border-gray-100 dark:border-slate-700 px-4 md:px-6 py-3 flex items-center justify-between">
+        <div className="flex items-center gap-2 text-xs text-gray-500 dark:text-slate-400">
           <span>NingClean Admin</span>
           <span>/</span>
-          <span className="text-gray-700">Audit Trail</span>
+          <span className="text-gray-700 dark:text-slate-200">Audit Trail</span>
         </div>
         <div className="flex items-center gap-3">
           <div className="flex items-center gap-1.5">
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-            <span className="text-[11px] text-gray-500">Live</span>
+            <span className="text-[11px] text-gray-500 dark:text-slate-400">Live</span>
           </div>
         </div>
       </div>
@@ -80,8 +80,8 @@ export default function AuditLogPage() {
       <div className="w-full px-4 md:px-6 py-6 space-y-6">
         {/* Page Header */}
         <div>
-          <h1 className="text-2xl font-bold tracking-tight text-gray-900">Audit Trail</h1>
-          <p className="text-sm text-gray-500 mt-0.5">Track all admin activities and changes</p>
+          <h1 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Audit Trail</h1>
+          <p className="text-sm text-gray-500 dark:text-slate-400 mt-0.5">Track all admin activities and changes</p>
         </div>
 
         {/* Stats */}
@@ -89,20 +89,20 @@ export default function AuditLogPage() {
           <motion.div
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
-            className="relative bg-white border border-gray-100 rounded-2xl p-5 overflow-hidden shadow-sm"
+            className="relative bg-white border border-gray-100 dark:border-slate-700 rounded-2xl p-5 overflow-hidden shadow-sm dark:shadow-slate-900/50"
           >
             <div className={`absolute top-0 left-0 right-0 h-[2px] rounded-t-2xl bg-gradient-to-r from-blue-600 to-blue-400`} />
-            <p className="text-[11px] uppercase tracking-widest text-gray-500 mb-2">Total Logs</p>
-            <p className="text-3xl font-bold tracking-tight text-gray-900">{logs.length}</p>
+            <p className="text-[11px] uppercase tracking-widest text-gray-500 dark:text-slate-400 mb-2">Total Logs</p>
+            <p className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white">{logs.length}</p>
           </motion.div>
           <motion.div
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.05 }}
-            className="relative bg-white border border-gray-100 rounded-2xl p-5 overflow-hidden shadow-sm"
+            className="relative bg-white border border-gray-100 dark:border-slate-700 rounded-2xl p-5 overflow-hidden shadow-sm dark:shadow-slate-900/50"
           >
             <div className={`absolute top-0 left-0 right-0 h-[2px] rounded-t-2xl bg-gradient-to-r from-green-600 to-green-400`} />
-            <p className="text-[11px] uppercase tracking-widest text-gray-500 mb-2">Creates</p>
+            <p className="text-[11px] uppercase tracking-widest text-gray-500 dark:text-slate-400 mb-2">Creates</p>
             <p className="text-3xl font-bold tracking-tight text-green-600">
               {logs.filter(l => l.action === 'CREATE').length}
             </p>
@@ -111,10 +111,10 @@ export default function AuditLogPage() {
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="relative bg-white border border-gray-100 rounded-2xl p-5 overflow-hidden shadow-sm"
+            className="relative bg-white border border-gray-100 dark:border-slate-700 rounded-2xl p-5 overflow-hidden shadow-sm dark:shadow-slate-900/50"
           >
             <div className={`absolute top-0 left-0 right-0 h-[2px] rounded-t-2xl bg-gradient-to-r from-blue-600 to-blue-400`} />
-            <p className="text-[11px] uppercase tracking-widest text-gray-500 mb-2">Updates</p>
+            <p className="text-[11px] uppercase tracking-widest text-gray-500 dark:text-slate-400 mb-2">Updates</p>
             <p className="text-3xl font-bold tracking-tight text-blue-600">
               {logs.filter(l => l.action === 'UPDATE').length}
             </p>
@@ -123,10 +123,10 @@ export default function AuditLogPage() {
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.15 }}
-            className="relative bg-white border border-gray-100 rounded-2xl p-5 overflow-hidden shadow-sm"
+            className="relative bg-white border border-gray-100 dark:border-slate-700 rounded-2xl p-5 overflow-hidden shadow-sm dark:shadow-slate-900/50"
           >
             <div className={`absolute top-0 left-0 right-0 h-[2px] rounded-t-2xl bg-gradient-to-r from-purple-600 to-purple-400`} />
-            <p className="text-[11px] uppercase tracking-widest text-gray-500 mb-2">Today</p>
+            <p className="text-[11px] uppercase tracking-widest text-gray-500 dark:text-slate-400 mb-2">Today</p>
             <p className="text-3xl font-bold tracking-tight text-purple-600">
               {logs.filter(l => new Date(l.created_at).toDateString() === new Date().toDateString()).length}
             </p>
@@ -155,23 +155,23 @@ export default function AuditLogPage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.25 }}
         >
-          <div className="bg-white border border-gray-100 rounded-2xl overflow-hidden shadow-sm">
+          <div className="bg-white border border-gray-100 dark:border-slate-700 rounded-2xl overflow-hidden shadow-sm dark:shadow-slate-900/50">
             {loading ? (
               <div className="flex items-center justify-center py-12">
                 <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
               </div>
             ) : filteredLogs.length === 0 ? (
-              <div className="text-center py-12 text-gray-500">
+              <div className="text-center py-12 text-gray-500 dark:text-slate-400">
                 No audit logs found
               </div>
             ) : (
-              <div className="divide-y divide-gray-100">
+              <div className="divide-y divide-gray-100 dark:divide-slate-700">
                 {filteredLogs.map((log) => (
                   <motion.div
                     key={log.id}
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
-                    className="p-4 hover:bg-gray-50"
+                    className="p-4 hover:bg-gray-50 dark:hover:bg-slate-800"
                   >
                     <div className="flex items-start gap-4">
                       <div className="flex-shrink-0 mt-1">
@@ -180,11 +180,11 @@ export default function AuditLogPage() {
                         </Badge>
                       </div>
                       <div className="flex-1 min-w-0">
-                        <p className="text-sm font-medium text-gray-900">
+                        <p className="text-sm font-medium text-gray-900 dark:text-white">
                           {log.action} on <span className="text-blue-600">{log.entity_type}</span>
                         </p>
-                        <p className="text-xs text-gray-500 mt-1">
-                          Entity ID: <code className="bg-gray-100 px-1 rounded">{log.entity_id.slice(0, 8)}...</code>
+                        <p className="text-xs text-gray-500 dark:text-slate-400 mt-1">
+                          Entity ID: <code className="bg-gray-100 dark:bg-slate-800 px-1 rounded">{log.entity_id.slice(0, 8)}...</code>
                         </p>
                         {log.changes && (
                           <p className="text-xs text-gray-400 mt-1 font-mono">
@@ -193,7 +193,7 @@ export default function AuditLogPage() {
                         )}
                       </div>
                       <div className="flex-shrink-0 text-right">
-                        <p className="text-xs text-gray-500">{log.user_email || 'System'}</p>
+                        <p className="text-xs text-gray-500 dark:text-slate-400">{log.user_email || 'System'}</p>
                         <p className="text-xs text-gray-400 mt-1">{formatDateTime(log.created_at)}</p>
                       </div>
                     </div>

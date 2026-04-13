@@ -114,17 +114,17 @@ export default function CustomersPage() {
       label: 'Customer',
       render: (value: string, row: any) => (
         <div className="flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 text-sm font-medium text-primary">
+          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 dark:bg-emerald-900/30 text-sm font-medium text-primary dark:text-emerald-400">
             {value?.charAt(0).toUpperCase() || '?'}
           </div>
           <div className="flex items-center gap-2">
-            <p className="font-medium text-gray-900">{value}</p>
+            <p className="font-medium text-gray-900 dark:text-white">{value}</p>
             {row.isVip && (
               <Star className="h-4 w-4 text-amber-500 fill-amber-500" />
             )}
           </div>
           <div>
-            <p className="text-xs text-gray-500">{row.email}</p>
+            <p className="text-xs text-gray-500 dark:text-slate-400">{row.email}</p>
           </div>
         </div>
       ),
@@ -207,13 +207,13 @@ export default function CustomersPage() {
   ]
 
   return (
-    <div className="min-h-screen bg-gray-50 text-gray-900">
+    <div className="min-h-screen bg-gray-50 dark:bg-slate-900 text-gray-900 dark:text-white">
       {/* Topbar */}
-      <div className="sticky top-0 z-20 bg-white/80 backdrop-blur-xl border-b border-gray-100 px-4 md:px-6 py-3 flex items-center justify-between">
-        <div className="flex items-center gap-2 text-xs text-gray-500">
+      <div className="sticky top-0 z-20 bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border-b border-gray-100 dark:border-slate-700 px-4 md:px-6 py-3 flex items-center justify-between">
+        <div className="flex items-center gap-2 text-xs text-gray-500 dark:text-slate-400">
           <span>NingClean Admin</span>
           <span>/</span>
-          <span className="text-gray-700">Customers</span>
+          <span className="text-gray-700 dark:text-slate-200">Customers</span>
         </div>
       </div>
 
@@ -225,8 +225,8 @@ export default function CustomersPage() {
           className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"
         >
           <div>
-            <h1 className="text-2xl font-bold tracking-tight text-gray-900">Customers</h1>
-            <p className="text-sm text-gray-500 mt-0.5">Manage and view customer information</p>
+            <h1 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Customers</h1>
+            <p className="text-sm text-gray-500 dark:text-slate-400 mt-0.5">Manage and view customer information</p>
           </div>
         </motion.div>
 
@@ -254,7 +254,7 @@ export default function CustomersPage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.15 }}
         >
-          <div className="bg-white border border-gray-100 rounded-2xl overflow-hidden shadow-sm">
+          <div className="bg-white dark:bg-slate-900 border border-gray-100 dark:border-slate-700 rounded-2xl overflow-hidden shadow-sm dark:shadow-slate-900/50">
             <DataTable
               columns={columns}
               data={customers}
@@ -322,7 +322,7 @@ export default function CustomersPage() {
 
             {/* VIP Toggle */}
             {isEditing && (
-              <div className="flex items-center gap-3 p-4 bg-amber-50 rounded-lg border border-amber-200">
+              <div className="flex items-center gap-3 p-4 bg-amber-50 dark:bg-amber-900/20 rounded-lg border border-amber-200 dark:border-amber-800">
                 <input
                   type="checkbox"
                   id="isVip"
@@ -330,30 +330,30 @@ export default function CustomersPage() {
                   onChange={(e) => setSelectedCustomer({ ...selectedCustomer, isVip: e.target.checked })}
                   className="h-5 w-5 rounded border-amber-300"
                 />
-                <label htmlFor="isVip" className="flex items-center gap-2 font-medium text-amber-800">
+                <label htmlFor="isVip" className="flex items-center gap-2 font-medium text-amber-800 dark:text-amber-300">
                   <Star className="h-4 w-4 text-amber-500 fill-amber-500" />
                   VIP Customer
                 </label>
-                <span className="text-sm text-amber-600">- Priority customer with special treatment</span>
+                <span className="text-sm text-amber-600 dark:text-amber-400">- Priority customer with special treatment</span>
               </div>
             )}
 
             {/* Contact Info */}
             <div>
-              <h3 className="mb-3 text-sm font-medium text-gray-500">Contact Information</h3>
+              <h3 className="mb-3 text-sm font-medium text-gray-500 dark:text-slate-400">Contact Information</h3>
               <div className="grid gap-3 sm:grid-cols-2">
-                <div className="flex items-center gap-3 rounded-lg bg-gray-50 p-3">
-                  <Mail className="h-5 w-5 text-gray-400" />
+                <div className="flex items-center gap-3 rounded-lg bg-gray-50 dark:bg-slate-800 p-3">
+                  <Mail className="h-5 w-5 text-gray-400 dark:text-slate-500" />
                   <div>
-                    <p className="text-xs text-gray-500">Email</p>
-                    <p className="text-sm font-medium">{selectedCustomer.email}</p>
+                    <p className="text-xs text-gray-500 dark:text-slate-400">Email</p>
+                    <p className="text-sm font-medium text-gray-900 dark:text-white">{selectedCustomer.email}</p>
                   </div>
                 </div>
-                <div className="flex items-center gap-3 rounded-lg bg-gray-50 p-3">
-                  <Phone className="h-5 w-5 text-gray-400" />
+                <div className="flex items-center gap-3 rounded-lg bg-gray-50 dark:bg-slate-800 p-3">
+                  <Phone className="h-5 w-5 text-gray-400 dark:text-slate-500" />
                   <div>
-                    <p className="text-xs text-gray-500">Phone</p>
-                    <p className="text-sm font-medium">{selectedCustomer.phone || '-'}</p>
+                    <p className="text-xs text-gray-500 dark:text-slate-400">Phone</p>
+                    <p className="text-sm font-medium text-gray-900 dark:text-white">{selectedCustomer.phone || '-'}</p>
                   </div>
                 </div>
               </div>
@@ -361,17 +361,17 @@ export default function CustomersPage() {
 
             {/* Notes Section */}
             <div>
-              <h3 className="mb-3 text-sm font-medium text-gray-500">Internal Notes</h3>
+              <h3 className="mb-3 text-sm font-medium text-gray-500 dark:text-slate-400">Internal Notes</h3>
               {isEditing ? (
                 <textarea
                   value={editNotes}
                   onChange={(e) => setEditNotes(e.target.value)}
                   placeholder="Add internal notes about this customer..."
-                  className="w-full h-24 px-3 py-2 rounded-lg border border-gray-200 text-sm resize-none"
+                  className="w-full h-24 px-3 py-2 rounded-lg border border-gray-200 dark:border-slate-700 text-sm text-gray-900 dark:text-slate-200 bg-white dark:bg-slate-800 resize-none focus:outline-none focus:border-amber-400 dark:focus:border-amber-400 dark:focus:ring-1 dark:focus:ring-amber-400/30 placeholder:text-gray-400 dark:placeholder:text-slate-500"
                 />
               ) : (
-                <div className="rounded-lg bg-gray-50 p-4">
-                  <p className="text-sm text-gray-600">
+                <div className="rounded-lg bg-gray-50 dark:bg-slate-800 p-4">
+                  <p className="text-sm text-gray-600 dark:text-slate-400">
                     {selectedCustomer.notes || 'No notes yet'}
                   </p>
                 </div>
@@ -392,7 +392,7 @@ export default function CustomersPage() {
               {isEditing ? (
                 <div className="space-y-3">
                   {editAddresses.map((addr, index) => (
-                    <div key={index} className="p-4 bg-gray-50 rounded-lg space-y-2">
+                    <div key={index} className="p-4 bg-gray-50 dark:bg-slate-800 rounded-lg space-y-2">
                       <div className="flex justify-between items-center">
                         <Input
                           placeholder="Label (e.g., Home, Office)"
@@ -431,17 +431,17 @@ export default function CustomersPage() {
                 <div className="space-y-2">
                   {(selectedCustomer.addresses || []).length > 0 ? (
                     selectedCustomer.addresses.map((addr: CustomerAddress, index: number) => (
-                      <div key={index} className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg">
-                        <MapPin className="h-5 w-5 text-gray-400 mt-0.5" />
+                      <div key={index} className="flex items-start gap-3 p-3 bg-gray-50 dark:bg-slate-800 rounded-lg">
+                        <MapPin className="h-5 w-5 text-gray-400 dark:text-slate-500 mt-0.5" />
                         <div>
-                          <p className="text-sm font-medium">{addr.label || `Address ${index + 1}`}</p>
-                          <p className="text-sm text-gray-600">{addr.address}</p>
-                          <p className="text-sm text-gray-500">{addr.city} {addr.phone && `• ${addr.phone}`}</p>
+                          <p className="text-sm font-medium text-gray-900 dark:text-white">{addr.label || `Address ${index + 1}`}</p>
+                          <p className="text-sm text-gray-600 dark:text-slate-400">{addr.address}</p>
+                          <p className="text-sm text-gray-500 dark:text-slate-500">{addr.city} {addr.phone && `• ${addr.phone}`}</p>
                         </div>
                       </div>
                     ))
                   ) : (
-                    <div className="rounded-lg bg-gray-50 p-4 text-center">
+                    <div className="rounded-lg bg-gray-50 dark:bg-slate-800 p-4 text-center">
                       <p className="text-sm text-gray-500">No addresses saved</p>
                     </div>
                   )}
@@ -451,25 +451,25 @@ export default function CustomersPage() {
 
             {/* Stats */}
             <div className="grid gap-4 sm:grid-cols-2">
-              <div className="rounded-lg bg-primary/5 p-4">
+              <div className="rounded-lg bg-primary/5 dark:bg-emerald-900/20 p-4">
                 <div className="flex items-center gap-3">
-                  <div className="rounded-lg bg-primary/10 p-3">
-                    <Calendar className="h-5 w-5 text-primary" />
+                  <div className="rounded-lg bg-primary/10 dark:bg-emerald-900/40 p-3">
+                    <Calendar className="h-5 w-5 text-primary dark:text-emerald-400" />
                   </div>
                   <div>
-                    <p className="text-sm text-gray-500">Total Bookings</p>
-                    <p className="text-2xl font-bold text-gray-900">{selectedCustomer.totalBookings || 0}</p>
+                    <p className="text-sm text-gray-500 dark:text-slate-400">Total Bookings</p>
+                    <p className="text-2xl font-bold text-gray-900 dark:text-white">{selectedCustomer.totalBookings || 0}</p>
                   </div>
                 </div>
               </div>
-              <div className="rounded-lg bg-success/5 p-4">
+              <div className="rounded-lg bg-success/5 dark:bg-emerald-900/20 p-4">
                 <div className="flex items-center gap-3">
-                  <div className="rounded-lg bg-success/10 p-3">
-                    <DollarSign className="h-5 w-5 text-success" />
+                  <div className="rounded-lg bg-success/10 dark:bg-emerald-900/40 p-3">
+                    <DollarSign className="h-5 w-5 text-success dark:text-emerald-400" />
                   </div>
                   <div>
-                    <p className="text-sm text-gray-500">Total Spent</p>
-                    <p className="text-2xl font-bold text-success">{formatCurrency(selectedCustomer.totalSpent || 0)}</p>
+                    <p className="text-sm text-gray-500 dark:text-slate-400">Total Spent</p>
+                    <p className="text-2xl font-bold text-success dark:text-emerald-400">{formatCurrency(selectedCustomer.totalSpent || 0)}</p>
                   </div>
                 </div>
               </div>
@@ -479,12 +479,12 @@ export default function CustomersPage() {
             <div>
               <h3 className="mb-3 text-sm font-medium text-gray-500">Order History</h3>
               {customerBookings.length > 0 ? (
-                <div className="rounded-lg border">
+                <div className="rounded-lg border border-gray-100 dark:border-slate-700">
                   <DataTable columns={bookingColumns} data={customerBookings} />
                 </div>
               ) : (
-                <div className="rounded-lg border bg-gray-50 p-8 text-center">
-                  <p className="text-sm text-gray-500">No bookings found</p>
+                <div className="rounded-lg border border-gray-100 dark:border-slate-700 bg-gray-50 dark:bg-slate-800 p-8 text-center">
+                  <p className="text-sm text-gray-500 dark:text-slate-400">No bookings found</p>
                 </div>
               )}
             </div>

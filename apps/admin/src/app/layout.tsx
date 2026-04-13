@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { Toaster } from 'sonner'
+import { ThemeProvider } from '@/components/providers/ThemeProvider'
 import './globals.css'
 
 export const metadata: Metadata = {
@@ -13,19 +14,22 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body className="antialiased">
-        {children}
-        <Toaster 
-          position="top-right"
-          toastOptions={{
-            style: {
-              background: '#1E293B',
-              color: '#fff',
-              border: 'none',
-            },
-          }}
-        />
+        <ThemeProvider>
+          {children}
+          <Toaster
+            position="top-right"
+            theme="system"
+            toastOptions={{
+              style: {
+                background: '#1E293B',
+                color: '#fff',
+                border: 'none',
+              },
+            }}
+          />
+        </ThemeProvider>
       </body>
     </html>
   )

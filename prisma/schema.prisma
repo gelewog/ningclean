@@ -92,7 +92,7 @@ model Service {
 model Booking {
   id            String        @id @default(uuid())
   orderNumber   String        @unique
-  customerId    String?
+  customerId    String
   status        BookingStatus @default(PENDING)
   serviceDate   DateTime
   serviceTime   String
@@ -104,12 +104,8 @@ model Booking {
   createdAt     DateTime      @default(now())
   updatedAt     DateTime      @updatedAt
 
-  customer Customer? @relation(fields: [customerId], references: [id])
+  customer Customer @relation(fields: [customerId], references: [id])
   items    BookingItem[]
-
-  guestName    String?
-  guestEmail   String?
-  guestPhone   String?
 
   @@map("bookings")
 }

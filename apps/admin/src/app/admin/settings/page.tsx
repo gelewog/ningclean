@@ -403,10 +403,10 @@ export default function SettingsPage() {
   const filledCompanyFields = ['companyName', 'tagline', 'description', 'logo'].filter(f => settings[f as keyof SiteSettings]).length
   const filledContactFields = ['email', 'phone', 'whatsapp', 'address'].filter(f => settings[f as keyof SiteSettings]).length
   const filledSocialFields = ['facebook', 'instagram', 'twitter'].filter(f => settings[f as keyof SiteSettings]).length
+  // Only 2 channels: WhatsApp (via Twilio) and Email
   const enabledNotifs = [
     notificationSettings.whatsappEnabled,
     notificationSettings.emailEnabled,
-    notificationSettings.hasTwilio
   ].filter(Boolean).length
 
   const tabs = [
@@ -498,7 +498,7 @@ export default function SettingsPage() {
           />
           <StatCard
             label="Notifications"
-            value={`${enabledNotifs}/3`}
+            value={`${enabledNotifs}/2`}
             sub="Channels active"
             accent="bg-gradient-to-r from-amber-600 to-amber-400"
             icon={Bell}

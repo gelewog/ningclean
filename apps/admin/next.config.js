@@ -4,6 +4,15 @@ const nextConfig = {
   images: {
     domains: ['localhost', 'api.ningclean.com'],
   },
+  async rewrites() {
+    // Proxy API requests to backend during development
+    return [
+      {
+        source: '/api/proxy/:path*',
+        destination: 'http://localhost:4000/api/:path*',
+      },
+    ];
+  },
 }
 
 module.exports = nextConfig

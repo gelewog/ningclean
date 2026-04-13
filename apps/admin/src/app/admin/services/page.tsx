@@ -260,13 +260,13 @@ export default function ServicesPage() {
   }, [services, filterActive])
 
   return (
-    <div className="min-h-screen bg-gray-50 text-gray-900">
+    <div className="min-h-screen bg-gray-50 dark:bg-slate-800 text-gray-900 dark:text-white">
       {/* Topbar */}
-      <div className="sticky top-0 z-20 bg-white/80 backdrop-blur-xl border-b border-gray-100 px-4 md:px-6 py-3 flex items-center justify-between">
-        <div className="flex items-center gap-2 text-xs text-gray-500">
+      <div className="sticky top-0 z-20 bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl border-b border-gray-100 dark:border-slate-700 px-4 md:px-6 py-3 flex items-center justify-between">
+        <div className="flex items-center gap-2 text-xs text-gray-500 dark:text-slate-400">
           <span>NingClean Admin</span>
           <span>/</span>
-          <span className="text-gray-700">Services</span>
+          <span className="text-gray-700 dark:text-slate-200">Services</span>
         </div>
       </div>
 
@@ -278,8 +278,8 @@ export default function ServicesPage() {
           className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"
         >
           <div>
-            <h1 className="text-2xl font-bold tracking-tight text-gray-900">Services</h1>
-            <p className="text-sm text-gray-500 mt-0.5">Manage cleaning services and pricing</p>
+            <h1 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Services</h1>
+            <p className="text-sm text-gray-500 dark:text-slate-400 mt-0.5">Manage cleaning services and pricing</p>
           </div>
           <div className="flex gap-2">
             <Button variant="outline" size="sm" onClick={fetchServices}>
@@ -297,7 +297,7 @@ export default function ServicesPage() {
           <button
             onClick={() => setFilterActive('all')}
             className={`rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
-              filterActive === 'all' ? 'bg-primary text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+              filterActive === 'all' ? 'bg-primary text-white' : 'bg-gray-100 dark:bg-slate-800 text-gray-600 dark:text-slate-400 hover:bg-gray-200 dark:hover:bg-slate-700'
             }`}
           >
             All ({services.length})
@@ -305,7 +305,7 @@ export default function ServicesPage() {
           <button
             onClick={() => setFilterActive('active')}
             className={`rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
-              filterActive === 'active' ? 'bg-success text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+              filterActive === 'active' ? 'bg-success text-white' : 'bg-gray-100 dark:bg-slate-800 text-gray-600 dark:text-slate-400 hover:bg-gray-200 dark:hover:bg-slate-700'
             }`}
           >
             Active ({services.filter(s => s.isActive).length})
@@ -313,7 +313,7 @@ export default function ServicesPage() {
           <button
             onClick={() => setFilterActive('inactive')}
             className={`rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
-              filterActive === 'inactive' ? 'bg-gray-500 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+              filterActive === 'inactive' ? 'bg-gray-500 text-white' : 'bg-gray-100 dark:bg-slate-800 text-gray-600 dark:text-slate-400 hover:bg-gray-200 dark:hover:bg-slate-700'
             }`}
           >
             Inactive ({services.filter(s => !s.isActive).length})
@@ -354,7 +354,7 @@ export default function ServicesPage() {
                       exit={{ opacity: 0, scale: 0.9 }}
                       transition={{ delay: index * 0.05 }}
                     >
-                      <Card className={`overflow-hidden transition-shadow hover:shadow-lg ${!service.isActive ? 'opacity-60 grayscale' : ''}`}>
+                      <Card className={`overflow-hidden transition-shadow hover:shadow-lg dark:shadow-slate-900/30 ${!service.isActive ? 'opacity-60 grayscale' : ''}`}>
                         <div className="relative">
                           {service.image ? (
                             <img
@@ -363,8 +363,8 @@ export default function ServicesPage() {
                               className="h-40 w-full object-cover"
                             />
                           ) : (
-                            <div className="flex h-40 w-full items-center justify-center bg-gray-100">
-                              <IconComponent className="h-16 w-16 text-gray-300" />
+                            <div className="flex h-40 w-full items-center justify-center bg-gray-100 dark:bg-slate-800">
+                              <IconComponent className="h-16 w-16 text-gray-300 dark:text-slate-600" />
                             </div>
                           )}
                           {service.isFeatured && (
@@ -397,11 +397,11 @@ export default function ServicesPage() {
                           </div>
                         </CardHeader>
                         <CardContent>
-                          <p className="mb-4 text-sm text-gray-500 line-clamp-2">{service.description}</p>
+                          <p className="mb-4 text-sm text-gray-500 dark:text-slate-400 line-clamp-2">{service.description}</p>
                           <div className="flex items-center justify-between">
                             <div>
-                              <p className="text-lg font-bold text-primary">{formatCurrency(service.price)}</p>
-                              <p className="text-xs text-gray-400">{service.duration} minutes</p>
+                              <p className="text-lg font-bold text-primary dark:text-emerald-400">{formatCurrency(service.price)}</p>
+                              <p className="text-xs text-gray-400 dark:text-slate-500">{service.duration} minutes</p>
                             </div>
                             <div className="flex items-center gap-2">
                               <div className="flex items-center gap-2">
@@ -538,7 +538,7 @@ export default function ServicesPage() {
             placeholder="Pembersihan dinding & langit-langit&#10;Sikat & vacuum karpet/sofa&#10;Sterilisasi kamar mandi"
             value={formData.features}
             onChange={(e) => setFormData({ ...formData, features: e.target.value })}
-            className="min-h-[100px]"
+            className="min-h-[100px] bg-white dark:bg-slate-800 border-gray-200 dark:border-slate-700 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-slate-500 focus:border-emerald-500 dark:focus:border-emerald-400 focus-visible:ring-emerald-500 dark:focus-visible:ring-emerald-400"
           />
 
           <div className="flex items-center gap-3">

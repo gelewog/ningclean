@@ -1,172 +1,140 @@
 /**
- * Migration Script: Migrate guest booking data to Customer table
- *
- * This script migrates all bookings with guestName/guestEmail/guestPhone
- * to use the normalized Customer table structure.
- *
- * Run: npx ts-node prisma/migrate-guest-bookings.ts
+ * Migration Script: Move guest data from Booking to Customer table
+ * Run with: npx ts-node prisma/migrate-guest-bookings.ts
  */
+import { PrismaClient } from '@prisma/client'
 
-import { PrismaClient, Prisma } from '@prisma/client';
+const prisma = new PrismaClient()
 
-const prisma = new PrismaClient();
+async function migrateGuestBookings() {
+  console.log('Starting migration: Guest Bookings → Customer...')
 
-async function migrate() {
-  console.log('Starting migration of guest bookings to Customer table...\n');
+  // 1. Get all bookings with guest data
+  const guestBookings = await prisma.$queryRawUnsafe(`
+    SELECT id, "guestName", "guestEmail", "guestPhone"
+    FROM bookings
+    WHERE "guestEmail" IS NOT NULL
+    ORDER BY "createdAt" ASC
+  `) as { id: string; guestName: string; guestEmail: string; guestPhone: string | null }[]
 
-  // Find all bookings that have guest data but no customerId
-  const guestBookings = await prisma.booking.findMany({
-    where: {
-      customerId: null,
-      OR: [
-        { guestName: { not: null } },
-        { guestEmail: { not: null } },
-        { guestPhone: { not: null } },
-      ],
-    },
-    select: {
-      id: true,
-      guestName: true,
-      guestEmail: true,
-      guestPhone: true,
-    },
-  });
+  console.log(`Found ${guestBookings.length} bookings with guest data`)
 
-  console.log(`Found ${guestBookings.length} guest bookings to migrate\n`);
+  // 2. Group by email to find unique customers
+  const emailToCustomer = new Map<string, { name: string; phone: string | null; bookingIds: string[] }>()
 
-  if (guestBookings.length === 0) {
-    console.log('No guest bookings to migrate. Migration complete.');
-    return;
-  }
-
-  // Group bookings by email to create one customer per unique email
-  const emailGroups = new Map<string, typeof guestBookings>();
   for (const booking of guestBookings) {
-    const email = booking.guestEmail || 'anonymous@no-email.local';
-    if (!emailGroups.has(email)) {
-      emailGroups.set(email, []);
+    const email = booking.guestEmail.toLowerCase().trim()
+    
+    if (!emailToCustomer.has(email)) {
+      emailToCustomer.set(email, {
+        name: booking.guestName,
+        phone: booking.guestPhone,
+        bookingIds: []
+      })
     }
-    emailGroups.get(email)!.push(booking);
+    
+    emailToCustomer.get(email)!.bookingIds.push(booking.id)
   }
 
-  console.log(`Found ${emailGroups.size} unique customer emails to create\n`);
+  console.log(`Found ${emailToCustomer.size} unique guest customers`)
 
-  let migratedCustomers = 0;
-  let migratedBookings = 0;
-  let errors = 0;
-
-  for (const [email, bookings] of emailGroups) {
+  // 3. Create customers and update bookings
+  let migratedCount = 0
+  
+  for (const [email, data] of emailToCustomer) {
     try {
-      // Get first booking data for customer info
-      const firstBooking = bookings[0];
-      const customerName = firstBooking.guestName || 'Guest';
-      const customerPhone = firstBooking.guestPhone || null;
+      // Check if customer already exists
+      const existingCustomer = await prisma.customer.findFirst({
+        where: { email: email }
+      })
 
-      // Check if customer with this email already exists
-      let customer = email !== 'anonymous@no-email.local'
-        ? await prisma.customer.findFirst({
-            where: {
-              email,
-              source: 'guest',
-            },
+      let customerId: string
+
+      if (existingCustomer) {
+        console.log(`Customer with email ${email} already exists, using existing customer`)
+        customerId = existingCustomer.id
+        
+        // Update source to guest if not set
+        if (existingCustomer.source !== 'guest') {
+          await prisma.customer.update({
+            where: { id: customerId },
+            data: { source: 'guest' }
           })
-        : null;
-
-      if (customer) {
-        // Update existing guest customer
-        customer = await prisma.customer.update({
-          where: { id: customer.id },
-          data: {
-            name: customerName,
-            phone: customerPhone,
-          },
-        });
+        }
       } else {
         // Create new customer
-        customer = await prisma.customer.create({
+        const customer = await prisma.customer.create({
           data: {
-            name: customerName,
+            name: data.name,
             email: email,
-            phone: customerPhone,
+            phone: data.phone,
             source: 'guest',
-          },
-        });
+            addresses: '[]'
+          }
+        })
+        customerId = customer.id
+        console.log(`Created customer: ${email} (ID: ${customerId})`)
       }
 
-      migratedCustomers++;
-
       // Update all bookings for this customer
-      const bookingIds = bookings.map(b => b.id);
-      await prisma.booking.updateMany({
-        where: { id: { in: bookingIds } },
-        data: {
-          customerId: customer.id,
-          guestName: null,
-          guestEmail: null,
-          guestPhone: null,
-        },
-      });
+      for (const bookingId of data.bookingIds) {
+        await prisma.booking.update({
+          where: { id: bookingId },
+          data: { customerId: customerId }
+        })
+        migratedCount++
+      }
 
-      migratedBookings += bookings.length;
-      console.log(`  ✓ Migrated customer ${customer.email}: ${bookings.length} booking(s)`);
+      console.log(`Migrated ${data.bookingIds.length} bookings for ${email}`)
     } catch (error) {
-      errors++;
-      console.error(`  ✗ Error migrating ${email}:`, error);
+      console.error(`Failed to migrate customer ${email}:`, error)
     }
   }
 
-  console.log('\n========================================');
-  console.log('Migration Summary:');
-  console.log(`  - Customers created/updated: ${migratedCustomers}`);
-  console.log(`  - Bookings migrated: ${migratedBookings}`);
-  console.log(`  - Errors: ${errors}`);
-  console.log('========================================\n');
+  // 4. Handle bookings without any customer (edge case - shouldn't happen but safe to handle)
+  const orphanedBookings = await prisma.$queryRawUnsafe(`
+    SELECT id, "guestName", "guestEmail", "guestPhone"
+    FROM bookings
+    WHERE "customerId" IS NULL
+  `) as { id: string; guestName: string | null; guestEmail: string | null; guestPhone: string | null }[]
 
-  // Verify migration
-  const remainingGuestBookings = await prisma.booking.count({
-    where: {
-      customerId: null,
-      OR: [
-        { guestName: { not: null } },
-        { guestEmail: { not: null } },
-        { guestPhone: { not: null } },
-      ],
-    },
-  });
+  console.log(`Found ${orphanedBookings.length} orphaned bookings`)
 
-  if (remainingGuestBookings === 0) {
-    console.log('✓ All guest bookings successfully migrated!');
-  } else {
-    console.log(`⚠ ${remainingGuestBookings} guest bookings still remaining (may have null customerId with null guest fields)`);
+  for (const booking of orphanedBookings) {
+    try {
+      // Create generic customer
+      const customer = await prisma.customer.create({
+        data: {
+          name: booking.guestName || 'Unknown Customer',
+          email: booking.guestEmail || `unknown-${booking.id}@temp.com`,
+          phone: booking.guestPhone,
+          source: 'guest',
+          addresses: '[]'
+        }
+      })
+
+      await prisma.booking.update({
+        where: { id: booking.id },
+        data: { customerId: customer.id }
+      })
+
+      migratedCount++
+      console.log(`Created generic customer for orphaned booking ${booking.id}`)
+    } catch (error) {
+      console.error(`Failed to handle orphaned booking ${booking.id}:`, error)
+    }
   }
 
-  // Show sample of migrated data
-  const sampleBookings = await prisma.booking.findMany({
-    take: 5,
-    select: {
-      id: true,
-      customerId: true,
-      customer: {
-        select: { name: true, email: true },
-      },
-    },
-  });
-
-  console.log('\nSample of migrated bookings:');
-  for (const booking of sampleBookings) {
-    console.log(`  Booking ${booking.id.slice(0, 8)}: customerId=${booking.customerId}, name=${booking.customer?.name}`);
-  }
+  console.log(`\n✅ Migration complete!`)
+  console.log(`- ${emailToCustomer.size} customers created/linked`)
+  console.log(`- ${migratedCount} bookings updated`)
 }
 
-migrate()
-  .then(() => {
-    console.log('\nMigration script completed.');
-    process.exit(0);
-  })
-  .catch((error) => {
-    console.error('Migration failed:', error);
-    process.exit(1);
+migrateGuestBookings()
+  .catch((e) => {
+    console.error(e)
+    process.exit(1)
   })
   .finally(async () => {
-    await prisma.$disconnect();
-  });
+    await prisma.$disconnect()
+  })

@@ -499,9 +499,9 @@ export default function AnalyticsPage() {
                     </tr>
                   ) : (
                     analytics.topCustomers.map((customer, index) => (
-                      <tr key={customer.customerId} className="border-b border-gray-100 hover:bg-gray-50">
+                      <tr key={customer.customerId} className="border-b border-gray-100 dark:border-slate-700 hover:bg-gray-50 dark:hover:bg-slate-800">
                         <td className="py-3 px-4">
-                          <div className="flex items-center justify-center w-6 h-6 rounded-full bg-gray-200 text-xs font-bold">
+                          <div className="flex items-center justify-center w-6 h-6 rounded-full bg-gray-200 dark:bg-slate-700 text-xs font-bold text-gray-700 dark:text-slate-200">
                             {index + 1}
                           </div>
                         </td>

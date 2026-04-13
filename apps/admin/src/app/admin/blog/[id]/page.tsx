@@ -123,7 +123,7 @@ export default function EditBlogPostPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center py-20">
-        <div className="h-8 w-8 animate-spin rounded-full border-4 border-gray-200 border-t-emerald-500" />
+        <div className="h-8 w-8 animate-spin rounded-full border-4 border-gray-200 dark:border-slate-700 border-t-emerald-500" />
       </div>
     )
   }
@@ -137,12 +137,12 @@ export default function EditBlogPostPage() {
         className="flex items-center justify-between"
       >
         <div className="flex items-center gap-4">
-          <Link href="/admin/blog" className="p-2 hover:bg-gray-100 rounded-lg transition-colors">
-            <ArrowLeft className="w-5 h-5 text-gray-500" />
+          <Link href="/admin/blog" className="p-2 hover:bg-gray-100 dark:hover:bg-slate-800 rounded-lg transition-colors">
+            <ArrowLeft className="w-5 h-5 text-gray-500 dark:text-slate-400" />
           </Link>
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">Edit Post</h1>
-            <p className="text-gray-500">Edit artikel blog</p>
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Edit Post</h1>
+            <p className="text-gray-500 dark:text-slate-400">Edit artikel blog</p>
           </div>
         </div>
         <div className="flex gap-3">
@@ -179,7 +179,7 @@ export default function EditBlogPostPage() {
                 placeholder="Judul artikel..."
                 value={formData.title}
                 onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                className="text-xl font-semibold border-0 p-0 h-auto focus:ring-0 placeholder:text-gray-300"
+                className="text-xl font-semibold border-0 p-0 h-auto focus:ring-0 placeholder:text-gray-300 dark:text-slate-600"
                 style={{ fontSize: '24px', fontWeight: 600 }}
               />
               {errors.title && <p className="text-sm text-red-500 mt-2">{errors.title}</p>}
@@ -189,7 +189,7 @@ export default function EditBlogPostPage() {
           {/* Cover Image */}
           <Card>
             <CardContent className="p-6">
-              <label className="text-sm font-medium text-gray-700 mb-3 block">Cover Image</label>
+              <label className="text-sm font-medium text-gray-700 dark:text-slate-200 mb-3 block">Cover Image</label>
               {formData.coverImage ? (
                 <div className="relative rounded-xl overflow-hidden">
                   <img
@@ -207,11 +207,11 @@ export default function EditBlogPostPage() {
               ) : (
                 <div
                   onClick={() => setFormData({ ...formData, coverImage: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800' })}
-                  className="border-2 border-dashed border-gray-200 rounded-xl p-12 text-center cursor-pointer hover:border-emerald-500 hover:bg-emerald-50/50 transition-colors"
+                  className="border-2 border-dashed border-gray-200 dark:border-slate-700 rounded-xl p-12 text-center cursor-pointer hover:border-emerald-500 hover:bg-emerald-50/50 dark:hover:bg-emerald-900/20 transition-colors"
                 >
-                  <ImageIcon className="w-12 h-12 text-gray-300 mx-auto mb-3" />
-                  <p className="text-gray-500">Klik untuk set cover image (demo)</p>
-                  <p className="text-xs text-gray-400 mt-1">atau paste URL image</p>
+                  <ImageIcon className="w-12 h-12 text-gray-300 dark:text-slate-600 mx-auto mb-3" />
+                  <p className="text-gray-500 dark:text-slate-400">Klik untuk set cover image (demo)</p>
+                  <p className="text-xs text-gray-400 dark:text-slate-500 mt-1">atau paste URL image</p>
                 </div>
               )}
               <Input
@@ -226,13 +226,13 @@ export default function EditBlogPostPage() {
           {/* Excerpt */}
           <Card>
             <CardContent className="p-6">
-              <label className="text-sm font-medium text-gray-700 mb-2 block">Excerpt</label>
+              <label className="text-sm font-medium text-gray-700 dark:text-slate-200 mb-2 block">Excerpt</label>
               <Textarea
                 placeholder="Ringkasan singkat artikel..."
                 value={formData.excerpt}
                 onChange={(e) => setFormData({ ...formData, excerpt: e.target.value })}
                 rows={3}
-                className={errors.excerpt ? 'border-red-500' : ''}
+                className={`w-full bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-xl text-sm text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-slate-500 focus:outline-none focus:border-emerald-500 dark:focus:border-emerald-400 focus:ring-1 focus:ring-emerald-500/20 dark:focus:ring-1 dark:focus:ring-emerald-400/30 resize-none ${errors.excerpt ? 'border-red-500 dark:border-red-500' : ''}`}
               />
               {errors.excerpt && <p className="text-sm text-red-500 mt-2">{errors.excerpt}</p>}
             </CardContent>
@@ -241,13 +241,13 @@ export default function EditBlogPostPage() {
           {/* Content */}
           <Card>
             <CardContent className="p-6">
-              <label className="text-sm font-medium text-gray-700 mb-2 block">Content (Markdown supported)</label>
+              <label className="text-sm font-medium text-gray-700 dark:text-slate-200 mb-2 block">Content (Markdown supported)</label>
               <Textarea
                 placeholder="Tulis konten artikel di sini... Markdown formatting didukung."
                 value={formData.content}
                 onChange={(e) => setFormData({ ...formData, content: e.target.value })}
                 rows={20}
-                className={`font-mono text-sm ${errors.content ? 'border-red-500' : ''}`}
+                className={`w-full font-mono text-sm bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-xl text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-slate-500 focus:outline-none focus:border-emerald-500 dark:focus:border-emerald-400 focus:ring-1 focus:ring-emerald-500/20 dark:focus:ring-1 dark:focus:ring-emerald-400/30 resize-none ${errors.content ? 'border-red-500 dark:border-red-500' : ''}`}
               />
               {errors.content && <p className="text-sm text-red-500 mt-2">{errors.content}</p>}
             </CardContent>
@@ -259,13 +259,13 @@ export default function EditBlogPostPage() {
           {/* Publish */}
           <Card>
             <CardContent className="p-6">
-              <h3 className="font-semibold text-gray-900 mb-4">Publish</h3>
+              <h3 className="font-semibold text-gray-900 dark:text-white mb-4">Publish</h3>
               <div className="space-y-4">
                 <div className="flex items-center gap-2">
                   {post?.status === 'published' ? (
                     <span className="px-2 py-1 rounded-full bg-green-100 text-green-700 text-xs font-medium">Published</span>
                   ) : (
-                    <span className="px-2 py-1 rounded-full bg-gray-100 text-gray-700 text-xs font-medium">Draft</span>
+                    <span className="px-2 py-1 rounded-full bg-gray-100 dark:bg-slate-800 text-gray-700 dark:text-slate-200 text-xs font-medium">Draft</span>
                   )}
                   {post?.isFeatured && (
                     <span className="px-2 py-1 rounded-full bg-amber-100 text-amber-700 text-xs font-medium flex items-center gap-1">
@@ -274,7 +274,7 @@ export default function EditBlogPostPage() {
                   )}
                 </div>
                 <div>
-                  <label className="text-sm font-medium text-gray-700 mb-2 block">Status</label>
+                  <label className="text-sm font-medium text-gray-700 dark:text-slate-200 mb-2 block">Status</label>
                   <div className="flex gap-4">
                     <label className="flex items-center gap-2 cursor-pointer">
                       <input
@@ -314,14 +314,14 @@ export default function EditBlogPostPage() {
           {/* Category */}
           <Card>
             <CardContent className="p-6">
-              <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
+              <h3 className="font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
                 <FolderOpen className="w-4 h-4" />
                 Kategori
               </h3>
               <select
                 value={formData.categoryId}
                 onChange={(e) => setFormData({ ...formData, categoryId: e.target.value })}
-                className="w-full h-10 px-3 rounded-lg border border-gray-200 text-sm"
+                className="w-full h-10 px-3 rounded-lg border border-gray-200 dark:border-slate-700 text-sm dark:bg-slate-800 dark:text-slate-200"
               >
                 <option value="">Tidak ada kategori</option>
                 {categories.map(cat => (
@@ -337,7 +337,7 @@ export default function EditBlogPostPage() {
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <Star className="w-4 h-4 text-amber-500" />
-                  <span className="font-medium text-gray-900">Featured Post</span>
+                  <span className="font-medium text-gray-900 dark:text-white">Featured Post</span>
                 </div>
                 <input
                   type="checkbox"
@@ -346,30 +346,30 @@ export default function EditBlogPostPage() {
                   className="h-5 w-5 rounded border-gray-300 text-emerald-600 focus:ring-emerald-500"
                 />
               </div>
-              <p className="text-xs text-gray-500 mt-2">Post ini akan ditampilkan di homepage</p>
+              <p className="text-xs text-gray-500 dark:text-slate-400 mt-2">Post ini akan ditampilkan di homepage</p>
             </CardContent>
           </Card>
 
           {/* Tags */}
           <Card>
             <CardContent className="p-6">
-              <h3 className="font-semibold text-gray-900 mb-4">Tags</h3>
+              <h3 className="font-semibold text-gray-900 dark:text-white mb-4">Tags</h3>
               <Input
                 placeholder="tips, cleaning, rumah (pisah dengan koma)"
                 value={formData.tags}
                 onChange={(e) => setFormData({ ...formData, tags: e.target.value })}
               />
-              <p className="text-xs text-gray-400 mt-2">Pisahkan dengan koma</p>
+              <p className="text-xs text-gray-400 dark:text-slate-500 mt-2">Pisahkan dengan koma</p>
             </CardContent>
           </Card>
 
           {/* Post Info */}
           {post && (
-            <Card className="bg-gray-50">
+            <Card className="bg-gray-50 dark:bg-slate-800">
               <CardContent className="p-6">
-                <h3 className="font-semibold text-gray-900 mb-4">Info Post</h3>
-                <div className="space-y-2 text-sm text-gray-500">
-                  <p>Slug: <code className="text-xs bg-gray-200 px-1 rounded">/{post.slug}</code></p>
+                <h3 className="font-semibold text-gray-900 dark:text-white mb-4">Info Post</h3>
+                <div className="space-y-2 text-sm text-gray-500 dark:text-slate-400">
+                  <p>Slug: <code className="text-xs bg-gray-200 dark:bg-slate-700 px-1 rounded">/{post.slug}</code></p>
                   <p>Created: {new Date(post.createdAt).toLocaleDateString('id-ID')}</p>
                   <p>Updated: {new Date(post.updatedAt).toLocaleDateString('id-ID')}</p>
                 </div>
@@ -385,10 +385,10 @@ export default function EditBlogPostPage() {
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="bg-white rounded-2xl p-6 w-full max-w-md mx-4 shadow-2xl"
+            className="bg-white dark:bg-slate-800 rounded-2xl p-6 w-full max-w-md mx-4 shadow-2xl"
           >
-            <h3 className="text-lg font-bold text-gray-900 mb-2">Hapus Post?</h3>
-            <p className="text-gray-600 mb-6">
+            <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-2">Hapus Post?</h3>
+            <p className="text-gray-600 dark:text-slate-300 dark:text-slate-300 mb-6">
               Yakin ingin menghapus post <strong>"{post?.title}"</strong>? Tindakan ini tidak dapat dibatalkan.
             </p>
             <div className="flex justify-end gap-3">

@@ -36,7 +36,7 @@ export function DataTable({
       <div className="flex flex-col items-center justify-center py-16 text-center">
         {emptyState || (
           <>
-            <div className="mb-4 rounded-full bg-gray-100 p-4">
+            <div className="mb-4 rounded-full bg-gray-100 dark:bg-slate-800 p-4">
               <svg
                 className="h-8 w-8 text-gray-400"
                 fill="none"

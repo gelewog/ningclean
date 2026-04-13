@@ -35,6 +35,21 @@ export class NotificationsService implements OnModuleInit {
 
   private async loadSettings() {
     try {
+      // Check if table exists first
+      const tableExists = await this.prisma.$queryRawUnsafe(`
+        SELECT EXISTS (
+          SELECT FROM information_schema.tables 
+          WHERE table_schema = 'public' 
+          AND table_name = 'notification_settings'
+        );
+      `) as [{ exists: boolean }];
+      
+      if (!tableExists[0]?.exists) {
+        console.log('notification_settings table does not exist');
+        this.settings = null;
+        return;
+      }
+      
       // Read from JSONB config and secrets fields
       const result = await this.prisma.$queryRawUnsafe(`
         SELECT 
@@ -46,27 +61,46 @@ export class NotificationsService implements OnModuleInit {
       
       if (result && result.length > 0) {
         const row = result[0];
+        // Safely parse config and secrets
+        const config = row.config || {};
+        const secrets = row.secrets || {};
+        
         this.settings = {
           // WhatsApp
-          whatsappNumber: row.config?.whatsapp?.number || null,
-          whatsappEnabled: row.config?.whatsapp?.enabled || false,
-          whatsappMessage: row.config?.whatsapp?.defaultMessage || null,
+          whatsappNumber: config.whatsapp?.number || null,
+          whatsappEnabled: config.whatsapp?.enabled || false,
+          whatsappMessage: config.whatsapp?.defaultMessage || null,
           // Email
-          emailEnabled: row.config?.email?.enabled || false,
-          emailHost: row.config?.email?.host || null,
-          emailPort: row.config?.email?.port || null,
-          emailUser: row.config?.email?.user || null,
-          emailFrom: row.config?.email?.from || null,
-          adminEmail: row.config?.email?.adminEmail || null,
+          emailEnabled: config.email?.enabled || false,
+          emailHost: config.email?.host || null,
+          emailPort: config.email?.port || null,
+          emailUser: config.email?.user || null,
+          emailFrom: config.email?.from || null,
+          adminEmail: config.email?.adminEmail || null,
           // Twilio
-          twilioAccountSid: row.config?.twilio?.accountSid || null,
-          twilioFromNumber: row.config?.twilio?.fromNumber || null,
+          twilioAccountSid: config.twilio?.accountSid || null,
+          twilioFromNumber: config.twilio?.fromNumber || null,
           // Secrets
-          emailPassword: row.secrets?.emailPassword || null,
-          twilioAuthToken: row.secrets?.twilioAuthToken || null,
+          emailPassword: secrets.emailPassword || null,
+          twilioAuthToken: secrets.twilioAuthToken || null,
         };
       } else {
-        this.settings = null;
+        // Return default settings
+        this.settings = {
+          whatsappNumber: null,
+          whatsappEnabled: false,
+          whatsappMessage: null,
+          emailEnabled: false,
+          emailHost: null,
+          emailPort: null,
+          emailUser: null,
+          emailFrom: null,
+          adminEmail: null,
+          twilioAccountSid: null,
+          twilioFromNumber: null,
+          emailPassword: null,
+          twilioAuthToken: null,
+        };
       }
     } catch (error) {
       console.error('Failed to load notification settings:', error);
@@ -262,18 +296,36 @@ Dikirim otomatis dari NingClean`;
   async getSettings() {
     await this.loadSettings();
     
-    if (!this.settings) return null;
+    // Return default values even if settings is null
+    const defaults = {
+      whatsappNumber: '',
+      whatsappMessage: '',
+      whatsappEnabled: false,
+      emailEnabled: false,
+      emailHost: 'smtp.gmail.com',
+      emailPort: 587,
+      emailUser: '',
+      emailFrom: '',
+      adminEmail: '',
+      twilioAccountSid: '',
+      twilioFromNumber: '',
+      twilioAuthToken: '',
+      hasTwilio: false,
+      hasPassword: false,
+    };
+    
+    if (!this.settings) return defaults;
 
     return {
-      whatsappNumber: this.settings.whatsappNumber,
-      whatsappMessage: this.settings.whatsappMessage,
-      whatsappEnabled: this.settings.whatsappEnabled,
-      emailEnabled: this.settings.emailEnabled,
-      emailHost: this.settings.emailHost,
-      emailPort: this.settings.emailPort,
-      emailUser: this.settings.emailUser,
-      emailFrom: this.settings.emailFrom,
-      adminEmail: this.settings.adminEmail,
+      whatsappNumber: this.settings.whatsappNumber || '',
+      whatsappMessage: this.settings.whatsappMessage || '',
+      whatsappEnabled: this.settings.whatsappEnabled || false,
+      emailEnabled: this.settings.emailEnabled || false,
+      emailHost: this.settings.emailHost || 'smtp.gmail.com',
+      emailPort: this.settings.emailPort || 587,
+      emailUser: this.settings.emailUser || '',
+      emailFrom: this.settings.emailFrom || '',
+      adminEmail: this.settings.adminEmail || '',
       twilioAccountSid: this.settings.twilioAccountSid || '',
       twilioFromNumber: this.settings.twilioFromNumber || '',
       hasTwilio: !!this.settings.twilioAuthToken,

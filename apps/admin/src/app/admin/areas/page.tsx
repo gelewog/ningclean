@@ -181,8 +181,8 @@ export default function AreasPage() {
             <MapPin className="h-5 w-5 text-primary" />
           </div>
           <div>
-            <p className="font-medium text-gray-900">{value}</p>
-            <p className="text-xs text-gray-500">{row.region}</p>
+            <p className="font-medium text-gray-900 dark:text-white">{value}</p>
+            <p className="text-xs text-gray-500 dark:text-slate-400">{row.region}</p>
           </div>
         </div>
       ),
@@ -191,14 +191,14 @@ export default function AreasPage() {
       key: 'slug',
       label: 'Slug',
       render: (value: string) => (
-        <code className="text-xs bg-gray-100 px-2 py-1 rounded">{value}</code>
+        <code className="text-xs bg-gray-100 dark:bg-slate-800 px-2 py-1 rounded">{value}</code>
       ),
     },
     {
       key: 'coverage',
       label: 'Coverage Areas',
       render: (value: string[]) => (
-        <span className="text-sm text-gray-500">
+        <span className="text-sm text-gray-500 dark:text-slate-400">
           {value?.length || 0} areas
         </span>
       ),
@@ -225,7 +225,7 @@ export default function AreasPage() {
       key: 'createdAt',
       label: 'Created',
       render: (value: string) => (
-        <div className="flex items-center gap-1 text-sm text-gray-500">
+        <div className="flex items-center gap-1 text-sm text-gray-500 dark:text-slate-400">
           <Calendar className="h-3.5 w-3.5" />
           {formatDate(value)}
         </div>
@@ -248,13 +248,13 @@ export default function AreasPage() {
   ]
 
   return (
-    <div className="min-h-screen bg-gray-50 text-gray-900">
+    <div className="min-h-screen bg-gray-50 dark:bg-slate-800 text-gray-900 dark:text-white">
       {/* Topbar */}
-      <div className="sticky top-0 z-20 bg-white/80 backdrop-blur-xl border-b border-gray-100 px-4 md:px-6 py-3 flex items-center justify-between">
-        <div className="flex items-center gap-2 text-xs text-gray-500">
+      <div className="sticky top-0 z-20 bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl border-b border-gray-100 dark:border-slate-700 px-4 md:px-6 py-3 flex items-center justify-between">
+        <div className="flex items-center gap-2 text-xs text-gray-500 dark:text-slate-400">
           <span>NingClean Admin</span>
           <span>/</span>
-          <span className="text-gray-700">Areas</span>
+          <span className="text-gray-700 dark:text-slate-200">Areas</span>
         </div>
       </div>
 
@@ -266,8 +266,8 @@ export default function AreasPage() {
           className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"
         >
           <div>
-            <h1 className="text-2xl font-bold tracking-tight text-gray-900">Service Areas</h1>
-            <p className="text-sm text-gray-500 mt-0.5">Manage service coverage areas</p>
+            <h1 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Service Areas</h1>
+            <p className="text-sm text-gray-500 dark:text-slate-400 mt-0.5">Manage service coverage areas</p>
           </div>
           <Button onClick={openCreateModal}>
             <Plus className="mr-2 h-4 w-4" />
@@ -281,7 +281,7 @@ export default function AreasPage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.15 }}
         >
-          <div className="bg-white border border-gray-100 rounded-2xl overflow-hidden shadow-sm">
+          <div className="bg-white border border-gray-100 dark:border-slate-700 rounded-2xl overflow-hidden shadow-sm dark:shadow-slate-900/50">
             <DataTable
               columns={columns}
               data={items}
@@ -326,7 +326,7 @@ export default function AreasPage() {
           <Textarea
             label="Description (optional)"
             placeholder="Enter description..."
-            className="min-h-[80px]"
+            className="min-h-[80px] bg-white dark:bg-slate-800 border-gray-200 dark:border-slate-700 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-slate-500 focus:border-emerald-500 dark:focus:border-emerald-400 focus-visible:ring-emerald-500 dark:focus-visible:ring-emerald-400"
             value={formData.description}
             onChange={(e) => setFormData({ ...formData, description: e.target.value })}
           />
@@ -344,7 +344,7 @@ export default function AreasPage() {
                 type="checkbox"
                 checked={formData.isFeatured}
                 onChange={(e) => setFormData({ ...formData, isFeatured: e.target.checked })}
-                className="h-4 w-4 rounded border-gray-300 text-primary"
+                className="h-4 w-4 rounded border-gray-300 dark:border-slate-600 text-primary"
               />
               <span className="text-sm">Featured area</span>
             </label>
@@ -353,7 +353,7 @@ export default function AreasPage() {
                 type="checkbox"
                 checked={formData.isActive}
                 onChange={(e) => setFormData({ ...formData, isActive: e.target.checked })}
-                className="h-4 w-4 rounded border-gray-300 text-primary"
+                className="h-4 w-4 rounded border-gray-300 dark:border-slate-600 text-primary"
               />
               <span className="text-sm">Active</span>
             </label>
@@ -375,7 +375,7 @@ export default function AreasPage() {
         size="sm"
       >
         <div className="space-y-4">
-          <p className="text-gray-600">
+          <p className="text-gray-600 dark:text-slate-300">
             Are you sure you want to delete <strong>{selectedItem?.city}</strong>? This action cannot be undone.
           </p>
           <div className="flex justify-end gap-2">

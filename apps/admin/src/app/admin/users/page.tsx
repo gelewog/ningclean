@@ -99,8 +99,8 @@ export default function UsersPage() {
             {value?.charAt(0).toUpperCase() || '?'}
           </div>
           <div>
-            <p className="font-medium text-gray-900">{value}</p>
-            <p className="text-xs text-gray-500">{row.email}</p>
+            <p className="font-medium text-gray-900 dark:text-white">{value}</p>
+            <p className="text-xs text-gray-500 dark:text-slate-400">{row.email}</p>
           </div>
         </div>
       ),
@@ -115,9 +115,9 @@ export default function UsersPage() {
       label: 'Role',
       render: (value: string) => {
         const roleStyles: Record<string, string> = {
-          ADMIN: 'bg-purple-100 text-purple-800',
-          STAFF: 'bg-blue-100 text-blue-800',
-          CUSTOMER: 'bg-gray-100 text-gray-800',
+          ADMIN: 'bg-purple-100 dark:bg-purple-900/30 text-purple-800',
+          STAFF: 'bg-blue-100 dark:bg-blue-900/30 text-blue-800',
+          CUSTOMER: 'bg-gray-100 dark:bg-slate-800 text-gray-800',
         }
         const roleLabels: Record<string, string> = {
           ADMIN: 'Admin',
@@ -125,7 +125,7 @@ export default function UsersPage() {
           CUSTOMER: 'Customer',
         }
         return (
-          <Badge className={roleStyles[value] || 'bg-gray-100 text-gray-800'}>
+          <Badge className={roleStyles[value] || 'bg-gray-100 dark:bg-slate-800 text-gray-800'}>
             {roleLabels[value] || value}
           </Badge>
         )
@@ -135,7 +135,7 @@ export default function UsersPage() {
       key: 'createdAt',
       label: 'Created',
       render: (value: string) => (
-        <div className="flex items-center gap-1 text-sm text-gray-500">
+        <div className="flex items-center gap-1 text-sm text-gray-500 dark:text-slate-400">
           <Calendar className="h-3.5 w-3.5" />
           {formatDate(value)}
         </div>
@@ -153,13 +153,13 @@ export default function UsersPage() {
   ]
 
   return (
-    <div className="min-h-screen bg-gray-50 text-gray-900">
+    <div className="min-h-screen bg-gray-50 dark:bg-slate-900 text-gray-900 dark:text-white">
       {/* Topbar */}
-      <div className="sticky top-0 z-20 bg-white/80 backdrop-blur-xl border-b border-gray-100 px-4 md:px-6 py-3 flex items-center justify-between">
-        <div className="flex items-center gap-2 text-xs text-gray-500">
+      <div className="sticky top-0 z-20 bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border-b border-gray-100 dark:border-slate-700 px-4 md:px-6 py-3 flex items-center justify-between">
+        <div className="flex items-center gap-2 text-xs text-gray-500 dark:text-slate-400">
           <span>NingClean Admin</span>
           <span>/</span>
-          <span className="text-gray-700">Users</span>
+          <span className="text-gray-700 dark:text-slate-200">Users</span>
         </div>
       </div>
 
@@ -171,46 +171,46 @@ export default function UsersPage() {
           className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"
         >
           <div>
-            <h1 className="text-2xl font-bold tracking-tight text-gray-900">Users</h1>
-            <p className="text-sm text-gray-500 mt-0.5">Manage admin and staff accounts</p>
+            <h1 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Users</h1>
+            <p className="text-sm text-gray-500 dark:text-slate-400 mt-0.5">Manage admin and staff accounts</p>
           </div>
         </motion.div>
 
         {/* Stats */}
         <div className="grid gap-4 md:grid-cols-3">
-          <div className="relative bg-white border border-gray-100 rounded-2xl p-5 overflow-hidden shadow-sm">
+          <div className="relative bg-white border border-gray-100 dark:border-slate-700 rounded-2xl p-5 overflow-hidden shadow-sm dark:shadow-slate-900/50">
             <div className="absolute top-0 left-0 right-0 h-[2px] rounded-t-2xl bg-gradient-to-r from-blue-600 to-blue-400" />
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-[11px] uppercase tracking-widest text-gray-500 mb-2">Total Users</p>
-                <p className="text-3xl font-bold text-gray-900">{users.length}</p>
+                <p className="text-[11px] uppercase tracking-widest text-gray-500 dark:text-slate-400 mb-2">Total Users</p>
+                <p className="text-3xl font-bold text-gray-900 dark:text-white">{users.length}</p>
               </div>
-              <div className="h-12 w-12 rounded-full bg-blue-100 flex items-center justify-center">
+              <div className="h-12 w-12 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center">
                 <Shield className="h-6 w-6 text-blue-600" />
               </div>
             </div>
           </div>
-          <div className="relative bg-white border border-gray-100 rounded-2xl p-5 overflow-hidden shadow-sm">
+          <div className="relative bg-white border border-gray-100 dark:border-slate-700 rounded-2xl p-5 overflow-hidden shadow-sm dark:shadow-slate-900/50">
             <div className="absolute top-0 left-0 right-0 h-[2px] rounded-t-2xl bg-gradient-to-r from-purple-600 to-purple-400" />
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-[11px] uppercase tracking-widest text-gray-500 mb-2">Admins</p>
+                <p className="text-[11px] uppercase tracking-widest text-gray-500 dark:text-slate-400 mb-2">Admins</p>
                 <p className="text-3xl font-bold text-purple-600">{users.filter(u => u.role === 'ADMIN').length}</p>
               </div>
-              <div className="h-12 w-12 rounded-full bg-purple-100 flex items-center justify-center">
+              <div className="h-12 w-12 rounded-full bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center">
                 <Shield className="h-6 w-6 text-purple-600" />
               </div>
             </div>
           </div>
-          <div className="relative bg-white border border-gray-100 rounded-2xl p-5 overflow-hidden shadow-sm">
+          <div className="relative bg-white border border-gray-100 dark:border-slate-700 rounded-2xl p-5 overflow-hidden shadow-sm dark:shadow-slate-900/50">
             <div className="absolute top-0 left-0 right-0 h-[2px] rounded-t-2xl bg-gradient-to-r from-gray-600 to-gray-400" />
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-[11px] uppercase tracking-widest text-gray-500 mb-2">Staff</p>
-                <p className="text-3xl font-bold text-gray-600">{users.filter(u => u.role === 'STAFF').length}</p>
+                <p className="text-[11px] uppercase tracking-widest text-gray-500 dark:text-slate-400 mb-2">Staff</p>
+                <p className="text-3xl font-bold text-gray-600 dark:text-slate-300">{users.filter(u => u.role === 'STAFF').length}</p>
               </div>
-              <div className="h-12 w-12 rounded-full bg-gray-100 flex items-center justify-center">
-                <Mail className="h-6 w-6 text-gray-600" />
+              <div className="h-12 w-12 rounded-full bg-gray-100 dark:bg-slate-800 flex items-center justify-center">
+                <Mail className="h-6 w-6 text-gray-600 dark:text-slate-300" />
               </div>
             </div>
           </div>
@@ -224,7 +224,7 @@ export default function UsersPage() {
           className="flex items-center gap-4"
         >
           <div className="relative flex-1 max-w-md">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400 dark:text-slate-500" />
             <Input
               placeholder="Search users..."
               value={search}
@@ -240,7 +240,7 @@ export default function UsersPage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.15 }}
         >
-          <div className="bg-white border border-gray-100 rounded-2xl overflow-hidden shadow-sm">
+          <div className="bg-white border border-gray-100 dark:border-slate-700 rounded-2xl overflow-hidden shadow-sm dark:shadow-slate-900/50">
             {loading ? (
               <div className="flex items-center justify-center h-32">
                 <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
@@ -262,14 +262,14 @@ export default function UsersPage() {
         {selectedUser && (
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Name</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-slate-200 mb-1">Name</label>
               <Input
                 value={editForm.name}
                 onChange={(e) => setEditForm({ ...editForm, name: e.target.value })}
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-slate-200 mb-1">Email</label>
               <Input
                 type="email"
                 value={editForm.email}
@@ -277,7 +277,7 @@ export default function UsersPage() {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Phone</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-slate-200 mb-1">Phone</label>
               <Input
                 value={editForm.phone}
                 onChange={(e) => setEditForm({ ...editForm, phone: e.target.value })}

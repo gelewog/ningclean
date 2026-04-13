@@ -94,13 +94,13 @@ export default function InvoicesPage() {
   )
 
   return (
-    <div className="min-h-screen bg-gray-50 text-gray-900">
+    <div className="min-h-screen bg-gray-50 dark:bg-slate-900 text-gray-900 dark:text-white">
       {/* Topbar */}
-      <div className="sticky top-0 z-20 bg-white/80 backdrop-blur-xl border-b border-gray-100 px-4 md:px-6 py-3 flex items-center justify-between">
-        <div className="flex items-center gap-2 text-xs text-gray-500">
+      <div className="sticky top-0 z-20 bg-white dark:bg-slate-900/80 dark:bg-slate-900/80 backdrop-blur-xl border-b border-gray-100 dark:border-slate-700 px-4 md:px-6 py-3 flex items-center justify-between">
+        <div className="flex items-center gap-2 text-xs text-gray-500 dark:text-slate-400">
           <span>NingClean Admin</span>
           <span>/</span>
-          <span className="text-gray-700">Invoices</span>
+          <span className="text-gray-700 dark:text-slate-200">Invoices</span>
         </div>
       </div>
 
@@ -111,8 +111,8 @@ export default function InvoicesPage() {
           animate={{ opacity: 1, y: 0 }}
         >
           <div>
-            <h1 className="text-2xl font-bold tracking-tight text-gray-900">Invoice</h1>
-            <p className="text-sm text-gray-500 mt-0.5">Generate dan preview invoice untuk bookings</p>
+            <h1 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Invoice</h1>
+            <p className="text-sm text-gray-500 dark:text-slate-400 mt-0.5">Generate dan preview invoice untuk bookings</p>
           </div>
         </motion.div>
 
@@ -124,7 +124,7 @@ export default function InvoicesPage() {
           className="flex flex-col gap-3 sm:flex-row"
         >
           <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400 dark:text-slate-500" />
             <Input
               placeholder="Cari order number, nama, alamat..."
               value={search}
@@ -133,7 +133,7 @@ export default function InvoicesPage() {
             />
           </div>
           <select
-            className="h-10 rounded-xl border border-gray-200 bg-white px-3 text-sm"
+            className="h-10 rounded-xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 text-sm"
             value={statusFilter}
             onChange={(e) => { setStatusFilter(e.target.value); setPagination(prev => ({ ...prev, page: 1 })); }}
           >
@@ -152,34 +152,34 @@ export default function InvoicesPage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.15 }}
         >
-          <div className="bg-white border border-gray-100 rounded-2xl overflow-hidden shadow-sm">
+          <div className="bg-white dark:bg-slate-900 border border-gray-100 dark:border-slate-700 rounded-2xl overflow-hidden shadow-sm dark:shadow-slate-900/50">
             {loading ? (
               <div className="flex items-center justify-center py-20">
-                <div className="h-8 w-8 animate-spin rounded-full border-4 border-gray-200 border-t-emerald-500" />
+                <div className="h-8 w-8 animate-spin rounded-full border-4 border-gray-200 dark:border-slate-700 border-t-emerald-500" />
               </div>
             ) : filteredBookings.length === 0 ? (
               <div className="text-center py-20">
                 <FileText className="h-12 w-12 text-gray-300 mx-auto mb-4" />
-                <p className="text-gray-500">Tidak ada bookings</p>
+                <p className="text-gray-500 dark:text-slate-400">Tidak ada bookings</p>
               </div>
             ) : (
               <div className="divide-y divide-gray-100">
                 {filteredBookings.map((booking) => (
                   <div
                     key={booking.id}
-                    className="flex items-center gap-4 p-4 hover:bg-gray-50 transition-colors"
+                    className="flex items-center gap-4 p-4 hover:bg-gray-50 dark:bg-slate-900 dark:hover:bg-slate-800 transition-colors"
                   >
-                    <div className="h-12 w-12 rounded-lg bg-emerald-100 flex items-center justify-center">
+                    <div className="h-12 w-12 rounded-lg bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center">
                       <FileText className="h-6 w-6 text-emerald-600" />
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 mb-1">
-                        <h3 className="font-medium text-gray-900">{booking.orderNumber}</h3>
+                        <h3 className="font-medium text-gray-900 dark:text-white">{booking.orderNumber}</h3>
                         <Badge className={STATUS_COLORS[booking.status]}>
                           {STATUS_LABELS[booking.status]}
                         </Badge>
                       </div>
-                      <div className="flex items-center gap-3 text-sm text-gray-500">
+                      <div className="flex items-center gap-3 text-sm text-gray-500 dark:text-slate-400">
                         <span>{booking.guestName || 'Guest'}</span>
                         <span>•</span>
                         <span className="flex items-center gap-1">
@@ -189,7 +189,7 @@ export default function InvoicesPage() {
                       </div>
                     </div>
                     <div className="text-right">
-                      <p className="font-semibold text-gray-900">
+                      <p className="font-semibold text-gray-900 dark:text-white">
                         Rp {Number(booking.totalAmount).toLocaleString('id-ID')}
                       </p>
                     </div>
@@ -208,7 +208,7 @@ export default function InvoicesPage() {
               </div>
             )}
             {pagination.totalPages > 1 && (
-              <div className="border-t border-gray-100">
+              <div className="border-t border-gray-100 dark:border-slate-700 dark:border-slate-700">
                 <Pagination
                   currentPage={pagination.page}
                   totalPages={pagination.totalPages}
@@ -230,58 +230,58 @@ export default function InvoicesPage() {
         {invoiceData && (
           <div className="space-y-6">
             {/* Invoice Content - Printable */}
-            <div className="bg-white p-8 rounded-xl border" id="invoice-print">
+            <div className="bg-white dark:bg-slate-900 p-8 rounded-xl border" id="invoice-print">
               {/* Header */}
               <div className="flex justify-between items-start mb-8">
                 <div>
-                  <h1 className="text-3xl font-bold text-gray-900">{invoiceData.template.headerText}</h1>
-                  <p className="text-gray-500 mt-1">#{invoiceData.invoice.number}</p>
+                  <h1 className="text-3xl font-bold text-gray-900 dark:text-white">{invoiceData.template.headerText}</h1>
+                  <p className="text-gray-500 dark:text-slate-400 mt-1">#{invoiceData.invoice.number}</p>
                 </div>
                 <div className="text-right">
                   <h2 className="text-xl font-bold text-emerald-600">{invoiceData.template.companyName}</h2>
-                  <p className="text-sm text-gray-500">{invoiceData.template.companyAddress}</p>
-                  <p className="text-sm text-gray-500">{invoiceData.template.companyPhone}</p>
-                  <p className="text-sm text-gray-500">{invoiceData.template.companyEmail}</p>
+                  <p className="text-sm text-gray-500 dark:text-slate-400">{invoiceData.template.companyAddress}</p>
+                  <p className="text-sm text-gray-500 dark:text-slate-400">{invoiceData.template.companyPhone}</p>
+                  <p className="text-sm text-gray-500 dark:text-slate-400">{invoiceData.template.companyEmail}</p>
                 </div>
               </div>
 
               {/* Invoice Info */}
               <div className="grid grid-cols-2 gap-8 mb-8">
                 <div>
-                  <p className="text-sm text-gray-500 mb-1">Tanggal Invoice</p>
+                  <p className="text-sm text-gray-500 dark:text-slate-400 mb-1">Tanggal Invoice</p>
                   <p className="font-medium">{invoiceData.invoice.date}</p>
                 </div>
                 <div>
-                  <p className="text-sm text-gray-500 mb-1">Bill To</p>
+                  <p className="text-sm text-gray-500 dark:text-slate-400 mb-1">Bill To</p>
                   <p className="font-medium">{invoiceData.invoice.customerName}</p>
-                  <p className="text-sm text-gray-500">{invoiceData.invoice.customerEmail}</p>
-                  <p className="text-sm text-gray-500">{invoiceData.invoice.customerPhone}</p>
+                  <p className="text-sm text-gray-500 dark:text-slate-400">{invoiceData.invoice.customerEmail}</p>
+                  <p className="text-sm text-gray-500 dark:text-slate-400">{invoiceData.invoice.customerPhone}</p>
                 </div>
               </div>
 
               {/* Service Details */}
               <div className="mb-4">
-                <p className="text-sm text-gray-500 mb-1">Service Date</p>
+                <p className="text-sm text-gray-500 dark:text-slate-400 mb-1">Service Date</p>
                 <p className="font-medium">{invoiceData.booking.serviceDateFormatted}</p>
-                <p className="text-sm text-gray-500">Address: {invoiceData.booking.address}</p>
+                <p className="text-sm text-gray-500 dark:text-slate-400">Address: {invoiceData.booking.address}</p>
               </div>
 
               {/* Items Table */}
               <table className="w-full mb-8">
                 <thead>
-                  <tr className="border-b-2 border-gray-200">
-                    <th className="text-left py-3 text-sm font-semibold text-gray-600">Description</th>
-                    <th className="text-center py-3 text-sm font-semibold text-gray-600">Qty</th>
-                    <th className="text-right py-3 text-sm font-semibold text-gray-600">Price</th>
-                    <th className="text-right py-3 text-sm font-semibold text-gray-600">Total</th>
+                  <tr className="border-b-2 border-gray-200 dark:border-slate-700">
+                    <th className="text-left py-3 text-sm font-semibold text-gray-600 dark:text-slate-300">Description</th>
+                    <th className="text-center py-3 text-sm font-semibold text-gray-600 dark:text-slate-300">Qty</th>
+                    <th className="text-right py-3 text-sm font-semibold text-gray-600 dark:text-slate-300">Price</th>
+                    <th className="text-right py-3 text-sm font-semibold text-gray-600 dark:text-slate-300">Total</th>
                   </tr>
                 </thead>
                 <tbody>
                   {invoiceData.items.map((item, index) => (
-                    <tr key={index} className="border-b border-gray-100">
+                    <tr key={index} className="border-b border-gray-100 dark:border-slate-700">
                       <td className="py-3">
                         <p className="font-medium">{item.name}</p>
-                        <p className="text-sm text-gray-500">{item.description}</p>
+                        <p className="text-sm text-gray-500 dark:text-slate-400">{item.description}</p>
                       </td>
                       <td className="py-3 text-center">{item.quantity}</td>
                       <td className="py-3 text-right">Rp {item.price.toLocaleString('id-ID')}</td>
@@ -295,16 +295,16 @@ export default function InvoicesPage() {
               <div className="flex justify-end">
                 <div className="w-64">
                   <div className="flex justify-between py-2">
-                    <span className="text-gray-500">Subtotal</span>
+                    <span className="text-gray-500 dark:text-slate-400">Subtotal</span>
                     <span className="font-medium">Rp {invoiceData.summary.subtotal.toLocaleString('id-ID')}</span>
                   </div>
                   {invoiceData.summary.taxRate > 0 && (
                     <div className="flex justify-between py-2">
-                      <span className="text-gray-500">Tax ({invoiceData.summary.taxRate}%)</span>
+                      <span className="text-gray-500 dark:text-slate-400">Tax ({invoiceData.summary.taxRate}%)</span>
                       <span className="font-medium">Rp {invoiceData.summary.taxAmount.toLocaleString('id-ID')}</span>
                     </div>
                   )}
-                  <div className="flex justify-between py-3 border-t-2 border-gray-200 mt-2">
+                  <div className="flex justify-between py-3 border-t-2 border-gray-200 dark:border-slate-700 mt-2">
                     <span className="text-lg font-bold">Total</span>
                     <span className="text-lg font-bold text-emerald-600">Rp {invoiceData.summary.total.toLocaleString('id-ID')}</span>
                   </div>
@@ -313,15 +313,15 @@ export default function InvoicesPage() {
 
               {/* Notes */}
               {invoiceData.template.notes && (
-                <div className="mt-8 p-4 bg-gray-50 rounded-lg">
-                  <p className="text-sm text-gray-500">Notes:</p>
+                <div className="mt-8 p-4 bg-gray-50 dark:bg-slate-900 rounded-lg">
+                  <p className="text-sm text-gray-500 dark:text-slate-400">Notes:</p>
                   <p className="text-sm">{invoiceData.template.notes}</p>
                 </div>
               )}
 
               {/* Footer */}
               {invoiceData.template.footerText && (
-                <div className="mt-8 text-center text-sm text-gray-400">
+                <div className="mt-8 text-center text-sm text-gray-400 dark:text-slate-500">
                   {invoiceData.template.footerText}
                 </div>
               )}

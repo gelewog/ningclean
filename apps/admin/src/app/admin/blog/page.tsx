@@ -67,18 +67,18 @@ export default function BlogPage() {
   )
 
   return (
-    <div className="min-h-screen bg-gray-50 text-gray-900">
+    <div className="min-h-screen bg-gray-50 dark:bg-slate-900 text-gray-900 dark:text-white">
       {/* Topbar */}
-      <div className="sticky top-0 z-20 bg-white/80 backdrop-blur-xl border-b border-gray-100 px-4 md:px-6 py-3 flex items-center justify-between">
-        <div className="flex items-center gap-2 text-xs text-gray-500">
+      <div className="sticky top-0 z-20 bg-white dark:bg-slate-900/80 backdrop-blur-xl border-b border-gray-100 dark:border-slate-700 px-4 md:px-6 py-3 flex items-center justify-between">
+        <div className="flex items-center gap-2 text-xs text-gray-500 dark:text-slate-400">
           <span>NingClean Admin</span>
           <span>/</span>
-          <span className="text-gray-700">Blog</span>
+          <span className="text-gray-700 dark:text-slate-200">Blog</span>
         </div>
         <div className="flex items-center gap-3">
           <div className="flex items-center gap-1.5">
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-            <span className="text-[11px] text-gray-500">Live</span>
+            <span className="text-[11px] text-gray-500 dark:text-slate-400">Live</span>
           </div>
         </div>
       </div>
@@ -91,8 +91,8 @@ export default function BlogPage() {
           className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"
         >
           <div>
-            <h1 className="text-2xl font-bold tracking-tight text-gray-900">Blog</h1>
-            <p className="text-sm text-gray-500 mt-0.5">Kelola artikel blog</p>
+            <h1 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Blog</h1>
+            <p className="text-sm text-gray-500 dark:text-slate-400 mt-0.5">Kelola artikel blog</p>
           </div>
           <div className="flex gap-3">
             <Link href="/admin/blog/categories">
@@ -118,16 +118,16 @@ export default function BlogPage() {
           className="flex flex-col gap-3 sm:flex-row"
         >
           <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400 dark:text-slate-500" />
             <Input
               placeholder="Cari post..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="pl-10 bg-white"
+              className="pl-10 bg-white dark:bg-slate-900"
             />
           </div>
           <select
-            className="h-10 rounded-xl border border-gray-200 bg-white px-3 text-sm"
+            className="h-10 rounded-xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 text-sm dark:text-slate-200"
             value={statusFilter}
             onChange={(e) => { setStatusFilter(e.target.value); setPagination(prev => ({ ...prev, page: 1 })); }}
           >
@@ -143,17 +143,17 @@ export default function BlogPage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.15 }}
         >
-          <div className="bg-white border border-gray-100 rounded-2xl overflow-hidden shadow-sm">
+          <div className="bg-white dark:bg-slate-900 border border-gray-100 dark:border-slate-700 rounded-2xl overflow-hidden shadow-sm dark:shadow-slate-900/50">
             {loading ? (
               <div className="flex items-center justify-center py-20">
-                <div className="h-8 w-8 animate-spin rounded-full border-4 border-gray-200 border-t-emerald-500" />
+                <div className="h-8 w-8 animate-spin rounded-full border-4 border-gray-200 dark:border-slate-700 border-t-emerald-500" />
               </div>
             ) : filteredPosts.length === 0 ? (
               <div className="text-center py-20">
-                <div className="h-16 w-16 mx-auto mb-4 rounded-full bg-gray-100 flex items-center justify-center">
-                  <Eye className="h-8 w-8 text-gray-400" />
+                <div className="h-16 w-16 mx-auto mb-4 rounded-full bg-gray-100 dark:bg-slate-800 flex items-center justify-center">
+                  <Eye className="h-8 w-8 text-gray-400 dark:text-slate-500" />
                 </div>
-                <p className="text-gray-500 mb-4">Belum ada post</p>
+                <p className="text-gray-500 dark:text-slate-400 mb-4">Belum ada post</p>
                 <Link href="/admin/blog/new">
                   <Button variant="outline">
                     <Plus className="mr-2 h-4 w-4" />
@@ -166,10 +166,10 @@ export default function BlogPage() {
                 {filteredPosts.map((post) => (
                   <div
                     key={post.id}
-                    className="flex items-center gap-4 p-4 hover:bg-gray-50 transition-colors"
+                    className="flex items-center gap-4 p-4 hover:bg-gray-50 dark:hover:bg-slate-800 transition-colors"
                   >
                     {/* Thumbnail */}
-                    <div className="h-16 w-24 rounded-lg overflow-hidden bg-gray-100 flex-shrink-0">
+                    <div className="h-16 w-24 rounded-lg overflow-hidden bg-gray-100 dark:bg-slate-800 flex-shrink-0">
                       {post.coverImage ? (
                         <img
                           src={post.coverImage}
@@ -186,12 +186,12 @@ export default function BlogPage() {
                     {/* Content */}
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 mb-1">
-                        <h3 className="font-medium text-gray-900 truncate">{post.title}</h3>
+                        <h3 className="font-medium text-gray-900 dark:text-white truncate">{post.title}</h3>
                         {post.isFeatured && (
                           <Star className="h-4 w-4 text-amber-500 flex-shrink-0" />
                         )}
                       </div>
-                      <div className="flex items-center gap-3 text-sm text-gray-500">
+                      <div className="flex items-center gap-3 text-sm text-gray-500 dark:text-slate-400">
                         <span className="flex items-center gap-1">
                           <Calendar className="h-3 w-3" />
                           {formatDate(post.createdAt)}
@@ -213,12 +213,12 @@ export default function BlogPage() {
                     {/* Actions */}
                     <div className="flex items-center gap-2">
                       <Link href={`/blog/${post.slug}`} target="_blank">
-                        <Button variant="ghost" size="sm" className="text-gray-400 hover:text-gray-600">
+                        <Button variant="ghost" size="sm" className="text-gray-400 dark:text-slate-500 hover:text-gray-600 dark:text-slate-300">
                           <ExternalLink className="h-4 w-4" />
                         </Button>
                       </Link>
                       <Link href={`/admin/blog/${post.id}`}>
-                        <Button variant="ghost" size="sm" className="text-gray-400 hover:text-emerald-600">
+                        <Button variant="ghost" size="sm" className="text-gray-400 dark:text-slate-500 hover:text-emerald-600">
                           <Edit className="h-4 w-4" />
                         </Button>
                       </Link>
@@ -226,7 +226,7 @@ export default function BlogPage() {
                         variant="ghost"
                         size="sm"
                         onClick={() => setDeleteId(post.id)}
-                        className="text-gray-400 hover:text-red-600"
+                        className="text-gray-400 dark:text-slate-500 hover:text-red-600"
                       >
                         <Trash2 className="h-4 w-4" />
                       </Button>
@@ -237,7 +237,7 @@ export default function BlogPage() {
             )}
             {/* Pagination */}
             {pagination.totalPages > 1 && (
-              <div className="border-t border-gray-100 px-4 py-3">
+              <div className="border-t border-gray-100 dark:border-slate-700 px-4 py-3">
                 <Pagination
                   currentPage={pagination.page}
                   totalPages={pagination.totalPages}
@@ -255,10 +255,10 @@ export default function BlogPage() {
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="bg-white rounded-2xl p-6 w-full max-w-md mx-4 shadow-2xl"
+            className="bg-white dark:bg-slate-900 rounded-2xl p-6 w-full max-w-md mx-4 shadow-2xl"
           >
-            <h3 className="text-lg font-bold text-gray-900 mb-2">Hapus Post?</h3>
-            <p className="text-gray-600 mb-6">
+            <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-2">Hapus Post?</h3>
+            <p className="text-gray-600 dark:text-slate-300 mb-6">
               Yakin ingin menghapus post ini? Tindakan ini tidak dapat dibatalkan.
             </p>
             <div className="flex justify-end gap-3">

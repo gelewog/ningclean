@@ -75,11 +75,11 @@ function StatCard({
     <motion.div
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
-      className="relative bg-white border border-gray-100 rounded-2xl p-5 overflow-hidden shadow-sm"
+      className="relative bg-white dark:bg-slate-900 border border-gray-100 dark:border-slate-700 rounded-2xl p-5 overflow-hidden shadow-sm dark:shadow-slate-900/50"
     >
       <div className={`absolute top-0 left-0 right-0 h-[2px] rounded-t-2xl ${accent}`} />
-      <p className="text-[11px] uppercase tracking-widest text-gray-500 mb-2">{label}</p>
-      <p className="text-3xl font-bold tracking-tight text-gray-900">{value}</p>
+      <p className="text-[11px] uppercase tracking-widest text-gray-500 dark:text-slate-400 mb-2">{label}</p>
+      <p className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white">{value}</p>
       <p className="text-xs text-gray-400 mt-1.5">{sub}</p>
     </motion.div>
   )
@@ -91,12 +91,12 @@ function DarkInput({
   return (
     <div className={`relative ${className}`}>
       {icon && (
-        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none">
+        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-slate-500 pointer-events-none">
           {icon}
         </span>
       )}
       <input
-        className={`w-full bg-white border border-gray-200 rounded-xl text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500/20 transition-all py-2.5 ${icon ? 'pl-9 pr-4' : 'px-4'}`}
+        className={`w-full bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-xl text-sm text-gray-900 dark:text-slate-100 placeholder:text-gray-400 dark:placeholder:text-slate-500 focus:outline-none focus:border-blue-500 dark:focus:border-blue-400 focus:ring-1 focus:ring-blue-500/20 dark:focus:ring-blue-400/20 transition-all py-2.5 ${icon ? 'pl-9 pr-4' : 'px-4'}`}
         {...props}
       />
     </div>
@@ -108,7 +108,7 @@ function DarkSelect({
 }: React.SelectHTMLAttributes<HTMLSelectElement> & { options: { value: string; label: string }[] }) {
   return (
     <select
-      className={`bg-white border border-gray-200 rounded-xl text-sm text-gray-700 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500/20 transition-all py-2.5 px-3 cursor-pointer ${className}`}
+      className={`bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-xl text-sm text-gray-700 dark:text-slate-200 focus:outline-none focus:border-blue-500 dark:focus:border-blue-400 focus:ring-1 focus:ring-blue-500/20 dark:focus:ring-blue-400/20 transition-all py-2.5 px-3 cursor-pointer ${className}`}
       {...props}
     >
       {options.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
@@ -364,7 +364,7 @@ function BookingsContent() {
       key: 'id',
       label: 'Booking ID',
       render: (value: string) => (
-        <span className={`font-mono text-[11px] px-2 py-1 rounded-md border ${highlightedRowId === value ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : 'bg-gray-100 text-gray-600 border-gray-200'}`}>
+        <span className={`font-mono text-[11px] px-2 py-1 rounded-md border ${highlightedRowId === value ? 'bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 border-emerald-200 dark:border-emerald-800' : 'bg-gray-100 dark:bg-slate-800 text-gray-600 dark:text-slate-400 border-gray-200 dark:border-slate-700'}`}>
           #{value.slice(0, 8)}
         </span>
       ),
@@ -374,8 +374,8 @@ function BookingsContent() {
       label: 'Customer',
       render: (value: string, row: any) => (
         <div>
-          <p className="text-sm font-semibold text-gray-900">{value}</p>
-          <p className="text-[11px] text-gray-500 mt-0.5">{row.customerEmail}</p>
+          <p className="text-sm font-semibold text-gray-900 dark:text-white">{value}</p>
+          <p className="text-[11px] text-gray-500 dark:text-slate-400 mt-0.5">{row.customerEmail}</p>
         </div>
       ),
     },
@@ -384,23 +384,23 @@ function BookingsContent() {
       label: 'Service',
       render: (value: string, row: any) => (
         <div>
-          <p className="text-sm text-gray-700">{value}</p>
-          <p className="text-[11px] text-gray-500 mt-0.5">{formatCurrency(row.servicePrice)}</p>
+          <p className="text-sm text-gray-700 dark:text-slate-200">{value}</p>
+          <p className="text-[11px] text-gray-500 dark:text-slate-400 mt-0.5">{formatCurrency(row.servicePrice)}</p>
         </div>
       ),
     },
     {
       key: 'area',
       label: 'Area',
-      render: (value: string) => <span className="text-xs text-gray-500">{value}</span>,
+      render: (value: string) => <span className="text-xs text-gray-500 dark:text-slate-400">{value}</span>,
     },
     {
       key: 'scheduledDate',
       label: 'Schedule',
       render: (value: string, row: any) => (
         <div>
-          <p className="text-sm text-gray-700">{formatDate(value)}</p>
-          <p className="text-[11px] text-gray-500 mt-0.5">{row.scheduledTime}</p>
+          <p className="text-sm text-gray-700 dark:text-slate-200">{formatDate(value)}</p>
+          <p className="text-[11px] text-gray-500 dark:text-slate-400 mt-0.5">{row.scheduledTime}</p>
         </div>
       ),
     },
@@ -415,7 +415,7 @@ function BookingsContent() {
       render: (_: any, row: any) => (
         <button
           onClick={() => { setSelectedBooking(row); setIsDetailOpen(true) }}
-          className="w-7 h-7 rounded-lg border border-gray-200 bg-white flex items-center justify-center text-gray-400 hover:text-gray-600 hover:bg-gray-50 transition-all"
+          className="w-7 h-7 rounded-lg border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 flex items-center justify-center text-gray-400 dark:text-slate-500 hover:text-gray-600 dark:hover:text-slate-200 hover:bg-gray-50 dark:hover:bg-slate-700 transition-all"
         >
           <Eye className="w-3.5 h-3.5" />
         </button>
@@ -426,18 +426,18 @@ function BookingsContent() {
   // ── render ─────────────────────────────────────────────────────────────────
 
   return (
-    <div className="min-h-screen bg-gray-50 text-gray-900">
+    <div className="min-h-screen bg-gray-50 dark:bg-slate-900 text-gray-900 dark:text-white">
       {/* Topbar */}
-      <div className="sticky top-0 z-20 bg-white/80 backdrop-blur-xl border-b border-gray-100 px-4 md:px-6 py-3 flex items-center justify-between">
-        <div className="flex items-center gap-2 text-xs text-gray-500">
+      <div className="sticky top-0 z-20 bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border-b border-gray-100 dark:border-slate-700 px-4 md:px-6 py-3 flex items-center justify-between">
+        <div className="flex items-center gap-2 text-xs text-gray-500 dark:text-slate-400">
           <span>NingClean Admin</span>
           <span>/</span>
-          <span className="text-gray-700">Bookings</span>
+          <span className="text-gray-700 dark:text-slate-200">Bookings</span>
         </div>
         <div className="flex items-center gap-3">
           <div className="flex items-center gap-1.5">
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-            <span className="text-[11px] text-gray-500">Live</span>
+            <span className="text-[11px] text-gray-500 dark:text-slate-400">Live</span>
           </div>
         </div>
       </div>
@@ -451,13 +451,13 @@ function BookingsContent() {
           className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"
         >
           <div>
-            <h1 className="text-2xl font-bold tracking-tight text-gray-900">Bookings</h1>
-            <p className="text-sm text-gray-500 mt-0.5">Manage all cleaning service bookings &amp; orders</p>
+            <h1 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Bookings</h1>
+            <p className="text-sm text-gray-500 dark:text-slate-400 mt-0.5">Manage all cleaning service bookings &amp; orders</p>
           </div>
           <div className="flex items-center gap-2">
             <button
               onClick={handleExport}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium bg-white text-gray-700 border border-gray-200 hover:bg-gray-50 hover:text-gray-900 transition-all"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium bg-white dark:bg-slate-800 text-gray-700 dark:text-slate-200 border border-gray-200 dark:border-slate-700 hover:bg-gray-50 dark:hover:bg-slate-700 hover:text-gray-900 dark:hover:text-white transition-all"
             >
               <Download className="w-3.5 h-3.5" />
               Export
@@ -489,7 +489,7 @@ function BookingsContent() {
               exit={{ opacity: 0, height: 0 }}
               className="overflow-hidden"
             >
-              <div className="flex items-center gap-3 px-4 py-3 bg-blue-50 border border-blue-200 rounded-xl">
+              <div className="flex items-center gap-3 px-4 py-3 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-xl">
                 <span className="text-sm font-medium text-blue-700">
                   {selectedIds.length} booking(s) dipilih
                 </span>
@@ -544,7 +544,7 @@ function BookingsContent() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.15 }}
         >
-          <div className="bg-white border border-gray-100 rounded-2xl overflow-hidden shadow-sm">
+          <div className="bg-white dark:bg-slate-900 border border-gray-100 dark:border-slate-700 rounded-2xl overflow-hidden shadow-sm dark:shadow-slate-900/50">
             <DataTable
               columns={columns}
               data={bookings}
@@ -578,10 +578,10 @@ function BookingsContent() {
             <BookingStepProgress status={selectedBooking.status} />
 
             {/* Status bar */}
-            <div className="flex flex-wrap items-center justify-between gap-3 px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl">
+            <div className="flex flex-wrap items-center justify-between gap-3 px-4 py-3 bg-gray-50 dark:bg-slate-800 border border-gray-100 dark:border-slate-700 rounded-xl">
               <div className="flex items-center gap-3">
                 <StatusPill status={selectedBooking.status} />
-                <span className="text-xs text-gray-500">
+                <span className="text-xs text-gray-500 dark:text-slate-400">
                   {formatDateTime(selectedBooking.createdAt)}
                 </span>
               </div>
@@ -616,8 +616,8 @@ function BookingsContent() {
                 <DetailCard title="Lokasi" icon={<MapPin className="w-3.5 h-3.5" />}>
                   <DetailRow label="Area" value={selectedBooking.area} />
                   <div className="mt-2">
-                    <p className="text-[11px] text-gray-500 mb-1">Alamat Lengkap</p>
-                    <p className="text-xs text-gray-700 bg-gray-100 rounded-lg p-3 leading-relaxed">
+                    <p className="text-[11px] text-gray-500 dark:text-slate-400 mb-1">Alamat Lengkap</p>
+                    <p className="text-xs text-gray-700 dark:text-slate-200 bg-gray-100 dark:bg-slate-700 rounded-lg p-3 leading-relaxed">
                       {selectedBooking.address}
                     </p>
                   </div>
@@ -648,15 +648,15 @@ function BookingsContent() {
                 </ActionBtn>
               )}
               {selectedBooking.status === 'completed' && (
-                <div className="flex items-center gap-2 px-3 py-2 bg-emerald-50 border border-emerald-200 rounded-xl">
-                  <Check className="w-3.5 h-3.5 text-emerald-600" />
-                  <span className="text-xs font-medium text-emerald-700">Booking sudah selesai</span>
+                <div className="flex items-center gap-2 px-3 py-2 bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-800 rounded-xl">
+                  <Check className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+                  <span className="text-xs font-medium text-emerald-700 dark:text-emerald-400">Booking sudah selesai</span>
                 </div>
               )}
               {selectedBooking.status === 'cancelled' && (
-                <div className="flex items-center gap-2 px-3 py-2 bg-red-50 border border-red-200 rounded-xl">
-                  <X className="w-3.5 h-3.5 text-red-600" />
-                  <span className="text-xs font-medium text-red-700">Booking sudah dibatalkan</span>
+                <div className="flex items-center gap-2 px-3 py-2 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl">
+                  <X className="w-3.5 h-3.5 text-red-600 dark:text-red-400" />
+                  <span className="text-xs font-medium text-red-700 dark:text-red-400">Booking sudah dibatalkan</span>
                 </div>
               )}
               <div className="flex-1" />
@@ -683,17 +683,17 @@ function BookingsContent() {
         subtitle={`Update ${selectedIds.length} booking(s)`}
         accent="blue"
       >
-        <p className="text-sm text-gray-600 mb-4">Update {selectedIds.length} booking(s) ke status:</p>
+        <p className="text-sm text-gray-600 dark:text-slate-400 mb-4">Update {selectedIds.length} booking(s) ke status:</p>
         <select
           value={bulkStatus}
           onChange={e => setBulkStatus(e.target.value)}
-          className="w-full bg-white border border-gray-200 rounded-xl px-3 py-2.5 text-sm text-gray-700 focus:outline-none focus:border-blue-400"
+          className="w-full bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-xl px-3 py-2.5 text-sm text-gray-700 dark:text-slate-200 focus:outline-none focus:border-blue-400 dark:focus:border-blue-500"
         >
           {STATUS_OPTIONS.filter(o => o.value).map(o => (
             <option key={o.value} value={o.value}>{o.label}</option>
           ))}
         </select>
-        <div className="flex justify-end gap-2 pt-5 mt-5 border-t border-gray-100">
+        <div className="flex justify-end gap-2 pt-5 mt-5 border-t border-gray-100 dark:border-slate-700">
           <ActionBtn variant="outline" onClick={() => setBulkStatusOpen(false)}>Batal</ActionBtn>
           <ActionBtn variant="primary" onClick={handleBulkStatusUpdate} loading={actionLoading}>
             Update {selectedIds.length} Booking
@@ -709,13 +709,13 @@ function BookingsContent() {
         subtitle="Catatan hanya visible untuk admin"
         accent="amber"
       >
-        <p className="text-xs text-gray-500 mb-3">Tidak akan ditampilkan ke customer.</p>
+        <p className="text-xs text-gray-500 dark:text-slate-400 mb-3">Tidak akan ditampilkan ke customer.</p>
         <textarea
           value={internalNotes}
           onChange={e => setInternalNotes(e.target.value)}
           placeholder="Tambahkan catatan internal..."
           rows={5}
-          className="w-full bg-white border border-gray-200 rounded-xl px-3 py-2.5 text-sm text-gray-700 placeholder:text-gray-400 resize-none focus:outline-none focus:border-amber-400"
+          className="w-full bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-xl px-3 py-2.5 text-sm text-gray-700 dark:text-slate-200 placeholder:text-gray-400 dark:placeholder:text-slate-500 resize-none focus:outline-none focus:border-amber-400 dark:focus:border-amber-500 dark:focus:ring-1 dark:focus:ring-amber-400/30"
         />
         <div className="flex justify-end gap-2 pt-4">
           <ActionBtn variant="outline" onClick={() => setInternalNotesOpen(false)}>Batal</ActionBtn>
@@ -751,7 +751,7 @@ function BookingsContent() {
                 const svc = services.find(s => s.id === e.target.value)
                 setNewBookingData(p => ({ ...p, serviceId: e.target.value, serviceName: svc?.name ?? '' }))
               }}
-              className="w-full bg-white border border-gray-200 rounded-xl px-3 py-2.5 text-sm text-gray-700 focus:outline-none focus:border-emerald-400"
+              className="w-full bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-xl px-3 py-2.5 text-sm text-gray-700 dark:text-slate-200 placeholder:text-gray-400 dark:placeholder:text-slate-500 focus:outline-none focus:border-emerald-400 dark:focus:border-emerald-500 dark:focus:ring-1 dark:focus:ring-emerald-400/30"
             >
               <option value="">Pilih Layanan</option>
               {services.map(s => (
@@ -780,7 +780,7 @@ function BookingsContent() {
             onChange={e => setNewBookingData(p => ({ ...p, address: e.target.value }))}
             placeholder="Jl. Contoh No. 1, Kel. Nama, Kec. Nama"
             rows={3}
-            className="w-full bg-white border border-gray-200 rounded-xl px-3 py-2.5 text-sm text-gray-700 placeholder:text-gray-400 resize-none focus:outline-none focus:border-emerald-400"
+            className="w-full bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-xl px-3 py-2.5 text-sm text-gray-700 dark:text-slate-200 placeholder:text-gray-400 dark:placeholder:text-slate-500 resize-none focus:outline-none focus:border-emerald-400 dark:focus:border-emerald-500 dark:focus:ring-1 dark:focus:ring-emerald-400/30"
           />
         </FormField>
         <FormField label="Catatan" className="mt-3">
@@ -789,10 +789,10 @@ function BookingsContent() {
             onChange={e => setNewBookingData(p => ({ ...p, notes: e.target.value }))}
             placeholder="Catatan tambahan..."
             rows={2}
-            className="w-full bg-white border border-gray-200 rounded-xl px-3 py-2.5 text-sm text-gray-700 placeholder:text-gray-400 resize-none focus:outline-none focus:border-emerald-400"
+            className="w-full bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-xl px-3 py-2.5 text-sm text-gray-700 dark:text-slate-200 placeholder:text-gray-400 dark:placeholder:text-slate-500 resize-none focus:outline-none focus:border-emerald-400 dark:focus:border-emerald-500 dark:focus:ring-1 dark:focus:ring-emerald-400/30"
           />
         </FormField>
-        <div className="flex justify-end gap-2 pt-4 mt-2 border-t border-gray-100">
+        <div className="flex justify-end gap-2 pt-4 mt-2 border-t border-gray-100 dark:border-slate-700">
           <ActionBtn variant="outline" onClick={() => setNewBookingOpen(false)}>Batal</ActionBtn>
           <ActionBtn variant="emerald" onClick={handleCreateBooking} loading={createLoading}>
             Buat Booking
@@ -807,8 +807,8 @@ function BookingsContent() {
 
 function DetailCard({ title, icon, children }: { title: string; icon: React.ReactNode; children: React.ReactNode }) {
   return (
-    <div className="bg-gray-50 border border-gray-100 rounded-xl p-4">
-      <div className="flex items-center gap-1.5 text-[11px] text-gray-500 uppercase tracking-wider mb-3">
+    <div className="bg-gray-50 dark:bg-slate-800 border border-gray-100 dark:border-slate-700 rounded-xl p-4">
+      <div className="flex items-center gap-1.5 text-[11px] text-gray-500 dark:text-slate-400 uppercase tracking-wider mb-3">
         {icon} {title}
       </div>
       {children}
@@ -819,19 +819,19 @@ function DetailCard({ title, icon, children }: { title: string; icon: React.Reac
 function DetailRow({ label, value, highlight }: { label: string; value: string; highlight?: boolean }) {
   return (
     <div className="flex items-center justify-between py-1.5">
-      <span className="text-[11px] text-gray-500">{label}</span>
-      <span className={`text-xs font-medium ${highlight ? 'text-blue-600' : 'text-gray-700'}`}>{value}</span>
+      <span className="text-[11px] text-gray-500 dark:text-slate-400">{label}</span>
+      <span className={`text-xs font-medium ${highlight ? 'text-blue-600 dark:text-blue-400' : 'text-gray-700 dark:text-slate-200'}`}>{value}</span>
     </div>
   )
 }
 
 const ACTION_STYLES: Record<string, string> = {
-  success: 'bg-emerald-500 text-white border border-emerald-600 hover:bg-emerald-600',
-  danger:  'bg-red-500 text-white border border-red-600 hover:bg-red-600',
-  primary: 'bg-blue-500 text-white border border-blue-600 hover:bg-blue-600',
-  amber:   'bg-amber-500 text-white border border-amber-600 hover:bg-amber-600',
-  emerald: 'bg-emerald-500 text-white border border-emerald-600 hover:bg-emerald-600',
-  outline: 'bg-white text-gray-700 border border-gray-200 hover:bg-gray-50',
+  success: 'bg-emerald-500 text-white border border-emerald-600 hover:bg-emerald-600 dark:bg-emerald-600 dark:border-emerald-700 dark:hover:bg-emerald-500',
+  danger:  'bg-red-500 text-white border border-red-600 hover:bg-red-600 dark:bg-red-600 dark:border-red-700 dark:hover:bg-red-500',
+  primary: 'bg-blue-500 text-white border border-blue-600 hover:bg-blue-600 dark:bg-blue-600 dark:border-blue-700 dark:hover:bg-blue-500',
+  amber:   'bg-amber-500 text-white border border-amber-600 hover:bg-amber-600 dark:bg-amber-600 dark:border-amber-700 dark:hover:bg-amber-500',
+  emerald: 'bg-emerald-500 text-white border border-emerald-600 hover:bg-emerald-600 dark:bg-emerald-600 dark:border-emerald-700 dark:hover:bg-emerald-500',
+  outline: 'bg-white dark:bg-slate-800 text-gray-700 dark:text-slate-200 border border-gray-200 dark:border-slate-700 hover:bg-gray-50 dark:hover:bg-slate-700',
 }
 
 function ActionBtn({
@@ -874,23 +874,23 @@ function DarkModal({
 }) {
   if (!isOpen) return null
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm" onClick={onClose}>
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 dark:bg-black/70 backdrop-blur-sm" onClick={onClose}>
       <motion.div
         initial={{ opacity: 0, scale: 0.96, y: 12 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.96 }}
         onClick={e => e.stopPropagation()}
-        className={`relative bg-white border border-gray-100 rounded-2xl overflow-hidden shadow-xl ${wide ? 'w-full max-w-2xl' : 'w-full max-w-md'}`}
+        className={`relative bg-white dark:bg-slate-900 border border-gray-100 dark:border-slate-700 rounded-2xl overflow-hidden shadow-xl ${wide ? 'w-full max-w-2xl' : 'w-full max-w-md'}`}
       >
         <div className={`absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r ${ACCENT_BORDER[accent] ?? ACCENT_BORDER.blue}`} />
         <div className="flex items-start justify-between p-5 pb-4">
           <div>
-            <h2 className="text-base font-bold text-gray-900">{title}</h2>
-            {subtitle && <p className="text-xs text-gray-500 mt-0.5">{subtitle}</p>}
+            <h2 className="text-base font-bold text-gray-900 dark:text-white">{title}</h2>
+            {subtitle && <p className="text-xs text-gray-500 dark:text-slate-400 mt-0.5">{subtitle}</p>}
           </div>
           <button
             onClick={onClose}
-            className="w-7 h-7 rounded-lg border border-gray-200 flex items-center justify-center text-gray-400 hover:text-gray-600 hover:bg-gray-50 transition-all"
+            className="w-7 h-7 rounded-lg border border-gray-200 dark:border-slate-700 flex items-center justify-center text-gray-400 dark:text-slate-500 hover:text-gray-600 dark:hover:text-slate-200 hover:bg-gray-50 dark:hover:bg-slate-700 transition-all"
           >
             <X className="w-3 h-3" />
           </button>
@@ -906,7 +906,7 @@ function DarkModal({
 export default function BookingsPage() {
   return (
     <Suspense fallback={
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gray-50 dark:bg-slate-900 flex items-center justify-center">
         <div className="flex flex-col items-center gap-3">
           <div className="w-8 h-8 rounded-full border-2 border-gray-200 border-t-emerald-500 animate-spin" />
           <p className="text-xs text-gray-500">Loading bookings...</p>

@@ -165,9 +165,9 @@ export default function CompanyStatsPage() {
             <TrendingUp className="h-5 w-5 text-emerald-600" />
           </div>
           <div>
-            <p className="font-medium text-gray-900">{value}</p>
+            <p className="font-medium text-gray-900 dark:text-white">{value}</p>
             {row.description && (
-              <p className="text-xs text-gray-500">{row.description}</p>
+              <p className="text-xs text-gray-500 dark:text-slate-400">{row.description}</p>
             )}
           </div>
         </div>
@@ -193,7 +193,7 @@ export default function CompanyStatsPage() {
       key: 'order',
       label: 'Order',
       render: (value: number) => (
-        <span className="text-sm text-gray-600">{value}</span>
+        <span className="text-sm text-gray-600 dark:text-slate-300">{value}</span>
       ),
     },
     {
@@ -212,7 +212,7 @@ export default function CompanyStatsPage() {
       key: 'createdAt',
       label: 'Created',
       render: (value: string) => (
-        <div className="flex items-center gap-1 text-sm text-gray-500">
+        <div className="flex items-center gap-1 text-sm text-gray-500 dark:text-slate-400">
           <Calendar className="h-3.5 w-3.5" />
           {formatDate(value)}
         </div>
@@ -245,18 +245,18 @@ export default function CompanyStatsPage() {
   ]
 
   return (
-    <div className="min-h-screen bg-gray-50 text-gray-900">
+    <div className="min-h-screen bg-gray-50 dark:bg-slate-900 text-gray-900 dark:text-white">
       {/* Topbar */}
-      <div className="sticky top-0 z-20 bg-white/80 backdrop-blur-xl border-b border-gray-100 px-6 py-3 flex items-center justify-between">
-        <div className="flex items-center gap-2 text-xs text-gray-500">
+      <div className="sticky top-0 z-20 bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border-b border-gray-100 dark:border-slate-700 px-6 py-3 flex items-center justify-between">
+        <div className="flex items-center gap-2 text-xs text-gray-500 dark:text-slate-400">
           <span>NingClean Admin</span>
           <span>/</span>
-          <span className="text-gray-700">Company Stats</span>
+          <span className="text-gray-700 dark:text-slate-200">Company Stats</span>
         </div>
         <div className="flex items-center gap-3">
           <div className="flex items-center gap-1.5">
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-            <span className="text-[11px] text-gray-400">Live</span>
+            <span className="text-[11px] text-gray-400 dark:text-slate-500">Live</span>
           </div>
         </div>
       </div>
@@ -269,8 +269,8 @@ export default function CompanyStatsPage() {
           className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"
         >
           <div>
-            <h1 className="text-2xl font-bold tracking-tight text-gray-900">Company Stats</h1>
-            <p className="text-sm text-gray-500 mt-0.5">
+            <h1 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Company Stats</h1>
+            <p className="text-sm text-gray-500 dark:text-slate-400 mt-0.5">
               Manage company statistics displayed on the website
             </p>
           </div>
@@ -284,13 +284,13 @@ export default function CompanyStatsPage() {
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
           <Card>
             <CardContent className="p-5">
-              <p className="text-[11px] uppercase tracking-widest text-gray-400 mb-2">Total Stats</p>
-              <p className="text-3xl font-bold text-gray-900">{stats.length}</p>
+              <p className="text-[11px] uppercase tracking-widest text-gray-400 dark:text-slate-500 mb-2">Total Stats</p>
+              <p className="text-3xl font-bold text-gray-900 dark:text-white">{stats.length}</p>
             </CardContent>
           </Card>
           <Card>
             <CardContent className="p-5">
-              <p className="text-[11px] uppercase tracking-widest text-gray-400 mb-2">Active</p>
+              <p className="text-[11px] uppercase tracking-widest text-gray-400 dark:text-slate-500 mb-2">Active</p>
               <p className="text-3xl font-bold text-emerald-600">
                 {stats.filter((s) => s.isActive).length}
               </p>
@@ -298,15 +298,15 @@ export default function CompanyStatsPage() {
           </Card>
           <Card>
             <CardContent className="p-5">
-              <p className="text-[11px] uppercase tracking-widest text-gray-400 mb-2">Inactive</p>
-              <p className="text-3xl font-bold text-gray-600">
+              <p className="text-[11px] uppercase tracking-widest text-gray-400 dark:text-slate-500 mb-2">Inactive</p>
+              <p className="text-3xl font-bold text-gray-600 dark:text-slate-300">
                 {stats.filter((s) => !s.isActive).length}
               </p>
             </CardContent>
           </Card>
           <Card>
             <CardContent className="p-5">
-              <p className="text-[11px] uppercase tracking-widest text-gray-400 mb-2">Featured</p>
+              <p className="text-[11px] uppercase tracking-widest text-gray-400 dark:text-slate-500 mb-2">Featured</p>
               <p className="text-3xl font-bold text-amber-600">
                 {stats.filter((s) => s.order <= 4).length}
               </p>
@@ -338,7 +338,7 @@ export default function CompanyStatsPage() {
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-700">Title *</label>
+              <label className="text-sm font-medium text-gray-700 dark:text-slate-200">Title *</label>
               <Input
                 placeholder="e.g., Years Experience"
                 value={formData.title}
@@ -349,7 +349,7 @@ export default function CompanyStatsPage() {
               )}
             </div>
             <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-700">Value *</label>
+              <label className="text-sm font-medium text-gray-700 dark:text-slate-200">Value *</label>
               <Input
                 placeholder="e.g., 10+"
                 value={formData.value}
@@ -362,7 +362,7 @@ export default function CompanyStatsPage() {
           </div>
 
           <div className="space-y-2">
-            <label className="text-sm font-medium text-gray-700">Description (optional)</label>
+            <label className="text-sm font-medium text-gray-700 dark:text-slate-200">Description (optional)</label>
             <Textarea
               placeholder="Brief description of this stat"
               rows={2}
@@ -373,9 +373,9 @@ export default function CompanyStatsPage() {
 
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-700">Icon</label>
+              <label className="text-sm font-medium text-gray-700 dark:text-slate-200">Icon</label>
               <select
-                className="w-full h-10 px-3 rounded-md border border-gray-200 bg-white text-sm"
+                className="w-full h-10 px-3 rounded-md border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm"
                 value={formData.icon}
                 onChange={(e) => setFormData({ ...formData, icon: e.target.value })}
               >
@@ -387,7 +387,7 @@ export default function CompanyStatsPage() {
               </select>
             </div>
             <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-700">Display Order</label>
+              <label className="text-sm font-medium text-gray-700 dark:text-slate-200">Display Order</label>
               <Input
                 type="number"
                 placeholder="0"
@@ -407,7 +407,7 @@ export default function CompanyStatsPage() {
               onChange={(e) => setFormData({ ...formData, isActive: e.target.checked })}
               className="h-4 w-4 rounded border-gray-300 text-emerald-600"
             />
-            <label htmlFor="isActive" className="text-sm font-medium text-gray-700">
+            <label htmlFor="isActive" className="text-sm font-medium text-gray-700 dark:text-slate-200">
               Active
             </label>
           </div>
@@ -431,7 +431,7 @@ export default function CompanyStatsPage() {
         size="sm"
       >
         <div className="space-y-4">
-          <p className="text-gray-600">
+          <p className="text-gray-600 dark:text-slate-300">
             Are you sure you want to delete{' '}
             <strong>{selectedStat?.title}</strong>?
           </p>

@@ -116,18 +116,18 @@ export default function BlogCategoriesPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 text-gray-900">
+    <div className="min-h-screen bg-gray-50 dark:bg-slate-900 text-gray-900 dark:text-white">
       {/* Topbar */}
-      <div className="sticky top-0 z-20 bg-white/80 backdrop-blur-xl border-b border-gray-100 px-4 md:px-6 py-3 flex items-center justify-between">
-        <div className="flex items-center gap-2 text-xs text-gray-500">
+      <div className="sticky top-0 z-20 bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border-b border-gray-100 dark:border-slate-700 px-4 md:px-6 py-3 flex items-center justify-between">
+        <div className="flex items-center gap-2 text-xs text-gray-500 dark:text-slate-400">
           <span>NingClean Admin</span>
           <span>/</span>
-          <span className="text-gray-700">Blog Categories</span>
+          <span className="text-gray-700 dark:text-slate-200">Blog Categories</span>
         </div>
         <div className="flex items-center gap-3">
           <div className="flex items-center gap-1.5">
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-            <span className="text-[11px] text-gray-500">Live</span>
+            <span className="text-[11px] text-gray-500 dark:text-slate-400">Live</span>
           </div>
         </div>
       </div>
@@ -140,12 +140,12 @@ export default function BlogCategoriesPage() {
           className="flex items-center justify-between"
         >
           <div className="flex items-center gap-4">
-            <Link href="/admin/blog" className="p-2 hover:bg-gray-100 rounded-lg transition-colors">
-              <ArrowLeft className="w-5 h-5 text-gray-500" />
+            <Link href="/admin/blog" className="p-2 hover:bg-gray-100 dark:hover:bg-slate-800 rounded-lg transition-colors">
+              <ArrowLeft className="w-5 h-5 text-gray-500 dark:text-slate-400" />
             </Link>
             <div>
-              <h1 className="text-2xl font-bold tracking-tight text-gray-900">Kategori Blog</h1>
-              <p className="text-sm text-gray-500">Kelola kategori untuk blog posts</p>
+              <h1 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Kategori Blog</h1>
+              <p className="text-sm text-gray-500 dark:text-slate-400">Kelola kategori untuk blog posts</p>
             </div>
           </div>
           <Button onClick={openCreateModal} className="bg-emerald-600 hover:bg-emerald-700">
@@ -160,15 +160,15 @@ export default function BlogCategoriesPage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.15 }}
         >
-          <div className="bg-white border border-gray-100 rounded-2xl overflow-hidden shadow-sm">
+          <div className="bg-white dark:bg-slate-900 border border-gray-100 dark:border-slate-700 rounded-2xl overflow-hidden shadow-sm dark:shadow-slate-900/50">
           {loading ? (
             <div className="flex items-center justify-center py-12">
-              <div className="h-8 w-8 animate-spin rounded-full border-4 border-gray-200 border-t-emerald-500" />
+              <div className="h-8 w-8 animate-spin rounded-full border-4 border-gray-200 dark:border-slate-700 border-t-emerald-500" />
             </div>
           ) : categories.length === 0 ? (
             <div className="text-center py-12">
               <Tag className="w-12 h-12 text-gray-300 mx-auto mb-4" />
-              <p className="text-gray-500">Belum ada kategori</p>
+              <p className="text-gray-500 dark:text-slate-400">Belum ada kategori</p>
               <Button onClick={openCreateModal} variant="outline" className="mt-4">
                 <Plus className="w-4 h-4 mr-2" />
                 Tambah Kategori
@@ -181,19 +181,19 @@ export default function BlogCategoriesPage() {
                   key={category.id}
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="flex items-center gap-4 p-4 bg-gray-50 rounded-xl border border-gray-100 hover:bg-gray-100 transition-colors"
+                  className="flex items-center gap-4 p-4 bg-gray-50 dark:bg-slate-900 rounded-xl border border-gray-100 dark:border-slate-700 hover:bg-gray-100 dark:hover:bg-slate-800 transition-colors"
                 >
-                  <GripVertical className="w-5 h-5 text-gray-400 cursor-grab" />
+                  <GripVertical className="w-5 h-5 text-gray-400 dark:text-slate-500 cursor-grab" />
                   <div className="flex-1">
                     <div className="flex items-center gap-2">
-                      <h3 className="font-medium text-gray-900">{category.name}</h3>
+                      <h3 className="font-medium text-gray-900 dark:text-white">{category.name}</h3>
                       {category._count?.posts ? (
                         <Badge variant="default">{category._count.posts} posts</Badge>
                       ) : null}
                     </div>
-                    <p className="text-sm text-gray-500">/{category.slug}</p>
+                    <p className="text-sm text-gray-500 dark:text-slate-400">/{category.slug}</p>
                     {category.description && (
-                      <p className="text-sm text-gray-400 mt-1">{category.description}</p>
+                      <p className="text-sm text-gray-400 dark:text-slate-500 mt-1">{category.description}</p>
                     )}
                   </div>
                   <div className="flex items-center gap-2">
@@ -201,7 +201,7 @@ export default function BlogCategoriesPage() {
                       variant="ghost"
                       size="sm"
                       onClick={() => openEditModal(category)}
-                      className="text-gray-500 hover:text-emerald-600"
+                      className="text-gray-500 dark:text-slate-400 hover:text-emerald-600"
                     >
                       <Edit className="w-4 h-4" />
                     </Button>
@@ -209,7 +209,7 @@ export default function BlogCategoriesPage() {
                       variant="ghost"
                       size="sm"
                       onClick={() => openDeleteModal(category)}
-                      className="text-gray-500 hover:text-red-600"
+                      className="text-gray-500 dark:text-slate-400 hover:text-red-600"
                     >
                       <Trash2 className="w-4 h-4" />
                     </Button>
@@ -230,7 +230,7 @@ export default function BlogCategoriesPage() {
       >
         <div className="space-y-4">
           <div className="space-y-2">
-            <label className="text-sm font-medium text-gray-700">Nama Kategori</label>
+            <label className="text-sm font-medium text-gray-700 dark:text-slate-200">Nama Kategori</label>
             <Input
               value={formData.name}
               onChange={(e) => {
@@ -244,7 +244,7 @@ export default function BlogCategoriesPage() {
           </div>
 
           <div className="space-y-2">
-            <label className="text-sm font-medium text-gray-700">Slug</label>
+            <label className="text-sm font-medium text-gray-700 dark:text-slate-200">Slug</label>
             <Input
               value={formData.slug}
               onChange={(e) => {
@@ -255,11 +255,11 @@ export default function BlogCategoriesPage() {
               className={errors.slug ? 'border-red-500' : ''}
             />
             {errors.slug && <p className="text-sm text-red-500">{errors.slug}</p>}
-            <p className="text-xs text-gray-400">URL-friendly version of the name</p>
+            <p className="text-xs text-gray-400 dark:text-slate-500">URL-friendly version of the name</p>
           </div>
 
           <div className="space-y-2">
-            <label className="text-sm font-medium text-gray-700">Deskripsi (opsional)</label>
+            <label className="text-sm font-medium text-gray-700 dark:text-slate-200">Deskripsi (opsional)</label>
             <Input
               value={formData.description}
               onChange={(e) => setFormData({ ...formData, description: e.target.value })}
@@ -286,7 +286,7 @@ export default function BlogCategoriesPage() {
         size="sm"
       >
         <div className="space-y-4">
-          <p className="text-gray-600">
+          <p className="text-gray-600 dark:text-slate-300">
             Yakin ingin menghapus kategori <strong>{selectedCategory?.name}</strong>?
           </p>
           {selectedCategory?._count?.posts ? (

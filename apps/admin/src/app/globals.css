@@ -30,6 +30,32 @@
   --glass-border: rgba(255, 255, 255, 0.3);
 }
 
+.dark {
+  --primary: #60A5FA;
+  --primary-dark: #3B82F6;
+  --primary-light: #93C5FD;
+  --secondary: #1E293B;
+  --accent: #A78BFA;
+  --success: #34D399;
+  --success-light: #064E3B;
+  --warning: #FBBF24;
+  --warning-light: #451A03;
+  --error: #F87171;
+  --error-light: #450A0A;
+  --background: #0F172A;
+  --background-gradient: linear-gradient(135deg, #0F172A 0%, #1E293B 100%);
+  --sidebar: #020617;
+  --sidebar-hover: #1E293B;
+  --text: #F1F5F9;
+  --text-muted: #94A3B8;
+  --border: #334155;
+  --card: #1E293B;
+  --card-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.3), 0 1px 2px -1px rgb(0 0 0 / 0.3);
+  --card-shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.4), 0 4px 6px -4px rgb(0 0 0 / 0.3);
+  --glass: rgba(30, 41, 59, 0.8);
+  --glass-border: rgba(255, 255, 255, 0.1);
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -45,6 +71,13 @@ body {
   min-height: 100vh;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.dark body,
+.dark html {
+  background: var(--background);
+  background-image: var(--background-gradient);
+  color: var(--text);
 }
 
 @layer utilities {
@@ -334,4 +367,90 @@ body {
 /* Transition defaults */
 .transition-default {
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Dark mode scrollbar */
+.dark .custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #475569;
+}
+
+.dark .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #64748B;
+}
+
+/* Dark mode skeleton */
+.dark .skeleton {
+  background: linear-gradient(90deg, #334155 25%, #475569 50%, #334155 75%);
+  background-size: 200% 100%;
+}
+
+/* Dark mode card */
+.dark .card-modern {
+  background: var(--card);
+  border-color: var(--border);
+}
+
+/* Dark mode button secondary */
+.dark .btn-secondary {
+  background-color: #1E293B;
+  color: #F1F5F9;
+  border-color: #334155;
+}
+
+.dark .btn-secondary:hover {
+  background-color: #334155;
+}
+
+/* Dark mode input */
+.dark .input-modern {
+  background-color: #1E293B;
+  color: #F1F5F9;
+  border-color: #334155;
+}
+
+.dark .input-modern:focus {
+  border-color: #3B82F6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+}
+
+/* Dark mode badges */
+.dark .badge-success {
+  background-color: #064E3B;
+  color: #6EE7B7;
+}
+
+.dark .badge-warning {
+  background-color: #451A03;
+  color: #FDE68A;
+}
+
+.dark .badge-error {
+  background-color: #450A0A;
+  color: #FCA5A5;
+}
+
+.dark .badge-info {
+  background-color: #1E3A8A;
+  color: #93C5FD;
+}
+
+/* Dark mode table */
+.dark .table-modern thead {
+  background-color: rgba(30, 41, 59, 0.8);
+}
+
+.dark .table-modern th {
+  color: #94A3B8;
+}
+
+.dark .table-modern tbody tr {
+  border-bottom-color: #1E293B;
+}
+
+.dark .table-modern tbody tr:hover {
+  background-color: rgba(59, 130, 246, 0.05);
+}
+
+.dark .table-modern td {
+  color: #F1F5F9;
 }
