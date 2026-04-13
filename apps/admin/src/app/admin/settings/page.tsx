@@ -36,18 +36,18 @@ function StatCard({
     <motion.div
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
-      className="relative bg-white border border-gray-100 rounded-2xl p-5 overflow-hidden shadow-sm"
+      className="relative bg-white dark:bg-slate-900 border border-gray-100 dark:border-slate-700 rounded-2xl p-5 overflow-hidden shadow-sm dark:shadow-slate-900/50"
     >
       <div className={`absolute top-0 left-0 right-0 h-[2px] rounded-t-2xl ${accent}`} />
       <div className="flex items-start justify-between">
         <div>
-          <p className="text-[11px] uppercase tracking-widest text-gray-500 mb-2">{label}</p>
-          <p className="text-3xl font-bold tracking-tight text-gray-900">{value}</p>
-          <p className="text-xs text-gray-400 mt-1.5">{sub}</p>
+          <p className="text-[11px] uppercase tracking-widest text-gray-500 dark:text-slate-400 mb-2">{label}</p>
+          <p className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white">{value}</p>
+          <p className="text-xs text-gray-400 dark:text-slate-500 mt-1.5">{sub}</p>
         </div>
         {Icon && (
-          <div className="h-10 w-10 rounded-xl bg-gray-50 flex items-center justify-center">
-            <Icon className="h-5 w-5 text-gray-400" />
+          <div className="h-10 w-10 rounded-xl bg-gray-50 dark:bg-slate-800 flex items-center justify-center">
+            <Icon className="h-5 w-5 text-gray-400 dark:text-slate-500" />
           </div>
         )}
       </div>
@@ -70,12 +70,12 @@ function DarkInput({
   return (
     <div className={`relative ${className}`}>
       {icon && (
-        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none">
+        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-slate-500 pointer-events-none">
           {icon}
         </span>
       )}
       <input
-        className={`w-full bg-white border border-gray-200 rounded-xl text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500/20 transition-all py-2.5 ${icon ? 'pl-10 pr-4' : 'px-4'}`}
+        className={`w-full bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-xl text-sm text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-slate-500 focus:outline-none focus:border-emerald-500 dark:focus:border-emerald-400 focus:ring-1 focus:ring-emerald-500/20 dark:focus:ring-1 dark:focus:ring-emerald-400/30 transition-all py-2.5 ${icon ? 'pl-10 pr-4' : 'px-4'}`}
         {...props}
       />
     </div>
@@ -87,7 +87,7 @@ function DarkSelect({
 }: React.SelectHTMLAttributes<HTMLSelectElement> & { options: { value: string; label: string }[] }) {
   return (
     <select
-      className={`bg-white border border-gray-200 rounded-xl text-sm text-gray-700 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500/20 transition-all py-2.5 px-3 cursor-pointer appearance-none ${className}`}
+      className={`bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-xl text-sm text-gray-700 dark:text-slate-200 focus:outline-none focus:border-emerald-500 dark:focus:border-emerald-400 focus:ring-1 focus:ring-emerald-500/20 dark:focus:ring-1 dark:focus:ring-emerald-400/30 transition-all py-2.5 px-3 cursor-pointer appearance-none ${className}`}
       style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E")`, backgroundRepeat: 'no-repeat', backgroundPosition: 'right 12px center' }}
       {...props}
     >
@@ -99,9 +99,9 @@ function DarkSelect({
 function FormField({ label, children, description, className = '' }: { label: string; children: React.ReactNode; description?: string; className?: string }) {
   return (
     <div className={className}>
-      <label className="block text-xs font-medium text-gray-700 mb-1.5">{label}</label>
+      <label className="block text-xs font-medium text-gray-700 dark:text-slate-200 mb-1.5">{label}</label>
       {children}
-      {description && <p className="text-[11px] text-gray-400 mt-1.5">{description}</p>}
+      {description && <p className="text-[11px] text-gray-400 dark:text-slate-500 mt-1.5">{description}</p>}
     </div>
   )
 }
@@ -111,19 +111,19 @@ function SectionCard({ title, subtitle, children, accent = 'from-gray-600 to-gra
     <motion.div
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
-      className="relative bg-white border border-gray-100 rounded-2xl overflow-hidden shadow-sm"
+      className="relative bg-white dark:bg-slate-900 border border-gray-100 dark:border-slate-700 rounded-2xl overflow-hidden shadow-sm dark:shadow-slate-900/50"
     >
       <div className={`absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r ${accent}`} />
       <div className="p-6">
         <div className="flex items-center gap-3 mb-6">
           {Icon && (
-            <div className="h-10 w-10 rounded-xl bg-gray-50 flex items-center justify-center">
-              <Icon className="h-5 w-5 text-gray-600" />
+            <div className="h-10 w-10 rounded-xl bg-gray-50 dark:bg-slate-800 flex items-center justify-center">
+              <Icon className="h-5 w-5 text-gray-600 dark:text-slate-300" />
             </div>
           )}
           <div>
-            <h3 className="text-base font-semibold text-gray-900">{title}</h3>
-            {subtitle && <p className="text-xs text-gray-500">{subtitle}</p>}
+            <h3 className="text-base font-semibold text-gray-900 dark:text-white">{title}</h3>
+            {subtitle && <p className="text-xs text-gray-500 dark:text-slate-400">{subtitle}</p>}
           </div>
         </div>
         {children}
@@ -134,10 +134,10 @@ function SectionCard({ title, subtitle, children, accent = 'from-gray-600 to-gra
 
 function SettingRow({ label, description, children }: { label: string; description?: string; children: React.ReactNode }) {
   return (
-    <div className="flex items-center justify-between py-4 border-b border-gray-50 last:border-0">
+    <div className="flex items-center justify-between py-4 border-b border-gray-50 dark:border-slate-800 last:border-0">
       <div>
-        <p className="text-sm font-medium text-gray-700">{label}</p>
-        {description && <p className="text-xs text-gray-400 mt-0.5">{description}</p>}
+        <p className="text-sm font-medium text-gray-700 dark:text-slate-200">{label}</p>
+        {description && <p className="text-xs text-gray-400 dark:text-slate-500 mt-0.5">{description}</p>}
       </div>
       {children}
     </div>
@@ -146,74 +146,132 @@ function SettingRow({ label, description, children }: { label: string; descripti
 
 // ─── Main Component ───────────────────────────────────────────────────────────
 
+// Default values for settings
+const defaultSiteSettings: Partial<SiteSettings> = {
+  companyName: '',
+  tagline: '',
+  description: '',
+  logo: '',
+  logoDark: '',
+  favicon: '',
+  email: '',
+  phone: '',
+  whatsapp: '',
+  address: '',
+  city: '',
+  province: '',
+  postalCode: '',
+  googleMapsUrl: '',
+  facebook: '',
+  instagram: '',
+  twitter: '',
+  youtube: '',
+  linkedin: '',
+  tiktok: '',
+  metaTitle: '',
+  metaDescription: '',
+  keywords: '',
+  ogImage: '',
+  footerText: '',
+  copyrightText: '',
+  is24Hours: false,
+  minAdvanceDays: 1,
+  maxAdvanceDays: 30,
+  cancellationHours: 24,
+  mondayOpen: '09:00',
+  mondayClose: '17:00',
+  tuesdayOpen: '09:00',
+  tuesdayClose: '17:00',
+  wednesdayOpen: '09:00',
+  wednesdayClose: '17:00',
+  thursdayOpen: '09:00',
+  thursdayClose: '17:00',
+  fridayOpen: '09:00',
+  fridayClose: '17:00',
+  saturdayOpen: '09:00',
+  saturdayClose: '17:00',
+  sundayOpen: '09:00',
+  sundayClose: '17:00',
+}
+
+const defaultNotificationSettings: Record<string, any> = {
+  whatsappNumber: '',
+  whatsappMessage: '',
+  whatsappEnabled: false,
+  emailEnabled: false,
+  emailHost: 'smtp.gmail.com',
+  emailPort: 587,
+  emailUser: '',
+  emailFrom: '',
+  adminEmail: '',
+  hasPassword: false,
+  twilioAccountSid: '',
+  twilioAuthToken: '',
+  twilioFromNumber: '',
+  hasTwilio: false,
+}
+
+const defaultNavSettings: Partial<NavigationSettings> = {
+  navLinks: [],
+  showServicesDropdown: true,
+  servicesDropdownLabel: 'Layanan',
+  ctaButtonText: 'Booking',
+  ctaButtonLink: '/booking',
+  showCtaButton: true,
+  mobileMenuType: 'slide',
+  activeIndicatorStyle: 'dot',
+}
+
+const defaultHomepageSettings: Partial<HomepageSettings> = {
+  heroHeadline: '',
+  heroSubheadline: '',
+  heroBadge: '',
+  heroImage: '',
+  ctaPrimaryText: '',
+  ctaPrimaryLink: '',
+  ctaSecondaryText: '',
+  ctaSecondaryLink: '',
+  statsHomesCleaned: '',
+  statsRating: '',
+  statsSatisfaction: '',
+  statsResponseTime: '',
+  showFeaturesSection: true,
+  showServicesSection: true,
+  showTestimonialsSection: true,
+  showAreasSection: true,
+  showBlogSection: true,
+  showImageShowcase: true,
+  showCTASection: true,
+  featuredServiceIds: [],
+  beforeAfterSlides: [],
+}
+
+const defaultFooterSettings: Partial<FooterSettings> = {
+  footerColumns: [],
+  showContact: true,
+  contactEmail: '',
+  contactPhone: '',
+  contactWhatsapp: '',
+  contactAddress: '',
+  showSocials: true,
+  socialLinks: [],
+  showNewsletter: true,
+  newsletterTitle: '',
+  newsletterSubtitle: '',
+  showStatusBadge: true,
+  statusBadgeText: '',
+  copyrightText: '',
+}
+
 export default function SettingsPage() {
-  const [settings, setSettings] = React.useState<Partial<SiteSettings>>({})
-  const [notificationSettings, setNotificationSettings] = React.useState<Record<string, any>>({
-    whatsappNumber: '',
-    whatsappMessage: '',
-    whatsappEnabled: false,
-    emailEnabled: false,
-    emailHost: 'smtp.gmail.com',
-    emailPort: 587,
-    emailUser: '',
-    emailFrom: '',
-    adminEmail: '',
-    hasPassword: false,
-    twilioAccountSid: '',
-    twilioAuthToken: '', // For input only, not returned from API
-    twilioFromNumber: '',
-    hasTwilio: false,
-  })
-  const [navSettings, setNavSettings] = React.useState<Partial<NavigationSettings>>({
-    navLinks: [],
-    showServicesDropdown: true,
-    servicesDropdownLabel: 'Layanan',
-    ctaButtonText: 'Booking',
-    ctaButtonLink: '/booking',
-    showCtaButton: true,
-    mobileMenuType: 'slide',
-    activeIndicatorStyle: 'dot',
-  })
-  const [homepageSettings, setHomepageSettings] = React.useState<Partial<HomepageSettings>>({
-    heroHeadline: '',
-    heroSubheadline: '',
-    heroBadge: '',
-    ctaPrimaryText: '',
-    ctaPrimaryLink: '',
-    ctaSecondaryText: '',
-    ctaSecondaryLink: '',
-    statsHomesCleaned: '',
-    statsRating: '',
-    statsSatisfaction: '',
-    statsResponseTime: '',
-    showFeaturesSection: true,
-    showServicesSection: true,
-    showTestimonialsSection: true,
-    showAreasSection: true,
-    showBlogSection: true,
-    showImageShowcase: true,
-    showCTASection: true,
-    featuredServiceIds: [],
-    beforeAfterSlides: [],
-  })
-  const [footerSettings, setFooterSettings] = React.useState<Partial<FooterSettings>>({
-    footerColumns: [],
-    showContact: true,
-    contactEmail: '',
-    contactPhone: '',
-    contactWhatsapp: '',
-    contactAddress: '',
-    showSocials: true,
-    socialLinks: [],
-    showNewsletter: true,
-    newsletterTitle: '',
-    newsletterSubtitle: '',
-    showStatusBadge: true,
-    statusBadgeText: '',
-    copyrightText: '',
-  })
+  const [settings, setSettings] = React.useState<Partial<SiteSettings>>(defaultSiteSettings)
+  const [notificationSettings, setNotificationSettings] = React.useState<Record<string, any>>(defaultNotificationSettings)
+  const [navSettings, setNavSettings] = React.useState<Partial<NavigationSettings>>(defaultNavSettings)
+  const [homepageSettings, setHomepageSettings] = React.useState<Partial<HomepageSettings>>(defaultHomepageSettings)
+  const [footerSettings, setFooterSettings] = React.useState<Partial<FooterSettings>>(defaultFooterSettings)
   const [loading, setLoading] = React.useState(true)
   const [saving, setSaving] = React.useState(false)
+  const [loadError, setLoadError] = React.useState<string | null>(null)
   const [activeTab, setActiveTab] = React.useState('company')
 
   React.useEffect(() => {
@@ -222,31 +280,68 @@ export default function SettingsPage() {
 
   const loadSettings = async () => {
     setLoading(true)
+    setLoadError(null)
     try {
-      const siteData = await getSiteSettings()
-      if (siteData) setSettings(siteData)
+      const [siteData, notifData, navData, homeData, footerData] = await Promise.all([
+        getSiteSettings().catch(err => {
+          console.error('Failed to load site settings:', err)
+          return null
+        }),
+        getNotificationSettings().catch(err => {
+          console.error('Failed to load notification settings:', err)
+          return null
+        }),
+        getNavigationSettings().catch(err => {
+          console.error('Failed to load nav settings:', err)
+          return null
+        }),
+        getHomepageSettings().catch(err => {
+          console.error('Failed to load homepage settings:', err)
+          return null
+        }),
+        getFooterSettings().catch(err => {
+          console.error('Failed to load footer settings:', err)
+          return null
+        }),
+      ])
 
-      const notifData = await getNotificationSettings()
-      if (notifData) setNotificationSettings(notifData)
+      // Merge with defaults - ensure all fields have values
+      setSettings(prev => ({ ...defaultSiteSettings, ...prev, ...siteData }))
+      setNotificationSettings(prev => ({ ...defaultNotificationSettings, ...prev, ...notifData }))
+      setNavSettings(prev => ({ ...defaultNavSettings, ...prev, ...navData }))
+      setHomepageSettings(prev => ({ ...defaultHomepageSettings, ...prev, ...homeData }))
+      setFooterSettings(prev => ({ ...defaultFooterSettings, ...prev, ...footerData }))
 
-      const navData = await getNavigationSettings()
-      if (navData) setNavSettings(navData)
-
-      const homeData = await getHomepageSettings()
-      if (homeData) setHomepageSettings(homeData)
-
-      const footerData = await getFooterSettings()
-      if (footerData) setFooterSettings(footerData)
+      // Check if any request failed
+      const errors = []
+      if (!siteData) errors.push('Site Settings')
+      if (!notifData) errors.push('Notification Settings')
+      if (!navData) errors.push('Navigation Settings')
+      if (!homeData) errors.push('Homepage Settings')
+      if (!footerData) errors.push('Footer Settings')
+      
+      if (errors.length > 0) {
+        setLoadError(`Gagal memuat: ${errors.join(', ')}. Cek console untuk detail.`)
+      }
     } catch (error) {
-      toast.error('Gagal memuat settings')
+      console.error('Failed to load settings:', error)
+      setLoadError('Gagal memuat settings. Silakan refresh halaman.')
     }
     setLoading(false)
   }
 
   const handleSave = async () => {
     setSaving(true)
+    const errors: string[] = []
+    
     try {
       await updateSiteSettings(settings)
+    } catch (error: any) {
+      console.error('Failed to save site settings:', error)
+      errors.push('Site Settings')
+    }
+
+    try {
       await updateNotificationSettings({
         whatsappNumber: notificationSettings.whatsappNumber,
         whatsappMessage: notificationSettings.whatsappMessage,
@@ -261,13 +356,38 @@ export default function SettingsPage() {
         twilioAuthToken: notificationSettings.twilioAuthToken,
         twilioFromNumber: notificationSettings.twilioFromNumber,
       })
-      await updateNavigationSettings(navSettings)
-      await updateHomepageSettings(homepageSettings)
-      await updateFooterSettings(footerSettings)
-      toast.success('Settings berhasil disimpan')
-    } catch (error) {
-      toast.error('Gagal menyimpan settings')
+    } catch (error: any) {
+      console.error('Failed to save notification settings:', error)
+      errors.push('Notification Settings')
     }
+
+    try {
+      await updateNavigationSettings(navSettings)
+    } catch (error: any) {
+      console.error('Failed to save nav settings:', error)
+      errors.push('Navigation Settings')
+    }
+
+    try {
+      await updateHomepageSettings(homepageSettings)
+    } catch (error: any) {
+      console.error('Failed to save homepage settings:', error)
+      errors.push('Homepage Settings')
+    }
+
+    try {
+      await updateFooterSettings(footerSettings)
+    } catch (error: any) {
+      console.error('Failed to save footer settings:', error)
+      errors.push('Footer Settings')
+    }
+
+    if (errors.length === 0) {
+      toast.success('Settings berhasil disimpan')
+    } else {
+      toast.error(`Gagal menyimpan: ${errors.join(', ')}`)
+    }
+    
     setSaving(false)
   }
 
@@ -303,18 +423,18 @@ export default function SettingsPage() {
   ]
 
   return (
-    <div className="min-h-screen bg-gray-50 text-gray-900">
+    <div className="min-h-screen bg-gray-50 dark:bg-slate-900 text-gray-900 dark:text-white">
       {/* Topbar */}
-      <div className="sticky top-0 z-20 bg-white/80 backdrop-blur-xl border-b border-gray-100 px-4 md:px-6 py-3 flex items-center justify-between">
-        <div className="flex items-center gap-2 text-xs text-gray-500">
+      <div className="sticky top-0 z-20 bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border-b border-gray-100 dark:border-slate-700 px-4 md:px-6 py-3 flex items-center justify-between">
+        <div className="flex items-center gap-2 text-xs text-gray-500 dark:text-slate-400">
           <span>NingClean Admin</span>
           <span>/</span>
-          <span className="text-gray-700">Settings</span>
+          <span className="text-gray-700 dark:text-slate-200">Settings</span>
         </div>
         <div className="flex items-center gap-3">
           <div className="flex items-center gap-1.5">
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-            <span className="text-[11px] text-gray-500">Live</span>
+            <span className="text-[11px] text-gray-500 dark:text-slate-400">Live</span>
           </div>
         </div>
       </div>
@@ -327,13 +447,13 @@ export default function SettingsPage() {
           className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"
         >
           <div>
-            <h1 className="text-2xl font-bold tracking-tight text-gray-900">Settings</h1>
-            <p className="text-sm text-gray-500 mt-0.5">Kelola pengaturan website dan konfigurasi sistem</p>
+            <h1 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Settings</h1>
+            <p className="text-sm text-gray-500 dark:text-slate-400 mt-0.5">Kelola pengaturan website dan konfigurasi sistem</p>
           </div>
           <div className="flex items-center gap-2">
             <button
               onClick={loadSettings}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium bg-white text-gray-700 border border-gray-200 hover:bg-gray-50 hover:text-gray-900 transition-all"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-700 text-sm font-medium text-gray-700 dark:text-slate-200 hover:bg-gray-50 dark:hover:bg-slate-800 hover:text-gray-900 transition-all"
             >
               <RefreshCw className="w-3.5 h-3.5" />
               Reset
@@ -341,7 +461,7 @@ export default function SettingsPage() {
             <button
               onClick={handleSave}
               disabled={saving}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium bg-emerald-500 text-white border border-emerald-600 hover:bg-emerald-600 transition-all disabled:opacity-50"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-700 text-sm font-medium bg-emerald-500 text-white border border-emerald-600 hover:bg-emerald-600 transition-all disabled:opacity-50"
             >
               {saving ? (
                 <div className="w-3.5 h-3.5 animate-spin rounded-full border-2 border-white/30 border-t-white" />
@@ -399,10 +519,10 @@ export default function SettingsPage() {
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-all ${
+                className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-700 text-sm font-medium transition-all ${
                   isActive
                     ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-500/20'
-                    : 'bg-white text-gray-700 border border-gray-200 hover:bg-gray-50'
+                    : 'bg-white text-gray-700 dark:text-slate-200 border border-gray-200 hover:bg-gray-50 dark:hover:bg-slate-800'
                 }`}
               >
                 <Icon className="w-4 h-4" />
@@ -413,8 +533,29 @@ export default function SettingsPage() {
         </motion.div>
 
         {/* Content */}
+        {loadError && (
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl p-4 mb-4"
+          >
+            <div className="flex items-start gap-3">
+              <AlertCircle className="w-5 h-5 text-red-600 dark:text-red-400 flex-shrink-0 mt-0.5" />
+              <div className="flex-1">
+                <p className="text-sm font-medium text-red-800 dark:text-red-200">Error saat memuat settings</p>
+                <p className="text-xs text-red-600 dark:text-red-300 mt-1">{loadError}</p>
+              </div>
+              <button
+                onClick={loadSettings}
+                className="px-3 py-1.5 text-xs font-medium text-red-700 dark:text-red-300 bg-red-100 dark:bg-red-800/50 rounded-lg hover:bg-red-200 dark:hover:bg-red-800 transition-colors"
+              >
+                Retry
+              </button>
+            </div>
+          </motion.div>
+        )}
         {loading ? (
-          <div className="bg-white border border-gray-100 rounded-2xl overflow-hidden shadow-sm">
+          <div className="bg-white dark:bg-slate-900 border border-gray-100 dark:border-slate-700 rounded-2xl overflow-hidden shadow-sm dark:shadow-slate-900/50">
             <div className="flex items-center justify-center py-20">
               <div className="h-8 w-8 animate-spin rounded-full border-4 border-gray-200 border-t-emerald-500" />
             </div>
@@ -458,7 +599,7 @@ export default function SettingsPage() {
                       onChange={e => updateField('description', e.target.value)}
                       placeholder="Deskripsi singkat tentang perusahaan..."
                       rows={4}
-                      className="bg-white border border-gray-200 rounded-xl text-sm focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500/20"
+                      className="w-full bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-xl text-sm text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-slate-500 focus:outline-none focus:border-emerald-500 dark:focus:border-emerald-400 focus:ring-1 focus:ring-emerald-500/20 dark:focus:ring-1 dark:focus:ring-emerald-400/30 transition-all resize-none"
                     />
                   </FormField>
                 </SectionCard>
@@ -554,7 +695,7 @@ export default function SettingsPage() {
                       onChange={e => updateField('address', e.target.value)}
                       placeholder="Jl. Raya Cleaning No. 123..."
                       rows={3}
-                      className="bg-white border border-gray-200 rounded-xl text-sm focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500/20"
+                      className="w-full bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-xl text-sm text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-slate-500 focus:outline-none focus:border-emerald-500 dark:focus:border-emerald-400 focus:ring-1 focus:ring-emerald-500/20 dark:focus:ring-1 dark:focus:ring-emerald-400/30 transition-all resize-none"
                     />
                   </FormField>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mt-5">
@@ -688,7 +829,7 @@ export default function SettingsPage() {
                         onChange={e => updateField('metaDescription', e.target.value)}
                         placeholder="Deskripsi website untuk search engine..."
                         rows={3}
-                        className="bg-white border border-gray-200 rounded-xl text-sm focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500/20"
+                        className="w-full bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-xl text-sm text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-slate-500 focus:outline-none focus:border-emerald-500 dark:focus:border-emerald-400 focus:ring-1 focus:ring-emerald-500/20 dark:focus:ring-1 dark:focus:ring-emerald-400/30 transition-all resize-none"
                       />
                     </FormField>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
@@ -734,7 +875,7 @@ export default function SettingsPage() {
                         onChange={e => updateField('footerText', e.target.value)}
                         placeholder="Teks tambahan di footer..."
                         rows={3}
-                        className="bg-white border border-gray-200 rounded-xl text-sm focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500/20"
+                        className="w-full bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-700 rounded-xl text-sm text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-slate-500 focus:outline-none focus:border-emerald-500 dark:focus:border-emerald-400 focus:ring-1 focus:ring-emerald-500/20 dark:focus:ring-1 dark:focus:ring-emerald-400/30 transition-all resize-none"
                       />
                     </FormField>
                     <FormField label="Copyright Text">
@@ -815,7 +956,7 @@ export default function SettingsPage() {
                     <div className="space-y-3 pt-4 border-t border-gray-50">
                       {(footerSettings.socialLinks || []).map((social, index) => (
                         <div key={index} className="flex items-center gap-3">
-                          <div className="w-24 text-sm font-medium text-gray-700">{social.name}</div>
+                          <div className="w-24 text-sm font-medium text-gray-700 dark:text-slate-200">{social.name}</div>
                           <DarkInput
                             className="flex-1"
                             value={social.href}
@@ -842,7 +983,7 @@ export default function SettingsPage() {
                           const newSocial: SocialLink = { name: 'New', href: '#', icon: 'link' }
                           setFooterSettings({...footerSettings, socialLinks: [...(footerSettings.socialLinks || []), newSocial]})
                         }}
-                        className="w-full p-3 border border-dashed border-gray-300 rounded-xl text-sm text-gray-500 hover:border-emerald-500 hover:text-emerald-600 hover:bg-emerald-50 transition-colors flex items-center justify-center gap-2"
+                        className="w-full p-3 border border-dashed border-gray-300 dark:border-slate-600 rounded-xl bg-white dark:bg-slate-900 text-sm text-gray-500 dark:text-slate-400 hover:border-emerald-500 hover:text-emerald-600 hover:bg-emerald-50 dark:hover:bg-slate-800 transition-colors flex items-center justify-center gap-2"
                       >
                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" /></svg>
                         Tambah Social Link
@@ -878,23 +1019,23 @@ export default function SettingsPage() {
                   </SettingRow>
 
                   {!settings.is24Hours && (
-                    <div className="space-y-2 mt-4 pt-4 border-t border-gray-50">
+                    <div className="space-y-2 mt-4 pt-4 border-t border-gray-50 dark:border-slate-800">
                       {DAYS.map(day => (
-                        <div key={day} className="flex items-center gap-4 py-3 border-b border-gray-50 last:border-0">
-                          <span className="w-28 text-sm font-medium text-gray-700">{DAY_LABELS[day]}</span>
+                        <div key={day} className="flex items-center gap-4 py-3 border-b border-gray-50 dark:border-slate-800 last:border-0">
+                          <span className="w-28 text-sm font-medium text-gray-700 dark:text-slate-200">{DAY_LABELS[day]}</span>
                           <div className="flex items-center gap-2">
                             <input
                               type="time"
                               value={settings[`${day}Open` as keyof SiteSettings] as string || ''}
                               onChange={e => updateField(`${day}Open` as keyof SiteSettings, e.target.value)}
-                              className="w-32 h-10 px-3 bg-white border border-gray-200 rounded-lg text-sm focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500/20"
+                              className="w-32 h-10 px-3 bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-lg text-sm text-gray-900 dark:text-white focus:outline-none focus:border-emerald-500 dark:focus:border-emerald-400 focus:ring-1 focus:ring-emerald-500/20 dark:focus:ring-1 dark:focus:ring-emerald-400/30"
                             />
-                            <span className="text-gray-400">-</span>
+                            <span className="text-gray-400 dark:text-slate-500">-</span>
                             <input
                               type="time"
                               value={settings[`${day}Close` as keyof SiteSettings] as string || ''}
                               onChange={e => updateField(`${day}Close` as keyof SiteSettings, e.target.value)}
-                              className="w-32 h-10 px-3 bg-white border border-gray-200 rounded-lg text-sm focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500/20"
+                              className="w-32 h-10 px-3 bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-700 rounded-lg text-sm text-gray-900 dark:text-white focus:outline-none focus:border-emerald-500 dark:focus:border-emerald-400 focus:ring-1 focus:ring-emerald-500/20 dark:focus:ring-1 dark:focus:ring-emerald-400/30"
                             />
                           </div>
                         </div>
@@ -920,12 +1061,12 @@ export default function SettingsPage() {
                   icon={Calendar}
                 >
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-                    <div className="p-5 bg-gray-50 rounded-xl border border-gray-100">
+                    <div className="p-5 bg-gray-50 dark:bg-slate-800 rounded-xl border border-gray-100 dark:border-slate-700">
                       <div className="flex items-center gap-3 mb-3">
                         <div className="h-10 w-10 rounded-xl bg-emerald-100 flex items-center justify-center">
                           <Calendar className="h-5 w-5 text-emerald-600" />
                         </div>
-                        <span className="text-sm font-medium text-gray-700">Min. Hari</span>
+                        <span className="text-sm font-medium text-gray-700 dark:text-slate-200">Min. Hari</span>
                       </div>
                       <DarkInput
                         type="number"
@@ -934,14 +1075,14 @@ export default function SettingsPage() {
                         onChange={e => updateField('minAdvanceDays', parseInt(e.target.value))}
                         className="text-center text-lg font-semibold"
                       />
-                      <p className="text-xs text-gray-400 mt-2">Minimal booking H-n</p>
+                      <p className="text-xs text-gray-400 dark:text-slate-500 mt-2">Minimal booking H-n</p>
                     </div>
-                    <div className="p-5 bg-gray-50 rounded-xl border border-gray-100">
+                    <div className="p-5 bg-gray-50 dark:bg-slate-800 rounded-xl border border-gray-100 dark:border-slate-700">
                       <div className="flex items-center gap-3 mb-3">
                         <div className="h-10 w-10 rounded-xl bg-blue-100 flex items-center justify-center">
                           <Calendar className="h-5 w-5 text-blue-600" />
                         </div>
-                        <span className="text-sm font-medium text-gray-700">Max. Hari</span>
+                        <span className="text-sm font-medium text-gray-700 dark:text-slate-200">Max. Hari</span>
                       </div>
                       <DarkInput
                         type="number"
@@ -950,14 +1091,14 @@ export default function SettingsPage() {
                         onChange={e => updateField('maxAdvanceDays', parseInt(e.target.value))}
                         className="text-center text-lg font-semibold"
                       />
-                      <p className="text-xs text-gray-400 mt-2">Maksimal booking H+n</p>
+                      <p className="text-xs text-gray-400 dark:text-slate-500 mt-2">Maksimal booking H+n</p>
                     </div>
-                    <div className="p-5 bg-gray-50 rounded-xl border border-gray-100">
+                    <div className="p-5 bg-gray-50 dark:bg-slate-800 rounded-xl border border-gray-100 dark:border-slate-700">
                       <div className="flex items-center gap-3 mb-3">
                         <div className="h-10 w-10 rounded-xl bg-red-100 flex items-center justify-center">
                           <AlertCircle className="h-5 w-5 text-red-600" />
                         </div>
-                        <span className="text-sm font-medium text-gray-700">Batal (jam)</span>
+                        <span className="text-sm font-medium text-gray-700 dark:text-slate-200">Batal (jam)</span>
                       </div>
                       <DarkInput
                         type="number"
@@ -966,7 +1107,7 @@ export default function SettingsPage() {
                         onChange={e => updateField('cancellationHours', parseInt(e.target.value))}
                         className="text-center text-lg font-semibold"
                       />
-                      <p className="text-xs text-gray-400 mt-2">Minimal jam sebelum batal</p>
+                      <p className="text-xs text-gray-400 dark:text-slate-500 mt-2">Minimal jam sebelum batal</p>
                     </div>
                   </div>
                 </SectionCard>
@@ -990,7 +1131,7 @@ export default function SettingsPage() {
                 >
                   <div className="space-y-3">
                     {(navSettings.navLinks || []).sort((a, b) => a.order - b.order).map((link, index) => (
-                      <div key={index} className="flex items-center gap-3 p-4 bg-gray-50 rounded-xl border border-gray-100">
+                      <div key={index} className="flex items-center gap-3 p-4 bg-gray-50 dark:bg-slate-800 rounded-xl border border-gray-100 dark:border-slate-700">
                         <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-emerald-100 text-emerald-600 font-semibold text-sm">
                           {link.order}
                         </div>
@@ -1044,7 +1185,7 @@ export default function SettingsPage() {
                         }
                         setNavSettings({ ...navSettings, navLinks: [...(navSettings.navLinks || []), newLink] })
                       }}
-                      className="w-full p-4 border-2 border-dashed border-gray-200 rounded-xl text-gray-500 hover:border-emerald-500 hover:text-emerald-600 hover:bg-emerald-50 transition-colors flex items-center justify-center gap-2"
+                      className="w-full p-4 border-2 border-dashed border-gray-200 rounded-xl text-gray-500 dark:text-slate-400 hover:border-emerald-500 hover:text-emerald-600 hover:bg-emerald-50 dark:hover:bg-slate-800 transition-colors flex items-center justify-center gap-2"
                     >
                       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" /></svg>
                       Tambah Link
@@ -1161,7 +1302,7 @@ export default function SettingsPage() {
                         onChange={(e) => setHomepageSettings({...homepageSettings, heroSubheadline: e.target.value})}
                         rows={3}
                         placeholder="Layanan kebersihan profesional..."
-                        className="bg-white border border-gray-200 rounded-xl text-sm focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500/20"
+                        className="w-full bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-700 rounded-xl text-sm text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-slate-500 focus:outline-none focus:border-emerald-500 dark:focus:border-emerald-400 focus:ring-1 focus:ring-emerald-500/20 dark:focus:ring-1 dark:focus:ring-emerald-400/30 transition-all resize-none"
                       />
                     </FormField>
                     <FormField label="Hero Image URL">
@@ -1284,9 +1425,9 @@ export default function SettingsPage() {
                 >
                   <div className="space-y-4">
                     {(homepageSettings.beforeAfterSlides || []).map((slide, index) => (
-                      <div key={index} className="p-4 bg-gray-50 rounded-xl space-y-3">
+                      <div key={index} className="p-4 bg-gray-50 dark:bg-slate-800 rounded-xl space-y-3">
                         <div className="flex items-center justify-between">
-                          <span className="text-sm font-medium text-gray-700">Slide {index + 1}</span>
+                          <span className="text-sm font-medium text-gray-700 dark:text-slate-200">Slide {index + 1}</span>
                           <button
                             onClick={() => {
                               const newSlides = [...(homepageSettings.beforeAfterSlides || [])]
@@ -1332,7 +1473,7 @@ export default function SettingsPage() {
                         const newSlide: BeforeAfterSlide = { before: '', after: '', title: 'New Slide' }
                         setHomepageSettings({...homepageSettings, beforeAfterSlides: [...(homepageSettings.beforeAfterSlides || []), newSlide]})
                       }}
-                      className="w-full p-4 border-2 border-dashed border-gray-200 rounded-xl text-gray-500 hover:border-emerald-500 hover:text-emerald-600 hover:bg-emerald-50 transition-colors flex items-center justify-center gap-2"
+                      className="w-full p-4 border-2 border-dashed border-gray-200 rounded-xl text-gray-500 dark:text-slate-400 hover:border-emerald-500 hover:text-emerald-600 hover:bg-emerald-50 dark:hover:bg-slate-800 transition-colors flex items-center justify-center gap-2"
                     >
                       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" /></svg>
                       Tambah Slide
@@ -1372,7 +1513,7 @@ export default function SettingsPage() {
                     <div className="space-y-5 mt-4 pt-4 border-t border-gray-50">
                       <FormField label="Nomor WhatsApp" description="Format: kode negara + nomor">
                         <div className="relative">
-                          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm">+</span>
+                          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-slate-500 text-sm">+</span>
                           <DarkInput
                             className="pl-8"
                             value={notificationSettings.whatsappNumber || ''}
@@ -1386,7 +1527,7 @@ export default function SettingsPage() {
                           value={notificationSettings.whatsappMessage || ''}
                           onChange={e => updateNotifField('whatsappMessage', e.target.value)}
                           rows={5}
-                          className="font-mono text-sm bg-white border border-gray-200 rounded-xl focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500/20"
+                          className="w-full font-mono text-sm bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-xl text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-slate-500 focus:outline-none focus:border-emerald-500 dark:focus:border-emerald-400 focus:ring-1 focus:ring-emerald-500/20 dark:focus:ring-1 dark:focus:ring-emerald-400/30 resize-none"
                         />
                       </FormField>
                     </div>

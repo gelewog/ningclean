@@ -24,105 +24,78 @@ export class SiteSettingsService {
   async updateSettings(data: any) {
     let settings = await this.prisma.siteSettings.findFirst();
     
+    // Build update data - only include fields that are explicitly provided (not undefined)
+    const updateData: any = {};
+    
+    // Helper to add field if defined (including empty string)
+    const addField = (key: string, value: any) => {
+      if (value !== undefined) {
+        updateData[key] = value;
+      }
+    };
+    
+    addField('companyName', data.companyName);
+    addField('tagline', data.tagline);
+    addField('description', data.description);
+    addField('logo', data.logo);
+    addField('favicon', data.favicon);
+    addField('logoDark', data.logoDark);
+    addField('email', data.email);
+    addField('phone', data.phone);
+    addField('whatsapp', data.whatsapp);
+    addField('address', data.address);
+    addField('city', data.city);
+    addField('province', data.province);
+    addField('postalCode', data.postalCode);
+    addField('googleMapsUrl', data.googleMapsUrl);
+    addField('facebook', data.facebook);
+    addField('instagram', data.instagram);
+    addField('twitter', data.twitter);
+    addField('youtube', data.youtube);
+    addField('linkedin', data.linkedin);
+    addField('tiktok', data.tiktok);
+    addField('metaTitle', data.metaTitle);
+    addField('metaDescription', data.metaDescription);
+    addField('ogImage', data.ogImage);
+    addField('keywords', data.keywords);
+    addField('footerText', data.footerText);
+    addField('copyrightText', data.copyrightText);
+    addField('mondayOpen', data.mondayOpen);
+    addField('mondayClose', data.mondayClose);
+    addField('tuesdayOpen', data.tuesdayOpen);
+    addField('tuesdayClose', data.tuesdayClose);
+    addField('wednesdayOpen', data.wednesdayOpen);
+    addField('wednesdayClose', data.wednesdayClose);
+    addField('thursdayOpen', data.thursdayOpen);
+    addField('thursdayClose', data.thursdayClose);
+    addField('fridayOpen', data.fridayOpen);
+    addField('fridayClose', data.fridayClose);
+    addField('saturdayOpen', data.saturdayOpen);
+    addField('saturdayClose', data.saturdayClose);
+    addField('sundayOpen', data.sundayOpen);
+    addField('sundayClose', data.sundayClose);
+    addField('is24Hours', data.is24Hours);
+    addField('minAdvanceDays', data.minAdvanceDays);
+    addField('maxAdvanceDays', data.maxAdvanceDays);
+    addField('cancellationHours', data.cancellationHours);
+    
     if (!settings) {
+      // Create new with defaults + updates
       settings = await this.prisma.siteSettings.create({
         data: {
-          companyName: data.companyName || 'NingClean',
-          tagline: data.tagline,
-          description: data.description,
-          logo: data.logo,
-          favicon: data.favicon,
-          logoDark: data.logoDark,
-          email: data.email,
-          phone: data.phone,
-          whatsapp: data.whatsapp,
-          address: data.address,
-          city: data.city,
-          province: data.province,
-          postalCode: data.postalCode,
-          googleMapsUrl: data.googleMapsUrl,
-          facebook: data.facebook,
-          instagram: data.instagram,
-          twitter: data.twitter,
-          youtube: data.youtube,
-          linkedin: data.linkedin,
-          tiktok: data.tiktok,
-          metaTitle: data.metaTitle,
-          metaDescription: data.metaDescription,
-          ogImage: data.ogImage,
-          keywords: data.keywords,
-          footerText: data.footerText,
-          copyrightText: data.copyrightText,
-          mondayOpen: data.mondayOpen,
-          mondayClose: data.mondayClose,
-          tuesdayOpen: data.tuesdayOpen,
-          tuesdayClose: data.tuesdayClose,
-          wednesdayOpen: data.wednesdayOpen,
-          wednesdayClose: data.wednesdayClose,
-          thursdayOpen: data.thursdayOpen,
-          thursdayClose: data.thursdayClose,
-          fridayOpen: data.fridayOpen,
-          fridayClose: data.fridayClose,
-          saturdayOpen: data.saturdayOpen,
-          saturdayClose: data.saturdayClose,
-          sundayOpen: data.sundayOpen,
-          sundayClose: data.sundayClose,
-          is24Hours: data.is24Hours,
-          minAdvanceDays: data.minAdvanceDays,
-          maxAdvanceDays: data.maxAdvanceDays,
-          cancellationHours: data.cancellationHours,
+          companyName: 'NingClean',
+          tagline: 'Layanan Kebersihan Profesional',
+          ...updateData,
         },
       });
     } else {
-      settings = await this.prisma.siteSettings.update({
-        where: { id: settings.id },
-        data: {
-          companyName: data.companyName ?? settings.companyName,
-          tagline: data.tagline ?? settings.tagline,
-          description: data.description ?? settings.description,
-          logo: data.logo ?? settings.logo,
-          favicon: data.favicon ?? settings.favicon,
-          logoDark: data.logoDark ?? settings.logoDark,
-          email: data.email ?? settings.email,
-          phone: data.phone ?? settings.phone,
-          whatsapp: data.whatsapp ?? settings.whatsapp,
-          address: data.address ?? settings.address,
-          city: data.city ?? settings.city,
-          province: data.province ?? settings.province,
-          postalCode: data.postalCode ?? settings.postalCode,
-          googleMapsUrl: data.googleMapsUrl ?? settings.googleMapsUrl,
-          facebook: data.facebook ?? settings.facebook,
-          instagram: data.instagram ?? settings.instagram,
-          twitter: data.twitter ?? settings.twitter,
-          youtube: data.youtube ?? settings.youtube,
-          linkedin: data.linkedin ?? settings.linkedin,
-          tiktok: data.tiktok ?? settings.tiktok,
-          metaTitle: data.metaTitle ?? settings.metaTitle,
-          metaDescription: data.metaDescription ?? settings.metaDescription,
-          ogImage: data.ogImage ?? settings.ogImage,
-          keywords: data.keywords ?? settings.keywords,
-          footerText: data.footerText ?? settings.footerText,
-          copyrightText: data.copyrightText ?? settings.copyrightText,
-          mondayOpen: data.mondayOpen ?? settings.mondayOpen,
-          mondayClose: data.mondayClose ?? settings.mondayClose,
-          tuesdayOpen: data.tuesdayOpen ?? settings.tuesdayOpen,
-          tuesdayClose: data.tuesdayClose ?? settings.tuesdayClose,
-          wednesdayOpen: data.wednesdayOpen ?? settings.wednesdayOpen,
-          wednesdayClose: data.wednesdayClose ?? settings.wednesdayClose,
-          thursdayOpen: data.thursdayOpen ?? settings.thursdayOpen,
-          thursdayClose: data.thursdayClose ?? settings.thursdayClose,
-          fridayOpen: data.fridayOpen ?? settings.fridayOpen,
-          fridayClose: data.fridayClose ?? settings.fridayClose,
-          saturdayOpen: data.saturdayOpen ?? settings.saturdayOpen,
-          saturdayClose: data.saturdayClose ?? settings.saturdayClose,
-          sundayOpen: data.sundayOpen ?? settings.sundayOpen,
-          sundayClose: data.sundayClose ?? settings.sundayClose,
-          is24Hours: data.is24Hours ?? settings.is24Hours,
-          minAdvanceDays: data.minAdvanceDays ?? settings.minAdvanceDays,
-          maxAdvanceDays: data.maxAdvanceDays ?? settings.maxAdvanceDays,
-          cancellationHours: data.cancellationHours ?? settings.cancellationHours,
-        },
-      });
+      // Update only if there's data to update
+      if (Object.keys(updateData).length > 0) {
+        settings = await this.prisma.siteSettings.update({
+          where: { id: settings.id },
+          data: updateData,
+        });
+      }
     }
     
     return settings;
