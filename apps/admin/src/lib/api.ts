@@ -751,9 +751,46 @@ export async function deletePricingPlan(id: string) {
 export async function getNotificationSettings() {
   const token = getToken()
   try {
-    return await fetchApi<any>('/notifications/settings', { token })
-  } catch {
-    return null
+    const data = await fetchApi<any>('/notifications/settings', { token })
+    // Return defaults if API returns null
+    if (!data) {
+      return {
+        whatsappNumber: '',
+        whatsappMessage: '',
+        whatsappEnabled: false,
+        emailEnabled: false,
+        emailHost: 'smtp.gmail.com',
+        emailPort: 587,
+        emailUser: '',
+        emailFrom: '',
+        adminEmail: '',
+        twilioAccountSid: '',
+        twilioAuthToken: '',
+        twilioFromNumber: '',
+        hasTwilio: false,
+        hasPassword: false,
+      }
+    }
+    return data
+  } catch (error: any) {
+    console.error('Failed to load notification settings:', error)
+    // Return defaults on error
+    return {
+      whatsappNumber: '',
+      whatsappMessage: '',
+      whatsappEnabled: false,
+      emailEnabled: false,
+      emailHost: 'smtp.gmail.com',
+      emailPort: 587,
+      emailUser: '',
+      emailFrom: '',
+      adminEmail: '',
+      twilioAccountSid: '',
+      twilioAuthToken: '',
+      twilioFromNumber: '',
+      hasTwilio: false,
+      hasPassword: false,
+    }
   }
 }
 
