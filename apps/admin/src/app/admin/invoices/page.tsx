@@ -177,8 +177,8 @@ export default function InvoicesPage() {
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 mb-1">
                         <h3 className="font-medium text-gray-900 dark:text-white">{booking.orderNumber}</h3>
-                        <Badge className={STATUS_COLORS[booking.status]}>
-                          {STATUS_LABELS[booking.status]}
+                        <Badge className={STATUS_COLORS[booking.status || 'UNKNOWN']}>
+                          {STATUS_LABELS[booking.status || 'UNKNOWN']}
                         </Badge>
                       </div>
                       <div className="flex items-center gap-3 text-sm text-gray-500 dark:text-slate-400">
