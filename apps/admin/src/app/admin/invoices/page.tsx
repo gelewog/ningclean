@@ -19,6 +19,7 @@ const STATUS_COLORS: Record<string, string> = {
   IN_PROGRESS: 'bg-purple-100 dark:bg-purple-900/30 text-purple-800 dark:text-purple-400',
   COMPLETED: 'bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-400',
   CANCELLED: 'bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-400',
+  UNKNOWN: 'bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-300',
 }
 
 const STATUS_LABELS: Record<string, string> = {
@@ -27,6 +28,7 @@ const STATUS_LABELS: Record<string, string> = {
   IN_PROGRESS: 'Sedang Dikerjakan',
   COMPLETED: 'Selesai',
   CANCELLED: 'Dibatalkan',
+  UNKNOWN: 'Unknown',
 }
 
 export default function InvoicesPage() {

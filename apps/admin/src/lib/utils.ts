@@ -13,7 +13,8 @@ export function formatCurrency(amount: number): string {
   }).format(amount)
 }
 
-export function formatDate(date: string | Date): string {
+export function formatDate(date: string | Date | null | undefined): string {
+  if (!date) return '-'
   const d = new Date(date)
   if (isNaN(d.getTime())) return '-'
   return new Intl.DateTimeFormat('id-ID', {
@@ -23,7 +24,8 @@ export function formatDate(date: string | Date): string {
   }).format(d)
 }
 
-export function formatDateTime(date: string | Date): string {
+export function formatDateTime(date: string | Date | null | undefined): string {
+  if (!date) return '-'
   const d = new Date(date)
   if (isNaN(d.getTime())) return '-'
   return new Intl.DateTimeFormat('id-ID', {
