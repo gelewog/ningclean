@@ -212,10 +212,11 @@ export interface Testimonial {
   company?: string
   content: string
   rating: number
-  avatar?: string
+  image?: string
   isActive: boolean
   isFeatured: boolean
   order: number
+  areaSlug?: string
   createdAt: string
   updatedAt: string
 }

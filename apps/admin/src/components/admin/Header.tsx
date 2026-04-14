@@ -259,12 +259,14 @@ export function Header({ onMenuClick }: HeaderProps) {
   const [notifications, setNotifications] = React.useState<Notification[]>([])
   const [unreadCount, setUnreadCount] = React.useState(0)
   const [loading, setLoading] = React.useState(false)
+  const [mounted, setMounted] = React.useState(false)
 
   const notifRef = React.useRef<HTMLDivElement>(null)
   const userRef = React.useRef<HTMLDivElement>(null)
 
   // ── Init ──
   React.useEffect(() => {
+    setMounted(true)
     setUser(getUser())
   }, [])
 
@@ -357,6 +359,24 @@ export function Header({ onMenuClick }: HeaderProps) {
   }
 
   // ── Render ──
+  // Prevent hydration issues by not rendering dynamic content until mounted
+  if (!mounted) {
+    return (
+      <header className="sticky top-0 z-30 flex h-16 items-center justify-between bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl border-b border-gray-200 dark:border-slate-700 px-4 md:px-5">
+        <div className="flex items-center gap-3">
+          <div className="md:hidden w-9 h-9 rounded-lg border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800" />
+          <div className="hidden md:block h-9 w-60 lg:w-80 bg-gray-50 dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-xl" />
+        </div>
+        <div className="flex items-center gap-2">
+          <div className="w-9 h-9 rounded-lg border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800" />
+          <div className="w-px h-5 bg-gray-200 mx-1 hidden sm:block" />
+          <div className="w-9 h-9 rounded-lg border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800" />
+          <div className="h-9 w-20 rounded-xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800" />
+        </div>
+      </header>
+    )
+  }
+
   return (
     <header className="sticky top-0 z-30 flex h-16 items-center justify-between bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl border-b border-gray-200 dark:border-slate-700 px-4 md:px-5">
 

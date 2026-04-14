@@ -6,6 +6,7 @@ import {
   Delete,
   Body,
   Param,
+  Query,
   UseGuards,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
@@ -22,8 +23,8 @@ export class TestimonialsController {
 
   @Get()
   @ApiOperation({ summary: 'Get all active testimonials (public)' })
-  findAll() {
-    return this.testimonialsService.findAll();
+  findAll(@Query('area') areaSlug?: string) {
+    return this.testimonialsService.findAll(areaSlug);
   }
 
   @Get('admin/all')

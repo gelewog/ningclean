@@ -33,6 +33,7 @@ export class BookingsController {
       search: query.search,
       dateFrom: query.dateFrom,
       dateTo: query.dateTo,
+      customerId: query.customerId,
     });
   }
 

@@ -38,7 +38,7 @@ export function DataTable({
           <>
             <div className="mb-4 rounded-full bg-gray-100 dark:bg-slate-800 p-4">
               <svg
-                className="h-8 w-8 text-gray-400"
+                className="h-8 w-8 text-gray-400 dark:text-slate-500"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -51,8 +51,8 @@ export function DataTable({
                 />
               </svg>
             </div>
-            <p className="text-sm font-medium text-gray-900">No data available</p>
-            <p className="mt-1 text-sm text-gray-500">Get started by creating a new record</p>
+            <p className="text-sm font-medium text-gray-900 dark:text-white">No data available</p>
+            <p className="mt-1 text-sm text-gray-500 dark:text-slate-400">Get started by creating a new record</p>
           </>
         )}
       </div>
@@ -63,13 +63,13 @@ export function DataTable({
     <div className="overflow-x-auto">
       <table className="w-full">
         <thead>
-          <tr className="border-b border-gray-100">
+          <tr className="border-b border-gray-100 dark:border-slate-700">
             {columns.map((column) => (
               <th
                 key={column.key}
                 className={cn(
-                  'px-5 py-4 text-left text-xs font-semibold uppercase tracking-wider text-gray-500',
-                  column.sortable && 'cursor-pointer select-none transition-colors hover:text-gray-700'
+                  'px-5 py-4 text-left text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-slate-400',
+                  column.sortable && 'cursor-pointer select-none transition-colors hover:text-gray-700 dark:hover:text-slate-300'
                 )}
                 onClick={() => column.sortable && onSort?.(column.key, sortDirection === 'asc' ? 'desc' : 'asc')}
               >
@@ -88,10 +88,10 @@ export function DataTable({
         <tbody>
           {loading
             ? Array.from({ length: 5 }).map((_, i) => (
-                <tr key={i} className="border-b border-gray-50">
+                <tr key={i} className="border-b border-gray-50 dark:border-slate-700/50">
                   {columns.map((col) => (
                     <td key={col.key} className="px-5 py-4">
-                      <div className="skeleton h-5 w-full rounded" />
+                      <div className="skeleton h-5 w-full rounded dark:bg-slate-700" />
                     </td>
                   ))}
                 </tr>
@@ -103,13 +103,13 @@ export function DataTable({
                   onMouseLeave={() => setHoveredRow(null)}
                   onClick={() => onRowClick?.(row)}
                   className={cn(
-                    'group border-b border-gray-50 transition-all duration-200',
+                    'group border-b border-gray-50 dark:border-slate-700/50 transition-all duration-200',
                     onRowClick && 'cursor-pointer',
-                    hoveredRow === (row.id || rowIndex) && 'bg-blue-50/50'
+                    hoveredRow === (row.id || rowIndex) && 'bg-blue-50/50 dark:bg-blue-900/20'
                   )}
                 >
                   {columns.map((column) => (
-                    <td key={column.key} className="px-5 py-4 text-sm text-gray-700">
+                    <td key={column.key} className="px-5 py-4 text-sm text-gray-700 dark:text-slate-300">
                       {column.render
                         ? column.render(row[column.key], row)
                         : row[column.key]}

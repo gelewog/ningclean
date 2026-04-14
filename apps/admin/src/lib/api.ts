@@ -335,39 +335,59 @@ export async function getCustomers(params?: {
 
 export async function getCustomerBookings(customerId: string): Promise<Booking[]> {
   const token = getToken()
-  // Customer bookings via the bookings endpoint - non-admin sees only own
-  const data = await fetchApi<{
-    data: any[]
-    total: number
-    page: number
-    limit: number
-    totalPages: number
-  }>(`/bookings`, { token })
-  
-  return data.data.map((b: any) => {
-    const firstItem = b.items?.[0]
-    const firstItemPrice = firstItem ? Number(firstItem.price) : 0
-    
-    return {
-      id: b.id,
-      customerId: b.customerId,
-      customerName: b.customer?.name || 'Unknown',
-      customerEmail: b.customer?.email || '',
-      customerPhone: b.customer?.phone || '',
-      serviceId: firstItem?.service?.id || '',
-      serviceName: firstItem?.service?.name || 'Unknown Service',
-      servicePrice: firstItemPrice,
-      totalAmount: Number(b.totalAmount) || 0,
-      area: b.area || '',
-      address: b.address || '',
-      scheduledDate: b.serviceDate,
-      scheduledTime: b.serviceTime,
-      status: b.status?.toLowerCase() || 'pending',
-      notes: b.notes || '',
-      createdAt: b.createdAt,
-      items: b.items,
+
+  if (!token) {
+    console.error('No auth token found for getCustomerBookings')
+    return []
+  }
+
+  if (!customerId) {
+    console.error('No customerId provided to getCustomerBookings')
+    return []
+  }
+
+  try {
+    const data = await fetchApi<{
+      data: any[]
+      total: number
+      page: number
+      limit: number
+      totalPages: number
+    }>(`/bookings?customerId=${customerId}&limit=100`, { token })
+
+    if (!data || !Array.isArray(data.data)) {
+      console.error('Invalid response from bookings API:', data)
+      return []
     }
-  })
+
+    return data.data.map((b: any) => {
+      const firstItem = b.items?.[0]
+      const firstItemPrice = firstItem ? Number(firstItem.price) : 0
+
+      return {
+        id: b.id,
+        customerId: b.customerId,
+        customerName: b.customer?.name || 'Unknown',
+        customerEmail: b.customer?.email || '',
+        customerPhone: b.customer?.phone || '',
+        serviceId: firstItem?.service?.id || '',
+        serviceName: firstItem?.service?.name || 'Unknown Service',
+        servicePrice: firstItemPrice,
+        totalAmount: Number(b.totalAmount) || 0,
+        area: b.area || '',
+        address: b.address || '',
+        scheduledDate: b.serviceDate,
+        scheduledTime: b.serviceTime,
+        status: b.status?.toLowerCase() || 'pending',
+        notes: b.notes || '',
+        createdAt: b.createdAt,
+        items: b.items,
+      }
+    })
+  } catch (error) {
+    console.error('Failed to fetch customer bookings:', error)
+    return []
+  }
 }
 
 // Blog

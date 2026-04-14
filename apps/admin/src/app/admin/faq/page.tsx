@@ -1,13 +1,14 @@
 'use client'
 
 import * as React from 'react'
-import { motion } from 'framer-motion'
-import { Plus, Edit, Trash2, HelpCircle, Calendar, ChevronDown } from 'lucide-react'
+import { motion, AnimatePresence } from 'framer-motion'
+import { 
+  Plus, Edit, Trash2, HelpCircle, Calendar, X, 
+  AlertCircle, MessageCircle, Search
+} from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { Textarea } from '@/components/ui/textarea'
 import { Badge } from '@/components/ui/badge'
-import { Modal } from '@/components/admin/Modal'
 import { DataTable } from '@/components/admin/DataTable'
 import { getFAQs, createFAQ, updateFAQ, deleteFAQ } from '@/lib/api'
 import { FAQ } from '@/types'
@@ -24,6 +25,301 @@ interface FAQFormData {
 
 const categories = ['General', 'Services', 'Pricing', 'Booking', 'Technical', 'Other']
 
+// Modern Modal Component for FAQ Form
+function FAQFormModal({
+  isOpen,
+  onClose,
+  isEditing,
+  formData,
+  setFormData,
+  errors,
+  setErrors,
+  saving,
+  onSave,
+}: {
+  isOpen: boolean
+  onClose: () => void
+  isEditing: boolean
+  formData: FAQFormData
+  setFormData: (data: FAQFormData) => void
+  errors: Partial<FAQFormData>
+  setErrors: (errors: Partial<FAQFormData>) => void
+  saving: boolean
+  onSave: () => void
+}) {
+  const [mounted, setMounted] = React.useState(false)
+
+  React.useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  React.useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = ''
+    }
+    return () => {
+      document.body.style.overflow = ''
+    }
+  }, [isOpen])
+
+  if (!mounted || !isOpen) return null
+
+  return (
+    <AnimatePresence>
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.2 }}
+        className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm"
+        onClick={onClose}
+      />
+      
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 pointer-events-none">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95, y: 20 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          exit={{ opacity: 0, scale: 0.95, y: 20 }}
+          transition={{ type: 'spring', damping: 25, stiffness: 300 }}
+          className="pointer-events-auto w-full max-w-xl bg-white dark:bg-slate-900 rounded-2xl shadow-2xl border border-gray-200 dark:border-slate-700 overflow-hidden flex flex-col max-h-[90vh]"
+          onClick={(e) => e.stopPropagation()}
+        >
+          {/* Header */}
+          <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100 dark:border-slate-700 bg-gradient-to-r from-emerald-50/50 to-transparent dark:from-emerald-900/20 dark:to-transparent flex-shrink-0">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-emerald-100 dark:bg-emerald-900/40 flex items-center justify-center">
+                <HelpCircle className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
+              </div>
+              <div>
+                <h2 className="text-lg font-bold text-gray-900 dark:text-white">
+                  {isEditing ? 'Edit FAQ' : 'Create FAQ'}
+                </h2>
+                <p className="text-xs text-gray-500 dark:text-slate-400">
+                  {isEditing ? 'Perbarui pertanyaan' : 'Buat FAQ baru'}
+                </p>
+              </div>
+            </div>
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={onClose}
+              className="rounded-lg"
+            >
+              <X className="w-5 h-5" />
+            </Button>
+          </div>
+
+          {/* Scrollable Content */}
+          <div className="flex-1 overflow-y-auto">
+            <div className="p-6 space-y-5">
+              {/* Question */}
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-gray-700 dark:text-slate-200">
+                  Question <span className="text-red-500">*</span>
+                </label>
+                <Input
+                  value={formData.question}
+                  onChange={(e) => {
+                    setFormData({ ...formData, question: e.target.value })
+                    setErrors({ ...errors, question: undefined })
+                  }}
+                  placeholder="Enter the question"
+                  className={errors.question ? 'border-red-500 focus:border-red-500' : ''}
+                />
+                {errors.question && <p className="text-sm text-red-500">{errors.question}</p>}
+              </div>
+
+              {/* Category & Order */}
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-gray-700 dark:text-slate-200">
+                    Category
+                  </label>
+                  <select
+                    value={formData.category}
+                    onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+                    className="w-full rounded-lg border border-gray-200 dark:border-slate-700 px-3 py-2 text-sm bg-white dark:bg-slate-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 dark:focus:border-emerald-400"
+                  >
+                    {categories.map(cat => (
+                      <option key={cat} value={cat}>{cat}</option>
+                    ))}
+                  </select>
+                </div>
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-gray-700 dark:text-slate-200">
+                    Display Order
+                  </label>
+                  <Input
+                    type="number"
+                    value={formData.order}
+                    onChange={(e) => setFormData({ ...formData, order: Number(e.target.value) })}
+                    placeholder="0"
+                  />
+                </div>
+              </div>
+
+              {/* Answer */}
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-gray-700 dark:text-slate-200">
+                  Answer <span className="text-red-500">*</span>
+                </label>
+                <textarea
+                  value={formData.answer}
+                  onChange={(e) => {
+                    setFormData({ ...formData, answer: e.target.value })
+                    setErrors({ ...errors, answer: undefined })
+                  }}
+                  placeholder="Enter the answer..."
+                  rows={5}
+                  className={`w-full px-3 py-2 rounded-lg border text-sm bg-white dark:bg-slate-800 text-gray-900 dark:text-slate-100 resize-none focus:outline-none focus:ring-2 focus:ring-emerald-500/20 transition-all placeholder:text-gray-400 dark:placeholder:text-slate-500 ${errors.answer ? 'border-red-500' : 'border-gray-200 dark:border-slate-700 focus:border-emerald-500 dark:focus:border-emerald-400'}`}
+                />
+                {errors.answer && <p className="text-sm text-red-500">{errors.answer}</p>}
+              </div>
+
+              {/* Status Toggle */}
+              <div className="flex flex-col gap-3 p-4 bg-gray-50 dark:bg-slate-800 rounded-xl border border-gray-100 dark:border-slate-700">
+                <label className="flex items-center gap-3 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={formData.isActive}
+                    onChange={(e) => setFormData({ ...formData, isActive: e.target.checked })}
+                    className="w-5 h-5 rounded border-gray-300 text-emerald-600 focus:ring-emerald-500"
+                  />
+                  <div>
+                    <span className="text-sm font-medium text-gray-900 dark:text-white">Active</span>
+                    <p className="text-xs text-gray-500 dark:text-slate-400">FAQ akan ditampilkan publik</p>
+                  </div>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          {/* Footer */}
+          <div className="flex items-center justify-end gap-3 px-6 py-4 border-t border-gray-100 dark:border-slate-700 bg-gray-50/50 dark:bg-slate-800/50 flex-shrink-0">
+            <Button variant="outline" onClick={onClose}>
+              Batal
+            </Button>
+            <Button 
+              onClick={onSave} 
+              disabled={saving}
+              className="bg-emerald-600 hover:bg-emerald-700 gap-2"
+            >
+              {saving ? (
+                <>
+                  <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                  Menyimpan...
+                </>
+              ) : (
+                <>
+                  {isEditing ? 'Simpan Perubahan' : 'Buat FAQ'}
+                </>
+              )}
+            </Button>
+          </div>
+        </motion.div>
+      </div>
+    </AnimatePresence>
+  )
+}
+
+// Delete Confirmation Modal
+function FAQDeleteModal({
+  isOpen,
+  onClose,
+  item,
+  onConfirm,
+  deleting,
+}: {
+  isOpen: boolean
+  onClose: () => void
+  item: FAQ | null
+  onConfirm: () => void
+  deleting: boolean
+}) {
+  const [mounted, setMounted] = React.useState(false)
+
+  React.useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  if (!mounted || !isOpen || !item) return null
+
+  return (
+    <AnimatePresence>
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.2 }}
+        className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm"
+        onClick={onClose}
+      />
+      
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 pointer-events-none">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95, y: 20 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          exit={{ opacity: 0, scale: 0.95, y: 20 }}
+          transition={{ type: 'spring', damping: 25, stiffness: 300 }}
+          className="pointer-events-auto w-full max-w-md bg-white dark:bg-slate-900 rounded-2xl shadow-2xl border border-gray-200 dark:border-slate-700 overflow-hidden"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <div className="p-6">
+            <div className="flex items-center gap-4">
+              <div className="w-12 h-12 rounded-xl bg-red-100 dark:bg-red-900/30 flex items-center justify-center flex-shrink-0">
+                <AlertCircle className="w-6 h-6 text-red-600 dark:text-red-400" />
+              </div>
+              <div>
+                <h2 className="text-lg font-bold text-gray-900 dark:text-white">Hapus FAQ</h2>
+                <p className="text-sm text-gray-500 dark:text-slate-400">
+                  Tindakan ini tidak dapat dibatalkan
+                </p>
+              </div>
+            </div>
+
+            <div className="mt-6 p-4 bg-gray-50 dark:bg-slate-800 rounded-xl border border-gray-100 dark:border-slate-700">
+              <div className="flex items-start gap-3">
+                <div className="w-8 h-8 rounded-lg bg-emerald-50 dark:bg-emerald-900/30 flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <HelpCircle className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-gray-900 dark:text-white line-clamp-2">{item.question}</p>
+                  <Badge variant="outline" className="mt-2">{item.category}</Badge>
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-6 flex justify-end gap-3">
+              <Button variant="outline" onClick={onClose}>
+                Batal
+              </Button>
+              <Button 
+                onClick={onConfirm} 
+                disabled={deleting}
+                className="bg-red-600 hover:bg-red-700 gap-2"
+              >
+                {deleting ? (
+                  <>
+                    <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                    Menghapus...
+                  </>
+                ) : (
+                  <>
+                    <Trash2 className="w-4 h-4" />
+                    Hapus
+                  </>
+                )}
+              </Button>
+            </div>
+          </div>
+        </motion.div>
+      </div>
+    </AnimatePresence>
+  )
+}
+
 export default function FAQPage() {
   const [items, setItems] = React.useState<FAQ[]>([])
   const [loading, setLoading] = React.useState(true)
@@ -39,6 +335,9 @@ export default function FAQPage() {
     isActive: true,
   })
   const [errors, setErrors] = React.useState<Partial<FAQFormData>>({})
+  const [saving, setSaving] = React.useState(false)
+  const [deleting, setDeleting] = React.useState(false)
+  const [search, setSearch] = React.useState('')
 
   React.useEffect(() => {
     fetchItems()
@@ -97,10 +396,10 @@ export default function FAQPage() {
     return Object.keys(newErrors).length === 0
   }
 
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault()
+  async function handleSubmit() {
     if (!validateForm()) return
 
+    setSaving(true)
     const itemData = {
       question: formData.question,
       answer: formData.answer,
@@ -121,11 +420,14 @@ export default function FAQPage() {
       fetchItems()
     } catch (error) {
       toast.error(`Failed to ${isEditing ? 'update' : 'create'} FAQ`)
+    } finally {
+      setSaving(false)
     }
   }
 
   async function handleDelete() {
     if (!selectedItem) return
+    setDeleting(true)
     try {
       await deleteFAQ(selectedItem.id)
       toast.success('FAQ deleted successfully')
@@ -133,25 +435,34 @@ export default function FAQPage() {
       fetchItems()
     } catch (error) {
       toast.error('Failed to delete FAQ')
+    } finally {
+      setDeleting(false)
     }
   }
+
+  const filteredItems = React.useMemo(() => {
+    if (!search) return items
+    const term = search.toLowerCase()
+    return items.filter(item => 
+      item.question.toLowerCase().includes(term) || 
+      item.answer.toLowerCase().includes(term) ||
+      item.category.toLowerCase().includes(term)
+    )
+  }, [items, search])
 
   const columns = [
     {
       key: 'question',
       label: 'Question',
-      render: (value: string) => (
-        <div className="max-w-md">
-          <p className="font-medium text-gray-900">{value}</p>
-        </div>
-      ),
-    },
-    {
-      key: 'answer',
-      label: 'Answer',
-      render: (value: string) => (
-        <div className="max-w-xs">
-          <p className="text-sm text-gray-500 truncate">{value}</p>
+      render: (value: string, row: FAQ) => (
+        <div className="flex items-start gap-3">
+          <div className="w-8 h-8 rounded-lg bg-emerald-50 dark:bg-emerald-900/30 flex items-center justify-center flex-shrink-0 mt-0.5">
+            <HelpCircle className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
+          </div>
+          <div className="min-w-0">
+            <p className="font-medium text-gray-900 dark:text-white line-clamp-2">{value}</p>
+            <p className="text-sm text-gray-500 dark:text-slate-400 mt-1 line-clamp-1">{row.answer}</p>
+          </div>
         </div>
       ),
     },
@@ -165,7 +476,7 @@ export default function FAQPage() {
     {
       key: 'order',
       label: 'Order',
-      render: (value: number) => <span className="text-sm">{value}</span>,
+      render: (value: number) => <span className="text-sm text-gray-700 dark:text-slate-300">{value}</span>,
     },
     {
       key: 'isActive',
@@ -180,7 +491,7 @@ export default function FAQPage() {
       key: 'createdAt',
       label: 'Created',
       render: (value: string) => (
-        <div className="flex items-center gap-1 text-sm text-gray-500">
+        <div className="flex items-center gap-1 text-sm text-gray-500 dark:text-slate-400">
           <Calendar className="h-3.5 w-3.5" />
           {formatDate(value)}
         </div>
@@ -188,14 +499,14 @@ export default function FAQPage() {
     },
     {
       key: 'actions',
-      label: 'Actions',
+      label: '',
       render: (_: any, row: FAQ) => (
         <div className="flex items-center gap-1">
-          <Button variant="ghost" size="icon" onClick={() => openEditModal(row)}>
+          <Button variant="ghost" size="sm" onClick={() => openEditModal(row)} className="text-gray-500 dark:text-slate-400 hover:text-emerald-600">
             <Edit className="h-4 w-4" />
           </Button>
-          <Button variant="ghost" size="icon" onClick={() => openDeleteModal(row)}>
-            <Trash2 className="h-4 w-4 text-error" />
+          <Button variant="ghost" size="sm" onClick={() => openDeleteModal(row)} className="text-gray-500 dark:text-slate-400 hover:text-red-600">
+            <Trash2 className="h-4 w-4" />
           </Button>
         </div>
       ),
@@ -203,19 +514,13 @@ export default function FAQPage() {
   ]
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-slate-800 text-gray-900 dark:text-white">
+    <div className="min-h-screen bg-gray-50/50 dark:bg-slate-900 text-gray-900 dark:text-white">
       {/* Topbar */}
-      <div className="sticky top-0 z-20 bg-white/80 backdrop-blur-xl border-b border-gray-100 px-4 md:px-6 py-3 flex items-center justify-between">
-        <div className="flex items-center gap-2 text-xs text-gray-500">
-          <span>NingClean Admin</span>
-          <span>/</span>
-          <span className="text-gray-700">FAQ</span>
-        </div>
-        <div className="flex items-center gap-3">
-          <div className="flex items-center gap-1.5">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-            <span className="text-[11px] text-gray-500">Live</span>
-          </div>
+      <div className="sticky top-0 z-20 bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border-b border-gray-200 dark:border-slate-700 px-4 md:px-6 py-4">
+        <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-slate-400">
+          <span>Admin</span>
+          <span className="text-gray-400 dark:text-slate-500">/</span>
+          <span className="text-gray-900 dark:text-white font-medium">FAQ</span>
         </div>
       </div>
 
@@ -227,13 +532,36 @@ export default function FAQPage() {
           className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"
         >
           <div>
-            <h1 className="text-2xl font-bold tracking-tight text-gray-900">FAQ</h1>
-            <p className="text-sm text-gray-500 mt-0.5">Manage frequently asked questions</p>
+            <h1 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">FAQ</h1>
+            <p className="text-sm text-gray-500 dark:text-slate-400 mt-1">Manage frequently asked questions</p>
           </div>
-          <Button onClick={openCreateModal} className="bg-emerald-600 hover:bg-emerald-700">
-            <Plus className="mr-2 h-4 w-4" />
-            New FAQ
-          </Button>
+          <div className="flex items-center gap-2">
+            <div className="px-4 py-2 bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700">
+              <span className="text-sm text-gray-500 dark:text-slate-400">Total: </span>
+              <span className="text-sm font-bold text-gray-900 dark:text-white">{items.length}</span>
+            </div>
+            <Button onClick={openCreateModal} className="bg-emerald-600 hover:bg-emerald-700 gap-2">
+              <Plus className="h-4 w-4" />
+              New FAQ
+            </Button>
+          </div>
+        </motion.div>
+
+        {/* Search */}
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1 }}
+        >
+          <div className="relative max-w-md">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+            <Input
+              placeholder="Search FAQs..."
+              className="pl-10 bg-white dark:bg-slate-800 border-gray-200 dark:border-slate-700"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+            />
+          </div>
         </motion.div>
 
         {/* Table */}
@@ -242,101 +570,53 @@ export default function FAQPage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.15 }}
         >
-          <div className="bg-white border border-gray-100 rounded-2xl overflow-hidden shadow-sm">
+          <div className="bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-700 rounded-2xl overflow-hidden shadow-sm">
             <DataTable
               columns={columns}
-              data={items}
+              data={filteredItems}
               loading={loading}
+              emptyState={
+                <div className="flex flex-col items-center justify-center py-16 text-center">
+                  <div className="mb-4 rounded-full bg-gray-100 dark:bg-slate-800 p-4">
+                    <MessageCircle className="h-8 w-8 text-gray-400 dark:text-slate-500" />
+                  </div>
+                  <p className="text-sm font-medium text-gray-900 dark:text-white">
+                    {search ? 'No FAQs found' : 'No FAQs yet'}
+                  </p>
+                  <p className="mt-1 text-sm text-gray-500 dark:text-slate-400">
+                    {search ? 'Try different keywords' : 'Click the button above to add your first FAQ'}
+                  </p>
+                </div>
+              }
             />
           </div>
         </motion.div>
+      </div>
 
-      <Modal
+      {/* Form Modal */}
+      <FAQFormModal
         isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        title={isEditing ? 'Edit FAQ' : 'Create New FAQ'}
-        size="lg"
-      >
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <Input
-            label="Question"
-            placeholder="Enter the question"
-            value={formData.question}
-            onChange={(e) => setFormData({ ...formData, question: e.target.value })}
-            error={errors.question}
-          />
+        onClose={() => {
+          setIsModalOpen(false)
+          setIsEditing(false)
+        }}
+        isEditing={isEditing}
+        formData={formData}
+        setFormData={setFormData}
+        errors={errors}
+        setErrors={setErrors}
+        saving={saving}
+        onSave={handleSubmit}
+      />
 
-          <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-1.5">
-              <label className="block text-sm font-medium text-gray-700">Category</label>
-              <select
-                value={formData.category}
-                onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
-              >
-                {categories.map(cat => (
-                  <option key={cat} value={cat}>{cat}</option>
-                ))}
-              </select>
-            </div>
-            <Input
-              label="Display Order"
-              type="number"
-              placeholder="0"
-              value={formData.order}
-              onChange={(e) => setFormData({ ...formData, order: Number(e.target.value) })}
-            />
-          </div>
-
-          <Textarea
-            label="Answer"
-            placeholder="Enter the answer..."
-            className="min-h-[120px] bg-white dark:bg-slate-800 border-gray-200 dark:border-slate-700 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-slate-500 focus:border-emerald-500 dark:focus:border-emerald-400 focus-visible:ring-emerald-500 dark:focus-visible:ring-emerald-400"
-            value={formData.answer}
-            onChange={(e) => setFormData({ ...formData, answer: e.target.value })}
-            error={errors.answer}
-          />
-
-          <label className="flex items-center gap-2">
-            <input
-              type="checkbox"
-              checked={formData.isActive}
-              onChange={(e) => setFormData({ ...formData, isActive: e.target.checked })}
-              className="h-4 w-4 rounded border-gray-300 text-primary"
-            />
-            <span className="text-sm">Active</span>
-          </label>
-
-          <div className="flex justify-end gap-2 border-t pt-4">
-            <Button type="button" variant="outline" onClick={() => setIsModalOpen(false)}>
-              Cancel
-            </Button>
-            <Button type="submit">{isEditing ? 'Update' : 'Create'}</Button>
-          </div>
-        </form>
-      </Modal>
-
-      <Modal
+      {/* Delete Modal */}
+      <FAQDeleteModal
         isOpen={isDeleteModalOpen}
         onClose={() => setIsDeleteModalOpen(false)}
-        title="Delete FAQ"
-        size="sm"
-      >
-        <div className="space-y-4">
-          <p className="text-gray-600">
-            Are you sure you want to delete this FAQ? This action cannot be undone.
-          </p>
-          <div className="flex justify-end gap-2">
-            <Button variant="outline" onClick={() => setIsDeleteModalOpen(false)}>
-              Cancel
-            </Button>
-            <Button variant="error" onClick={handleDelete}>
-              Delete
-            </Button>
-          </div>
-        </div>
-      </Modal>
-      </div>
+        item={selectedItem}
+        onConfirm={handleDelete}
+        deleting={deleting}
+      />
     </div>
   )
 }

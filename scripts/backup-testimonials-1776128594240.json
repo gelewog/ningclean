@@ -1,0 +1,48 @@
+{
+  "timestamp": "2026-04-14T01:03:14.239Z",
+  "count": 3,
+  "data": [
+    {
+      "id": "a6fe3c8c-d427-4c87-a5a2-d1ed954f0d1a",
+      "name": "PT Maju Jaya",
+      "role": "Manager",
+      "company": "PT Maju Jaya",
+      "content": "Kantor kami selalu bersih berkat layanan regular dari NingClean. Highly recommended!",
+      "rating": 5,
+      "avatar": null,
+      "isActive": true,
+      "isFeatured": true,
+      "order": 3,
+      "createdAt": "2026-04-12T14:57:54.699Z",
+      "updatedAt": "2026-04-12T14:57:54.699Z"
+    },
+    {
+      "id": "9d3d414b-1f77-4732-b908-ec09409692ff",
+      "name": "Siti Rahayu",
+      "role": "Ibu Rumah Tangga",
+      "company": null,
+      "content": "Tim NingClean sangat ramah dan teliti. Saya puas dengan hasil deep cleaning.",
+      "rating": 5,
+      "avatar": null,
+      "isActive": true,
+      "isFeatured": true,
+      "order": 2,
+      "createdAt": "2026-04-12T14:57:54.698Z",
+      "updatedAt": "2026-04-12T14:57:54.698Z"
+    },
+    {
+      "id": "f2a33e8d-7999-4d4d-ba04-cbfeb0757580",
+      "name": "Budi Santoso",
+      "role": "Pemilik Rumah",
+      "company": null,
+      "content": "Pelayanan sangat profesional dan hasilnya memuaskan. Rumah saya jadi bersih dan wangi!",
+      "rating": 5,
+      "avatar": null,
+      "isActive": true,
+      "isFeatured": true,
+      "order": 1,
+      "createdAt": "2026-04-12T14:57:54.693Z",
+      "updatedAt": "2026-04-12T14:57:54.693Z"
+    }
+  ]
+}

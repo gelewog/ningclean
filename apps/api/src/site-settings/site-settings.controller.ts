@@ -10,6 +10,7 @@ export class SiteSettingsController {
   constructor(private siteSettingsService: SiteSettingsService) {}
 
   @Get()
+  @UseGuards(JwtAuthGuard)
   async getSettings() {
     return this.siteSettingsService.getSettings();
   }

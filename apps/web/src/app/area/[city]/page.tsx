@@ -10,7 +10,7 @@ import { SectionLoader } from '@/components/ui/Spinner';
 import Button from '@/components/ui/Button';
 import { ServiceCard } from '@/components/cards';
 import { MapPin, Star, ArrowRight, CheckCircle } from 'lucide-react';
-import { getServiceAreas, getServices } from '@/lib/api';
+import { getServiceAreas, getServices, getTestimonials } from '@/lib/api';
 
 const cityData: Record<string, {
   name: string;
@@ -90,14 +90,16 @@ export default function AreaCityPage() {
   const [loading, setLoading] = useState(true);
   const [area, setArea] = useState<any>(null);
   const [services, setServices] = useState<any[]>([]);
+  const [testimonials, setTestimonials] = useState<any[]>([]);
   const citySlug = (params?.city as string || 'surabaya').toLowerCase();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [areasData, servicesData] = await Promise.all([
+        const [areasData, servicesData, testimonialsData] = await Promise.all([
           getServiceAreas(),
           getServices(),
+          getTestimonials(citySlug),
         ]);
         // Find matching area or fallback to first
         const matchedArea = areasData.find((a: any) => a.slug === citySlug) || areasData[0];
@@ -108,6 +110,7 @@ export default function AreaCityPage() {
           coverage: [],
         });
         setServices(servicesData || []);
+        setTestimonials(testimonialsData || []);
       } catch (error) {
         console.error('Failed to fetch area data:', error);
         setArea({
@@ -116,6 +119,7 @@ export default function AreaCityPage() {
           description: 'Layanan cleaning profesional di area ini.',
           coverage: [],
         });
+        setTestimonials([]);
       } finally {
         setLoading(false);
       }
@@ -307,15 +311,52 @@ export default function AreaCityPage() {
             transition={{ delay: 0.4 }}
             className="mb-8"
           >
-            <h2 className="text-2xl font-semibold page-text mb-2">Layanan di {area.city}</h2>
+            <h2 className="text-2xl font-semibold page-text mb-2">Testimoni di {area.city}</h2>
             <p className="text-[14px] page-text-muted">Review asli dari pelanggan kami.</p>
           </motion.div>
 
-          <div className="grid md:grid-cols-3 gap-5">
-            <p className="text-[14px] page-text-muted col-span-3 text-center py-8">
-              Testimoni pelanggan di area ini akan segera ditambahkan.
-            </p>
-          </div>
+          {testimonials.length > 0 ? (
+            <div className="grid md:grid-cols-3 gap-5">
+              {testimonials.slice(0, 6).map((t, idx) => (
+                <motion.div
+                  key={t.id || idx}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.45 + idx * 0.08 }}
+                  className="page-section-card border rounded-2xl p-6"
+                >
+                  <div className="flex items-center gap-1 mb-3">
+                    {[1, 2, 3, 4, 5].map((star) => (
+                      <Star
+                        key={star}
+                        className={`h-4 w-4 ${star <= t.rating ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300'}`}
+                      />
+                    ))}
+                  </div>
+                  <p className="text-[14px] page-text leading-relaxed mb-4">"{t.content}"</p>
+                  <div className="flex items-center gap-3">
+                    {t.image ? (
+                      <img src={t.image} alt={t.name} className="h-10 w-10 rounded-full object-cover" />
+                    ) : (
+                      <div className="h-10 w-10 rounded-full bg-emerald-500 flex items-center justify-center text-white font-semibold">
+                        {t.name.charAt(0)}
+                      </div>
+                    )}
+                    <div>
+                      <p className="text-sm font-semibold page-text">{t.name}</p>
+                      {t.role && <p className="text-xs page-text-muted">{t.role}{t.company ? ` - ${t.company}` : ''}</p>}
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-12">
+              <p className="text-[14px] page-text-muted">
+                Testimoni pelanggan di area ini akan segera ditambahkan.
+              </p>
+            </div>
+          )}
         </div>
       </section>
 

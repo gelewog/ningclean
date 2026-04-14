@@ -306,11 +306,12 @@ export default function SettingsPage() {
       ])
 
       // Merge with defaults - ensure all fields have values
-      setSettings(prev => ({ ...defaultSiteSettings, ...prev, ...siteData }))
-      setNotificationSettings(prev => ({ ...defaultNotificationSettings, ...prev, ...notifData }))
-      setNavSettings(prev => ({ ...defaultNavSettings, ...prev, ...navData }))
-      setHomepageSettings(prev => ({ ...defaultHomepageSettings, ...prev, ...homeData }))
-      setFooterSettings(prev => ({ ...defaultFooterSettings, ...prev, ...footerData }))
+      // Use empty object as fallback if data is null
+      setSettings(prev => ({ ...defaultSiteSettings, ...prev, ...(siteData || {}) }))
+      setNotificationSettings(prev => ({ ...defaultNotificationSettings, ...prev, ...(notifData || {}) }))
+      setNavSettings(prev => ({ ...defaultNavSettings, ...prev, ...(navData || {}) }))
+      setHomepageSettings(prev => ({ ...defaultHomepageSettings, ...prev, ...(homeData || {}) }))
+      setFooterSettings(prev => ({ ...defaultFooterSettings, ...prev, ...(footerData || {}) }))
 
       // Check if any request failed
       const errors = []

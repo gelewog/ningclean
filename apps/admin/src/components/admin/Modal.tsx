@@ -21,7 +21,7 @@ interface ModalProps {
   size?: 'sm' | 'md' | 'lg' | 'xl' | 'full'
 }
 
-export function Modal({ isOpen, onClose, title, description, children, size = 'md' }: ModalProps) {
+export function Modal({ isOpen, onClose, title, description, children, size = 'md', titleIcon: TitleIcon, accentColor = 'emerald', footer }: ModalProps & { titleIcon?: React.ReactNode; accentColor?: string; footer?: React.ReactNode }) {
   const sizes = {
     sm: 'max-w-md',
     md: 'max-w-2xl',
@@ -30,64 +30,81 @@ export function Modal({ isOpen, onClose, title, description, children, size = 'm
     full: 'max-w-[95vw]',
   }
 
+  const iconBgColors: Record<string, string> = {
+    emerald: 'bg-emerald-100 dark:bg-emerald-900/40 border-emerald-200 dark:border-emerald-800',
+    blue: 'bg-blue-100 dark:bg-blue-900/40 border-blue-200 dark:border-blue-800',
+    amber: 'bg-amber-100 dark:bg-amber-900/40 border-amber-200 dark:border-amber-800',
+    red: 'bg-red-100 dark:bg-red-900/40 border-red-200 dark:border-red-800',
+    purple: 'bg-purple-100 dark:bg-purple-900/40 border-purple-200 dark:border-purple-800',
+  }
+
+  const iconTextColors: Record<string, string> = {
+    emerald: 'text-emerald-600 dark:text-emerald-400',
+    blue: 'text-blue-600 dark:text-blue-400',
+    amber: 'text-amber-600 dark:text-amber-400',
+    red: 'text-red-600 dark:text-red-400',
+    purple: 'text-purple-600 dark:text-purple-400',
+  }
+
   return (
     <AnimatePresence>
       {isOpen && (
         <>
-          {/* Light Backdrop */}
+          {/* Backdrop */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
             onClick={onClose}
-            className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm"
+            className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm"
           />
 
           {/* Modal Container */}
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6">
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 pointer-events-none">
             <motion.div
-              initial={{ opacity: 0, scale: 0.96, y: 20 }}
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.96, y: 20 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
               transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-              className={`relative ${sizes[size]} w-full`}
+              className={`pointer-events-auto w-full ${sizes[size]} max-h-[90vh] overflow-hidden rounded-2xl bg-white dark:bg-slate-900 shadow-2xl border border-gray-200 dark:border-slate-700 flex flex-col`}
             >
-              {/* Main Container */}
-              <div className="relative overflow-hidden rounded-2xl bg-white dark:bg-slate-900 shadow-xl border border-gray-200 dark:border-slate-700">
-                
-                {/* Light Header Bar */}
-                <div className="relative bg-white dark:bg-slate-900 border-b border-gray-100 dark:border-slate-700 px-6 py-5">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-4">
-                      <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-emerald-50 dark:bg-emerald-900/30 border border-emerald-100 dark:border-emerald-800">
-                        <Calendar className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
-                      </div>
-                      <div>
-                        {title && (
-                          <h2 className="text-lg font-bold text-gray-900 dark:text-white">{title}</h2>
-                        )}
-                        {description && (
-                          <p className="text-sm text-gray-500 dark:text-slate-400">{description}</p>
-                        )}
-                      </div>
+              {/* Header */}
+              <div className={`flex items-center justify-between px-6 py-4 border-b border-gray-100 dark:border-slate-700 bg-gradient-to-r from-${accentColor}-50/50 to-transparent dark:from-${accentColor}-900/20 dark:to-transparent`}>
+                <div className="flex items-center gap-3">
+                  {TitleIcon && (
+                    <div className={`w-10 h-10 rounded-xl ${iconBgColors[accentColor] || iconBgColors.emerald} flex items-center justify-center border`}>
+                      <span className={iconTextColors[accentColor] || iconTextColors.emerald}>{TitleIcon}</span>
                     </div>
-
-                    {/* Close Button */}
-                    <button
-                      onClick={onClose}
-                      className="flex h-9 w-9 items-center justify-center rounded-lg bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 text-gray-400 dark:text-slate-500 transition-all duration-200 hover:bg-gray-50 dark:hover:bg-slate-700 hover:text-gray-600 dark:hover:text-slate-200 hover:border-gray-300 dark:hover:border-slate-600"
-                    >
-                      <X className="h-4 w-4" />
-                    </button>
+                  )}
+                  <div>
+                    {title && (
+                      <h2 className="text-lg font-bold text-gray-900 dark:text-white">{title}</h2>
+                    )}
+                    {description && (
+                      <p className="text-xs text-gray-500 dark:text-slate-400">{description}</p>
+                    )}
                   </div>
                 </div>
-
-                {/* Content Area */}
-                <div className="relative bg-gray-50 dark:bg-slate-800 p-6" style={{ maxHeight: 'calc(100vh - 10rem)' }}>
-                  {children}
-                </div>
+                <button
+                  onClick={onClose}
+                  className="flex h-9 w-9 items-center justify-center rounded-lg bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 text-gray-400 dark:text-slate-500 transition-all duration-200 hover:bg-gray-50 dark:hover:bg-slate-700 hover:text-gray-600 dark:hover:text-slate-200 hover:border-gray-300 dark:hover:border-slate-600"
+                >
+                  <X className="h-5 w-5" />
+                </button>
               </div>
+
+              {/* Content Area - Scrollable */}
+              <div className="flex-1 overflow-y-auto p-6">
+                {children}
+              </div>
+
+              {/* Footer */}
+              {footer && (
+                <div className="flex items-center justify-end gap-3 px-6 py-4 border-t border-gray-100 dark:border-slate-700 bg-gray-50/50 dark:bg-slate-800/50">
+                  {footer}
+                </div>
+              )}
             </motion.div>
           </div>
         </>
@@ -98,6 +115,12 @@ export function Modal({ isOpen, onClose, title, description, children, size = 'm
 
 // Step Progress Indicator Component
 export function BookingStepProgress({ status }: { status: string }) {
+  const [mounted, setMounted] = React.useState(false)
+  
+  React.useEffect(() => {
+    setMounted(true)
+  }, [])
+
   const steps = [
     { key: 'pending', label: 'Pending', icon: Clock },
     { key: 'confirmed', label: 'Dikonfirmasi', icon: Check },
@@ -108,6 +131,29 @@ export function BookingStepProgress({ status }: { status: string }) {
   const statusOrder = ['pending', 'confirmed', 'in_progress', 'completed']
   const currentIndex = statusOrder.indexOf(status)
   const isCancelled = status === 'cancelled'
+
+  // Prevent hydration mismatch by rendering placeholder until mounted
+  if (!mounted) {
+    return (
+      <div className="mb-6">
+        <div className="flex items-center justify-between">
+          {steps.map((step, index) => (
+            <React.Fragment key={step.key}>
+              <div className="flex flex-col items-center">
+                <div className="flex h-10 w-10 items-center justify-center rounded-full border-2 bg-white border-gray-200" />
+                <p className="mt-2 text-xs font-medium text-gray-400">{step.label}</p>
+              </div>
+              {index < steps.length - 1 && (
+                <div className="flex-1 mx-2 mb-6">
+                  <div className="h-1 rounded-full bg-gray-200" />
+                </div>
+              )}
+            </React.Fragment>
+          ))}
+        </div>
+      </div>
+    )
+  }
 
   if (isCancelled) {
     return (
@@ -125,6 +171,22 @@ export function BookingStepProgress({ status }: { status: string }) {
     )
   }
 
+  const getStepStyles = (isActive: boolean, isCompleted: boolean) => {
+    if (isCompleted) {
+      return 'bg-emerald-500 border-emerald-500 text-white dark:bg-emerald-600 dark:border-emerald-500'
+    }
+    if (isActive) {
+      return 'bg-blue-500 border-blue-500 text-white dark:bg-blue-600 dark:border-blue-500'
+    }
+    return 'bg-white border-gray-200 text-gray-400 dark:bg-slate-800 dark:border-slate-600 dark:text-slate-500'
+  }
+
+  const getLabelStyles = (isActive: boolean, isCompleted: boolean) => {
+    if (isActive) return 'text-blue-600 dark:text-blue-400'
+    if (isCompleted) return 'text-emerald-600 dark:text-emerald-400'
+    return 'text-gray-400 dark:text-slate-500'
+  }
+
   return (
     <div className="mb-6">
       <div className="flex items-center justify-between">
@@ -138,23 +200,14 @@ export function BookingStepProgress({ status }: { status: string }) {
               {/* Step Circle */}
               <div className="flex flex-col items-center">
                 <div className={`
-                  flex h-10 w-10 items-center justify-center rounded-full border-2 transition-all duration-300
-                  ${isCompleted
-                    ? 'bg-emerald-500 border-emerald-500 text-white dark:bg-emerald-600 dark:border-emerald-500 dark:text-white'
-                    : isActive
-                      ? 'bg-blue-500 border-blue-500 text-white dark:bg-blue-600 dark:border-blue-500 dark:text-white'
-                      : 'bg-white border-gray-200 text-gray-400 dark:bg-slate-800 dark:border-slate-600 dark:text-slate-500'
-                  }
+                  flex h-10 w-10 items-center justify-center rounded-full border-2
+                  transition-all duration-300 ${getStepStyles(isActive, isCompleted)}
                 `}>
-                  {isCompleted ? (
-                    <Check className="h-5 w-5" />
-                  ) : (
-                    <Icon className="h-4 w-4" />
-                  )}
+                  {isCompleted ? <Check className="h-5 w-5" /> : <Icon className="h-4 w-4" />}
                 </div>
                 <p className={`
                   mt-2 text-xs font-medium transition-colors
-                  ${isActive ? 'text-blue-600 dark:text-blue-400' : isCompleted ? 'text-emerald-600 dark:text-emerald-400' : 'text-gray-400 dark:text-slate-500'}
+                  ${getLabelStyles(isActive, isCompleted)}
                 `}>
                   {step.label}
                 </p>

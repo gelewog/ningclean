@@ -1,17 +1,18 @@
 'use client'
 
 import * as React from 'react'
-import { motion } from 'framer-motion'
-import { Plus, Edit, Trash2, Star, Image as ImageIcon, Calendar, MapPin } from 'lucide-react'
+import { motion, AnimatePresence } from 'framer-motion'
+import { 
+  Plus, Edit, Trash2, Star, Image as ImageIcon, Calendar, MapPin, X, 
+  AlertCircle, Folder
+} from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { Textarea } from '@/components/ui/textarea'
 import { Badge } from '@/components/ui/badge'
-import { Modal } from '@/components/admin/Modal'
 import { DataTable } from '@/components/admin/DataTable'
 import { getGalleryItems, createGalleryItem, updateGalleryItem, deleteGalleryItem } from '@/lib/api'
 import { GalleryItem } from '@/types'
-import { formatDate, truncate } from '@/lib/utils'
+import { formatDate } from '@/lib/utils'
 import { toast } from 'sonner'
 
 interface GalleryFormData {
@@ -26,6 +27,366 @@ interface GalleryFormData {
 }
 
 const categories = ['Residential', 'Commercial', 'Deep Cleaning', 'Post Construction', 'Move In/Out', 'Regular']
+
+// Modern Modal Component for Gallery Form
+function GalleryFormModal({
+  isOpen,
+  onClose,
+  isEditing,
+  formData,
+  setFormData,
+  errors,
+  setErrors,
+  saving,
+  onSave,
+}: {
+  isOpen: boolean
+  onClose: () => void
+  isEditing: boolean
+  formData: GalleryFormData
+  setFormData: (data: GalleryFormData) => void
+  errors: Partial<GalleryFormData>
+  setErrors: (errors: Partial<GalleryFormData>) => void
+  saving: boolean
+  onSave: () => void
+}) {
+  const modalRef = React.useRef<HTMLDivElement>(null)
+  const [mounted, setMounted] = React.useState(false)
+
+  React.useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  React.useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = ''
+    }
+    return () => {
+      document.body.style.overflow = ''
+    }
+  }, [isOpen])
+
+  if (!mounted || !isOpen) return null
+
+  return (
+    <AnimatePresence>
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.2 }}
+        className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm"
+        onClick={onClose}
+      />
+      
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 pointer-events-none">
+        <motion.div
+          ref={modalRef}
+          initial={{ opacity: 0, scale: 0.95, y: 20 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          exit={{ opacity: 0, scale: 0.95, y: 20 }}
+          transition={{ type: 'spring', damping: 25, stiffness: 300 }}
+          className="pointer-events-auto w-full max-w-xl bg-white dark:bg-slate-900 rounded-2xl shadow-2xl border border-gray-200 dark:border-slate-700 overflow-hidden flex flex-col max-h-[90vh]"
+          onClick={(e) => e.stopPropagation()}
+        >
+          {/* Header */}
+          <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100 dark:border-slate-700 bg-gradient-to-r from-emerald-50/50 to-transparent dark:from-emerald-900/20 dark:to-transparent flex-shrink-0">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-emerald-100 dark:bg-emerald-900/40 flex items-center justify-center">
+                <Folder className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
+              </div>
+              <div>
+                <h2 className="text-lg font-bold text-gray-900 dark:text-white">
+                  {isEditing ? 'Edit Gallery Item' : 'Create Gallery Item'}
+                </h2>
+                <p className="text-xs text-gray-500 dark:text-slate-400">
+                  {isEditing ? 'Perbarui informasi gallery item' : 'Buat gallery item baru'}
+                </p>
+              </div>
+            </div>
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={onClose}
+              className="rounded-lg"
+            >
+              <X className="w-5 h-5" />
+            </Button>
+          </div>
+
+          {/* Scrollable Content */}
+          <div className="flex-1 overflow-y-auto">
+            <div className="p-6 space-y-5">
+              {/* Image Preview */}
+              {formData.imageUrl && (
+                <div className="relative aspect-video rounded-xl overflow-hidden border border-gray-200 dark:border-slate-700">
+                  <img
+                    src={formData.imageUrl}
+                    alt="Preview"
+                    className="w-full h-full object-cover"
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="100%25" height="100%25"%3E%3Crect width="100%25" height="100%25" fill="%23f3f4f6"/%3E%3Ctext x="50%25" y="50%25" dominant-baseline="middle" text-anchor="middle" fill="%239ca3af"%3EInvalid Image URL%3C/text%3E%3C/svg%3E'
+                    }}
+                  />
+                </div>
+              )}
+
+              {/* Title */}
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-gray-700 dark:text-slate-200">
+                  Title <span className="text-red-500">*</span>
+                </label>
+                <Input
+                  value={formData.title}
+                  onChange={(e) => {
+                    setFormData({ ...formData, title: e.target.value })
+                    setErrors({ ...errors, title: '' })
+                  }}
+                  placeholder="Enter gallery item title"
+                  className={errors.title ? 'border-red-500 focus:border-red-500' : ''}
+                />
+                {errors.title && <p className="text-sm text-red-500">{errors.title}</p>}
+              </div>
+
+              {/* Image URL */}
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-gray-700 dark:text-slate-200">
+                  Image URL <span className="text-red-500">*</span>
+                </label>
+                <Input
+                  value={formData.imageUrl}
+                  onChange={(e) => {
+                    setFormData({ ...formData, imageUrl: e.target.value })
+                    setErrors({ ...errors, imageUrl: '' })
+                  }}
+                  placeholder="https://images.unsplash.com/..."
+                  className={errors.imageUrl ? 'border-red-500 focus:border-red-500' : ''}
+                />
+                {errors.imageUrl && <p className="text-sm text-red-500">{errors.imageUrl}</p>}
+              </div>
+
+              {/* Category & Order */}
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-gray-700 dark:text-slate-200">
+                    Category <span className="text-red-500">*</span>
+                  </label>
+                  <select
+                    value={formData.category}
+                    onChange={(e) => {
+                      setFormData({ ...formData, category: e.target.value })
+                      setErrors({ ...errors, category: '' })
+                    }}
+                    className={`w-full rounded-lg border px-3 py-2 text-sm bg-white dark:bg-slate-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 dark:focus:border-emerald-400 ${
+                      errors.category ? 'border-red-500' : 'border-gray-200 dark:border-slate-700'
+                    }`}
+                  >
+                    {categories.map(cat => (
+                      <option key={cat} value={cat}>{cat}</option>
+                    ))}
+                  </select>
+                  {errors.category && <p className="text-sm text-red-500">{errors.category}</p>}
+                </div>
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-gray-700 dark:text-slate-200">
+                    Display Order
+                  </label>
+                  <Input
+                    type="number"
+                    value={formData.order}
+                    onChange={(e) => setFormData({ ...formData, order: Number(e.target.value) })}
+                    placeholder="0"
+                  />
+                </div>
+              </div>
+
+              {/* Description */}
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-gray-700 dark:text-slate-200">
+                  Description
+                </label>
+                <textarea
+                  value={formData.description}
+                  onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                  placeholder="Enter description..."
+                  rows={3}
+                  className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-slate-700 text-sm text-gray-900 dark:text-slate-100 bg-white dark:bg-slate-800 resize-none focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 dark:focus:border-emerald-400 transition-all placeholder:text-gray-400 dark:placeholder:text-slate-500"
+                />
+              </div>
+
+              {/* Location */}
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-gray-700 dark:text-slate-200">
+                  Location
+                </label>
+                <div className="relative">
+                  <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+                  <Input
+                    value={formData.location}
+                    onChange={(e) => setFormData({ ...formData, location: e.target.value })}
+                    placeholder="e.g., Surabaya, East Java"
+                    className="pl-10"
+                  />
+                </div>
+              </div>
+
+              {/* Toggles */}
+              <div className="flex flex-col gap-3 p-4 bg-gray-50 dark:bg-slate-800 rounded-xl border border-gray-100 dark:border-slate-700">
+                <label className="flex items-center gap-3 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={formData.isFeatured}
+                    onChange={(e) => setFormData({ ...formData, isFeatured: e.target.checked })}
+                    className="w-5 h-5 rounded border-gray-300 text-emerald-600 focus:ring-emerald-500"
+                  />
+                  <div>
+                    <span className="text-sm font-medium text-gray-900 dark:text-white">Featured Item</span>
+                    <p className="text-xs text-gray-500 dark:text-slate-400">Tampilkan di halaman utama</p>
+                  </div>
+                </label>
+                <label className="flex items-center gap-3 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={formData.isActive}
+                    onChange={(e) => setFormData({ ...formData, isActive: e.target.checked })}
+                    className="w-5 h-5 rounded border-gray-300 text-emerald-600 focus:ring-emerald-500"
+                  />
+                  <div>
+                    <span className="text-sm font-medium text-gray-900 dark:text-white">Active</span>
+                    <p className="text-xs text-gray-500 dark:text-slate-400">Item akan ditampilkan publik</p>
+                  </div>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          {/* Footer */}
+          <div className="flex items-center justify-end gap-3 px-6 py-4 border-t border-gray-100 dark:border-slate-700 bg-gray-50/50 dark:bg-slate-800/50 flex-shrink-0">
+            <Button variant="outline" onClick={onClose}>
+              Batal
+            </Button>
+            <Button 
+              onClick={onSave} 
+              disabled={saving}
+              className="bg-emerald-600 hover:bg-emerald-700 gap-2"
+            >
+              {saving ? (
+                <>
+                  <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                  Menyimpan...
+                </>
+              ) : (
+                <>
+                  {isEditing ? 'Simpan Perubahan' : 'Buat Item'}
+                </>
+              )}
+            </Button>
+          </div>
+        </motion.div>
+      </div>
+    </AnimatePresence>
+  )
+}
+
+// Delete Confirmation Modal
+function GalleryDeleteModal({
+  isOpen,
+  onClose,
+  item,
+  onConfirm,
+  deleting,
+}: {
+  isOpen: boolean
+  onClose: () => void
+  item: GalleryItem | null
+  onConfirm: () => void
+  deleting: boolean
+}) {
+  const [mounted, setMounted] = React.useState(false)
+
+  React.useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  if (!mounted || !isOpen || !item) return null
+
+  return (
+    <AnimatePresence>
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.2 }}
+        className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm"
+        onClick={onClose}
+      />
+      
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 pointer-events-none">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95, y: 20 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          exit={{ opacity: 0, scale: 0.95, y: 20 }}
+          transition={{ type: 'spring', damping: 25, stiffness: 300 }}
+          className="pointer-events-auto w-full max-w-md bg-white dark:bg-slate-900 rounded-2xl shadow-2xl border border-gray-200 dark:border-slate-700 overflow-hidden"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <div className="p-6">
+            <div className="flex items-center gap-4">
+              <div className="w-12 h-12 rounded-xl bg-red-100 dark:bg-red-900/30 flex items-center justify-center flex-shrink-0">
+                <AlertCircle className="w-6 h-6 text-red-600 dark:text-red-400" />
+              </div>
+              <div>
+                <h2 className="text-lg font-bold text-gray-900 dark:text-white">Hapus Gallery Item</h2>
+                <p className="text-sm text-gray-500 dark:text-slate-400">
+                  Tindakan ini tidak dapat dibatalkan
+                </p>
+              </div>
+            </div>
+
+            <div className="mt-6 p-4 bg-gray-50 dark:bg-slate-800 rounded-xl border border-gray-100 dark:border-slate-700">
+              <div className="flex items-center gap-3">
+                <img
+                  src={item.imageUrl}
+                  alt=""
+                  className="h-16 w-16 rounded-lg object-cover"
+                />
+                <div>
+                  <p className="text-sm font-medium text-gray-900 dark:text-white">{item.title}</p>
+                  <p className="text-xs text-gray-500 dark:text-slate-400">{item.category}</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-6 flex justify-end gap-3">
+              <Button variant="outline" onClick={onClose}>
+                Batal
+              </Button>
+              <Button 
+                onClick={onConfirm} 
+                disabled={deleting}
+                className="bg-red-600 hover:bg-red-700 gap-2"
+              >
+                {deleting ? (
+                  <>
+                    <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                    Menghapus...
+                  </>
+                ) : (
+                  <>
+                    <Trash2 className="w-4 h-4" />
+                    Hapus
+                  </>
+                )}
+              </Button>
+            </div>
+          </div>
+        </motion.div>
+      </div>
+    </AnimatePresence>
+  )
+}
 
 export default function GalleryPage() {
   const [items, setItems] = React.useState<GalleryItem[]>([])
@@ -45,6 +406,8 @@ export default function GalleryPage() {
     order: 0,
   })
   const [errors, setErrors] = React.useState<Partial<GalleryFormData>>({})
+  const [saving, setSaving] = React.useState(false)
+  const [deleting, setDeleting] = React.useState(false)
 
   React.useEffect(() => {
     fetchItems()
@@ -110,10 +473,10 @@ export default function GalleryPage() {
     return Object.keys(newErrors).length === 0
   }
 
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault()
+  async function handleSubmit() {
     if (!validateForm()) return
 
+    setSaving(true)
     const itemData = {
       title: formData.title,
       description: formData.description || undefined,
@@ -137,11 +500,14 @@ export default function GalleryPage() {
       fetchItems()
     } catch (error) {
       toast.error(`Failed to ${isEditing ? 'update' : 'create'} gallery item`)
+    } finally {
+      setSaving(false)
     }
   }
 
   async function handleDelete() {
     if (!selectedItem) return
+    setDeleting(true)
     try {
       await deleteGalleryItem(selectedItem.id)
       toast.success('Gallery item deleted successfully')
@@ -149,6 +515,8 @@ export default function GalleryPage() {
       fetchItems()
     } catch (error) {
       toast.error('Failed to delete gallery item')
+    } finally {
+      setDeleting(false)
     }
   }
 
@@ -174,9 +542,9 @@ export default function GalleryPage() {
             className="h-14 w-14 rounded-lg object-cover"
           />
           <div>
-            <p className="font-medium text-gray-900">{value}</p>
+            <p className="font-medium text-gray-900 dark:text-white">{value}</p>
             {row.location && (
-              <p className="text-xs text-gray-500 flex items-center gap-1">
+              <p className="text-xs text-gray-500 dark:text-slate-400 flex items-center gap-1">
                 <MapPin className="h-3 w-3" /> {row.location}
               </p>
             )}
@@ -199,7 +567,7 @@ export default function GalleryPage() {
           const item = items.find(i => i.isFeatured === value)
           if (item) handleToggleFeatured(item)
         }}>
-          <Star className={`h-5 w-5 ${value ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300'}`} />
+          <Star className={`h-5 w-5 ${value ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300 dark:text-slate-600'}`} />
         </button>
       ),
     },
@@ -215,13 +583,13 @@ export default function GalleryPage() {
     {
       key: 'order',
       label: 'Order',
-      render: (value: number) => <span className="text-sm">{value}</span>,
+      render: (value: number) => <span className="text-sm text-gray-700 dark:text-slate-300">{value}</span>,
     },
     {
       key: 'createdAt',
       label: 'Created',
       render: (value: string) => (
-        <div className="flex items-center gap-1 text-sm text-gray-500">
+        <div className="flex items-center gap-1 text-sm text-gray-500 dark:text-slate-400">
           <Calendar className="h-3.5 w-3.5" />
           {formatDate(value)}
         </div>
@@ -232,11 +600,11 @@ export default function GalleryPage() {
       label: 'Actions',
       render: (_: any, row: GalleryItem) => (
         <div className="flex items-center gap-1">
-          <Button variant="ghost" size="icon" onClick={() => openEditModal(row)}>
+          <Button variant="ghost" size="sm" onClick={() => openEditModal(row)} className="text-gray-500 dark:text-slate-400 hover:text-emerald-600">
             <Edit className="h-4 w-4" />
           </Button>
-          <Button variant="ghost" size="icon" onClick={() => openDeleteModal(row)}>
-            <Trash2 className="h-4 w-4 text-error" />
+          <Button variant="ghost" size="sm" onClick={() => openDeleteModal(row)} className="text-gray-500 dark:text-slate-400 hover:text-red-600">
+            <Trash2 className="h-4 w-4" />
           </Button>
         </div>
       ),
@@ -244,13 +612,13 @@ export default function GalleryPage() {
   ]
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-slate-900 text-gray-900 dark:text-white">
+    <div className="min-h-screen bg-gray-50/50 dark:bg-slate-900 text-gray-900 dark:text-white">
       {/* Topbar */}
-      <div className="sticky top-0 z-20 bg-white/80 backdrop-blur-xl border-b border-gray-100 px-4 md:px-6 py-3 flex items-center justify-between">
-        <div className="flex items-center gap-2 text-xs text-gray-500">
-          <span>NingClean Admin</span>
-          <span>/</span>
-          <span className="text-gray-700">Gallery</span>
+      <div className="sticky top-0 z-20 bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border-b border-gray-200 dark:border-slate-700 px-4 md:px-6 py-4">
+        <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-slate-400">
+          <span>Admin</span>
+          <span className="text-gray-400 dark:text-slate-500">/</span>
+          <span className="text-gray-900 dark:text-white font-medium">Gallery</span>
         </div>
       </div>
 
@@ -262,11 +630,11 @@ export default function GalleryPage() {
           className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"
         >
           <div>
-            <h1 className="text-2xl font-bold tracking-tight text-gray-900">Gallery</h1>
-            <p className="text-sm text-gray-500 mt-0.5">Manage gallery items and portfolio</p>
+            <h1 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Gallery</h1>
+            <p className="text-sm text-gray-500 dark:text-slate-400 mt-1">Manage gallery items and portfolio</p>
           </div>
-          <Button onClick={openCreateModal}>
-            <Plus className="mr-2 h-4 w-4" />
+          <Button onClick={openCreateModal} className="bg-emerald-600 hover:bg-emerald-700 gap-2">
+            <Plus className="h-4 w-4" />
             New Gallery Item
           </Button>
         </motion.div>
@@ -277,7 +645,7 @@ export default function GalleryPage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.15 }}
         >
-          <div className="bg-white border border-gray-100 rounded-2xl overflow-hidden shadow-sm">
+          <div className="bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-700 rounded-2xl overflow-hidden shadow-sm">
             <DataTable
               columns={columns}
               data={items}
@@ -287,119 +655,30 @@ export default function GalleryPage() {
         </motion.div>
       </div>
 
-      <Modal
+      {/* Form Modal */}
+      <GalleryFormModal
         isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        title={isEditing ? 'Edit Gallery Item' : 'Create New Gallery Item'}
-        size="lg"
-      >
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <Input
-            label="Title"
-            placeholder="Enter gallery item title"
-            value={formData.title}
-            onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-            error={errors.title}
-          />
+        onClose={() => {
+          setIsModalOpen(false)
+          setIsEditing(false)
+        }}
+        isEditing={isEditing}
+        formData={formData}
+        setFormData={setFormData}
+        errors={errors}
+        setErrors={setErrors}
+        saving={saving}
+        onSave={handleSubmit}
+      />
 
-          <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-1.5">
-              <label className="block text-sm font-medium text-gray-700">Category</label>
-              <select
-                value={formData.category}
-                onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
-              >
-                {categories.map(cat => (
-                  <option key={cat} value={cat}>{cat}</option>
-                ))}
-              </select>
-              {errors.category && <p className="text-sm text-error">{errors.category}</p>}
-            </div>
-            <Input
-              label="Display Order"
-              type="number"
-              placeholder="0"
-              value={formData.order}
-              onChange={(e) => setFormData({ ...formData, order: Number(e.target.value) })}
-            />
-          </div>
-
-          <Textarea
-            label="Description (optional)"
-            placeholder="Enter description..."
-            className="min-h-[80px] bg-white dark:bg-slate-900 border-gray-200 dark:border-slate-700 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-slate-500 focus:border-emerald-500 dark:focus:border-emerald-400 focus-visible:ring-emerald-500 dark:focus-visible:ring-emerald-400"
-            value={formData.description}
-            onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-          />
-
-          <Input
-            label="Image URL"
-            placeholder="https://images.unsplash.com/..."
-            value={formData.imageUrl}
-            onChange={(e) => setFormData({ ...formData, imageUrl: e.target.value })}
-            error={errors.imageUrl}
-            icon={<ImageIcon className="h-4 w-4" />}
-          />
-
-          <Input
-            label="Location (optional)"
-            placeholder="e.g., Surabaya, East Java"
-            value={formData.location}
-            onChange={(e) => setFormData({ ...formData, location: e.target.value })}
-            icon={<MapPin className="h-4 w-4" />}
-          />
-
-          <div className="flex flex-col gap-2">
-            <label className="flex items-center gap-2">
-              <input
-                type="checkbox"
-                checked={formData.isFeatured}
-                onChange={(e) => setFormData({ ...formData, isFeatured: e.target.checked })}
-                className="h-4 w-4 rounded border-gray-300 text-primary"
-              />
-              <span className="text-sm">Featured item</span>
-            </label>
-            <label className="flex items-center gap-2">
-              <input
-                type="checkbox"
-                checked={formData.isActive}
-                onChange={(e) => setFormData({ ...formData, isActive: e.target.checked })}
-                className="h-4 w-4 rounded border-gray-300 text-primary"
-              />
-              <span className="text-sm">Active</span>
-            </label>
-          </div>
-
-          <div className="flex justify-end gap-2 border-t pt-4">
-            <Button type="button" variant="outline" onClick={() => setIsModalOpen(false)}>
-              Cancel
-            </Button>
-            <Button type="submit">{isEditing ? 'Update' : 'Create'}</Button>
-          </div>
-        </form>
-      </Modal>
-
-      <Modal
+      {/* Delete Modal */}
+      <GalleryDeleteModal
         isOpen={isDeleteModalOpen}
         onClose={() => setIsDeleteModalOpen(false)}
-        title="Delete Gallery Item"
-        size="sm"
-      >
-        <div className="space-y-4">
-          <p className="text-gray-600">
-            Are you sure you want to delete <strong>{selectedItem?.title}</strong>? This action cannot be undone.
-          </p>
-          <div className="flex justify-end gap-2">
-            <Button variant="outline" onClick={() => setIsDeleteModalOpen(false)}>
-              Cancel
-            </Button>
-            <Button variant="error" onClick={handleDelete}>
-              Delete
-            </Button>
-          </div>
-        </div>
-      </Modal>
+        item={selectedItem}
+        onConfirm={handleDelete}
+        deleting={deleting}
+      />
     </div>
   )
 }

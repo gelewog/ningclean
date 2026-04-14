@@ -32,7 +32,7 @@ export class CreateTestimonialDto {
   @ApiPropertyOptional({ example: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e' })
   @IsString()
   @IsOptional()
-  avatar?: string;
+  image?: string;
 
   @ApiPropertyOptional({ example: true })
   @IsBoolean()
@@ -48,6 +48,11 @@ export class CreateTestimonialDto {
   @IsNumber()
   @IsOptional()
   order?: number;
+
+  @ApiPropertyOptional({ example: 'surabaya' })
+  @IsString()
+  @IsOptional()
+  areaSlug?: string;
 }
 
 export class UpdateTestimonialDto {
@@ -81,7 +86,7 @@ export class UpdateTestimonialDto {
   @ApiPropertyOptional({ example: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e' })
   @IsString()
   @IsOptional()
-  avatar?: string;
+  image?: string;
 
   @ApiPropertyOptional({ example: true })
   @IsBoolean()
@@ -97,4 +102,9 @@ export class UpdateTestimonialDto {
   @IsNumber()
   @IsOptional()
   order?: number;
+
+  @ApiPropertyOptional({ example: 'surabaya' })
+  @IsString()
+  @IsOptional()
+  areaSlug?: string;
 }

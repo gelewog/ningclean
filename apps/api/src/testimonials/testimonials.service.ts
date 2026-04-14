@@ -6,9 +6,12 @@ import { CreateTestimonialDto, UpdateTestimonialDto } from './dto/testimonial.dt
 export class TestimonialsService {
   constructor(private prisma: PrismaService) {}
 
-  async findAll() {
+  async findAll(areaSlug?: string) {
     return this.prisma.testimonial.findMany({
-      where: { isActive: true },
+      where: {
+        isActive: true,
+        ...(areaSlug && { areaSlug }),
+      },
       orderBy: [
         { isFeatured: 'desc' },
         { order: 'asc' },

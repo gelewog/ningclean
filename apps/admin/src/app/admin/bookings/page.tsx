@@ -8,15 +8,14 @@ import {
   Search, Download, Plus, Eye, X, Check, Clock,
   MapPin, User, FileText, Calendar, MessageCircle,
   Phone, ChevronLeft, ChevronRight, TrendingUp,
-  MoreHorizontal, Loader2
+  MoreHorizontal, Loader2, Mail
 } from 'lucide-react'
-import {
-  Modal, BookingDetailSection, BookingDetailRow,
-  BookingActionButton, WhatsAppButton, StatusBadge,
-  BookingStepProgress
-} from '@/components/admin/Modal'
+import { Badge } from '@/components/ui/badge'
 import { Pagination } from '@/components/admin/Pagination'
 import { DataTable } from '@/components/admin/DataTable'
+import {
+  Modal, WhatsAppButton, StatusBadge, BookingStepProgress
+} from '@/components/admin/Modal'
 import {
   getBookings, getToken, updateBookingStatus
 } from '@/lib/api'
@@ -242,15 +241,20 @@ function BookingsContent() {
         method: 'POST',
         headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          guestName: newBookingData.customerName,
-          guestPhone: newBookingData.customerPhone,
-          guestEmail: newBookingData.customerEmail,
-          serviceId: newBookingData.serviceId,
-          area: newBookingData.area,
-          address: newBookingData.address,
+          customerName: newBookingData.customerName,
+          customerPhone: newBookingData.customerPhone,
+          customerEmail: newBookingData.customerEmail,
           serviceDate: newBookingData.serviceDate,
           serviceTime: newBookingData.serviceTime,
+          address: newBookingData.address,
+          area: newBookingData.area,
           notes: newBookingData.notes,
+          items: [
+            {
+              serviceId: newBookingData.serviceId,
+              quantity: 1,
+            },
+          ],
         }),
       })
       if (res.ok) {
@@ -565,115 +569,257 @@ function BookingsContent() {
       </div>
 
       {/* ── Detail Modal ──────────────────────────────────────────────────────── */}
-      <Modal
-        isOpen={isDetailOpen}
-        onClose={() => setIsDetailOpen(false)}
-        title="Detail Booking"
-        description={`Order #${selectedBooking?.id?.slice(0, 8) ?? ''}`}
-        size="lg"
-      >
-        {selectedBooking && (
-          <div className="p-6 space-y-5">
-            {/* Step Progress */}
-            <BookingStepProgress status={selectedBooking.status} />
+      {isDetailOpen && selectedBooking && (
+        <AnimatePresence>
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm"
+            onClick={() => setIsDetailOpen(false)}
+          />
 
-            {/* Status bar */}
-            <div className="flex flex-wrap items-center justify-between gap-3 px-4 py-3 bg-gray-50 dark:bg-slate-800 border border-gray-100 dark:border-slate-700 rounded-xl">
-              <div className="flex items-center gap-3">
-                <StatusPill status={selectedBooking.status} />
-                <span className="text-xs text-gray-500 dark:text-slate-400">
-                  {formatDateTime(selectedBooking.createdAt)}
-                </span>
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 pointer-events-none">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              transition={{ type: 'spring', damping: 25, stiffness: 300 }}
+              className="pointer-events-auto w-full max-w-4xl max-h-[90vh] bg-white dark:bg-slate-900 rounded-2xl shadow-2xl border border-gray-200 dark:border-slate-700 overflow-hidden flex flex-col"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Header */}
+              <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100 dark:border-slate-700 bg-gradient-to-r from-blue-50/50 to-transparent dark:from-blue-900/20 dark:to-transparent">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-blue-100 dark:bg-blue-900/40 flex items-center justify-center border border-blue-200 dark:border-blue-800">
+                    <FileText className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+                  </div>
+                  <div>
+                    <h2 className="text-lg font-bold text-gray-900 dark:text-white">Booking Details</h2>
+                    <p className="text-xs text-gray-500 dark:text-slate-400">Order #{selectedBooking.id?.slice(0, 8) ?? ''}</p>
+                  </div>
+                </div>
+                <button
+                  onClick={() => setIsDetailOpen(false)}
+                  className="flex h-9 w-9 items-center justify-center rounded-lg bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 text-gray-400 dark:text-slate-500 transition-all duration-200 hover:bg-gray-50 dark:hover:bg-slate-700 hover:text-gray-600 dark:hover:text-slate-200"
+                >
+                  <X className="h-5 w-5" />
+                </button>
               </div>
-              <WhatsAppButton phone={selectedBooking.customerPhone} />
-            </div>
 
-            {/* Detail Grid */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-              <div className="space-y-4">
-                <DetailCard title="Informasi Customer" icon={<User className="w-3.5 h-3.5" />}>
-                  <DetailRow label="Nama" value={selectedBooking.customerName} />
-                  <DetailRow label="Email" value={selectedBooking.customerEmail || '-'} />
-                  <DetailRow label="Telepon" value={selectedBooking.customerPhone || '-'} />
-                  {selectedBooking.notes && (
-                    <div className="mt-3 pt-3 border-t border-gray-100">
-                      <p className="text-[11px] text-gray-500 mb-1">Catatan</p>
-                      <p className="text-xs text-gray-600 leading-relaxed">{selectedBooking.notes}</p>
+              {/* Scrollable Content */}
+              <div className="flex-1 overflow-y-auto p-6 space-y-6">
+                {/* Step Progress */}
+                <BookingStepProgress status={selectedBooking.status} />
+
+                {/* Status Bar */}
+                <div className="flex flex-wrap items-center justify-between gap-3 px-4 py-3 bg-gray-50 dark:bg-slate-800 border border-gray-100 dark:border-slate-700 rounded-xl">
+                  <div className="flex items-center gap-3">
+                    <StatusPill status={selectedBooking.status} />
+                    <span className="text-xs text-gray-500 dark:text-slate-400">
+                      {formatDateTime(selectedBooking.createdAt)}
+                    </span>
+                  </div>
+                  <WhatsAppButton phone={selectedBooking.customerPhone} />
+                </div>
+
+                {/* Customer Profile Card */}
+                <div className="bg-gradient-to-br from-gray-50 to-white dark:from-slate-800 dark:to-slate-900 rounded-xl border border-gray-100 dark:border-slate-700 p-5">
+                  <div className="flex items-start gap-4">
+                    <div className="flex-shrink-0 w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-500 to-blue-600 dark:from-blue-600 dark:to-blue-700 flex items-center justify-center shadow-lg shadow-blue-500/20">
+                      <span className="text-2xl font-bold text-white">
+                        {selectedBooking.customerName?.charAt(0).toUpperCase() || '?'}
+                      </span>
                     </div>
-                  )}
-                </DetailCard>
-                <DetailCard title="Jadwal Layanan" icon={<Calendar className="w-3.5 h-3.5" />}>
-                  <DetailRow label="Tanggal" value={formatDate(selectedBooking.scheduledDate)} highlight />
-                  <DetailRow label="Jam" value={selectedBooking.scheduledTime} highlight />
-                </DetailCard>
-              </div>
-              <div className="space-y-4">
-                <DetailCard title="Detail Layanan" icon={<FileText className="w-3.5 h-3.5" />}>
-                  <DetailRow label="Layanan" value={selectedBooking.serviceName} />
-                  <DetailRow label="Harga" value={formatCurrency(selectedBooking.servicePrice)} />
-                  <DetailRow label="Total" value={formatCurrency(selectedBooking.totalAmount)} highlight />
-                </DetailCard>
-                <DetailCard title="Lokasi" icon={<MapPin className="w-3.5 h-3.5" />}>
-                  <DetailRow label="Area" value={selectedBooking.area} />
-                  <div className="mt-2">
-                    <p className="text-[11px] text-gray-500 dark:text-slate-400 mb-1">Alamat Lengkap</p>
-                    <p className="text-xs text-gray-700 dark:text-slate-200 bg-gray-100 dark:bg-slate-700 rounded-lg p-3 leading-relaxed">
+                    <div className="flex-1 min-w-0">
+                      <h3 className="text-xl font-bold text-gray-900 dark:text-white">{selectedBooking.customerName}</h3>
+                      <p className="text-sm text-gray-500 dark:text-slate-400 mt-1">
+                        Booked on {formatDateTime(selectedBooking.createdAt)}
+                      </p>
+
+                      {/* Quick Stats */}
+                      <div className="flex flex-wrap items-center gap-4 sm:gap-6 mt-4">
+                        {/* Service Info */}
+                        <div className="flex items-center gap-3">
+                          <div className="w-10 h-10 rounded-lg bg-emerald-50 dark:bg-emerald-900/30 flex items-center justify-center shrink-0">
+                            <span className="text-sm font-bold text-emerald-600 dark:text-emerald-400" suppressHydrationWarning>
+                              {selectedBooking.servicePrice >= 1000000 ? '1M+' : selectedBooking.servicePrice >= 1000 ? `${Math.round(selectedBooking.servicePrice / 1000)}K` : selectedBooking.servicePrice}
+                            </span>
+                          </div>
+                          <div>
+                            <p className="text-xs text-gray-500 dark:text-slate-400">Service</p>
+                            <p className="text-sm font-semibold text-gray-900 dark:text-white truncate max-w-[140px]">{selectedBooking.serviceName}</p>
+                          </div>
+                        </div>
+
+                        {/* Schedule Info */}
+                        <div className="flex items-center gap-3">
+                          <div className="w-10 h-10 rounded-lg bg-blue-50 dark:bg-blue-900/30 flex items-center justify-center shrink-0">
+                            <Calendar className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+                          </div>
+                          <div>
+                            <p className="text-xs text-gray-500 dark:text-slate-400">Schedule</p>
+                            <p className="text-sm font-semibold text-gray-900 dark:text-white" suppressHydrationWarning>{formatDate(selectedBooking.scheduledDate)}</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Contact Information */}
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <div className="bg-white dark:bg-slate-800 rounded-xl border border-gray-100 dark:border-slate-700 p-4 hover:border-blue-200 dark:hover:border-blue-800 transition-colors">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-lg bg-blue-50 dark:bg-blue-900/30 flex items-center justify-center">
+                        <Mail className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <p className="text-xs text-gray-500 dark:text-slate-400 uppercase tracking-wide">Email</p>
+                        <p className="text-sm font-medium text-gray-900 dark:text-white truncate">{selectedBooking.customerEmail || '—'}</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="bg-white dark:bg-slate-800 rounded-xl border border-gray-100 dark:border-slate-700 p-4 hover:border-emerald-200 dark:hover:border-emerald-800 transition-colors">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-lg bg-emerald-50 dark:bg-emerald-900/30 flex items-center justify-center">
+                        <Phone className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <p className="text-xs text-gray-500 dark:text-slate-400 uppercase tracking-wide">Phone</p>
+                        <p className="text-sm font-medium text-gray-900 dark:text-white">{selectedBooking.customerPhone || '—'}</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Service & Schedule Info */}
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <div className="bg-white dark:bg-slate-800 rounded-xl border border-gray-100 dark:border-slate-700 p-4">
+                    <div className="flex items-center gap-2 mb-3">
+                      <FileText className="w-4 h-4 text-gray-500 dark:text-slate-400" />
+                      <span className="text-sm font-semibold text-gray-900 dark:text-white">Service Details</span>
+                    </div>
+                    <div className="space-y-2">
+                      <div className="flex justify-between">
+                        <span className="text-xs text-gray-500 dark:text-slate-400">Service</span>
+                        <span className="text-sm font-medium text-gray-900 dark:text-white">{selectedBooking.serviceName}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-xs text-gray-500 dark:text-slate-400">Price</span>
+                        <span className="text-sm font-medium text-emerald-600 dark:text-emerald-400">{formatCurrency(selectedBooking.servicePrice)}</span>
+                      </div>
+                      <div className="flex justify-between pt-2 border-t border-gray-100 dark:border-slate-700">
+                        <span className="text-xs text-gray-500 dark:text-slate-400">Total</span>
+                        <span className="text-sm font-bold text-gray-900 dark:text-white">{formatCurrency(selectedBooking.totalAmount)}</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="bg-white dark:bg-slate-800 rounded-xl border border-gray-100 dark:border-slate-700 p-4">
+                    <div className="flex items-center gap-2 mb-3">
+                      <Calendar className="w-4 h-4 text-gray-500 dark:text-slate-400" />
+                      <span className="text-sm font-semibold text-gray-900 dark:text-white">Schedule</span>
+                    </div>
+                    <div className="space-y-2">
+                      <div className="flex justify-between">
+                        <span className="text-xs text-gray-500 dark:text-slate-400">Date</span>
+                        <span className="text-sm font-medium text-gray-900 dark:text-white">{formatDate(selectedBooking.scheduledDate)}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-xs text-gray-500 dark:text-slate-400">Time</span>
+                        <span className="text-sm font-medium text-blue-600 dark:text-blue-400">{selectedBooking.scheduledTime}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Location */}
+                <div className="bg-white dark:bg-slate-800 rounded-xl border border-gray-100 dark:border-slate-700 overflow-hidden">
+                  <div className="px-4 py-3 border-b border-gray-100 dark:border-slate-700 bg-gray-50/50 dark:bg-slate-800/50">
+                    <div className="flex items-center gap-2">
+                      <MapPin className="w-4 h-4 text-gray-500 dark:text-slate-400" />
+                      <span className="text-sm font-semibold text-gray-900 dark:text-white">Location</span>
+                    </div>
+                  </div>
+                  <div className="p-4">
+                    <div className="flex items-center gap-2 mb-3">
+                      <Badge variant="info" className="text-xs">{selectedBooking.area}</Badge>
+                    </div>
+                    <p className="text-sm text-gray-600 dark:text-slate-400 leading-relaxed">
                       {selectedBooking.address}
                     </p>
                   </div>
-                </DetailCard>
-              </div>
-            </div>
+                </div>
 
-            {/* Action Buttons */}
-            <div className="flex flex-wrap items-center gap-2 pt-4 border-t border-gray-100">
-              {selectedBooking.status === 'pending' && (
-                <>
-                  <ActionBtn variant="success" onClick={() => handleStatusUpdate(selectedBooking.id, 'confirmed')} loading={actionLoading}>
-                    <Check className="w-3.5 h-3.5" /> Konfirmasi
+                {/* Notes */}
+                {selectedBooking.notes && (
+                  <div className="bg-white dark:bg-slate-800 rounded-xl border border-gray-100 dark:border-slate-700 overflow-hidden">
+                    <div className="px-4 py-3 border-b border-gray-100 dark:border-slate-700 bg-gray-50/50 dark:bg-slate-800/50">
+                      <div className="flex items-center gap-2">
+                        <MessageCircle className="w-4 h-4 text-gray-500 dark:text-slate-400" />
+                        <span className="text-sm font-semibold text-gray-900 dark:text-white">Customer Notes</span>
+                      </div>
+                    </div>
+                    <div className="p-4">
+                      <p className="text-sm text-gray-600 dark:text-slate-400 leading-relaxed">
+                        {selectedBooking.notes}
+                      </p>
+                    </div>
+                  </div>
+                )}
+
+                {/* Action Buttons */}
+                <div className="flex flex-wrap items-center gap-3 pt-4 border-t border-gray-100 dark:border-slate-700">
+                  {selectedBooking.status === 'pending' && (
+                    <>
+                      <ActionBtn variant="success" onClick={() => handleStatusUpdate(selectedBooking.id, 'confirmed')} loading={actionLoading}>
+                        <Check className="w-3.5 h-3.5" /> Konfirmasi
+                      </ActionBtn>
+                      <ActionBtn variant="danger" onClick={() => handleStatusUpdate(selectedBooking.id, 'cancelled')} loading={actionLoading}>
+                        Batalkan
+                      </ActionBtn>
+                    </>
+                  )}
+                  {selectedBooking.status === 'confirmed' && (
+                    <ActionBtn variant="primary" onClick={() => handleStatusUpdate(selectedBooking.id, 'in_progress')} loading={actionLoading}>
+                      <Clock className="w-3.5 h-3.5" /> Mulai Pengerjaan
+                    </ActionBtn>
+                  )}
+                  {selectedBooking.status === 'in_progress' && (
+                    <ActionBtn variant="success" onClick={() => handleStatusUpdate(selectedBooking.id, 'completed')} loading={actionLoading}>
+                      <Check className="w-3.5 h-3.5" /> Tandai Selesai
+                    </ActionBtn>
+                  )}
+                  {selectedBooking.status === 'completed' && (
+                    <div className="flex items-center gap-2 px-3 py-2 bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-800 rounded-xl">
+                      <Check className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+                      <span className="text-xs font-medium text-emerald-700 dark:text-emerald-400">Booking sudah selesai</span>
+                    </div>
+                  )}
+                  {selectedBooking.status === 'cancelled' && (
+                    <div className="flex items-center gap-2 px-3 py-2 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl">
+                      <X className="w-3.5 h-3.5 text-red-600 dark:text-red-400" />
+                      <span className="text-xs font-medium text-red-700 dark:text-red-400">Booking sudah dibatalkan</span>
+                    </div>
+                  )}
+                  <div className="flex-1" />
+                  <ActionBtn variant="outline" onClick={() => {
+                    setCurrentBookingId(selectedBooking.id)
+                    setInternalNotes(selectedBooking.internalNotes || '')
+                    setInternalNotesOpen(true)
+                  }}>
+                    Notes
                   </ActionBtn>
-                  <ActionBtn variant="danger" onClick={() => handleStatusUpdate(selectedBooking.id, 'cancelled')} loading={actionLoading}>
-                    Batalkan
+                  <ActionBtn variant="outline" onClick={() => setIsDetailOpen(false)}>
+                    Close
                   </ActionBtn>
-                </>
-              )}
-              {selectedBooking.status === 'confirmed' && (
-                <ActionBtn variant="primary" onClick={() => handleStatusUpdate(selectedBooking.id, 'in_progress')} loading={actionLoading}>
-                  <Clock className="w-3.5 h-3.5" /> Mulai Pengerjaan
-                </ActionBtn>
-              )}
-              {selectedBooking.status === 'in_progress' && (
-                <ActionBtn variant="success" onClick={() => handleStatusUpdate(selectedBooking.id, 'completed')} loading={actionLoading}>
-                  <Check className="w-3.5 h-3.5" /> Tandai Selesai
-                </ActionBtn>
-              )}
-              {selectedBooking.status === 'completed' && (
-                <div className="flex items-center gap-2 px-3 py-2 bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-800 rounded-xl">
-                  <Check className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
-                  <span className="text-xs font-medium text-emerald-700 dark:text-emerald-400">Booking sudah selesai</span>
                 </div>
-              )}
-              {selectedBooking.status === 'cancelled' && (
-                <div className="flex items-center gap-2 px-3 py-2 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl">
-                  <X className="w-3.5 h-3.5 text-red-600 dark:text-red-400" />
-                  <span className="text-xs font-medium text-red-700 dark:text-red-400">Booking sudah dibatalkan</span>
-                </div>
-              )}
-              <div className="flex-1" />
-              <ActionBtn variant="outline" onClick={() => {
-                setCurrentBookingId(selectedBooking.id)
-                setInternalNotes(selectedBooking.internalNotes || '')
-                setInternalNotesOpen(true)
-              }}>
-                Notes
-              </ActionBtn>
-              <ActionBtn variant="outline" onClick={() => setIsDetailOpen(false)}>
-                Tutup
-              </ActionBtn>
-            </div>
+              </div>
+            </motion.div>
           </div>
-        )}
-      </Modal>
+        </AnimatePresence>
+      )}
 
       {/* ── Bulk Status Modal ──────────────────────────────────────────────── */}
       <DarkModal

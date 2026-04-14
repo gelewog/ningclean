@@ -178,9 +178,10 @@ export async function getPricingPlans() {
 }
 
 // Testimonials (Public)
-export async function getTestimonials() {
+export async function getTestimonials(areaSlug?: string) {
   try {
-    return await fetchApi<any[]>('/testimonials')
+    const query = areaSlug ? `?area=${areaSlug}` : ''
+    return await fetchApi<any[]>(`/testimonials${query}`)
   } catch {
     return []
   }

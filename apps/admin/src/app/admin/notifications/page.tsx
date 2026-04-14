@@ -259,12 +259,14 @@ export default function NotificationsPage() {
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   className={`flex gap-4 p-5 transition-colors hover:bg-gray-50/50 dark:hover:bg-slate-800 ${
-                    !notification.isRead ? 'bg-emerald-50/30' : ''
+                    !notification.isRead ? 'bg-emerald-50/30 dark:bg-emerald-900/20' : ''
                   }`}
                 >
                   {/* Icon */}
                   <div className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl ${
-                    !notification.isRead ? 'bg-emerald-100' : 'bg-gray-100 dark:bg-slate-800'
+                    !notification.isRead 
+                      ? 'bg-emerald-100 dark:bg-emerald-900/40' 
+                      : 'bg-gray-100 dark:bg-slate-800'
                   }`}>
                     {getNotificationIcon(notification.type)}
                   </div>
@@ -280,7 +282,7 @@ export default function NotificationsPage() {
                           <h3 className={`text-sm ${!notification.isRead ? 'font-semibold text-gray-900 dark:text-white' : 'font-medium text-gray-700 dark:text-slate-200'}`}>
                             {notification.title}
                           </h3>
-                          <span className="text-[10px] font-medium text-gray-400 dark:text-slate-500 px-2 py-0.5 rounded-full bg-gray-100 dark:bg-slate-800">
+                          <span className="text-[10px] font-medium text-gray-500 dark:text-slate-400 px-2 py-0.5 rounded-full bg-gray-100 dark:bg-slate-700">
                             {getTypeLabel(notification.type)}
                           </span>
                         </div>
@@ -288,11 +290,11 @@ export default function NotificationsPage() {
                           {notification.message}
                         </p>
                         <div className="flex items-center gap-4 mt-2">
-                          <span className="text-xs text-gray-400 dark:text-slate-500">
+                          <span className="text-xs text-gray-500 dark:text-slate-400">
                             {formatDate(notification.createdAt)}
                           </span>
                           {notification.data?.bookingId && (
-                            <span className="text-xs text-gray-400 dark:text-slate-500">
+                            <span className="text-xs text-gray-500 dark:text-slate-400">
                               ID: {notification.data.bookingId.slice(0, 8)}...
                             </span>
                           )}
@@ -307,7 +309,7 @@ export default function NotificationsPage() {
                             size="sm"
                             onClick={() => handleMarkAsUnread(notification.id)}
                             disabled={actionLoading === notification.id}
-                            className="gap-1 text-xs text-gray-500 dark:text-slate-400 hover:text-gray-700 dark:text-slate-200"
+                            className="gap-1 text-xs text-gray-500 dark:text-slate-400 hover:text-gray-700 dark:hover:text-slate-200"
                           >
                             <Check className="h-3 w-3" />
                             Tandai Belum Dibaca
@@ -318,7 +320,7 @@ export default function NotificationsPage() {
                             size="sm"
                             onClick={() => handleMarkAsRead(notification.id)}
                             disabled={actionLoading === notification.id}
-                            className="gap-1 text-xs text-emerald-600 hover:text-emerald-700"
+                            className="gap-1 text-xs text-emerald-600 dark:text-emerald-400 hover:text-emerald-700 dark:hover:text-emerald-300"
                           >
                             <Check className="h-3 w-3" />
                             Tandai Dibaca

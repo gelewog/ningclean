@@ -67,7 +67,7 @@ export interface BlogPost {
 export interface Testimonial {
   id: string;
   name: string;
-  avatar?: string;
+  image?: string;
   rating: number;
   content: string;
   role?: string;
@@ -75,6 +75,8 @@ export interface Testimonial {
   service?: string;
   isActive?: boolean;
   isFeatured?: boolean;
+  order?: number;
+  areaSlug?: string;
   createdAt?: string;
 }
 

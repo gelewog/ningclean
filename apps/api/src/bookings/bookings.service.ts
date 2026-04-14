@@ -12,6 +12,7 @@ interface FindAllQuery {
   search?: string;
   dateFrom?: string;
   dateTo?: string;
+  customerId?: string;
 }
 
 @Injectable()
@@ -22,7 +23,7 @@ export class BookingsService {
   ) {}
 
   async findAll(user: User, query: FindAllQuery = {}) {
-    const { page = 1, limit = 10, status, area, search, dateFrom, dateTo } = query;
+    const { page = 1, limit = 10, status, area, search, dateFrom, dateTo, customerId } = query;
 
     // Build where clause
     const where: Prisma.BookingWhereInput = {};
@@ -30,6 +31,11 @@ export class BookingsService {
     // Non-admin users only see their own bookings
     if (user.role !== Role.ADMIN) {
       where.customerId = user.id;
+    }
+
+    // Filter by customerId (admin can filter by specific customer)
+    if (customerId) {
+      where.customerId = customerId;
     }
 
     // Filter by status (convert lowercase to uppercase enum)

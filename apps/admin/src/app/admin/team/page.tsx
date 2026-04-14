@@ -2,7 +2,7 @@
 
 import * as React from 'react'
 import { motion } from 'framer-motion'
-import { Plus, Edit, Trash2, User, Calendar, Mail, Phone, GripVertical } from 'lucide-react'
+import { Plus, FileText, Save, Edit, Trash2, User, Calendar, Mail, Phone, GripVertical } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
@@ -276,7 +276,7 @@ export default function TeamPage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.15 }}
         >
-          <div className="bg-white border border-gray-100 dark:border-slate-700 rounded-2xl overflow-hidden shadow-sm dark:shadow-slate-900/50">
+          <div className="bg-white dark:bg-slate-900 border border-gray-100 dark:border-slate-700 rounded-2xl overflow-hidden shadow-sm dark:shadow-slate-900/50">
             <DataTable
               columns={columns}
               data={items}
@@ -286,121 +286,206 @@ export default function TeamPage() {
         </motion.div>
       </div>
 
+      {/* Create/Edit Modal - Consistent with Customer Modal */}
       <Modal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         title={isEditing ? 'Edit Team Member' : 'Create New Team Member'}
         size="lg"
+        titleIcon={<User className="w-5 h-5" />}
+        accentColor="emerald"
       >
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="grid grid-cols-2 gap-4">
-            <Input
-              label="Name"
-              placeholder="Enter full name"
-              value={formData.name}
-              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-              error={errors.name}
-            />
-            <Input
-              label="Position"
-              placeholder="e.g., Cleaning Supervisor"
-              value={formData.position}
-              onChange={(e) => setFormData({ ...formData, position: e.target.value })}
-              error={errors.position}
-            />
-          </div>
-
-          <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-1.5">
-              <label className="block text-sm font-medium text-gray-700 dark:text-slate-200">Department</label>
-              <select
-                value={formData.department}
-                onChange={(e) => setFormData({ ...formData, department: e.target.value })}
-                className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
-              >
-                {departments.map(dept => (
-                  <option key={dept} value={dept}>{dept}</option>
-                ))}
-              </select>
-              {errors.department && <p className="text-sm text-error">{errors.department}</p>}
+        <form onSubmit={handleSubmit} className="space-y-6">
+          {/* Profile Section */}
+          <div className="bg-gradient-to-br from-gray-50 to-white dark:from-slate-800 dark:to-slate-900 rounded-xl border border-gray-100 dark:border-slate-700 p-5">
+            <div className="flex items-start gap-4">
+              <div className="flex-shrink-0 w-16 h-16 rounded-2xl bg-gradient-to-br from-emerald-500 to-emerald-600 dark:from-emerald-600 dark:to-emerald-700 flex items-center justify-center shadow-lg shadow-emerald-500/20">
+                {formData.avatar ? (
+                  <img src={formData.avatar} alt="" className="w-full h-full rounded-2xl object-cover" />
+                ) : (
+                  <User className="w-8 h-8 text-white" />
+                )}
+              </div>
+              <div className="flex-1 min-w-0">
+                <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-3">Member Profile</h3>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-1.5">
+                    <label className="block text-xs font-medium text-gray-500 dark:text-slate-400 uppercase tracking-wide">Full Name *</label>
+                    <Input
+                      placeholder="Enter full name"
+                      value={formData.name}
+                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                      className="bg-white dark:bg-slate-900 border-gray-200 dark:border-slate-700"
+                    />
+                    {errors.name && <p className="text-xs text-red-500">{errors.name}</p>}
+                  </div>
+                  <div className="space-y-1.5">
+                    <label className="block text-xs font-medium text-gray-500 dark:text-slate-400 uppercase tracking-wide">Position *</label>
+                    <Input
+                      placeholder="e.g., Cleaning Supervisor"
+                      value={formData.position}
+                      onChange={(e) => setFormData({ ...formData, position: e.target.value })}
+                      className="bg-white dark:bg-slate-900 border-gray-200 dark:border-slate-700"
+                    />
+                    {errors.position && <p className="text-xs text-red-500">{errors.position}</p>}
+                  </div>
+                </div>
+              </div>
             </div>
-            <Input
-              label="Display Order"
-              type="number"
-              placeholder="0"
-              value={formData.order}
-              onChange={(e) => setFormData({ ...formData, order: Number(e.target.value) })}
-            />
           </div>
 
-          <Textarea
-            label="Bio (optional)"
-            placeholder="Enter short bio..."
-            className="min-h-[80px] bg-white dark:bg-slate-800 border-gray-200 dark:border-slate-700 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-slate-500 focus:border-emerald-500 dark:focus:border-emerald-400 focus-visible:ring-emerald-500 dark:focus-visible:ring-emerald-400"
-            value={formData.bio}
-            onChange={(e) => setFormData({ ...formData, bio: e.target.value })}
-          />
-
+          {/* Department & Order */}
           <div className="grid grid-cols-2 gap-4">
-            <Input
-              label="Email (optional)"
-              type="email"
-              placeholder="email@example.com"
-              value={formData.email}
-              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-              icon={<Mail className="h-4 w-4" />}
-            />
-            <Input
-              label="Phone (optional)"
-              placeholder="+62 xxx xxxx xxxx"
-              value={formData.phone}
-              onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-              icon={<Phone className="h-4 w-4" />}
-            />
+            <div className="bg-white dark:bg-slate-800 rounded-xl border border-gray-100 dark:border-slate-700 p-4">
+              <div className="space-y-1.5">
+                <label className="block text-xs font-medium text-gray-500 dark:text-slate-400 uppercase tracking-wide">Department *</label>
+                <select
+                  value={formData.department}
+                  onChange={(e) => setFormData({ ...formData, department: e.target.value })}
+                  className="w-full rounded-lg border border-gray-200 dark:border-slate-600 px-3 py-2 text-sm bg-white dark:bg-slate-900 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 dark:focus:border-emerald-400"
+                >
+                  {departments.map(dept => (
+                    <option key={dept} value={dept}>{dept}</option>
+                  ))}
+                </select>
+                {errors.department && <p className="text-xs text-red-500">{errors.department}</p>}
+              </div>
+            </div>
+            <div className="bg-white dark:bg-slate-800 rounded-xl border border-gray-100 dark:border-slate-700 p-4">
+              <div className="space-y-1.5">
+                <label className="block text-xs font-medium text-gray-500 dark:text-slate-400 uppercase tracking-wide">Display Order</label>
+                <Input
+                  type="number"
+                  placeholder="0"
+                  value={formData.order}
+                  onChange={(e) => setFormData({ ...formData, order: Number(e.target.value) })}
+                  className="bg-white dark:bg-slate-900 border-gray-200 dark:border-slate-700"
+                />
+              </div>
+            </div>
           </div>
 
-          <Input
-            label="Avatar URL (optional)"
-            placeholder="https://images.unsplash.com/..."
-            value={formData.avatar}
-            onChange={(e) => setFormData({ ...formData, avatar: e.target.value })}
-          />
+          {/* Bio Section */}
+          <div className="bg-white dark:bg-slate-800 rounded-xl border border-gray-100 dark:border-slate-700 overflow-hidden">
+            <div className="px-4 py-3 border-b border-gray-100 dark:border-slate-700 bg-gray-50/50 dark:bg-slate-800/50">
+              <div className="flex items-center gap-2">
+                <FileText className="w-4 h-4 text-gray-500 dark:text-slate-400" />
+                <span className="text-sm font-semibold text-gray-900 dark:text-white">Bio (Optional)</span>
+              </div>
+            </div>
+            <div className="p-4">
+              <Textarea
+                placeholder="Enter short bio about this team member..."
+                className="min-h-[100px] bg-white dark:bg-slate-900 border-gray-200 dark:border-slate-700 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-slate-500 focus:border-emerald-500 dark:focus:border-emerald-400 focus-visible:ring-emerald-500 dark:focus-visible:ring-emerald-400 resize-none"
+                value={formData.bio}
+                onChange={(e) => setFormData({ ...formData, bio: e.target.value })}
+              />
+            </div>
+          </div>
 
-          <label className="flex items-center gap-2">
+          {/* Contact Information */}
+          <div className="bg-white dark:bg-slate-800 rounded-xl border border-gray-100 dark:border-slate-700 overflow-hidden">
+            <div className="px-4 py-3 border-b border-gray-100 dark:border-slate-700 bg-gray-50/50 dark:bg-slate-800/50">
+              <div className="flex items-center gap-2">
+                <Mail className="w-4 h-4 text-gray-500 dark:text-slate-400" />
+                <span className="text-sm font-semibold text-gray-900 dark:text-white">Contact Information (Optional)</span>
+              </div>
+            </div>
+            <div className="p-4 space-y-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-1.5">
+                  <label className="block text-xs font-medium text-gray-500 dark:text-slate-400 uppercase tracking-wide">Email</label>
+                  <div className="relative">
+                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400 dark:text-slate-500" />
+                    <Input
+                      type="email"
+                      placeholder="email@example.com"
+                      value={formData.email}
+                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                      className="pl-10 bg-white dark:bg-slate-900 border-gray-200 dark:border-slate-700"
+                    />
+                  </div>
+                </div>
+                <div className="space-y-1.5">
+                  <label className="block text-xs font-medium text-gray-500 dark:text-slate-400 uppercase tracking-wide">Phone</label>
+                  <div className="relative">
+                    <Phone className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400 dark:text-slate-500" />
+                    <Input
+                      placeholder="+62 xxx xxxx xxxx"
+                      value={formData.phone}
+                      onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                      className="pl-10 bg-white dark:bg-slate-900 border-gray-200 dark:border-slate-700"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Avatar URL */}
+          <div className="bg-white dark:bg-slate-800 rounded-xl border border-gray-100 dark:border-slate-700 p-4">
+            <div className="space-y-1.5">
+              <label className="block text-xs font-medium text-gray-500 dark:text-slate-400 uppercase tracking-wide">Avatar URL (Optional)</label>
+              <Input
+                placeholder="https://images.unsplash.com/..."
+                value={formData.avatar}
+                onChange={(e) => setFormData({ ...formData, avatar: e.target.value })}
+                className="bg-white dark:bg-slate-900 border-gray-200 dark:border-slate-700"
+              />
+            </div>
+          </div>
+
+          {/* Active Status */}
+          <div className="flex items-center gap-3 p-4 bg-emerald-50 dark:bg-emerald-900/20 rounded-xl border border-emerald-200 dark:border-emerald-800/50">
             <input
               type="checkbox"
+              id="isActive"
               checked={formData.isActive}
               onChange={(e) => setFormData({ ...formData, isActive: e.target.checked })}
-              className="h-4 w-4 rounded border-gray-300 text-primary"
+              className="w-5 h-5 rounded border-emerald-300 text-emerald-500 focus:ring-emerald-500"
             />
-            <span className="text-sm">Active</span>
-          </label>
+            <label htmlFor="isActive" className="flex items-center gap-2 font-medium text-emerald-800 dark:text-emerald-300">
+              Active Member
+            </label>
+            <span className="text-sm text-emerald-600 dark:text-emerald-400">— Member is currently active and visible</span>
+          </div>
 
-          <div className="flex justify-end gap-2 border-t pt-4">
+          {/* Actions */}
+          <div className="flex items-center justify-end gap-3 pt-4 border-t border-gray-100 dark:border-slate-700">
             <Button type="button" variant="outline" onClick={() => setIsModalOpen(false)}>
               Cancel
             </Button>
-            <Button type="submit">{isEditing ? 'Update' : 'Create'}</Button>
+            <Button type="submit" className="bg-emerald-600 hover:bg-emerald-700 gap-2">
+              <Save className="w-4 h-4" />
+              {isEditing ? 'Update Member' : 'Create Member'}
+            </Button>
           </div>
         </form>
       </Modal>
 
+      {/* Delete Modal - Consistent with Customer Modal */}
       <Modal
         isOpen={isDeleteModalOpen}
         onClose={() => setIsDeleteModalOpen(false)}
         title="Delete Team Member"
         size="sm"
+        titleIcon={<Trash2 className="w-5 h-5" />}
+        accentColor="red"
       >
-        <div className="space-y-4">
-          <p className="text-gray-600 dark:text-slate-300">
-            Are you sure you want to delete <strong>{selectedItem?.name}</strong>? This action cannot be undone.
-          </p>
-          <div className="flex justify-end gap-2">
+        <div className="space-y-6">
+          <div className="p-4 bg-red-50 dark:bg-red-900/20 rounded-xl border border-red-200 dark:border-red-800/50">
+            <p className="text-gray-700 dark:text-slate-300">
+              Are you sure you want to delete <strong className="text-red-600 dark:text-red-400">{selectedItem?.name}</strong>?
+            </p>
+            <p className="text-sm text-gray-500 dark:text-slate-400 mt-2">This action cannot be undone. All associated data will be permanently removed.</p>
+          </div>
+          <div className="flex items-center justify-end gap-3">
             <Button variant="outline" onClick={() => setIsDeleteModalOpen(false)}>
               Cancel
             </Button>
-            <Button variant="error" onClick={handleDelete}>
-              Delete
+            <Button variant="error" onClick={handleDelete} className="gap-2">
+              <Trash2 className="w-4 h-4" />
+              Delete Member
             </Button>
           </div>
         </div>

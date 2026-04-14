@@ -1,13 +1,14 @@
 'use client'
 
 import * as React from 'react'
-import { motion } from 'framer-motion'
-import { Plus, Edit, Trash2, Briefcase, Calendar, MapPin, DollarSign } from 'lucide-react'
+import { motion, AnimatePresence } from 'framer-motion'
+import { 
+  Plus, Edit, Trash2, Briefcase, Calendar, MapPin, DollarSign, X, 
+  AlertCircle, Building2, Search, Users
+} from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { Textarea } from '@/components/ui/textarea'
 import { Badge } from '@/components/ui/badge'
-import { Modal } from '@/components/admin/Modal'
 import { DataTable } from '@/components/admin/DataTable'
 import { getJobListings, createJobListing, updateJobListing, deleteJobListing } from '@/lib/api'
 import { JobListing } from '@/types'
@@ -26,7 +27,393 @@ interface JobFormData {
   isActive: boolean
 }
 
-const jobTypes = ['Full-time', 'Part-time', 'Contract', 'Internship', 'Freelance']
+const jobTypes = [
+  { value: 'Full-time', label: 'Full-time' },
+  { value: 'Part-time', label: 'Part-time' },
+  { value: 'Contract', label: 'Contract' },
+  { value: 'Internship', label: 'Internship' },
+  { value: 'Freelance', label: 'Freelance' }
+]
+
+// Modern Modal Component for Job Form
+function JobFormModal({
+  isOpen,
+  onClose,
+  isEditing,
+  formData,
+  setFormData,
+  errors,
+  setErrors,
+  saving,
+  onSave,
+}: {
+  isOpen: boolean
+  onClose: () => void
+  isEditing: boolean
+  formData: JobFormData
+  setFormData: (data: JobFormData) => void
+  errors: Partial<JobFormData>
+  setErrors: (errors: Partial<JobFormData>) => void
+  saving: boolean
+  onSave: () => void
+}) {
+  const [mounted, setMounted] = React.useState(false)
+
+  React.useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  React.useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = ''
+    }
+    return () => {
+      document.body.style.overflow = ''
+    }
+  }, [isOpen])
+
+  if (!mounted || !isOpen) return null
+
+  return (
+    <AnimatePresence>
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.2 }}
+        className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm"
+        onClick={onClose}
+      />
+      
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 pointer-events-none">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95, y: 20 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          exit={{ opacity: 0, scale: 0.95, y: 20 }}
+          transition={{ type: 'spring', damping: 25, stiffness: 300 }}
+          className="pointer-events-auto w-full max-w-2xl bg-white dark:bg-slate-900 rounded-2xl shadow-2xl border border-gray-200 dark:border-slate-700 overflow-hidden flex flex-col max-h-[90vh]"
+          onClick={(e) => e.stopPropagation()}
+        >
+          {/* Header */}
+          <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100 dark:border-slate-700 bg-gradient-to-r from-emerald-50/50 to-transparent dark:from-emerald-900/20 dark:to-transparent flex-shrink-0">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-emerald-100 dark:bg-emerald-900/40 flex items-center justify-center">
+                <Briefcase className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
+              </div>
+              <div>
+                <h2 className="text-lg font-bold text-gray-900 dark:text-white">
+                  {isEditing ? 'Edit Job Listing' : 'Create Job Listing'}
+                </h2>
+                <p className="text-xs text-gray-500 dark:text-slate-400">
+                  {isEditing ? 'Perbarui lowongan kerja' : 'Buat lowongan kerja baru'}
+                </p>
+              </div>
+            </div>
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={onClose}
+              className="rounded-lg"
+            >
+              <X className="w-5 h-5" />
+            </Button>
+          </div>
+
+          {/* Scrollable Content */}
+          <div className="flex-1 overflow-y-auto">
+            <div className="p-6 space-y-5">
+              {/* Job Title */}
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-gray-700 dark:text-slate-200">
+                  Job Title <span className="text-red-500">*</span>
+                </label>
+                <div className="relative">
+                  <Briefcase className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+                  <Input
+                    value={formData.title}
+                    onChange={(e) => {
+                      setFormData({ ...formData, title: e.target.value })
+                      setErrors({ ...errors, title: '' })
+                    }}
+                    placeholder="e.g., Cleaning Supervisor"
+                    className={`pl-10 ${errors.title ? 'border-red-500 focus:border-red-500' : ''}`}
+                  />
+                </div>
+                {errors.title && <p className="text-sm text-red-500">{errors.title}</p>}
+              </div>
+
+              {/* Department, Location, Type */}
+              <div className="grid grid-cols-3 gap-4">
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-gray-700 dark:text-slate-200">
+                    Department <span className="text-red-500">*</span>
+                  </label>
+                  <div className="relative">
+                    <Building2 className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+                    <Input
+                      value={formData.department}
+                      onChange={(e) => {
+                        setFormData({ ...formData, department: e.target.value })
+                        setErrors({ ...errors, department: '' })
+                      }}
+                      placeholder="e.g., Operations"
+                      className={`pl-10 ${errors.department ? 'border-red-500 focus:border-red-500' : ''}`}
+                    />
+                  </div>
+                  {errors.department && <p className="text-sm text-red-500">{errors.department}</p>}
+                </div>
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-gray-700 dark:text-slate-200">
+                    Location <span className="text-red-500">*</span>
+                  </label>
+                  <div className="relative">
+                    <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+                    <Input
+                      value={formData.location}
+                      onChange={(e) => {
+                        setFormData({ ...formData, location: e.target.value })
+                        setErrors({ ...errors, location: '' })
+                      }}
+                      placeholder="e.g., Surabaya"
+                      className={`pl-10 ${errors.location ? 'border-red-500 focus:border-red-500' : ''}`}
+                    />
+                  </div>
+                  {errors.location && <p className="text-sm text-red-500">{errors.location}</p>}
+                </div>
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-gray-700 dark:text-slate-200">
+                    Job Type <span className="text-red-500">*</span>
+                  </label>
+                  <select
+                    value={formData.type}
+                    onChange={(e) => {
+                      setFormData({ ...formData, type: e.target.value })
+                      setErrors({ ...errors, type: '' })
+                    }}
+                    className={`w-full rounded-lg border px-3 py-2 text-sm bg-white dark:bg-slate-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 dark:focus:border-emerald-400 ${
+                      errors.type ? 'border-red-500' : 'border-gray-200 dark:border-slate-700'
+                    }`}
+                  >
+                    {jobTypes.map(type => (
+                      <option key={type.value} value={type.value}>{type.label}</option>
+                    ))}
+                  </select>
+                  {errors.type && <p className="text-sm text-red-500">{errors.type}</p>}
+                </div>
+              </div>
+
+              {/* Description */}
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-gray-700 dark:text-slate-200">
+                  Job Description <span className="text-red-500">*</span>
+                </label>
+                <textarea
+                  value={formData.description}
+                  onChange={(e) => {
+                    setFormData({ ...formData, description: e.target.value })
+                    setErrors({ ...errors, description: '' })
+                  }}
+                  placeholder="Enter detailed job description..."
+                  rows={4}
+                  className={`w-full px-3 py-2 rounded-lg border text-sm bg-white dark:bg-slate-800 text-gray-900 dark:text-slate-100 resize-none focus:outline-none focus:ring-2 focus:ring-emerald-500/20 transition-all placeholder:text-gray-400 dark:placeholder:text-slate-500 ${errors.description ? 'border-red-500' : 'border-gray-200 dark:border-slate-700 focus:border-emerald-500 dark:focus:border-emerald-400'}`}
+                />
+                {errors.description && <p className="text-sm text-red-500">{errors.description}</p>}
+              </div>
+
+              {/* Requirements */}
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-gray-700 dark:text-slate-200">
+                  Requirements (one per line)
+                </label>
+                <textarea
+                  value={formData.requirements}
+                  onChange={(e) => setFormData({ ...formData, requirements: e.target.value })}
+                  placeholder="Minimum 2 years experience&#10;Familiar with cleaning equipment&#10;Good communication skills"
+                  rows={4}
+                  className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-slate-700 text-sm text-gray-900 dark:text-slate-100 bg-white dark:bg-slate-800 resize-none focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 dark:focus:border-emerald-400 transition-all placeholder:text-gray-400 dark:placeholder:text-slate-500"
+                />
+                <p className="text-xs text-gray-400 dark:text-slate-500">
+                  Masukkan setiap persyaratan di baris baru
+                </p>
+              </div>
+
+              {/* Benefits */}
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-gray-700 dark:text-slate-200">
+                  Benefits (one per line)
+                </label>
+                <textarea
+                  value={formData.benefits}
+                  onChange={(e) => setFormData({ ...formData, benefits: e.target.value })}
+                  placeholder="Competitive salary&#10;Health insurance&#10;Professional development"
+                  rows={3}
+                  className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-slate-700 text-sm text-gray-900 dark:text-slate-100 bg-white dark:bg-slate-800 resize-none focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 dark:focus:border-emerald-400 transition-all placeholder:text-gray-400 dark:placeholder:text-slate-500"
+                />
+              </div>
+
+              {/* Salary Range */}
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-gray-700 dark:text-slate-200">
+                  Salary Range
+                </label>
+                <div className="relative">
+                  <DollarSign className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+                  <Input
+                    value={formData.salaryRange}
+                    onChange={(e) => setFormData({ ...formData, salaryRange: e.target.value })}
+                    placeholder="e.g., Rp 5.000.000 - 8.000.000"
+                    className="pl-10"
+                  />
+                </div>
+                <p className="text-xs text-gray-400 dark:text-slate-500">
+                    Opsional, akan ditampilkan di halaman karir
+                </p>
+              </div>
+
+              {/* Status Toggle */}
+              <div className="flex flex-col gap-3 p-4 bg-gray-50 dark:bg-slate-800 rounded-xl border border-gray-100 dark:border-slate-700">
+                <label className="flex items-center gap-3 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={formData.isActive}
+                    onChange={(e) => setFormData({ ...formData, isActive: e.target.checked })}
+                    className="w-5 h-5 rounded border-gray-300 text-emerald-600 focus:ring-emerald-500"
+                  />
+                  <div>
+                    <span className="text-sm font-medium text-gray-900 dark:text-white">Active</span>
+                    <p className="text-xs text-gray-500 dark:text-slate-400">Lowongan tersedia untuk pelamar</p>
+                  </div>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          {/* Footer */}
+          <div className="flex items-center justify-end gap-3 px-6 py-4 border-t border-gray-100 dark:border-slate-700 bg-gray-50/50 dark:bg-slate-800/50 flex-shrink-0">
+            <Button variant="outline" onClick={onClose}>
+              Batal
+            </Button>
+            <Button 
+              onClick={onSave} 
+              disabled={saving}
+              className="bg-emerald-600 hover:bg-emerald-700 gap-2"
+            >
+              {saving ? (
+                <>
+                  <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                  Menyimpan...
+                </>
+              ) : (
+                <>
+                  {isEditing ? 'Simpan Perubahan' : 'Buat Lowongan'}
+                </>
+              )}
+            </Button>
+          </div>
+        </motion.div>
+      </div>
+    </AnimatePresence>
+  )
+}
+
+// Delete Confirmation Modal
+function JobDeleteModal({
+  isOpen,
+  onClose,
+  item,
+  onConfirm,
+  deleting,
+}: {
+  isOpen: boolean
+  onClose: () => void
+  item: JobListing | null
+  onConfirm: () => void
+  deleting: boolean
+}) {
+  const [mounted, setMounted] = React.useState(false)
+
+  React.useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  if (!mounted || !isOpen || !item) return null
+
+  return (
+    <AnimatePresence>
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.2 }}
+        className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm"
+        onClick={onClose}
+      />
+      
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 pointer-events-none">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95, y: 20 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          exit={{ opacity: 0, scale: 0.95, y: 20 }}
+          transition={{ type: 'spring', damping: 25, stiffness: 300 }}
+          className="pointer-events-auto w-full max-w-md bg-white dark:bg-slate-900 rounded-2xl shadow-2xl border border-gray-200 dark:border-slate-700 overflow-hidden"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <div className="p-6">
+            <div className="flex items-center gap-4">
+              <div className="w-12 h-12 rounded-xl bg-red-100 dark:bg-red-900/30 flex items-center justify-center flex-shrink-0">
+                <AlertCircle className="w-6 h-6 text-red-600 dark:text-red-400" />
+              </div>
+              <div>
+                <h2 className="text-lg font-bold text-gray-900 dark:text-white">Hapus Lowongan</h2>
+                <p className="text-sm text-gray-500 dark:text-slate-400">
+                  Tindakan ini tidak dapat dibatalkan
+                </p>
+              </div>
+            </div>
+
+            <div className="mt-6 p-4 bg-gray-50 dark:bg-slate-800 rounded-xl border border-gray-100 dark:border-slate-700">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-lg bg-emerald-50 dark:bg-emerald-900/30 flex items-center justify-center">
+                  <Briefcase className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-gray-900 dark:text-white">{item.title}</p>
+                  <p className="text-xs text-gray-500 dark:text-slate-400">{item.department} • {item.location}</p>
+                  <Badge variant="outline" className="mt-1">{item.type}</Badge>
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-6 flex justify-end gap-3">
+              <Button variant="outline" onClick={onClose}>
+                Batal
+              </Button>
+              <Button 
+                onClick={onConfirm} 
+                disabled={deleting}
+                className="bg-red-600 hover:bg-red-700 gap-2"
+              >
+                {deleting ? (
+                  <>
+                    <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                    Menghapus...
+                  </>
+                ) : (
+                  <>
+                    <Trash2 className="w-4 h-4" />
+                    Hapus
+                  </>
+                )}
+              </Button>
+            </div>
+          </div>
+        </motion.div>
+      </div>
+    </AnimatePresence>
+  )
+}
 
 export default function CareersPage() {
   const [items, setItems] = React.useState<JobListing[]>([])
@@ -47,6 +434,9 @@ export default function CareersPage() {
     isActive: true,
   })
   const [errors, setErrors] = React.useState<Partial<JobFormData>>({})
+  const [saving, setSaving] = React.useState(false)
+  const [deleting, setDeleting] = React.useState(false)
+  const [search, setSearch] = React.useState('')
 
   React.useEffect(() => {
     fetchItems()
@@ -116,10 +506,10 @@ export default function CareersPage() {
     return Object.keys(newErrors).length === 0
   }
 
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault()
+  async function handleSubmit() {
     if (!validateForm()) return
 
+    setSaving(true)
     const requirementsArray = formData.requirements
       ? formData.requirements.split('\n').map(r => r.trim()).filter(Boolean)
       : []
@@ -151,11 +541,14 @@ export default function CareersPage() {
       fetchItems()
     } catch (error) {
       toast.error(`Failed to ${isEditing ? 'update' : 'create'} job listing`)
+    } finally {
+      setSaving(false)
     }
   }
 
   async function handleDelete() {
     if (!selectedItem) return
+    setDeleting(true)
     try {
       await deleteJobListing(selectedItem.id)
       toast.success('Job listing deleted successfully')
@@ -163,8 +556,20 @@ export default function CareersPage() {
       fetchItems()
     } catch (error) {
       toast.error('Failed to delete job listing')
+    } finally {
+      setDeleting(false)
     }
   }
+
+  const filteredItems = React.useMemo(() => {
+    if (!search) return items
+    const term = search.toLowerCase()
+    return items.filter(item => 
+      item.title.toLowerCase().includes(term) || 
+      item.department.toLowerCase().includes(term) ||
+      item.location.toLowerCase().includes(term)
+    )
+  }, [items, search])
 
   const columns = [
     {
@@ -172,11 +577,11 @@ export default function CareersPage() {
       label: 'Position',
       render: (value: string, row: JobListing) => (
         <div className="flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
-            <Briefcase className="h-5 w-5 text-primary" />
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-600 shadow-lg shadow-emerald-500/20">
+            <Briefcase className="h-5 w-5 text-white" />
           </div>
           <div>
-            <p className="font-medium text-gray-900 dark:text-white">{value}</p>
+            <p className="font-semibold text-gray-900 dark:text-white">{value}</p>
             <p className="text-xs text-gray-500 dark:text-slate-400">{row.department}</p>
           </div>
         </div>
@@ -186,9 +591,12 @@ export default function CareersPage() {
       key: 'location',
       label: 'Location',
       render: (value: string) => (
-        <span className="flex items-center gap-1 text-sm text-gray-500 dark:text-slate-400">
-          <MapPin className="h-3.5 w-3.5" /> {value}
-        </span>
+        <div className="flex items-center gap-2">
+          <div className="w-6 h-6 rounded bg-blue-50 dark:bg-blue-900/30 flex items-center justify-center">
+            <MapPin className="h-3 w-3 text-blue-600 dark:text-blue-400" />
+          </div>
+          <span className="text-sm text-gray-700 dark:text-slate-300">{value}</span>
+        </div>
       ),
     },
     {
@@ -202,9 +610,14 @@ export default function CareersPage() {
       key: 'salaryRange',
       label: 'Salary',
       render: (value: string) => (
-        <span className="flex items-center gap-1 text-sm text-gray-500 dark:text-slate-400">
-          {value ? <><DollarSign className="h-3.5 w-3.5" /> {value}</> : '-'}
-        </span>
+        <div className="flex items-center gap-2">
+          <div className="w-6 h-6 rounded bg-green-50 dark:bg-green-900/30 flex items-center justify-center">
+            <DollarSign className="h-3 w-3 text-green-600 dark:text-green-400" />
+          </div>
+          <span className="text-sm text-gray-700 dark:text-slate-300">
+            {value || '-'}
+          </span>
+        </div>
       ),
     },
     {
@@ -228,14 +641,14 @@ export default function CareersPage() {
     },
     {
       key: 'actions',
-      label: 'Actions',
+      label: '',
       render: (_: any, row: JobListing) => (
         <div className="flex items-center gap-1">
-          <Button variant="ghost" size="icon" onClick={() => openEditModal(row)}>
+          <Button variant="ghost" size="sm" onClick={() => openEditModal(row)} className="text-gray-500 dark:text-slate-400 hover:text-emerald-600">
             <Edit className="h-4 w-4" />
           </Button>
-          <Button variant="ghost" size="icon" onClick={() => openDeleteModal(row)}>
-            <Trash2 className="h-4 w-4 text-error" />
+          <Button variant="ghost" size="sm" onClick={() => openDeleteModal(row)} className="text-gray-500 dark:text-slate-400 hover:text-red-600">
+            <Trash2 className="h-4 w-4" />
           </Button>
         </div>
       ),
@@ -243,19 +656,13 @@ export default function CareersPage() {
   ]
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-slate-900 text-gray-900 dark:text-white">
+    <div className="min-h-screen bg-gray-50/50 dark:bg-slate-900 text-gray-900 dark:text-white">
       {/* Topbar */}
-      <div className="sticky top-0 z-20 bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border-b border-gray-100 dark:border-slate-700 px-4 md:px-6 py-3 flex items-center justify-between">
-        <div className="flex items-center gap-2 text-xs text-gray-500 dark:text-slate-400">
-          <span>NingClean Admin</span>
-          <span>/</span>
-          <span className="text-gray-700 dark:text-slate-200">Careers</span>
-        </div>
-        <div className="flex items-center gap-3">
-          <div className="flex items-center gap-1.5">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-            <span className="text-[11px] text-gray-500 dark:text-slate-400">Live</span>
-          </div>
+      <div className="sticky top-0 z-20 bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border-b border-gray-200 dark:border-slate-700 px-4 md:px-6 py-4">
+        <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-slate-400">
+          <span>Admin</span>
+          <span className="text-gray-400 dark:text-slate-500">/</span>
+          <span className="text-gray-900 dark:text-white font-medium">Careers</span>
         </div>
       </div>
 
@@ -268,12 +675,35 @@ export default function CareersPage() {
         >
           <div>
             <h1 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Careers</h1>
-            <p className="text-sm text-gray-500 dark:text-slate-400 mt-0.5">Manage job listings and openings</p>
+            <p className="text-sm text-gray-500 dark:text-slate-400 mt-1">Manage job listings and openings</p>
           </div>
-          <Button onClick={openCreateModal} className="bg-emerald-600 hover:bg-emerald-700">
-            <Plus className="mr-2 h-4 w-4" />
-            New Job Listing
-          </Button>
+          <div className="flex items-center gap-2">
+            <div className="px-4 py-2 bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700">
+              <span className="text-sm text-gray-500 dark:text-slate-400">Total: </span>
+              <span className="text-sm font-bold text-gray-900 dark:text-white">{items.length}</span>
+            </div>
+            <Button onClick={openCreateModal} className="bg-emerald-600 hover:bg-emerald-700 gap-2">
+              <Plus className="h-4 w-4" />
+              New Job
+            </Button>
+          </div>
+        </motion.div>
+
+        {/* Search */}
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1 }}
+        >
+          <div className="relative max-w-md">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+            <Input
+              placeholder="Search job listings..."
+              className="pl-10 bg-white dark:bg-slate-800 border-gray-200 dark:border-slate-700"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+            />
+          </div>
         </motion.div>
 
         {/* Table */}
@@ -282,133 +712,53 @@ export default function CareersPage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.15 }}
         >
-          <div className="bg-white border border-gray-100 dark:border-slate-700 rounded-2xl overflow-hidden shadow-sm dark:shadow-slate-900/50">
+          <div className="bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-700 rounded-2xl overflow-hidden shadow-sm">
             <DataTable
               columns={columns}
-              data={items}
+              data={filteredItems}
               loading={loading}
+              emptyState={
+                <div className="flex flex-col items-center justify-center py-16 text-center">
+                  <div className="mb-4 rounded-full bg-gray-100 dark:bg-slate-800 p-4">
+                    <Users className="h-8 w-8 text-gray-400 dark:text-slate-500" />
+                  </div>
+                  <p className="text-sm font-medium text-gray-900 dark:text-white">
+                    {search ? 'No jobs found' : 'No job listings yet'}
+                  </p>
+                  <p className="mt-1 text-sm text-gray-500 dark:text-slate-400">
+                    {search ? 'Try different keywords' : 'Click the button above to add your first job listing'}
+                  </p>
+                </div>
+              }
             />
           </div>
         </motion.div>
+      </div>
 
-      <Modal
+      {/* Form Modal */}
+      <JobFormModal
         isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        title={isEditing ? 'Edit Job Listing' : 'Create New Job Listing'}
-        size="lg"
-      >
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <Input
-            label="Job Title"
-            placeholder="e.g., Cleaning Supervisor"
-            value={formData.title}
-            onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-            error={errors.title}
-          />
+        onClose={() => {
+          setIsModalOpen(false)
+          setIsEditing(false)
+        }}
+        isEditing={isEditing}
+        formData={formData}
+        setFormData={setFormData}
+        errors={errors}
+        setErrors={setErrors}
+        saving={saving}
+        onSave={handleSubmit}
+      />
 
-          <div className="grid grid-cols-3 gap-4">
-            <Input
-              label="Department"
-              placeholder="e.g., Operations"
-              value={formData.department}
-              onChange={(e) => setFormData({ ...formData, department: e.target.value })}
-              error={errors.department}
-            />
-            <Input
-              label="Location"
-              placeholder="e.g., Surabaya"
-              value={formData.location}
-              onChange={(e) => setFormData({ ...formData, location: e.target.value })}
-              error={errors.location}
-            />
-            <div className="space-y-1.5">
-              <label className="block text-sm font-medium text-gray-700 dark:text-slate-200">Job Type</label>
-              <select
-                value={formData.type}
-                onChange={(e) => setFormData({ ...formData, type: e.target.value })}
-                className="w-full rounded-lg border border-gray-300 dark:border-slate-600 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
-              >
-                {jobTypes.map(type => (
-                  <option key={type} value={type}>{type}</option>
-                ))}
-              </select>
-              {errors.type && <p className="text-sm text-error">{errors.type}</p>}
-            </div>
-          </div>
-
-          <Textarea
-            label="Job Description"
-            placeholder="Enter detailed job description..."
-            className="min-h-[100px] bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-700 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-slate-500 focus:border-emerald-500 dark:focus:border-emerald-400 focus:ring-1 dark:focus:ring-emerald-400/30"
-            value={formData.description}
-            onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-            error={errors.description}
-          />
-
-          <Textarea
-            label="Requirements (one per line)"
-            placeholder="e.g., Minimum 2 years experience&#10;Familiar with cleaning equipment&#10;Good communication skills"
-            className="min-h-[80px] bg-white dark:bg-slate-900 border-gray-200 dark:border-slate-700 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-slate-500 focus:border-emerald-500 dark:focus:border-emerald-400 focus-visible:ring-emerald-500 dark:focus-visible:ring-emerald-400"
-            value={formData.requirements}
-            onChange={(e) => setFormData({ ...formData, requirements: e.target.value })}
-          />
-
-          <Textarea
-            label="Benefits (one per line)"
-            placeholder="e.g., Competitive salary&#10;Health insurance&#10;Professional development"
-            className="min-h-[80px] bg-white dark:bg-slate-900 border-gray-200 dark:border-slate-700 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-slate-500 focus:border-emerald-500 dark:focus:border-emerald-400 focus-visible:ring-emerald-500 dark:focus-visible:ring-emerald-400"
-            value={formData.benefits}
-            onChange={(e) => setFormData({ ...formData, benefits: e.target.value })}
-          />
-
-          <Input
-            label="Salary Range (optional)"
-            placeholder="e.g., Rp 5.000.000 - 8.000.000"
-            value={formData.salaryRange}
-            onChange={(e) => setFormData({ ...formData, salaryRange: e.target.value })}
-            icon={<DollarSign className="h-4 w-4" />}
-          />
-
-          <label className="flex items-center gap-2">
-            <input
-              type="checkbox"
-              checked={formData.isActive}
-              onChange={(e) => setFormData({ ...formData, isActive: e.target.checked })}
-              className="h-4 w-4 rounded border-gray-300 dark:border-slate-600 text-primary"
-            />
-            <span className="text-sm">Active (visible to applicants)</span>
-          </label>
-
-          <div className="flex justify-end gap-2 border-t pt-4">
-            <Button type="button" variant="outline" onClick={() => setIsModalOpen(false)}>
-              Cancel
-            </Button>
-            <Button type="submit">{isEditing ? 'Update' : 'Create'}</Button>
-          </div>
-        </form>
-      </Modal>
-
-      <Modal
+      {/* Delete Modal */}
+      <JobDeleteModal
         isOpen={isDeleteModalOpen}
         onClose={() => setIsDeleteModalOpen(false)}
-        title="Delete Job Listing"
-        size="sm"
-      >
-        <div className="space-y-4">
-          <p className="text-gray-600 dark:text-slate-300">
-            Are you sure you want to delete <strong>{selectedItem?.title}</strong>? This action cannot be undone.
-          </p>
-          <div className="flex justify-end gap-2">
-            <Button variant="outline" onClick={() => setIsDeleteModalOpen(false)}>
-              Cancel
-            </Button>
-            <Button variant="error" onClick={handleDelete}>
-              Delete
-            </Button>
-          </div>
-        </div>
-      </Modal>
-      </div>
+        item={selectedItem}
+        onConfirm={handleDelete}
+        deleting={deleting}
+      />
     </div>
   )
 }

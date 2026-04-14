@@ -14,11 +14,11 @@ import { formatDate } from '@/lib/utils'
 import { toast } from 'sonner'
 
 const STATUS_COLORS: Record<string, string> = {
-  PENDING: 'bg-yellow-100 text-yellow-800',
-  CONFIRMED: 'bg-blue-100 text-blue-800',
-  IN_PROGRESS: 'bg-purple-100 text-purple-800',
-  COMPLETED: 'bg-green-100 text-green-800',
-  CANCELLED: 'bg-red-100 text-red-800',
+  PENDING: 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-400',
+  CONFIRMED: 'bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-400',
+  IN_PROGRESS: 'bg-purple-100 dark:bg-purple-900/30 text-purple-800 dark:text-purple-400',
+  COMPLETED: 'bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-400',
+  CANCELLED: 'bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-400',
 }
 
 const STATUS_LABELS: Record<string, string> = {
@@ -163,11 +163,11 @@ export default function InvoicesPage() {
                 <p className="text-gray-500 dark:text-slate-400">Tidak ada bookings</p>
               </div>
             ) : (
-              <div className="divide-y divide-gray-100">
+              <div className="divide-y divide-gray-100 dark:divide-slate-700">
                 {filteredBookings.map((booking) => (
                   <div
                     key={booking.id}
-                    className="flex items-center gap-4 p-4 hover:bg-gray-50 dark:bg-slate-900 dark:hover:bg-slate-800 transition-colors"
+                    className="flex items-center gap-4 p-4 hover:bg-gray-50 dark:hover:bg-slate-800 transition-colors"
                   >
                     <div className="h-12 w-12 rounded-lg bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center">
                       <FileText className="h-6 w-6 text-emerald-600" />
@@ -230,7 +230,7 @@ export default function InvoicesPage() {
         {invoiceData && (
           <div className="space-y-6">
             {/* Invoice Content - Printable */}
-            <div className="bg-white dark:bg-slate-900 p-8 rounded-xl border" id="invoice-print">
+            <div className="bg-white dark:bg-slate-900 p-8 rounded-xl border border-gray-200 dark:border-slate-700" id="invoice-print">
               {/* Header */}
               <div className="flex justify-between items-start mb-8">
                 <div>
@@ -238,7 +238,7 @@ export default function InvoicesPage() {
                   <p className="text-gray-500 dark:text-slate-400 mt-1">#{invoiceData.invoice.number}</p>
                 </div>
                 <div className="text-right">
-                  <h2 className="text-xl font-bold text-emerald-600">{invoiceData.template.companyName}</h2>
+                  <h2 className="text-xl font-bold text-emerald-600 dark:text-emerald-400">{invoiceData.template.companyName}</h2>
                   <p className="text-sm text-gray-500 dark:text-slate-400">{invoiceData.template.companyAddress}</p>
                   <p className="text-sm text-gray-500 dark:text-slate-400">{invoiceData.template.companyPhone}</p>
                   <p className="text-sm text-gray-500 dark:text-slate-400">{invoiceData.template.companyEmail}</p>
@@ -280,12 +280,12 @@ export default function InvoicesPage() {
                   {invoiceData.items.map((item, index) => (
                     <tr key={index} className="border-b border-gray-100 dark:border-slate-700">
                       <td className="py-3">
-                        <p className="font-medium">{item.name}</p>
+                        <p className="font-medium text-gray-900 dark:text-white">{item.name}</p>
                         <p className="text-sm text-gray-500 dark:text-slate-400">{item.description}</p>
                       </td>
-                      <td className="py-3 text-center">{item.quantity}</td>
-                      <td className="py-3 text-right">Rp {item.price.toLocaleString('id-ID')}</td>
-                      <td className="py-3 text-right">Rp {item.total.toLocaleString('id-ID')}</td>
+                      <td className="py-3 text-center text-gray-900 dark:text-white">{item.quantity}</td>
+                      <td className="py-3 text-right text-gray-900 dark:text-white">Rp {item.price.toLocaleString('id-ID')}</td>
+                      <td className="py-3 text-right text-gray-900 dark:text-white">Rp {item.total.toLocaleString('id-ID')}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -296,39 +296,39 @@ export default function InvoicesPage() {
                 <div className="w-64">
                   <div className="flex justify-between py-2">
                     <span className="text-gray-500 dark:text-slate-400">Subtotal</span>
-                    <span className="font-medium">Rp {invoiceData.summary.subtotal.toLocaleString('id-ID')}</span>
+                    <span className="font-medium text-gray-900 dark:text-white">Rp {invoiceData.summary.subtotal.toLocaleString('id-ID')}</span>
                   </div>
                   {invoiceData.summary.taxRate > 0 && (
                     <div className="flex justify-between py-2">
                       <span className="text-gray-500 dark:text-slate-400">Tax ({invoiceData.summary.taxRate}%)</span>
-                      <span className="font-medium">Rp {invoiceData.summary.taxAmount.toLocaleString('id-ID')}</span>
+                      <span className="font-medium text-gray-900 dark:text-white">Rp {invoiceData.summary.taxAmount.toLocaleString('id-ID')}</span>
                     </div>
                   )}
                   <div className="flex justify-between py-3 border-t-2 border-gray-200 dark:border-slate-700 mt-2">
-                    <span className="text-lg font-bold">Total</span>
-                    <span className="text-lg font-bold text-emerald-600">Rp {invoiceData.summary.total.toLocaleString('id-ID')}</span>
+                    <span className="text-lg font-bold text-gray-900 dark:text-white">Total</span>
+                    <span className="text-lg font-bold text-emerald-600 dark:text-emerald-400">Rp {invoiceData.summary.total.toLocaleString('id-ID')}</span>
                   </div>
                 </div>
               </div>
 
               {/* Notes */}
               {invoiceData.template.notes && (
-                <div className="mt-8 p-4 bg-gray-50 dark:bg-slate-900 rounded-lg">
+                <div className="mt-8 p-4 bg-gray-50 dark:bg-slate-800 rounded-lg">
                   <p className="text-sm text-gray-500 dark:text-slate-400">Notes:</p>
-                  <p className="text-sm">{invoiceData.template.notes}</p>
+                  <p className="text-sm text-gray-900 dark:text-white">{invoiceData.template.notes}</p>
                 </div>
               )}
 
               {/* Footer */}
               {invoiceData.template.footerText && (
-                <div className="mt-8 text-center text-sm text-gray-400 dark:text-slate-500">
+                <div className="mt-8 text-center text-sm text-gray-500 dark:text-slate-400">
                   {invoiceData.template.footerText}
                 </div>
               )}
             </div>
 
             {/* Actions */}
-            <div className="flex justify-end gap-3">
+            <div className="flex justify-end gap-3 pt-4 border-t border-gray-100 dark:border-slate-700">
               <Button variant="outline" onClick={() => setPreviewOpen(false)}>
                 Tutup
               </Button>
