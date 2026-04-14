@@ -47,6 +47,7 @@ interface ServiceFormData {
   image: string
   features: string
   isFeatured: boolean
+  availableCities: string[]
 }
 
 // Modern Switch Component
@@ -90,7 +91,7 @@ function ServiceModal({
   loading: boolean
 }) {
   const modalRef = React.useRef<HTMLDivElement>(null)
-  const [activeTab, setActiveTab] = React.useState<'basic' | 'details' | 'features'>('basic')
+  const [activeTab, setActiveTab] = React.useState<'basic' | 'details' | 'features' | 'cities'>('basic')
 
   React.useEffect(() => {
     if (isOpen) {
@@ -107,6 +108,57 @@ function ServiceModal({
   const getCategoryColor = (category: string) => {
     const cat = CATEGORY_OPTIONS.find(c => c.value === category)
     return cat?.color || 'gray'
+  }
+
+  // Predefined color mappings for Tailwind (avoid dynamic template strings)
+  const CATEGORY_COLOR_STYLES: Record<string, { 
+    light: string
+    dark: string 
+    border: string
+    borderDark: string
+    text: string
+    textDark: string
+  }> = {
+    blue: {
+      light: 'bg-blue-50',
+      dark: 'dark:bg-blue-900/20',
+      border: 'border-blue-500',
+      borderDark: 'dark:border-blue-500',
+      text: 'text-blue-700',
+      textDark: 'dark:text-blue-300',
+    },
+    green: {
+      light: 'bg-green-50',
+      dark: 'dark:bg-green-900/20',
+      border: 'border-green-500',
+      borderDark: 'dark:border-green-500',
+      text: 'text-green-700',
+      textDark: 'dark:text-green-300',
+    },
+    orange: {
+      light: 'bg-orange-50',
+      dark: 'dark:bg-orange-900/20',
+      border: 'border-orange-500',
+      borderDark: 'dark:border-orange-500',
+      text: 'text-orange-700',
+      textDark: 'dark:text-orange-300',
+    },
+    purple: {
+      light: 'bg-purple-50',
+      dark: 'dark:bg-purple-900/20',
+      border: 'border-purple-500',
+      borderDark: 'dark:border-purple-500',
+      text: 'text-purple-700',
+      textDark: 'dark:text-purple-300',
+    },
+    cyan: {
+      light: 'bg-cyan-50',
+      dark: 'dark:bg-cyan-900/20',
+      border: 'border-cyan-500',
+      borderDark: 'dark:border-cyan-500',
+      text: 'text-cyan-700',
+      textDark: 'dark:text-cyan-300',
+    },
   }
 
   if (!isOpen) return null
@@ -160,6 +212,7 @@ function ServiceModal({
                 { key: 'basic', label: 'Basic Info', icon: Package },
                 { key: 'details', label: 'Details', icon: List },
                 { key: 'features', label: 'Features', icon: CheckCircle2 },
+                { key: 'cities', label: 'Available Cities', icon: Building },
               ].map((tab) => (
                 <button
                   key={tab.key}
@@ -283,20 +336,24 @@ function ServiceModal({
                       </div>
                     </label>
                     <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                      {CATEGORY_OPTIONS.map((opt) => (
-                        <button
-                          key={opt.value}
-                          type="button"
-                          onClick={() => setFormData({ ...formData, category: opt.value })}
-                          className={`px-4 py-3 rounded-xl text-sm font-medium transition-all border-2 ${
-                            formData.category === opt.value
-                              ? `border-${opt.color}-500 bg-${opt.color}-50 dark:bg-${opt.color}-900/20 text-${opt.color}-700 dark:text-${opt.color}-300`
-                              : 'border-gray-200 dark:border-slate-600 text-gray-600 dark:text-slate-400 hover:border-gray-300 dark:hover:border-slate-500'
-                          }`}
-                        >
-                          {opt.label}
-                        </button>
-                      ))}
+                      {CATEGORY_OPTIONS.map((opt) => {
+                        const colorStyle = CATEGORY_COLOR_STYLES[opt.color]
+                        const isSelected = formData.category === opt.value
+                        return (
+                          <button
+                            key={opt.value}
+                            type="button"
+                            onClick={() => setFormData({ ...formData, category: opt.value })}
+                            className={`px-4 py-3 rounded-xl text-sm font-medium transition-all border-2 ${
+                              isSelected
+                                ? `${colorStyle.border} ${colorStyle.borderDark} ${colorStyle.light} ${colorStyle.dark} ${colorStyle.text} ${colorStyle.textDark}`
+                                : 'border-gray-200 dark:border-slate-600 text-gray-600 dark:text-slate-400 hover:border-gray-300 dark:hover:border-slate-500'
+                            }`}
+                          >
+                            {opt.label}
+                          </button>
+                        )
+                      })}
                     </div>
                   </div>
 
@@ -402,6 +459,59 @@ function ServiceModal({
                       </label>
                     </div>
                     <p className="text-sm text-amber-600 dark:text-amber-400 mt-2 ml-8">This service will be highlighted on the homepage</p>
+                  </div>
+                </motion.div>
+              )}
+
+              {/* Cities Tab */}
+              {activeTab === 'cities' && (
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="space-y-6"
+                >
+                  {/* Available Cities */}
+                  <div className="bg-gray-50 dark:bg-slate-800 rounded-xl p-4 border border-gray-100 dark:border-slate-700">
+                    <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-2">
+                      <div className="flex items-center gap-2">
+                        <Building className="w-4 h-4 text-blue-500" />
+                        Available Cities
+                      </div>
+                    </label>
+                    <p className="text-xs text-gray-500 dark:text-slate-400 mb-4">
+                      Select cities where this service is available. Leave all unchecked for all cities.
+                    </p>
+                    <div className="grid grid-cols-2 gap-3">
+                      {[
+                        { value: 'surabaya', label: 'Surabaya' },
+                        { value: 'sidoarjo', label: 'Sidoarjo' },
+                        { value: 'gresik', label: 'Gresik' },
+                      ].map((city) => (
+                        <label
+                          key={city.value}
+                          className="flex items-center gap-3 p-3 bg-white dark:bg-slate-900 rounded-lg border border-gray-200 dark:border-slate-700 cursor-pointer hover:border-emerald-500 transition-colors"
+                        >
+                          <input
+                            type="checkbox"
+                            checked={formData.availableCities.includes(city.value)}
+                            onChange={(e) => {
+                              if (e.target.checked) {
+                                setFormData({ ...formData, availableCities: [...formData.availableCities, city.value] })
+                              } else {
+                                setFormData({ ...formData, availableCities: formData.availableCities.filter(c => c !== city.value) })
+                              }
+                            }}
+                            className="w-4 h-4 rounded border-gray-300 text-emerald-600 focus:ring-emerald-500"
+                          />
+                          <span className="text-sm text-gray-700 dark:text-slate-300">{city.label}</span>
+                        </label>
+                      ))}
+                    </div>
+                    {formData.availableCities.length === 0 && (
+                      <p className="text-xs text-emerald-600 dark:text-emerald-400 mt-3">
+                        No cities selected = available in all cities
+                      </p>
+                    )}
                   </div>
                 </motion.div>
               )}
@@ -523,6 +633,7 @@ export default function ServicesPage() {
     image: '',
     features: '',
     isFeatured: false,
+    availableCities: [],
   })
   const [errors, setErrors] = React.useState<Partial<ServiceFormData>>({})
 
@@ -560,6 +671,7 @@ export default function ServicesPage() {
       image: '',
       features: '',
       isFeatured: false,
+      availableCities: [],
     })
     setErrors({})
     setIsModalOpen(true)
@@ -579,6 +691,7 @@ export default function ServicesPage() {
       image: service.image || '',
       features: service.features?.join('\n') || '',
       isFeatured: service.isFeatured || false,
+      availableCities: service.availableCities || [],
     })
     setErrors({})
     setIsModalOpen(true)
@@ -620,6 +733,7 @@ export default function ServicesPage() {
       features: formData.features.split('\n').map(f => f.trim()).filter(f => f.length > 0),
       isActive: selectedService?.isActive ?? true,
       isFeatured: formData.isFeatured,
+      availableCities: formData.availableCities,
     }
 
     setFormLoading(true)
