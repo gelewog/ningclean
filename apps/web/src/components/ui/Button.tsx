@@ -30,11 +30,11 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     const baseStyles = 'inline-flex items-center justify-center font-semibold rounded-xl transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed';
 
     const variants = {
-      primary: 'bg-gradient-to-r from-primary to-primary/90 text-white hover:from-primary hover:to-primary shadow-lg shadow-primary/30 hover:shadow-xl hover:shadow-primary/40 focus:ring-primary-500',
-      secondary: 'bg-gradient-to-r from-secondary to-secondary/90 text-white hover:from-secondary hover:to-secondary shadow-lg shadow-secondary/30 hover:shadow-xl hover:shadow-secondary/40 focus:ring-secondary-500',
-      outline: 'border-2 border-primary/50 text-primary hover:bg-primary hover:border-primary hover:text-white hover:shadow-lg hover:shadow-primary/20 focus:ring-primary-500',
-      ghost: 'text-primary hover:bg-primary/10 focus:ring-primary-500',
-      accent: 'bg-gradient-to-r from-accent to-accent/90 text-white hover:from-accent hover:to-accent shadow-lg shadow-accent/30 hover:shadow-xl hover:shadow-accent/40 focus:ring-accent-500',
+      primary: 'bg-gradient-to-r from-primary to-primary/90 text-white shadow-lg shadow-primary/30 hover:shadow-xl hover:shadow-primary/40 focus:ring-primary-500',
+      secondary: 'bg-gradient-to-r from-secondary to-secondary/90 text-white shadow-lg shadow-secondary/30 hover:shadow-xl hover:shadow-secondary/40 focus:ring-secondary-500',
+      outline: 'border-2 border-primary text-primary hover:bg-primary hover:border-primary hover:text-white hover:shadow-lg hover:shadow-primary/20 focus:ring-primary-500',
+      ghost: 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 focus:ring-slate-500',
+      accent: 'bg-gradient-to-r from-accent to-accent/90 text-white shadow-lg shadow-accent/30 hover:shadow-xl hover:shadow-accent/40 focus:ring-accent-500',
       gradient: 'bg-gradient-to-r from-primary via-accent to-primary bg-[length:200%_100%] text-white hover:from-accent hover:to-accent shadow-lg shadow-accent/30 focus:ring-accent-500',
     };
 

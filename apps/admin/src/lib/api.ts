@@ -211,6 +211,7 @@ export async function getBookings(params?: {
           notes: b.notes || '',
           createdAt: b.createdAt,
           items: b.items,
+          invoice: b.invoice || null,
         }
       }),
       total: data.total,
@@ -1291,4 +1292,49 @@ export async function updateCustomer(id: string, data: { isVip?: boolean; notes?
     token,
     body: JSON.stringify(data),
   })
+}
+
+// Invoice API Functions
+export async function createInvoice(bookingId: string, data?: { templateId?: string; dueDate?: Date }): Promise<any> {
+  const token = getToken()
+  return fetchApi<any>(`/invoices/booking/${bookingId}`, {
+    method: 'POST',
+    token,
+    body: JSON.stringify({
+      templateId: data?.templateId || null,
+      dueDate: data?.dueDate?.toISOString() || new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
+    }),
+  })
+}
+
+export async function updateInvoiceStatus(bookingId: string, status: string): Promise<any> {
+  const token = getToken()
+  return fetchApi<any>(`/invoices/booking/${bookingId}/status`, {
+    method: 'PUT',
+    token,
+    body: JSON.stringify({ status }),
+  })
+}
+
+export async function getInvoices(params?: {
+  page?: number
+  limit?: number
+  status?: string
+}): Promise<PaginatedResponse<any>> {
+  const token = getToken()
+  
+  const queryParams = new URLSearchParams()
+  if (params?.page) queryParams.set('page', params.page.toString())
+  if (params?.limit) queryParams.set('limit', params.limit?.toString() || '20')
+  if (params?.status) queryParams.set('status', params.status)
+  
+  const query = queryParams.toString()
+  const endpoint = `/invoices${query ? `?${query}` : ''}`
+  
+  return fetchApi<PaginatedResponse<any>>(endpoint, { token })
+}
+
+export async function getInvoiceById(invoiceId: string): Promise<any> {
+  const token = getToken()
+  return fetchApi<any>(`/invoices/${invoiceId}`, { token })
 }

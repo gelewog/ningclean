@@ -90,6 +90,16 @@ export class BookingsService {
             },
           },
         },
+        invoice: {
+          select: {
+            id: true,
+            invoiceNumber: true,
+            status: true,
+            issuedAt: true,
+            paidAt: true,
+            total: true,
+          },
+        },
       },
       orderBy: { createdAt: 'desc' },
       skip,

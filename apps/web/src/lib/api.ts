@@ -62,8 +62,9 @@ async function fetchApi<T>(endpoint: string, options: RequestInit = {}): Promise
 }
 
 // Services
-export async function getServices() {
-  return fetchApi<any[]>('/services')
+export async function getServices(city?: string) {
+  const query = city ? `?city=${city}` : ''
+  return fetchApi<any[]>(`/services${query}`)
 }
 
 export async function getService(slug: string) {

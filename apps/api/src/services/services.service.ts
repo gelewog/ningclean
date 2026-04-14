@@ -6,9 +6,23 @@ import { CreateServiceDto, UpdateServiceDto } from './dto/service.dto';
 export class ServicesService {
   constructor(private prisma: PrismaService) {}
 
-  async findAll(includeInactive = false) {
+  async findAll(includeInactive = false, city?: string) {
+    // Build where clause
+    const where: any = includeInactive ? {} : { isActive: true };
+
+    // If city is provided, filter by availableCities
+    // Service is available if:
+    // - availableCities is empty (means available in all cities)
+    // - OR availableCities contains the requested city
+    if (city) {
+      where.OR = [
+        { availableCities: { isEmpty: true } },
+        { availableCities: { has: city.toLowerCase() } },
+      ];
+    }
+
     return this.prisma.service.findMany({
-      where: includeInactive ? {} : { isActive: true },
+      where,
       orderBy: { createdAt: 'asc' },
     });
   }
@@ -43,6 +57,7 @@ export class ServicesService {
         features: dto.features || [],
         isActive: dto.isActive ?? true,
         isFeatured: dto.isFeatured ?? false,
+        availableCities: dto.availableCities || [],
       },
     });
   }
@@ -54,6 +69,7 @@ export class ServicesService {
       data: {
         ...dto,
         features: dto.features || undefined,
+        availableCities: dto.availableCities !== undefined ? dto.availableCities : undefined,
       },
     });
   }

@@ -190,7 +190,7 @@ export default function Navigation() {
                     }}
                     className={cn(
                       'w-full h-0.5 rounded-full origin-left',
-                      isScrolled ? 'bg-white' : 'bg-slate-700'
+                      isScrolled ? 'dark:bg-white bg-slate-700' : 'bg-slate-700'
                     )}
                   />
                   <motion.span
@@ -200,7 +200,7 @@ export default function Navigation() {
                     }}
                     className={cn(
                       'w-full h-0.5 rounded-full',
-                      isScrolled ? 'bg-white' : 'bg-slate-700'
+                      isScrolled ? 'dark:bg-white bg-slate-700' : 'bg-slate-700'
                     )}
                   />
                   <motion.span
@@ -210,7 +210,7 @@ export default function Navigation() {
                     }}
                     className={cn(
                       'w-full h-0.5 rounded-full origin-left',
-                      isScrolled ? 'bg-white' : 'bg-slate-700'
+                      isScrolled ? 'dark:bg-white bg-slate-700' : 'bg-slate-700'
                     )}
                   />
                 </motion.div>
@@ -237,7 +237,7 @@ export default function Navigation() {
                     key={link.href}
                     href={link.href}
                     onClick={() => setIsMobileMenuOpen(false)}
-                    className="px-4 py-3 rounded-xl dark:text-white font-medium dark:hover:bg-white/5 hover:bg-slate-100 transition-colors"
+                    className="px-4 py-3 rounded-xl dark:text-white text-slate-700 font-medium dark:hover:bg-white/5 hover:bg-slate-100 transition-colors"
                   >
                     {link.label}
                   </Link>

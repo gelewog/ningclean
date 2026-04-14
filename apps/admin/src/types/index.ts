@@ -41,6 +41,7 @@ export interface Service {
   features?: string[]
   isActive: boolean
   isFeatured?: boolean
+  availableCities?: string[]
   createdAt: string
 }
 

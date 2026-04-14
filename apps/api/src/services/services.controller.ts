@@ -23,9 +23,10 @@ export class ServicesController {
 
   @Get()
   @ApiOperation({ summary: 'Get all services (public - only active)' })
-  findAll(@Query('all') all?: string) {
+  findAll(@Query('all') all?: string, @Query('city') city?: string) {
     // If 'all=true' is passed, return all services (for admin)
-    return this.servicesService.findAll(all === 'true');
+    // If 'city' is passed, filter by availableCities (empty = all cities)
+    return this.servicesService.findAll(all === 'true', city);
   }
 
   @Get(':id')

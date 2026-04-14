@@ -2,33 +2,51 @@
 
 import * as React from 'react'
 import { motion } from 'framer-motion'
-import { FileText, Search, Calendar, Download, Eye } from 'lucide-react'
+import { FileText, Search, Calendar, Download, Eye, Plus, CheckCircle, Clock, DollarSign, RotateCcw } from 'lucide-react'
 import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Badge } from '@/components/ui/badge'
 import { Modal } from '@/components/admin/Modal'
 import { Pagination } from '@/components/admin/Pagination'
-import { getBookings, getBookingInvoice, InvoiceData } from '@/lib/api'
+import { getBookings, getBookingInvoice, InvoiceData, createInvoice, updateInvoiceStatus } from '@/lib/api'
 import { formatDate } from '@/lib/utils'
 import { toast } from 'sonner'
 
-const STATUS_COLORS: Record<string, string> = {
-  PENDING: 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-400',
-  CONFIRMED: 'bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-400',
-  IN_PROGRESS: 'bg-purple-100 dark:bg-purple-900/30 text-purple-800 dark:text-purple-400',
-  COMPLETED: 'bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-400',
-  CANCELLED: 'bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-400',
-  UNKNOWN: 'bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-300',
+// Booking Status (lowercase keys to match API)
+const BOOKING_STATUS_COLORS: Record<string, string> = {
+  pending: 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-400',
+  confirmed: 'bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-400',
+  in_progress: 'bg-purple-100 dark:bg-purple-900/30 text-purple-800 dark:text-purple-400',
+  completed: 'bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-400',
+  cancelled: 'bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-400',
+  unknown: 'bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-300',
 }
 
-const STATUS_LABELS: Record<string, string> = {
-  PENDING: 'Pending',
-  CONFIRMED: 'Dikonfirmasi',
-  IN_PROGRESS: 'Sedang Dikerjakan',
-  COMPLETED: 'Selesai',
-  CANCELLED: 'Dibatalkan',
-  UNKNOWN: 'Unknown',
+const BOOKING_STATUS_LABELS: Record<string, string> = {
+  pending: 'Pending',
+  confirmed: 'Dikonfirmasi',
+  in_progress: 'Sedang Dikerjakan',
+  completed: 'Selesai',
+  cancelled: 'Dibatalkan',
+  unknown: 'Unknown',
+}
+
+// Invoice Status
+const INVOICE_STATUS_COLORS: Record<string, string> = {
+  draft: 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-700',
+  issued: 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 border border-blue-200 dark:border-blue-800',
+  paid: 'bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800',
+  cancelled: 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400 border border-red-200 dark:border-red-800',
+  none: 'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 border border-slate-200 dark:border-slate-700',
+}
+
+const INVOICE_STATUS_LABELS: Record<string, string> = {
+  draft: 'Draf',
+  issued: 'Terbit',
+  paid: 'Lunas',
+  cancelled: 'Dibatalkan',
+  none: 'Belum Dibuat',
 }
 
 export default function InvoicesPage() {
@@ -37,10 +55,12 @@ export default function InvoicesPage() {
   const [search, setSearch] = React.useState('')
   const [pagination, setPagination] = React.useState({ page: 1, limit: 20, total: 0, totalPages: 0 })
   const [statusFilter, setStatusFilter] = React.useState('')
+  const [invoiceStatusFilter, setInvoiceStatusFilter] = React.useState('')
   const [selectedBooking, setSelectedBooking] = React.useState<any>(null)
   const [invoiceData, setInvoiceData] = React.useState<InvoiceData | null>(null)
   const [previewOpen, setPreviewOpen] = React.useState(false)
   const [loadingInvoice, setLoadingInvoice] = React.useState(false)
+  const [generatingInvoice, setGeneratingInvoice] = React.useState<string | null>(null)
 
   React.useEffect(() => {
     fetchBookings()
@@ -54,6 +74,7 @@ export default function InvoicesPage() {
         limit: pagination.limit,
         status: statusFilter || undefined,
       })
+      // Use actual booking data from API (may include invoice if API returns it)
       setBookings(response.data)
       setPagination((prev) => ({
         ...prev,
@@ -64,6 +85,44 @@ export default function InvoicesPage() {
       toast.error('Gagal memuat bookings')
     } finally {
       setLoading(false)
+    }
+  }
+
+  // Helper to get invoice status from booking
+  const getInvoiceStatus = (booking: any): string => {
+    if (!booking.invoice) return 'none'
+    return booking.invoice.status?.toLowerCase() || 'draft'
+  }
+
+  // Generate invoice for booking
+  async function handleGenerateInvoice(booking: any) {
+    setGeneratingInvoice(booking.id)
+    try {
+      const invoice = await createInvoice(booking.id, {
+        templateId: undefined,
+        dueDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // Due in 7 days
+      })
+      
+      toast.success('Invoice berhasil dibuat')
+      // Update local state
+      setBookings(prev => prev.map(b => 
+        b.id === booking.id ? { ...b, invoice } : b
+      ))
+    } catch (error) {
+      toast.error('Gagal membuat invoice')
+    } finally {
+      setGeneratingInvoice(null)
+    }
+  }
+
+  // Update invoice status
+  async function handleUpdateInvoiceStatus(bookingId: string, newStatus: string) {
+    try {
+      await updateInvoiceStatus(bookingId, newStatus)
+      toast.success(`Status invoice diupdate ke ${newStatus}`)
+      fetchBookings()
+    } catch (error) {
+      toast.error('Gagal update status')
     }
   }
 
@@ -89,11 +148,24 @@ export default function InvoicesPage() {
     window.print()
   }
 
-  const filteredBookings = bookings.filter(booking =>
-    booking.orderNumber?.toLowerCase().includes(search.toLowerCase()) ||
-    booking.guestName?.toLowerCase().includes(search.toLowerCase()) ||
-    booking.address?.toLowerCase().includes(search.toLowerCase())
-  )
+  // Filter bookings by search and invoice status
+  const filteredBookings = React.useMemo(() => {
+    let filtered = bookings.filter(booking =>
+      booking.orderNumber?.toLowerCase().includes(search.toLowerCase()) ||
+      booking.guestName?.toLowerCase().includes(search.toLowerCase()) ||
+      booking.address?.toLowerCase().includes(search.toLowerCase())
+    )
+    
+    // Apply invoice status filter
+    if (invoiceStatusFilter) {
+      filtered = filtered.filter(booking => {
+        const invStatus = getInvoiceStatus(booking)
+        return invStatus === invoiceStatusFilter
+      })
+    }
+    
+    return filtered
+  }, [bookings, search, invoiceStatusFilter])
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-slate-900 text-gray-900 dark:text-white">
@@ -139,12 +211,24 @@ export default function InvoicesPage() {
             value={statusFilter}
             onChange={(e) => { setStatusFilter(e.target.value); setPagination(prev => ({ ...prev, page: 1 })); }}
           >
-            <option value="">Semua Status</option>
+            <option value="">Semua Status Booking</option>
             <option value="PENDING">Pending</option>
             <option value="CONFIRMED">Dikonfirmasi</option>
             <option value="IN_PROGRESS">Sedang Dikerjakan</option>
             <option value="COMPLETED">Selesai</option>
             <option value="CANCELLED">Dibatalkan</option>
+          </select>
+          <select
+            className="h-10 rounded-xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 text-sm"
+            value={invoiceStatusFilter}
+            onChange={(e) => { setInvoiceStatusFilter(e.target.value); setPagination(prev => ({ ...prev, page: 1 })); }}
+          >
+            <option value="">Semua Status Invoice</option>
+            <option value="none">Belum Dibuat</option>
+            <option value="draft">Draf</option>
+            <option value="issued">Terbit</option>
+            <option value="paid">Lunas</option>
+            <option value="cancelled">Dibatalkan</option>
           </select>
         </motion.div>
 
@@ -166,51 +250,79 @@ export default function InvoicesPage() {
               </div>
             ) : (
               <div className="divide-y divide-gray-100 dark:divide-slate-700">
-                {filteredBookings.map((booking) => (
-                  <div
-                    key={booking.id}
-                    className="flex items-center gap-4 p-4 hover:bg-gray-50 dark:hover:bg-slate-800 transition-colors"
-                  >
-                    <div className="h-12 w-12 rounded-lg bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center">
-                      <FileText className="h-6 w-6 text-emerald-600" />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2 mb-1">
-                        <h3 className="font-medium text-gray-900 dark:text-white">{booking.orderNumber}</h3>
-                        <Badge className={STATUS_COLORS[booking.status || 'UNKNOWN']}>
-                          {STATUS_LABELS[booking.status || 'UNKNOWN']}
-                        </Badge>
-                      </div>
-                      <div className="flex items-center gap-3 text-sm text-gray-500 dark:text-slate-400">
-                        <span>{booking.guestName || 'Guest'}</span>
-                        <span>•</span>
-                        <span className="flex items-center gap-1">
-                          <Calendar className="h-3 w-3" />
-                          {formatDate(booking.serviceDate)}
-                        </span>
-                      </div>
-                    </div>
-                    <div className="text-right">
-                      <p className="font-semibold text-gray-900 dark:text-white">
-                        Rp {Number(booking.totalAmount).toLocaleString('id-ID')}
-                      </p>
-                    </div>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => handlePreview(booking)}
-                      disabled={loadingInvoice}
-                      className="gap-2"
+                {filteredBookings.map((booking) => {
+                  const invStatus = getInvoiceStatus(booking)
+                  const hasInvoice = invStatus !== 'none'
+                  
+                  return (
+                    <div
+                      key={booking.id}
+                      className="flex items-center gap-4 p-4 hover:bg-gray-50 dark:hover:bg-slate-800 transition-colors"
                     >
-                      <Eye className="h-4 w-4" />
-                      Preview
-                    </Button>
-                  </div>
-                ))}
+                      <div className="h-12 w-12 rounded-lg bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center">
+                        <FileText className="h-6 w-6 text-emerald-600" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2 mb-1">
+                          <h3 className="font-medium text-gray-900 dark:text-white">{booking.orderNumber}</h3>
+                          <Badge className={BOOKING_STATUS_COLORS[(booking.status || 'unknown').toLowerCase()]}>
+                            {BOOKING_STATUS_LABELS[(booking.status || 'unknown').toLowerCase()]}
+                          </Badge>
+                          {/* Invoice Status Badge */}
+                          <Badge className={INVOICE_STATUS_COLORS[invStatus]}>
+                            {INVOICE_STATUS_LABELS[invStatus]}
+                          </Badge>
+                        </div>
+                        <div className="flex items-center gap-3 text-sm text-gray-500 dark:text-slate-400">
+                          <span>{booking.guestName || 'Guest'}</span>
+                          <span>•</span>
+                          <span className="flex items-center gap-1">
+                            <Calendar className="h-3 w-3" />
+                            {booking.serviceDate ? formatDate(booking.serviceDate) : '-'}
+                          </span>
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <p className="font-semibold text-gray-900 dark:text-white">
+                          Rp {Number(booking.totalAmount || 0).toLocaleString('id-ID')}
+                        </p>
+                      </div>
+                      {/* Action Buttons */}
+                      <div className="flex items-center gap-2">
+                        {hasInvoice ? (
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => handlePreview(booking)}
+                            disabled={loadingInvoice}
+                            className="gap-2"
+                          >
+                            <Eye className="h-4 w-4" />
+                            Preview
+                          </Button>
+                        ) : (
+                          <Button
+                            size="sm"
+                            onClick={() => handleGenerateInvoice(booking)}
+                            disabled={generatingInvoice === booking.id}
+                            className="gap-2 bg-emerald-600 hover:bg-emerald-700"
+                          >
+                            {generatingInvoice === booking.id ? (
+                              <span className="animate-spin">⏳</span>
+                            ) : (
+                              <Plus className="h-4 w-4" />
+                            )}
+                            Buat Invoice
+                          </Button>
+                        )}
+                      </div>
+                    </div>
+                  )
+                })}
               </div>
             )}
             {pagination.totalPages > 1 && (
-              <div className="border-t border-gray-100 dark:border-slate-700 dark:border-slate-700">
+              <div className="border-t border-gray-100 dark:border-slate-700">
                 <Pagination
                   currentPage={pagination.page}
                   totalPages={pagination.totalPages}
@@ -232,7 +344,27 @@ export default function InvoicesPage() {
         {invoiceData && (
           <div className="space-y-6">
             {/* Invoice Content - Printable */}
-            <div className="bg-white dark:bg-slate-900 p-8 rounded-xl border border-gray-200 dark:border-slate-700" id="invoice-print">
+            <div className="bg-white dark:bg-slate-900 p-8 rounded-xl border border-gray-200 dark:border-slate-700 relative overflow-hidden" id="invoice-print">
+              {/* Watermark based on invoice status (Bahasa Indonesia) */}
+              {selectedBooking?.invoice?.status && (
+                <div 
+                  className={`absolute inset-0 flex items-center justify-center pointer-events-none select-none z-10 ${
+                    selectedBooking.invoice.status === 'PAID' ? 'text-emerald-400/20' :
+                    selectedBooking.invoice.status === 'CANCELLED' ? 'text-red-400/20' :
+                    selectedBooking.invoice.status === 'DRAFT' ? 'text-gray-400/15' :
+                    'text-blue-400/20'
+                  }`}
+                  style={{ transform: 'rotate(-45deg)' }}
+                >
+                  <span className="text-8xl font-black tracking-widest uppercase">
+                    {selectedBooking.invoice.status === 'PAID' ? 'LUNAS' :
+                     selectedBooking.invoice.status === 'CANCELLED' ? 'DIBATALKAN' :
+                     selectedBooking.invoice.status === 'DRAFT' ? 'DRAF' :
+                     selectedBooking.invoice.status === 'ISSUED' ? 'TERBIT' :
+                     selectedBooking.invoice.status}
+                  </span>
+                </div>
+              )}
               {/* Header */}
               <div className="flex justify-between items-start mb-8">
                 <div>
@@ -328,6 +460,45 @@ export default function InvoicesPage() {
                 </div>
               )}
             </div>
+
+            {/* Invoice Status Actions */}
+            {selectedBooking?.invoice && (
+              <div className="flex flex-wrap items-center gap-2 pt-4 border-t border-gray-100 dark:border-slate-700">
+                <span className="text-sm text-gray-500 dark:text-slate-400 mr-2">Status Invoice:</span>
+                {selectedBooking.invoice.status !== 'ISSUED' && (
+                  <Button 
+                    size="sm" 
+                    variant="outline"
+                    onClick={() => handleUpdateInvoiceStatus(selectedBooking.id, 'ISSUED')}
+                    className="gap-2 border-blue-200 text-blue-600 hover:bg-blue-50"
+                  >
+                    <CheckCircle className="h-4 w-4" />
+                    Tandai Terbitkan
+                  </Button>
+                )}
+                {selectedBooking.invoice.status !== 'PAID' && (
+                  <Button 
+                    size="sm"
+                    onClick={() => handleUpdateInvoiceStatus(selectedBooking.id, 'PAID')}
+                    className="gap-2 bg-emerald-600 hover:bg-emerald-700"
+                  >
+                    <DollarSign className="h-4 w-4" />
+                    Tandai Lunas
+                  </Button>
+                )}
+                {selectedBooking.invoice.status !== 'CANCELLED' && (
+                  <Button 
+                    size="sm" 
+                    variant="outline"
+                    onClick={() => handleUpdateInvoiceStatus(selectedBooking.id, 'CANCELLED')}
+                    className="gap-2 border-red-200 text-red-600 hover:bg-red-50"
+                  >
+                    <RotateCcw className="h-4 w-4" />
+                    Batalkan
+                  </Button>
+                )}
+              </div>
+            )}
 
             {/* Actions */}
             <div className="flex justify-end gap-3 pt-4 border-t border-gray-100 dark:border-slate-700">

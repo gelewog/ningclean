@@ -98,7 +98,7 @@ export default function AreaCityPage() {
       try {
         const [areasData, servicesData, testimonialsData] = await Promise.all([
           getServiceAreas(),
-          getServices(),
+          getServices(citySlug),
           getTestimonials(citySlug),
         ]);
         // Find matching area or fallback to first

@@ -68,6 +68,12 @@ export class CreateServiceDto {
   @IsOptional()
   @IsBoolean()
   isFeatured?: boolean;
+
+  @ApiPropertyOptional({ example: ['surabaya', 'sidoarjo', 'gresik'] })
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
+  availableCities?: string[];
 }
 
 export class UpdateServiceDto {
@@ -130,4 +136,10 @@ export class UpdateServiceDto {
   @IsOptional()
   @IsBoolean()
   isFeatured?: boolean;
+
+  @ApiPropertyOptional({ example: ['surabaya', 'sidoarjo', 'gresik'] })
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
+  availableCities?: string[];
 }

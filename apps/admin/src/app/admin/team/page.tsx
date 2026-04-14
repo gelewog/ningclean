@@ -2,7 +2,7 @@
 
 import * as React from 'react'
 import { motion } from 'framer-motion'
-import { Plus, FileText, Save, Edit, Trash2, User, Calendar, Mail, Phone, GripVertical, Facebook, Instagram, Linkedin, Twitter, Link2, CalendarDays } from 'lucide-react'
+import { Plus, FileText, Save, Edit, Trash2, User, Calendar, Mail, Phone, GripVertical, Facebook, Instagram, Linkedin, Twitter, Link2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
@@ -113,7 +113,6 @@ export default function TeamPage() {
       avatar: item.avatar || '',
       isActive: item.isActive,
       order: item.order,
-
       socialLinks: {
         facebook: (item.socialLinks as any)?.facebook || '',
         instagram: (item.socialLinks as any)?.instagram || '',
@@ -130,11 +129,29 @@ export default function TeamPage() {
     setIsDeleteModalOpen(true)
   }
 
-  function validateForm(): boolean {
+  async function checkDuplicate(): Promise<{ nameExists: boolean; emailExists: boolean }> {
+    const nameExists = items.some(
+      item => item.name.toLowerCase() === formData.name.trim().toLowerCase() &&
+              (!isEditing || item.id !== selectedItem?.id)
+    )
+    const emailExists = formData.email.trim() ? items.some(
+      item => item.email?.toLowerCase() === formData.email.trim().toLowerCase() &&
+              (!isEditing || item.id !== selectedItem?.id)
+    ) : false
+    return { nameExists, emailExists }
+  }
+
+  async function validateForm(): Promise<boolean> {
     const newErrors: Partial<TeamFormData> = {}
     if (!formData.name.trim()) newErrors.name = 'Name is required'
     if (!formData.position.trim()) newErrors.position = 'Position is required'
     if (!formData.department.trim()) newErrors.department = 'Department is required'
+    
+    // Check for duplicates
+    const { nameExists, emailExists } = await checkDuplicate()
+    if (nameExists) newErrors.name = 'Team member with this name already exists'
+    if (emailExists) newErrors.email = 'Email already exists'
+    
     setErrors(newErrors)
     return Object.keys(newErrors).length === 0
   }
@@ -153,7 +170,6 @@ export default function TeamPage() {
       avatar: formData.avatar || undefined,
       isActive: formData.isActive,
       order: formData.order,
-      joinDate: formData.joinDate ? new Date(formData.joinDate).toISOString() : undefined,
       socialLinks: {
         facebook: formData.socialLinks.facebook || undefined,
         instagram: formData.socialLinks.instagram || undefined,
@@ -335,7 +351,7 @@ export default function TeamPage() {
         </motion.div>
       </div>
 
-      {/* Create/Edit Modal - Redesigned with Social Links & Join Date */}
+      {/* Create/Edit Modal - Redesigned with Social Links */}
       <Modal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}

@@ -23,6 +23,7 @@ export interface Service {
   features: string[];
   isActive: boolean;
   isPopular?: boolean;
+  availableCities?: string[]; // Empty = all cities
   createdAt: string;
   updatedAt: string;
 }
