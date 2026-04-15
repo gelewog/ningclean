@@ -1,7 +1,6 @@
 'use client'
 
 import * as React from 'react'
-import { useSearchParams } from 'next/navigation'
 import { motion } from 'framer-motion'
 import Link from 'next/link'
 import { formatDate } from '@/lib/utils'
@@ -56,8 +55,6 @@ interface DraftPost {
 }
 
 export default function BlogPreviewPage() {
-  const router = useRouter()
-  const searchParams = useSearchParams()
   const [post, setPost] = React.useState<DraftPost | null>(null)
   const [loading, setLoading] = React.useState(true)
 
