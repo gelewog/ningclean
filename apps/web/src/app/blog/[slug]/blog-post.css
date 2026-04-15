@@ -1,15 +1,33 @@
-/* Blog Post Base Styles + Dark Mode Overrides */
+/* ============================================================
+   blog-post.css
+   Blog Post Base Styles + Dark Mode Overrides
+   v2.0 — Modern, complete, production-ready
+   ============================================================ */
 
-/* ============================================
-   BASE STYLES - Spacing & Typography
-   ============================================ */
+/* ============================================================
+   CUSTOM PROPERTIES
+   ============================================================ */
+
+:root {
+  --article-accent:         #00c98d;
+  --article-accent-dim:     rgba(0, 201, 141, 0.10);
+  --article-accent-border:  rgba(0, 201, 141, 0.25);
+}
+
+/* ============================================================
+   BASE — Typography & Spacing
+   ============================================================ */
 
 .article-html-content {
   line-height: 1.8;
-  color: inherit;
+  color: #334155;           /* slate-700 */
+  font-size: 1rem;
+  word-break: break-word;
+  overflow-wrap: break-word;
 }
 
-/* Headings */
+/* ── Headings ── */
+
 .article-html-content h1,
 .article-html-content h2,
 .article-html-content h3,
@@ -17,49 +35,104 @@
 .article-html-content h5,
 .article-html-content h6 {
   margin-top: 2rem;
-  margin-bottom: 1rem;
+  margin-bottom: 0.75rem;
   font-weight: 600;
   line-height: 1.3;
+  color: #0f172a;           /* slate-900 */
 }
 
 .article-html-content h1 {
   font-size: 2rem;
   margin-top: 0;
+  letter-spacing: -0.025em;
 }
 
 .article-html-content h2 {
-  font-size: 1.75rem;
+  font-size: 1.625rem;
+  letter-spacing: -0.015em;
 }
 
 .article-html-content h3 {
-  font-size: 1.5rem;
+  font-size: 1.3rem;
+  letter-spacing: -0.01em;
 }
 
 .article-html-content h4 {
-  font-size: 1.25rem;
+  font-size: 1.1rem;
 }
 
 .article-html-content h5,
 .article-html-content h6 {
-  font-size: 1.125rem;
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #475569;
 }
 
-/* Paragraphs */
+/* ── Paragraphs ── */
+
 .article-html-content p {
-  margin-bottom: 1.25rem;
   margin-top: 0;
+  margin-bottom: 1.25rem;
 }
 
-/* Lists */
+/* ── Links ── */
+
+.article-html-content a {
+  color: #059669;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+  transition: color 0.15s ease;
+}
+
+.article-html-content a:hover {
+  color: #047857;
+}
+
+/* ── Inline text ── */
+
+.article-html-content strong,
+.article-html-content b {
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.article-html-content em,
+.article-html-content i {
+  color: #64748b;
+  font-style: italic;
+}
+
+.article-html-content mark {
+  background-color: rgba(0, 201, 141, 0.20);
+  color: #065f46;
+  padding: 0.1em 0.3em;
+  border-radius: 4px;
+}
+
+.article-html-content del,
+.article-html-content s {
+  color: #94a3b8;
+  text-decoration: line-through;
+}
+
+.article-html-content abbr[title] {
+  text-decoration: underline dotted;
+  cursor: help;
+}
+
+/* ── Lists ── */
+
 .article-html-content ul,
 .article-html-content ol {
-  margin-bottom: 1.25rem;
   margin-top: 0;
+  margin-bottom: 1.25rem;
   padding-left: 1.5rem;
 }
 
 .article-html-content li {
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.4rem;
 }
 
 .article-html-content ul li {
@@ -70,339 +143,486 @@
   list-style-type: decimal;
 }
 
-/* Nested lists */
 .article-html-content ul ul,
 .article-html-content ol ol,
 .article-html-content ul ol,
 .article-html-content ol ul {
-  margin-top: 0.5rem;
-  margin-bottom: 0.5rem;
+  margin-top: 0.4rem;
+  margin-bottom: 0.4rem;
 }
 
-/* Blockquotes */
+/* ── Blockquote ── */
+
 .article-html-content blockquote {
-  margin: 1.5rem 0;
+  margin: 1.75rem 0;
   padding: 1rem 1.5rem;
-  border-left: 4px solid #10b981;
-  background-color: #f8fafc;
-  border-radius: 0 0.5rem 0.5rem 0;
+  border-left: 3px solid var(--article-accent);
+  background-color: var(--article-accent-dim);
+  border-radius: 0 8px 8px 0;
+  color: #475569;
 }
 
-/* Code */
+.article-html-content blockquote p {
+  margin-bottom: 0;
+  font-style: italic;
+}
+
+.article-html-content blockquote cite {
+  display: block;
+  margin-top: 0.5rem;
+  font-size: 0.875rem;
+  color: #94a3b8;
+  font-style: normal;
+}
+
+/* ── Code & Pre ── */
+
 .article-html-content code {
-  padding: 0.2rem 0.4rem;
-  border-radius: 0.25rem;
-  font-size: 0.875em;
+  padding: 0.175rem 0.4rem;
+  border-radius: 5px;
+  font-size: 0.85em;
+  font-family: ui-monospace, 'Cascadia Code', 'Fira Code', monospace;
   background-color: #f1f5f9;
+  color: #be185d;
 }
 
 .article-html-content pre {
-  padding: 1rem;
-  border-radius: 0.5rem;
+  margin: 1.5rem 0;
+  padding: 1.25rem 1.5rem;
+  border-radius: 10px;
   overflow-x: auto;
-  margin: 1.25rem 0;
+  background-color: #0f172a;
+  color: #e2e8f0;
+  font-size: 0.875rem;
+  line-height: 1.7;
+  tab-size: 2;
+  -moz-tab-size: 2;
 }
 
 .article-html-content pre code {
   padding: 0;
   background: none;
+  color: inherit;
+  font-size: inherit;
 }
 
-/* Tables */
+/* ── Keyboard ── */
+
+.article-html-content kbd {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.1em 0.45em;
+  font-size: 0.8em;
+  font-family: ui-monospace, monospace;
+  background-color: #f8fafc;
+  border: 0.5px solid #cbd5e1;
+  border-bottom-width: 2px;
+  border-radius: 5px;
+  color: #334155;
+  white-space: nowrap;
+}
+
+/* ── Tables ── */
+
 .article-html-content table {
   width: 100%;
   border-collapse: collapse;
-  margin: 1.5rem 0;
-  border-radius: 0.5rem;
-  overflow: hidden;
+  margin: 1.75rem 0;
+  font-size: 0.9375rem;
 }
 
 .article-html-content th,
 .article-html-content td {
-  padding: 0.75rem 1rem;
+  padding: 0.7rem 1rem;
   text-align: left;
-  border-bottom: 1px solid #e2e8f0;
+  border-bottom: 0.5px solid #e2e8f0;
+  vertical-align: top;
 }
 
 .article-html-content th {
   font-weight: 600;
+  font-size: 0.875rem;
   background-color: #f8fafc;
+  color: #0f172a;
+  white-space: nowrap;
 }
 
 .article-html-content tr:last-child td {
   border-bottom: none;
 }
 
-/* Horizontal rule */
-.article-html-content hr {
-  margin: 2rem 0;
-  border: 0;
-  border-top: 1px solid #e2e8f0;
+.article-html-content tbody tr:hover {
+  background-color: #f8fafc;
 }
 
-/* Images */
+/* ── Images & Media ── */
+
 .article-html-content img {
   max-width: 100%;
   height: auto;
-  border-radius: 0.5rem;
+  border-radius: 10px;
   margin: 1.25rem 0;
+  display: block;
 }
 
-/* Links */
-.article-html-content a {
-  color: #059669;
-  text-decoration: underline;
-  text-underline-offset: 2px;
+.article-html-content figure {
+  margin: 1.75rem 0;
 }
 
-.article-html-content a:hover {
-  color: #047857;
+.article-html-content figcaption {
+  margin-top: 0.5rem;
+  font-size: 0.8125rem;
+  color: #94a3b8;
+  text-align: center;
+  line-height: 1.5;
 }
 
-/* Strong & Emphasis */
-.article-html-content strong,
-.article-html-content b {
+.article-html-content video,
+.article-html-content iframe {
+  max-width: 100%;
+  border-radius: 10px;
+  display: block;
+  margin: 1.5rem 0;
+}
+
+/* ── Horizontal Rule ── */
+
+.article-html-content hr {
+  margin: 2.5rem 0;
+  border: none;
+  border-top: 0.5px solid #e2e8f0;
+}
+
+/* ── Details / Summary ── */
+
+.article-html-content details {
+  margin: 1.5rem 0;
+  border: 0.5px solid #e2e8f0;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.article-html-content summary {
+  padding: 0.75rem 1rem;
   font-weight: 600;
+  cursor: pointer;
+  background-color: #f8fafc;
+  user-select: none;
+  list-style: none;
 }
 
-/* Checkboxes in content */
-.article-html-content input[type="checkbox"] {
+.article-html-content summary::-webkit-details-marker {
+  display: none;
+}
+
+.article-html-content summary::before {
+  content: '▶';
+  display: inline-block;
   margin-right: 0.5rem;
+  font-size: 0.7em;
+  transition: transform 0.2s ease;
+  color: var(--article-accent);
+}
+
+.article-html-content details[open] summary::before {
+  transform: rotate(90deg);
+}
+
+.article-html-content details > *:not(summary) {
+  padding: 1rem;
+}
+
+/* ── Callout (utility class) ── */
+
+.article-html-content .callout {
+  display: flex;
+  gap: 0.75rem;
+  padding: 1rem 1.25rem;
+  background-color: var(--article-accent-dim);
+  border: 0.5px solid var(--article-accent-border);
+  border-radius: 10px;
+  margin: 1.5rem 0;
+}
+
+.article-html-content .callout-icon {
+  flex-shrink: 0;
+  font-size: 1rem;
+  margin-top: 0.1rem;
+  line-height: 1.8;
+}
+
+.article-html-content .callout p {
+  margin: 0;
+}
+
+.article-html-content .callout-warning {
+  background-color: rgba(245, 158, 11, 0.08);
+  border-color: rgba(245, 158, 11, 0.25);
+}
+
+.article-html-content .callout-danger {
+  background-color: rgba(239, 68, 68, 0.07);
+  border-color: rgba(239, 68, 68, 0.2);
+}
+
+.article-html-content .callout-info {
+  background-color: rgba(59, 130, 246, 0.07);
+  border-color: rgba(59, 130, 246, 0.2);
+}
+
+/* ── Checkboxes ── */
+
+.article-html-content input[type="checkbox"] {
   width: 1rem;
   height: 1rem;
+  margin-right: 0.5rem;
   vertical-align: middle;
+  accent-color: var(--article-accent);
 }
 
-/* Div containers with backgrounds */
-.article-html-content > div {
-  margin: 1.5rem 0;
-}
+/* ── Utility ── */
 
-/* Cards/boxes from HTML content */
-.article-html-content .bg-white,
-.article-html-content [class*="bg-"] {
-  padding: 1.5rem;
-  border-radius: 0.75rem;
-  margin: 1.5rem 0;
-}
-
-/* Grid layouts */
-.article-html-content .grid {
-  gap: 1rem;
-  margin: 1.5rem 0;
-}
-
-/* First child no margin top */
 .article-html-content > *:first-child {
-  margin-top: 0;
+  margin-top: 0 !important;
 }
 
-/* Last child no margin bottom */
 .article-html-content > *:last-child {
-  margin-bottom: 0;
+  margin-bottom: 0 !important;
 }
 
-/* ============================================
+/* ============================================================
    DARK MODE OVERRIDES
-   ============================================ */
+   .dark prefix — sesuaikan dengan class dark-mode projectmu
+   ============================================================ */
 
-/* Dark mode - force all content text to be readable */
-.dark .article-html-content,
-.dark .article-html-content *,
-.dark .article-html-content *::before,
-.dark .article-html-content *::after,
-.dark .article-html-content div,
-.dark .article-html-content div *,
-.dark .article-html-content span,
-.dark .article-html-content span *,
-.dark .article-html-content p,
-.dark .article-html-content p *,
-.dark .article-html-content section,
-.dark .article-html-content section *,
-.dark .article-html-content article,
-.dark .article-html-content article * {
-  color: #cbd5e1 !important; /* slate-300 */
+/* ── Base text ── */
+
+.dark .article-html-content {
+  color: #94a3b8;           /* slate-400 */
 }
 
-/* Headings in dark mode */
+/* ── Headings ── */
+
 .dark .article-html-content h1,
 .dark .article-html-content h2,
 .dark .article-html-content h3,
-.dark .article-html-content h4,
+.dark .article-html-content h4 {
+  color: #f1f5f9 !important;
+}
+
 .dark .article-html-content h5,
-.dark .article-html-content h6,
-.dark .article-html-content h1 *,
-.dark .article-html-content h2 *,
-.dark .article-html-content h3 *,
-.dark .article-html-content h4 *,
-.dark .article-html-content h5 *,
-.dark .article-html-content h6 * {
-  color: #f8fafc !important; /* slate-50 */
+.dark .article-html-content h6 {
+  color: #64748b !important;
 }
 
-/* Links in dark mode */
-.dark .article-html-content a,
-.dark .article-html-content a * {
-  color: #34d399 !important; /* emerald-400 */
+/* ── Links ── */
+
+.dark .article-html-content a {
+  color: #34d399 !important;
 }
 
-.dark .article-html-content a:hover,
-.dark .article-html-content a:hover * {
-  color: #6ee7b7 !important; /* emerald-300 */
+.dark .article-html-content a:hover {
+  color: #6ee7b7 !important;
 }
 
-/* Bold/Strong in dark mode */
+/* ── Inline text ── */
+
 .dark .article-html-content strong,
-.dark .article-html-content b,
-.dark .article-html-content strong *,
-.dark .article-html-content b * {
-  color: #f8fafc !important; /* slate-50 */
+.dark .article-html-content b {
+  color: #f1f5f9 !important;
 }
 
-/* Emphasis/Italic in dark mode */
 .dark .article-html-content em,
-.dark .article-html-content i,
-.dark .article-html-content em *,
-.dark .article-html-content i * {
-  color: #94a3b8 !important; /* slate-400 */
+.dark .article-html-content i {
+  color: #64748b !important;
 }
 
-/* Lists in dark mode */
-.dark .article-html-content ul,
-.dark .article-html-content ol,
+.dark .article-html-content mark {
+  background-color: rgba(0, 201, 141, 0.15) !important;
+  color: #6ee7b7 !important;
+}
+
+.dark .article-html-content del,
+.dark .article-html-content s {
+  color: #475569 !important;
+}
+
+/* ── Lists ── */
+
 .dark .article-html-content li {
-  color: #cbd5e1 !important;
+  color: #94a3b8 !important;
 }
 
-/* Blockquotes in dark mode */
-.dark .article-html-content blockquote,
-.dark .article-html-content blockquote * {
-  background-color: rgba(6, 6, 14, 0.5) !important;
-  border-left-color: #10b981 !important;
-  color: #cbd5e1 !important;
+/* ── Blockquote ── */
+
+.dark .article-html-content blockquote {
+  background-color: rgba(0, 201, 141, 0.07) !important;
+  border-left-color: var(--article-accent) !important;
+  color: #64748b !important;
 }
 
-/* Code elements in dark mode */
+.dark .article-html-content blockquote cite {
+  color: #475569 !important;
+}
+
+/* ── Code & Pre ── */
+
 .dark .article-html-content code {
   background-color: #1e293b !important;
   color: #f472b6 !important;
 }
 
 .dark .article-html-content pre {
-  background-color: #0f172a !important;
+  background-color: #0a0f1e !important;
   color: #e2e8f0 !important;
+  border: 0.5px solid #1e2a3a !important;
 }
 
-/* Tables in dark mode */
-.dark .article-html-content table,
-.dark .article-html-content table * {
-  background-color: rgba(30, 41, 59, 0.4) !important;
+.dark .article-html-content pre code {
+  background: none !important;
+  color: inherit !important;
+}
+
+/* ── Keyboard ── */
+
+.dark .article-html-content kbd {
+  background-color: #1e293b !important;
   border-color: #334155 !important;
+  color: #94a3b8 !important;
 }
 
-.dark .article-html-content th,
-.dark .article-html-content th * {
+/* ── Tables ── */
+
+.dark .article-html-content th {
   background-color: rgba(30, 41, 59, 0.8) !important;
-  color: #f8fafc !important;
+  color: #f1f5f9 !important;
+  border-bottom-color: #1e293b !important;
 }
 
-.dark .article-html-content td,
-.dark .article-html-content td * {
-  color: #cbd5e1 !important;
+.dark .article-html-content td {
+  color: #94a3b8 !important;
+  border-bottom-color: #1e293b !important;
 }
 
-.dark .article-html-content tr:last-child td {
-  border-bottom: none;
+.dark .article-html-content tbody tr:hover {
+  background-color: rgba(30, 41, 59, 0.4) !important;
 }
 
-/* Override any inline background colors in dark mode */
-.dark .article-html-content [style*="background"],
-.dark .article-html-content [style*="background-color"] {
+/* ── Media ── */
+
+.dark .article-html-content figcaption {
+  color: #475569 !important;
+}
+
+/* ── Horizontal Rule ── */
+
+.dark .article-html-content hr {
+  border-top-color: #1e293b !important;
+}
+
+/* ── Details / Summary ── */
+
+.dark .article-html-content details {
+  border-color: #1e293b !important;
+}
+
+.dark .article-html-content summary {
   background-color: rgba(30, 41, 59, 0.5) !important;
-  background-image: none !important;
+  color: #94a3b8 !important;
 }
 
-/* White backgrounds in dark mode */
+/* ── Callout ── */
+
+.dark .article-html-content .callout {
+  background-color: rgba(0, 201, 141, 0.06) !important;
+  border-color: rgba(0, 201, 141, 0.18) !important;
+}
+
+.dark .article-html-content .callout p {
+  color: #94a3b8 !important;
+}
+
+.dark .article-html-content .callout-warning {
+  background-color: rgba(245, 158, 11, 0.07) !important;
+  border-color: rgba(245, 158, 11, 0.2) !important;
+}
+
+.dark .article-html-content .callout-danger {
+  background-color: rgba(239, 68, 68, 0.06) !important;
+  border-color: rgba(239, 68, 68, 0.18) !important;
+}
+
+.dark .article-html-content .callout-info {
+  background-color: rgba(59, 130, 246, 0.06) !important;
+  border-color: rgba(59, 130, 246, 0.18) !important;
+}
+
+/* ── Inline background overrides (escape hatch) ── */
+
 .dark .article-html-content [style*="background:#fff"],
 .dark .article-html-content [style*="background: #fff"],
 .dark .article-html-content [style*="background-color:#fff"],
 .dark .article-html-content [style*="background-color: #fff"],
-.dark .article-html-content [style*="background:rgb(255"],
-.dark .article-html-content [style*="background-color:rgb(255"] {
+.dark .article-html-content [style*="background-color: white"],
+.dark .article-html-content [style*="background-color:white"],
+.dark .article-html-content [style*="background: white"],
+.dark .article-html-content [style*="background:white"],
+.dark .article-html-content [style*="background:rgb(255"] {
   background-color: rgba(15, 23, 42, 0.8) !important;
+  background-image: none !important;
 }
 
-/* Light gray backgrounds in dark mode */
 .dark .article-html-content [style*="background:#f"],
 .dark .article-html-content [style*="background: #f"],
 .dark .article-html-content [style*="background-color:#f"],
 .dark .article-html-content [style*="background-color: #f"] {
   background-color: rgba(30, 41, 59, 0.6) !important;
+  background-image: none !important;
 }
 
-/* Progress trackers, checklists, cards in dark mode */
-.dark .article-html-content [class*="progress"],
-.dark .article-html-content [class*="tracker"],
-.dark .article-html-content [class*="checklist"],
-.dark .article-html-content [class*="card"] {
-  background-color: rgba(30, 41, 59, 0.6) !important;
-  border-color: #334155 !important;
+/* ── Inline text color overrides ── */
+
+.dark .article-html-content [style*="color:#000"],
+.dark .article-html-content [style*="color: #000"],
+.dark .article-html-content [style*="color:black"],
+.dark .article-html-content [style*="color: black"],
+.dark .article-html-content [style*="color:rgb(0"],
+.dark .article-html-content [style*="color: rgb(0"] {
+  color: #94a3b8 !important;
 }
 
-/* Numbered sections/badges in dark mode */
-.dark .article-html-content [class*="badge"],
-.dark .article-html-content [class*="number"],
-.dark .article-html-content [class*="step"] {
-  background-color: rgba(16, 185, 129, 0.15) !important;
-  border-color: rgba(16, 185, 129, 0.3) !important;
-  color: #6ee7b7 !important;
-}
-
-/* Horizontal rules in dark mode */
-.dark .article-html-content hr {
-  border-color: #334155 !important;
-}
-
-/* Summary/conclusion boxes in dark mode */
-.dark .article-html-content [class*="summary"],
-.dark .article-html-content [class*="conclusion"],
-.dark .article-html-content [class*="highlight"] {
-  background-color: rgba(30, 41, 59, 0.6) !important;
-  border-color: #334155 !important;
-}
-
-/* Specific override for white backgrounds in content divs (dark mode) */
-.dark .article-html-content div[style*="background-color: white"],
-.dark .article-html-content div[style*="background-color:white"],
-.dark .article-html-content div[style*="background: white"],
-.dark .article-html-content div[style*="background:white"] {
-  background-color: rgba(30, 41, 59, 0.5) !important;
-}
-
-/* Override inline text colors in dark mode */
-.dark .article-html-content span[style*="color:#000"],
-.dark .article-html-content span[style*="color: #000"],
-.dark .article-html-content span[style*="color:black"],
-.dark .article-html-content span[style*="color: black"],
-.dark .article-html-content span[style*="color:rgb(0"],
-.dark .article-html-content span[style*="color: rgb(0"] {
-  color: #cbd5e1 !important;
-}
-
-/* Paragraphs with inline styles in dark mode */
 .dark .article-html-content p[style] {
-  color: #cbd5e1 !important;
+  color: #94a3b8 !important;
 }
 
-/* Make sure checkboxes are visible in dark mode */
+/* ── Checkboxes ── */
+
 .dark .article-html-content input[type="checkbox"] {
-  background-color: #1e293b !important;
-  border-color: #475569 !important;
+  accent-color: var(--article-accent) !important;
 }
 
-/* Any element with class containing bg-white in dark mode */
+/* ── Class-based bg overrides ── */
+
 .dark .article-html-content [class*="bg-white"],
 .dark .article-html-content [class*="bg-gray-50"],
-.dark .article-html-content [class*="bg-slate-50"] {
+.dark .article-html-content [class*="bg-slate-50"],
+.dark .article-html-content [class*="bg-gray-100"] {
   background-color: rgba(30, 41, 59, 0.5) !important;
+}
+
+/* ── Card / badge patterns ── */
+
+.dark .article-html-content [class*="card"],
+.dark .article-html-content [class*="box"],
+.dark .article-html-content [class*="panel"] {
+  background-color: rgba(30, 41, 59, 0.5) !important;
+  border-color: #1e293b !important;
+}
+
+.dark .article-html-content [class*="badge"],
+.dark .article-html-content [class*="tag"],
+.dark .article-html-content [class*="pill"] {
+  background-color: rgba(0, 201, 141, 0.12) !important;
+  color: #6ee7b7 !important;
+  border-color: rgba(0, 201, 141, 0.25) !important;
 }
