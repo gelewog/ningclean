@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Badge } from '@/components/ui/badge'
-import { ImageUpload } from '@/components/ui/ImageUpload'
+import { ImageUpload, useImageUpload } from '@/components/ui/ImageUpload'
 import { Modal } from '@/components/admin/Modal'
 import { DataTable } from '@/components/admin/DataTable'
 import { getTeamMembers, createTeamMember, updateTeamMember, deleteTeamMember } from '@/lib/api'
@@ -60,6 +60,8 @@ export default function TeamPage() {
     },
   })
   const [errors, setErrors] = React.useState<Partial<TeamFormData>>({})
+  const [selectedImageFile, setSelectedImageFile] = React.useState<File | null>(null)
+  const { uploadImage } = useImageUpload()
 
   React.useEffect(() => {
     fetchItems()
@@ -161,6 +163,18 @@ export default function TeamPage() {
     e.preventDefault()
     if (!validateForm()) return
 
+    // Upload image if there's a new file selected
+    let avatarUrl = formData.avatar
+    if (selectedImageFile) {
+      const uploadedUrl = await uploadImage(selectedImageFile, 'team')
+      if (uploadedUrl) {
+        avatarUrl = uploadedUrl
+      } else {
+        toast.error('Failed to upload image')
+        return
+      }
+    }
+
     const itemData = {
       name: formData.name,
       position: formData.position,
@@ -168,7 +182,7 @@ export default function TeamPage() {
       bio: formData.bio || undefined,
       email: formData.email || undefined,
       phone: formData.phone || undefined,
-      avatar: formData.avatar || undefined,
+      avatar: avatarUrl || undefined,
       isActive: formData.isActive,
       order: formData.order,
       socialLinks: {
@@ -187,6 +201,7 @@ export default function TeamPage() {
         await createTeamMember(itemData)
         toast.success('Team member created successfully')
       }
+      setSelectedImageFile(null)
       setIsModalOpen(false)
       fetchItems()
     } catch (error) {
@@ -502,6 +517,8 @@ export default function TeamPage() {
                   folder="team"
                   value={formData.avatar}
                   onChange={(url) => setFormData({ ...formData, avatar: url })}
+                  onFileSelect={(file) => setSelectedImageFile(file)}
+                  autoUpload={false}
                   previewClassName="h-32 w-32 mx-auto"
                 />
               </div>

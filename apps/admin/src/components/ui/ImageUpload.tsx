@@ -1,35 +1,59 @@
 'use client';
 
-import React, { useState, useRef, useCallback } from 'react';
+import React, { useState, useRef, useCallback, useEffect } from 'react';
 import { Upload, X, Image as ImageIcon, Loader2 } from 'lucide-react';
 
 interface ImageUploadProps {
   value: string;
   onChange: (url: string) => void;
+  onFileSelect?: (file: File | null) => void; // Callback saat file dipilih/tidak dipilih
   folder: 'gallery' | 'services' | 'team' | 'testimonials' | 'settings';
   label?: string;
   placeholder?: string;
   required?: boolean;
   error?: string;
   previewClassName?: string;
+  autoUpload?: boolean; // true = upload langsung, false = preview lokal saja
 }
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
+const BASE_URL = API_URL.replace(/\/api$/, '');
 
 export function ImageUpload({
   value,
   onChange,
+  onFileSelect,
   folder,
   label = 'Image',
   placeholder = 'https://...',
   required = false,
   error,
   previewClassName = 'h-40 w-full',
+  autoUpload = true,
 }: ImageUploadProps) {
   const [isDragging, setIsDragging] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const [uploadError, setUploadError] = useState<string | null>(null);
+  const [localPreview, setLocalPreview] = useState<string | null>(null);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // Cleanup blob URL saat unmount atau value berubah
+  useEffect(() => {
+    return () => {
+      if (localPreview && localPreview.startsWith('blob:')) {
+        URL.revokeObjectURL(localPreview);
+      }
+    };
+  }, [localPreview]);
+
+  // Reset local state saat value external berubah (misalnya saat edit item)
+  useEffect(() => {
+    if (value && !value.startsWith('blob:')) {
+      setLocalPreview(null);
+      setSelectedFile(null);
+    }
+  }, [value]);
 
   const handleDragOver = useCallback((e: React.DragEvent) => {
     e.preventDefault();
@@ -51,7 +75,7 @@ export function ImageUpload({
       const formData = new FormData();
       formData.append('file', file);
 
-      const response = await fetch(`${API_URL}/api/upload/${folder}`, {
+      const response = await fetch(`${BASE_URL}/api/upload/${folder}`, {
         method: 'POST',
         body: formData,
       });
@@ -62,11 +86,42 @@ export function ImageUpload({
       }
 
       const data = await response.json();
+      
+      // Clear local preview setelah upload sukses
+      if (localPreview && localPreview.startsWith('blob:')) {
+        URL.revokeObjectURL(localPreview);
+      }
+      setLocalPreview(null);
+      setSelectedFile(null);
+      
       onChange(data.data.url);
     } catch (err) {
       setUploadError(err instanceof Error ? err.message : 'Upload failed');
     } finally {
       setIsUploading(false);
+    }
+  };
+
+  const processFile = (file: File) => {
+    if (!file.type.startsWith('image/')) {
+      setUploadError('Only image files are allowed');
+      return;
+    }
+
+    // Buat preview lokal
+    const previewUrl = URL.createObjectURL(file);
+    setLocalPreview(previewUrl);
+    setSelectedFile(file);
+    setUploadError(null);
+
+    // Notify parent tentang file yang dipilih
+    onFileSelect?.(file);
+
+    if (autoUpload) {
+      uploadFile(file);
+    } else {
+      // Mode deferred: kirim blob URL sementara ke parent
+      onChange(previewUrl);
     }
   };
 
@@ -76,18 +131,18 @@ export function ImageUpload({
     setIsDragging(false);
 
     const file = e.dataTransfer.files[0];
-    if (file && file.type.startsWith('image/')) {
-      uploadFile(file);
+    if (file) {
+      processFile(file);
     }
-  }, [folder]);
+  }, []);
 
   const handleFileSelect = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     e.stopPropagation();
     const file = e.target.files?.[0];
     if (file) {
-      uploadFile(file);
+      processFile(file);
     }
-  }, [folder]);
+  }, []);
 
   const triggerFileInput = useCallback((e?: React.MouseEvent) => {
     e?.preventDefault();
@@ -96,11 +151,57 @@ export function ImageUpload({
   }, []);
 
   const clearImage = () => {
+    if (localPreview && localPreview.startsWith('blob:')) {
+      URL.revokeObjectURL(localPreview);
+    }
+    setLocalPreview(null);
+    setSelectedFile(null);
+    setUploadError(null);
     onChange('');
+    onFileSelect?.(null);
     if (fileInputRef.current) {
       fileInputRef.current.value = '';
     }
   };
+
+  // Method untuk upload manual (dipanggil saat form submit)
+  const uploadSelectedFile = async (): Promise<string | null> => {
+    if (!selectedFile) return value; // Return existing value if no new file
+    
+    try {
+      const formData = new FormData();
+      formData.append('file', selectedFile);
+
+      const response = await fetch(`${BASE_URL}/api/upload/${folder}`, {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Upload failed');
+      }
+
+      const data = await response.json();
+      
+      // Clear local preview
+      if (localPreview && localPreview.startsWith('blob:')) {
+        URL.revokeObjectURL(localPreview);
+      }
+      setLocalPreview(null);
+      setSelectedFile(null);
+      
+      onChange(data.data.url);
+      onFileSelect?.(null);
+      return data.data.url;
+    } catch (err) {
+      setUploadError(err instanceof Error ? err.message : 'Upload failed');
+      return null;
+    }
+  };
+
+  // Determine which URL to show
+  const displayUrl = localPreview || value;
 
   return (
     <div className="space-y-2">
@@ -111,11 +212,13 @@ export function ImageUpload({
         </label>
       )}
 
-      {value ? (
+      {displayUrl ? (
         <div className="relative">
           <div className={`relative overflow-hidden rounded-lg border border-gray-200 dark:border-slate-700 bg-gray-50 dark:bg-slate-800 ${previewClassName}`}>
             <img
-              src={value.startsWith('http') ? value : `${API_URL}${value}`}
+              src={displayUrl.startsWith('http') || displayUrl.startsWith('blob:') 
+                ? displayUrl 
+                : `${BASE_URL}${displayUrl}`}
               alt="Preview"
               className="h-full w-full object-cover"
               onError={(e) => {
@@ -210,4 +313,40 @@ export function ImageUpload({
       )}
     </div>
   );
+}
+
+// Hook untuk handle upload saat form submit
+export function useImageUpload() {
+  const uploadImage = async (
+    file: File | null,
+    folder: 'gallery' | 'services' | 'team' | 'testimonials' | 'settings'
+  ): Promise<string | null> => {
+    if (!file) return null;
+
+    const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
+    const BASE_URL = API_URL.replace(/\/api$/, '');
+
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+
+      const response = await fetch(`${BASE_URL}/api/upload/${folder}`, {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Upload failed');
+      }
+
+      const data = await response.json();
+      return data.data.url;
+    } catch (err) {
+      console.error('Upload error:', err);
+      return null;
+    }
+  };
+
+  return { uploadImage };
 }

@@ -12,7 +12,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Badge } from '@/components/ui/badge'
-import { ImageUpload } from '@/components/ui/ImageUpload'
+import { ImageUpload, useImageUpload } from '@/components/ui/ImageUpload'
 import { getServices, createService, updateService, deleteService } from '@/lib/api'
 import { formatCurrency } from '@/lib/utils'
 import { toast } from 'sonner'
@@ -391,6 +391,8 @@ function ServiceModal({
                       folder="services"
                       value={formData.image}
                       onChange={(url) => setFormData({ ...formData, image: url })}
+                      onFileSelect={(file) => setSelectedImageFile(file)}
+                      autoUpload={false}
                       previewClassName="h-40 w-full"
                     />
                   </div>
@@ -627,6 +629,8 @@ export default function ServicesPage() {
     availableCities: [],
   })
   const [errors, setErrors] = React.useState<Partial<ServiceFormData>>({})
+  const [selectedImageFile, setSelectedImageFile] = React.useState<File | null>(null)
+  const { uploadImage } = useImageUpload()
 
   React.useEffect(() => {
     fetchServices()
@@ -711,6 +715,18 @@ export default function ServicesPage() {
     e.preventDefault()
     if (!validateForm()) return
 
+    // Upload image if there's a new file selected
+    let imageUrl = formData.image
+    if (selectedImageFile) {
+      const uploadedUrl = await uploadImage(selectedImageFile, 'services')
+      if (uploadedUrl) {
+        imageUrl = uploadedUrl
+      } else {
+        toast.error('Failed to upload image')
+        return
+      }
+    }
+
     const slug = formData.slug || generateSlug(formData.name)
     const serviceData = {
       name: formData.name,
@@ -720,7 +736,7 @@ export default function ServicesPage() {
       duration: Number(formData.duration),
       category: formData.category,
       icon: formData.icon,
-      image: formData.image || undefined,
+      image: imageUrl || undefined,
       features: formData.features.split('\n').map(f => f.trim()).filter(f => f.length > 0),
       isActive: selectedService?.isActive ?? true,
       isFeatured: formData.isFeatured,
@@ -736,6 +752,7 @@ export default function ServicesPage() {
         await createService(serviceData)
         toast.success('Service created successfully')
       }
+      setSelectedImageFile(null)
       setIsModalOpen(false)
       fetchServices()
     } catch (error: any) {

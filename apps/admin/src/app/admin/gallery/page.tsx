@@ -10,7 +10,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Badge } from '@/components/ui/badge'
 import { DataTable } from '@/components/admin/DataTable'
-import { ImageUpload } from '@/components/ui/ImageUpload'
+import { ImageUpload, useImageUpload } from '@/components/ui/ImageUpload'
 import { getGalleryItems, createGalleryItem, updateGalleryItem, deleteGalleryItem } from '@/lib/api'
 import { GalleryItem } from '@/types'
 import { formatDate } from '@/lib/utils'
@@ -146,6 +146,8 @@ function GalleryFormModal({
                   setFormData({ ...formData, imageUrl: url })
                   setErrors({ ...errors, imageUrl: '' })
                 }}
+                onFileSelect={(file) => setSelectedImageFile(file)}
+                autoUpload={false}
                 required
                 error={errors.imageUrl}
                 previewClassName="h-48 w-full"
@@ -397,6 +399,8 @@ export default function GalleryPage() {
   const [errors, setErrors] = React.useState<Partial<GalleryFormData>>({})
   const [saving, setSaving] = React.useState(false)
   const [deleting, setDeleting] = React.useState(false)
+  const [selectedImageFile, setSelectedImageFile] = React.useState<File | null>(null)
+  const { uploadImage } = useImageUpload()
 
   React.useEffect(() => {
     fetchItems()
@@ -466,11 +470,25 @@ export default function GalleryPage() {
     if (!validateForm()) return
 
     setSaving(true)
+    
+    // Upload image if there's a new file selected
+    let imageUrl = formData.imageUrl
+    if (selectedImageFile) {
+      const uploadedUrl = await uploadImage(selectedImageFile, 'gallery')
+      if (uploadedUrl) {
+        imageUrl = uploadedUrl
+      } else {
+        toast.error('Failed to upload image')
+        setSaving(false)
+        return
+      }
+    }
+    
     const itemData = {
       title: formData.title,
       description: formData.description || undefined,
       category: formData.category,
-      imageUrl: formData.imageUrl,
+      imageUrl: imageUrl,
       location: formData.location || undefined,
       isFeatured: formData.isFeatured,
       isActive: formData.isActive,
@@ -485,6 +503,7 @@ export default function GalleryPage() {
         await createGalleryItem(itemData)
         toast.success('Gallery item created successfully')
       }
+      setSelectedImageFile(null)
       setIsModalOpen(false)
       fetchItems()
     } catch (error) {

@@ -9,7 +9,7 @@ import {
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Badge } from '@/components/ui/badge'
-import { ImageUpload } from '@/components/ui/ImageUpload'
+import { ImageUpload, useImageUpload } from '@/components/ui/ImageUpload'
 import { DataTable } from '@/components/admin/DataTable'
 import { getTestimonials, createTestimonial, updateTestimonial, deleteTestimonial } from '@/lib/api'
 import { Testimonial } from '@/types'
@@ -185,6 +185,8 @@ function TestimonialFormModal({
                 folder="testimonials"
                 value={formData.image}
                 onChange={(url) => setFormData({ ...formData, image: url })}
+                onFileSelect={(file) => setSelectedImageFile(file)}
+                autoUpload={false}
                 previewClassName="h-32 w-32 mx-auto"
               />
 
@@ -439,6 +441,8 @@ export default function TestimonialsPage() {
   const [saving, setSaving] = React.useState(false)
   const [deleting, setDeleting] = React.useState(false)
   const [search, setSearch] = React.useState('')
+  const [selectedImageFile, setSelectedImageFile] = React.useState<File | null>(null)
+  const { uploadImage } = useImageUpload()
 
   React.useEffect(() => {
     fetchTestimonials()
@@ -511,11 +515,25 @@ export default function TestimonialsPage() {
     if (!validateForm()) return
 
     setSaving(true)
+    
+    // Upload image if there's a new file selected
+    let imageUrl = formData.image
+    if (selectedImageFile) {
+      const uploadedUrl = await uploadImage(selectedImageFile, 'testimonials')
+      if (uploadedUrl) {
+        imageUrl = uploadedUrl
+      } else {
+        toast.error('Failed to upload image')
+        setSaving(false)
+        return
+      }
+    }
+    
     const testimonialData = {
       name: formData.name,
       content: formData.content,
       rating: formData.rating,
-      image: formData.image || undefined,
+      image: imageUrl || undefined,
       role: formData.role || undefined,
       company: formData.company || undefined,
       isActive: formData.isActive,
@@ -532,6 +550,7 @@ export default function TestimonialsPage() {
         await createTestimonial(testimonialData)
         toast.success('Testimonial created successfully')
       }
+      setSelectedImageFile(null)
       setIsModalOpen(false)
       fetchTestimonials()
     } catch (error) {
