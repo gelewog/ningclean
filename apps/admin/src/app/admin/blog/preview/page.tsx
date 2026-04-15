@@ -1,14 +1,46 @@
 'use client'
 
 import * as React from 'react'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useSearchParams } from 'next/navigation'
 import { motion } from 'framer-motion'
 import Link from 'next/link'
-import { Navigation } from '@/components/navigation'
-import { Footer } from '@/components/footer'
-import { PageLoader } from '@/components/ui/Spinner'
 import { formatDate } from '@/lib/utils'
 import './preview.css'
+
+// Simple Navigation for Preview
+function PreviewNavigation() {
+  return (
+    <nav className="fixed top-0 left-0 right-0 z-50 bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border-b border-gray-200 dark:border-slate-700 px-4 md:px-6 py-4">
+      <div className="container-fluid max-w-6xl mx-auto flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <div className="w-8 h-8 rounded-lg bg-emerald-600 flex items-center justify-center">
+            <span className="text-white font-bold text-sm">N</span>
+          </div>
+          <span className="font-semibold text-gray-900 dark:text-white">NingClean</span>
+          <span className="text-gray-400 mx-2">/</span>
+          <span className="text-gray-500 dark:text-slate-400 text-sm">Preview</span>
+        </div>
+        <Link 
+          href="/admin/blog" 
+          className="px-4 py-2 text-sm bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg transition-colors"
+        >
+          Kembali ke Editor
+        </Link>
+      </div>
+    </nav>
+  )
+}
+
+// Simple Footer for Preview
+function PreviewFooter() {
+  return (
+    <footer className="py-8 px-4 border-t border-gray-200 dark:border-slate-800">
+      <div className="container-fluid max-w-4xl mx-auto text-center text-sm text-gray-500 dark:text-slate-400">
+        <p>🔍 Preview Mode - Post belum disimpan ke database</p>
+      </div>
+    </footer>
+  )
+}
 
 interface DraftPost {
   title: string
@@ -57,13 +89,17 @@ export default function BlogPreviewPage() {
   const headings = post?.content?.match(/^##\s+(.+)$/gm) || []
 
   if (loading) {
-    return <PageLoader />
+    return (
+      <div className="min-h-screen bg-white dark:bg-slate-950 flex items-center justify-center">
+        <div className="h-8 w-8 animate-spin rounded-full border-4 border-gray-200 dark:border-slate-700 border-t-emerald-500" />
+      </div>
+    )
   }
 
   if (!post) {
     return (
       <div className="min-h-screen bg-white dark:bg-slate-950">
-        <Navigation />
+        <PreviewNavigation />
         <div className="container-fluid py-32 text-center">
           <h1 className="text-2xl font-bold text-slate-900 dark:text-white mb-4">Preview Tidak Tersedia</h1>
           <p className="text-slate-600 dark:text-slate-400 mb-6">Data preview tidak ditemukan. Apakah kamu sudah menyimpan draft?</p>
@@ -78,7 +114,7 @@ export default function BlogPreviewPage() {
 
   return (
     <div className="min-h-screen bg-white dark:bg-slate-950">
-      <Navigation />
+      <PreviewNavigation />
 
       {/* Preview Banner */}
       <div className="sticky top-0 z-50 bg-amber-500 text-white py-2 px-4 text-center text-sm font-medium">
@@ -244,7 +280,7 @@ export default function BlogPreviewPage() {
         </div>
       </section>
 
-      <Footer />
+      <PreviewFooter />
     </div>
   )
 }
