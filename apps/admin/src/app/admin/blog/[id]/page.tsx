@@ -111,10 +111,19 @@ export default function EditBlogPostPage() {
       }
 
       const tags = formData.tags.split(',').map(t => t.trim()).filter(Boolean)
+      
+      // Konversi status ke publishedAt untuk database
+      const publishedAt = formData.status === 'published' ? new Date().toISOString() : null
+      
       await updateBlogPost(postId, {
-        ...formData,
+        title: formData.title,
+        content: formData.content,
+        excerpt: formData.excerpt,
         coverImage: coverImageUrl,
         tags,
+        categoryId: formData.categoryId || undefined,
+        isFeatured: formData.isFeatured,
+        publishedAt,
       })
       setSelectedCoverFile(null)
       toast.success('Post berhasil diperbarui')

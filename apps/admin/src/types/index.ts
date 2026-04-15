@@ -78,6 +78,7 @@ export interface BlogPost {
   categoryId?: string
   category?: { id: string; name: string; slug: string }
   isFeatured?: boolean
+  publishedAt?: string | null
   createdAt: string
   updatedAt: string
 }

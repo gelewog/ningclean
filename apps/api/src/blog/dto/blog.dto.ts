@@ -5,6 +5,7 @@ import {
   IsArray,
   IsNumber,
   IsBoolean,
+  IsDate,
   Min,
 } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
@@ -63,6 +64,12 @@ export class CreateBlogDto {
   @IsOptional()
   @IsBoolean()
   isFeatured?: boolean;
+
+  @ApiPropertyOptional({ example: '2024-01-15T00:00:00.000Z', description: 'Publish date. null = draft, date = published' })
+  @IsOptional()
+  @IsDate()
+  @Type(() => Date)
+  publishedAt?: Date | null;
 }
 
 export class UpdateBlogDto {
@@ -118,4 +125,10 @@ export class UpdateBlogDto {
   @IsOptional()
   @IsBoolean()
   isFeatured?: boolean;
+
+  @ApiPropertyOptional({ example: '2024-01-15T00:00:00.000Z', description: 'Publish date. null = draft, date = published' })
+  @IsOptional()
+  @IsDate()
+  @Type(() => Date)
+  publishedAt?: Date | null;
 }

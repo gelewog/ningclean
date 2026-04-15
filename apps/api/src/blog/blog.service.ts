@@ -120,15 +120,32 @@ export class BlogService {
         readTime: dto.readTime || 5,
         categoryId: dto.categoryId || null,
         isFeatured: dto.isFeatured || false,
+        publishedAt: dto.publishedAt || null,
       },
     });
   }
 
   async update(id: string, dto: UpdateBlogDto) {
     await this.findOne(id);
+    
+    // Build update data - filter out invalid fields for Prisma
+    const updateData: Prisma.BlogPostUpdateInput = {
+      ...(dto.slug !== undefined && { slug: dto.slug }),
+      ...(dto.title !== undefined && { title: dto.title }),
+      ...(dto.excerpt !== undefined && { excerpt: dto.excerpt }),
+      ...(dto.content !== undefined && { content: dto.content }),
+      ...(dto.coverImage !== undefined && { coverImage: dto.coverImage }),
+      ...(dto.author !== undefined && { author: dto.author }),
+      ...(dto.tags !== undefined && { tags: dto.tags }),
+      ...(dto.readTime !== undefined && { readTime: dto.readTime }),
+      ...(dto.categoryId !== undefined && { category: dto.categoryId ? { connect: { id: dto.categoryId } } : { disconnect: true } }),
+      ...(dto.isFeatured !== undefined && { isFeatured: dto.isFeatured }),
+      ...(dto.publishedAt !== undefined && { publishedAt: dto.publishedAt }),
+    };
+    
     return this.prisma.blogPost.update({
       where: { id },
-      data: dto,
+      data: updateData,
     });
   }
 

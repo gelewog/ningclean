@@ -85,10 +85,21 @@ export default function NewBlogPostPage() {
       }
 
       const tags = formData.tags.split(',').map(t => t.trim()).filter(Boolean)
+      
+      // Konversi status ke publishedAt untuk database
+      const publishedAt = formData.status === 'published' ? new Date().toISOString() : null
+      
       await createBlogPost({
-        ...formData,
+        title: formData.title,
+        slug: formData.title.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, ''),
+        content: formData.content,
+        excerpt: formData.excerpt,
         coverImage: coverImageUrl,
+        author: 'Admin', // Default author
         tags,
+        categoryId: formData.categoryId || undefined,
+        isFeatured: formData.isFeatured,
+        publishedAt,
       })
       setSelectedCoverFile(null)
       toast.success('Post berhasil dibuat')
