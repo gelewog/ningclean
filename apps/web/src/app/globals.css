@@ -396,3 +396,415 @@
 .dark .page-icon-bg {
   @apply bg-emerald-500/10 border-emerald-500/20;
 }
+
+/* ============================================
+   BLOG POST CONTENT - Dark Mode Support
+   Styles for raw HTML content from database
+   ============================================ */
+
+/* Main content wrapper */
+.dark .prose,
+.dark .prose-lg {
+  color: #cbd5e1; /* slate-300 */
+}
+
+/* Headings */
+.dark .prose h1,
+.dark .prose h2,
+.dark .prose h3,
+.dark .prose h4,
+.dark .prose h5,
+.dark .prose h6 {
+  color: #f8fafc !important; /* slate-50 */
+}
+
+/* Paragraphs */
+.dark .prose p {
+  color: #cbd5e1; /* slate-300 */
+}
+
+/* Lists */
+.dark .prose ul,
+.dark .prose ol {
+  color: #cbd5e1;
+}
+
+.dark .prose li {
+  color: #cbd5e1;
+}
+
+/* Links */
+.dark .prose a {
+  color: #34d399; /* emerald-400 */
+}
+
+.dark .prose a:hover {
+  color: #6ee7b7; /* emerald-300 */
+}
+
+/* Strong/Bold text */
+.dark .prose strong,
+.dark .prose b {
+  color: #f8fafc; /* slate-50 */
+}
+
+/* Blockquotes */
+.dark .prose blockquote {
+  background: rgba(6, 6, 14, 0.5);
+  border-left-color: #10b981;
+  color: #cbd5e1;
+}
+
+/* Tables */
+.dark .prose table {
+  background: rgba(15, 23, 42, 0.5);
+  border-color: #334155;
+}
+
+.dark .prose th,
+.dark .prose td {
+  border-color: #334155;
+  color: #cbd5e1;
+}
+
+.dark .prose th {
+  background: rgba(30, 41, 59, 0.8);
+  color: #f8fafc;
+}
+
+.dark .prose tr:nth-child(even) {
+  background: rgba(15, 23, 42, 0.3);
+}
+
+/* Code inline */
+.dark .prose code {
+  background: #1e293b;
+  color: #f472b6; /* pink-400 */
+}
+
+/* Code blocks */
+.dark .prose pre {
+  background: #0f172a;
+  color: #e2e8f0;
+}
+
+/* Horizontal rules */
+.dark .prose hr {
+  border-color: #334155;
+}
+
+/* Checkboxes in blog content */
+.dark .prose input[type="checkbox"] {
+  background-color: #1e293b;
+  border-color: #475569;
+}
+
+/* Article content generic divs/spans that may have inline styles */
+.dark article div[style*="background"],
+.dark article span[style*="background"] {
+  background-color: rgba(15, 23, 42, 0.5) !important;
+}
+
+/* Progress bars or colored boxes in content */
+.dark article div[class*="progress"],
+.dark article div[class*="tracker"] {
+  background: rgba(30, 41, 59, 0.8) !important;
+  border-color: #334155 !important;
+}
+
+/* Any div with light backgrounds in dark mode */
+.dark article div[style*="#f" i],
+.dark article div[style*="rgb(255" i],
+.dark article div[style*="rgba(255" i] {
+  background-color: rgba(15, 23, 42, 0.8) !important;
+  color: #cbd5e1 !important;
+}
+
+/* Emphasis/italic */
+.dark .prose em,
+.dark .prose i {
+  color: #94a3b8; /* slate-400 */
+}
+
+/* ============================================
+   AGGRESSIVE DARK MODE OVERRIDES
+   Force override inline styles from database content
+   ============================================ */
+
+/* Override any inline background colors in dark mode */
+.dark .prose [style*="background"],
+.dark .prose [style*="background-color"] {
+  background-color: rgba(30, 41, 59, 0.5) !important;
+  background-image: none !important;
+}
+
+/* Override white/light backgrounds */
+.dark .prose [style*="background:#fff"],
+.dark .prose [style*="background: #fff"],
+.dark .prose [style*="background-color:#fff"],
+.dark .prose [style*="background-color: #fff"],
+.dark .prose [style*="background:rgb(255"],
+.dark .prose [style*="background-color:rgb(255"],
+.dark .prose [style*="background-color: rgb(255"],
+.dark .prose [style*="background:rgba(255"],
+.dark .prose [style*="background-color:rgba(255"] {
+  background-color: rgba(15, 23, 42, 0.8) !important;
+}
+
+/* Override text colors */
+.dark .prose [style*="color:#000"],
+.dark .prose [style*="color: #000"],
+.dark .prose [style*="color:rgb(0"],
+.dark .prose [style*="color: rgb(0"],
+.dark .prose [style*="color:#1f"],
+.dark .prose [style*="color: #1f"],
+.dark .prose [style*="color:#111"],
+.dark .prose [style*="color: #111"] {
+  color: #f8fafc !important;
+}
+
+/* Content cards/boxes in blog */
+.dark .prose > div,
+.dark .prose section,
+.dark .prose article > div {
+  background-color: transparent !important;
+}
+
+/* Progress tracker and checklist containers */
+.dark .prose [class*="progress"],
+.dark .prose [class*="tracker"],
+.dark .prose [class*="checklist"] {
+  background-color: rgba(30, 41, 59, 0.6) !important;
+  border-color: #334155 !important;
+}
+
+/* Numbered sections (like "1", "2", etc) */
+.dark .prose [class*="rounded"] {
+  border-color: #334155 !important;
+}
+
+/* Table cells in dark mode */
+.dark .prose td,
+.dark .prose th {
+  background-color: rgba(30, 41, 59, 0.4) !important;
+  border-color: #334155 !important;
+  color: #cbd5e1 !important;
+}
+
+.dark .prose th {
+  background-color: rgba(30, 41, 59, 0.8) !important;
+  color: #f8fafc !important;
+}
+
+.dark .prose tr:nth-child(even) {
+  background: rgba(15, 23, 42, 0.3);
+}
+
+/* Any div or span with explicit light colors */
+.dark article [style*="color: #"],
+.dark article [style*="color:#"] {
+  color: #cbd5e1 !important;
+}
+
+/* Force all prose content text to be readable in dark mode */
+.dark .prose,
+.dark .prose *,
+.dark .prose *::before,
+.dark .prose *::after {
+  color: #cbd5e1;
+}
+
+/* But keep heading colors bright */
+.dark .prose h1, .dark .prose h2, .dark .prose h3,
+.dark .prose h4, .dark .prose h5, .dark .prose h6,
+.dark .prose h1 *, .dark .prose h2 *, .dark .prose h3 *,
+.dark .prose h4 *, .dark .prose h5 *, .dark .prose h6 * {
+  color: #f8fafc !important;
+}
+
+/* Keep links colored */
+.dark .prose a,
+.dark .prose a * {
+  color: #34d399 !important;
+}
+
+/* Keep strong/bold bright */
+.dark .prose strong,
+.dark .prose strong *,
+.dark .prose b,
+.dark .prose b * {
+  color: #f8fafc !important;
+}
+
+/* Article main container - force dark background */
+.dark article.prose,
+.dark article.prose-lg {
+  background-color: transparent !important;
+}
+
+/* Specific content sections that might have inline styles */
+.dark .prose [class*="bg-white"],
+.dark .prose [class*="bg-gray-50"],
+.dark .prose [class*="bg-slate-50"] {
+  background-color: rgba(30, 41, 59, 0.5) !important;
+}
+
+/* Timeline, steps, or numbered content */
+.dark .prose [class*="step"],
+.dark .prose [class*="number"],
+.dark .prose [class*="badge"] {
+  background-color: rgba(16, 185, 129, 0.15) !important;
+  border-color: rgba(16, 185, 129, 0.3) !important;
+  color: #6ee7b7 !important;
+}
+
+/* Override inline styles on the article element itself */
+.dark article[style*="background"],
+.dark article[style*="background-color"] {
+  background-color: transparent !important;
+}
+
+/* Summary/conclusion boxes */
+.dark .prose [class*="summary"],
+.dark .prose [class*="conclusion"],
+.dark .prose [class*="highlight"] {
+  background-color: rgba(30, 41, 59, 0.6) !important;
+  border-color: #334155 !important;
+}
+
+/* ============================================
+   AGGRESSIVE DARK MODE OVERRIDES
+   Force override inline styles from database content
+   ============================================ */
+
+/* Override any inline background colors in dark mode */
+.dark .prose [style*="background"],
+.dark .prose [style*="background-color"] {
+  background-color: rgba(30, 41, 59, 0.5) !important;
+  background-image: none !important;
+}
+
+/* Override white/light backgrounds */
+.dark .prose [style*="background:#fff"],
+.dark .prose [style*="background: #fff"],
+.dark .prose [style*="background-color:#fff"],
+.dark .prose [style*="background-color: #fff"],
+.dark .prose [style*="background:rgb(255"],
+.dark .prose [style*="background-color:rgb(255"],
+.dark .prose [style*="background-color: rgb(255"],
+.dark .prose [style*="background:rgba(255"],
+.dark .prose [style*="background-color:rgba(255"] {
+  background-color: rgba(15, 23, 42, 0.8) !important;
+}
+
+/* Override text colors */
+.dark .prose [style*="color:#000"],
+.dark .prose [style*="color: #000"],
+.dark .prose [style*="color:rgb(0"],
+.dark .prose [style*="color: rgb(0"],
+.dark .prose [style*="color:#1f"],
+.dark .prose [style*="color: #1f"],
+.dark .prose [style*="color:#111"],
+.dark .prose [style*="color: #111"] {
+  color: #f8fafc !important;
+}
+
+/* Content cards/boxes in blog */
+.dark .prose > div,
+.dark .prose section,
+.dark .prose article > div {
+  background-color: transparent !important;
+}
+
+/* Progress tracker and checklist containers */
+.dark .prose [class*="progress"],
+.dark .prose [class*="tracker"],
+.dark .prose [class*="checklist"] {
+  background-color: rgba(30, 41, 59, 0.6) !important;
+  border-color: #334155 !important;
+}
+
+/* Numbered sections (like "1", "2", etc) */
+.dark .prose [class*="rounded"] {
+  border-color: #334155 !important;
+}
+
+/* Table cells in dark mode */
+.dark .prose td,
+.dark .prose th {
+  background-color: rgba(30, 41, 59, 0.4) !important;
+  border-color: #334155 !important;
+  color: #cbd5e1 !important;
+}
+
+/* Any div or span with explicit light colors */
+.dark article [style*="color: #"],
+.dark article [style*="color:#"] {
+  color: #cbd5e1 !important;
+}
+
+/* Force all prose content text to be readable in dark mode */
+.dark .prose,
+.dark .prose *,
+.dark .prose *::before,
+.dark .prose *::after {
+  color: #cbd5e1;
+}
+
+/* But keep heading colors bright */
+.dark .prose h1, .dark .prose h2, .dark .prose h3,
+.dark .prose h4, .dark .prose h5, .dark .prose h6,
+.dark .prose h1 *, .dark .prose h2 *, .dark .prose h3 *,
+.dark .prose h4 *, .dark .prose h5 *, .dark .prose h6 * {
+  color: #f8fafc !important;
+}
+
+/* Keep links colored */
+.dark .prose a,
+.dark .prose a * {
+  color: #34d399 !important;
+}
+
+/* Keep strong/bold bright */
+.dark .prose strong,
+.dark .prose strong *,
+.dark .prose b,
+.dark .prose b * {
+  color: #f8fafc !important;
+}
+
+/* Article main container - force dark background */
+.dark article.prose,
+.dark article.prose-lg {
+  background-color: transparent !important;
+}
+
+/* Specific content sections that might have inline styles */
+.dark .prose [class*="bg-white"],
+.dark .prose [class*="bg-gray-50"],
+.dark .prose [class*="bg-slate-50"] {
+  background-color: rgba(30, 41, 59, 0.5) !important;
+}
+
+/* Timeline, steps, or numbered content */
+.dark .prose [class*="step"],
+.dark .prose [class*="number"],
+.dark .prose [class*="badge"] {
+  background-color: rgba(16, 185, 129, 0.15) !important;
+  border-color: rgba(16, 185, 129, 0.3) !important;
+  color: #6ee7b7 !important;
+}
+
+/* Override inline styles on the article element itself */
+.dark article[style*="background"],
+.dark article[style*="background-color"] {
+  background-color: transparent !important;
+}
+
+/* Summary/conclusion boxes */
+.dark .prose [class*="summary"],
+.dark .prose [class*="conclusion"],
+.dark .prose [class*="highlight"] {
+  background-color: rgba(30, 41, 59, 0.6) !important;
+  border-color: #334155 !important;
+}

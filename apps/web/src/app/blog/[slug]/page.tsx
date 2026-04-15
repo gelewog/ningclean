@@ -13,6 +13,8 @@ import Button from '@/components/ui/Button';
 import { blogApi } from '@/lib/api';
 import { BlogPost } from '@/types/api';
 import { formatDate } from '@/lib/utils';
+import './blog-post.css';
+import { BlogContent } from './BlogContent';
 
 export default function BlogPostPage() {
   const params = useParams();
@@ -190,17 +192,24 @@ export default function BlogPostPage() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2 }}
-                className="prose prose-lg max-w-none 
-                  prose-headings:text-slate-900 dark:prose-headings:text-white 
+                className="prose prose-lg max-w-none blog-content
+                  prose-headings:text-slate-900 dark:prose-headings:text-slate-50
                   prose-p:text-slate-700 dark:prose-p:text-slate-300
                   prose-a:text-emerald-600 dark:prose-a:text-emerald-400 prose-a:no-underline hover:prose-a:underline
-                  prose-strong:text-slate-900 dark:prose-strong:text-white
+                  prose-strong:text-slate-900 dark:prose-strong:text-slate-50
+                  prose-em:text-slate-600 dark:prose-em:text-slate-400
                   prose-li:text-slate-700 dark:prose-li:text-slate-300
-                  prose-blockquote:border-l-emerald-500 prose-blockquote:bg-slate-50 dark:prose-blockquote:bg-slate-900/30 prose-blockquote:py-2 prose-blockquote:px-4 prose-blockquote:rounded-r-lg
-                  prose-code:text-pink-600 dark:prose-code:text-pink-400 prose-code:bg-slate-100 dark:prose-code:bg-slate-800 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded
-                  prose-pre:bg-slate-900 dark:prose-pre:bg-slate-950 prose-pre:text-slate-100"
+                  prose-blockquote:border-l-emerald-500 dark:prose-blockquote:border-l-emerald-500
+                  prose-blockquote:bg-slate-50 dark:prose-blockquote:bg-slate-900/30
+                  prose-blockquote:py-2 prose-blockquote:px-4 prose-blockquote:rounded-r-lg
+                  prose-code:text-pink-600 dark:prose-code:text-pink-400
+                  prose-code:bg-slate-100 dark:prose-code:bg-slate-800 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded
+                  prose-pre:bg-slate-900 dark:prose-pre:bg-slate-950 prose-pre:text-slate-100
+                  dark:prose-h1:text-slate-50 dark:prose-h2:text-slate-50 dark:prose-h3:text-slate-50
+                  dark:prose-h4:text-slate-50 dark:prose-h5:text-slate-50 dark:prose-h6:text-slate-50
+                  dark:prose-ol:text-slate-300 dark:prose-ul:text-slate-300"
               >
-                <div dangerouslySetInnerHTML={{ __html: post.content }} />
+                <BlogContent content={post.content} />
               </motion.article>
 
               {/* Share Buttons */}

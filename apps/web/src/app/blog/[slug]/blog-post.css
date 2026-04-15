@@ -1,0 +1,199 @@
+/* Blog Post Dark Mode Styles */
+/* Force override any inline styles from database content */
+
+/* Dark mode - force all content text to be readable - ULTRA AGGRESSIVE */
+.dark .article-html-content,
+.dark .article-html-content *,
+.dark .article-html-content *::before,
+.dark .article-html-content *::after,
+.dark .article-html-content div,
+.dark .article-html-content div *,
+.dark .article-html-content span,
+.dark .article-html-content span *,
+.dark .article-html-content p,
+.dark .article-html-content p *,
+.dark .article-html-content section,
+.dark .article-html-content section *,
+.dark .article-html-content article,
+.dark .article-html-content article * {
+  color: #cbd5e1 !important; /* slate-300 */
+}
+
+/* Headings in dark mode */
+.dark .article-html-content h1,
+.dark .article-html-content h2,
+.dark .article-html-content h3,
+.dark .article-html-content h4,
+.dark .article-html-content h5,
+.dark .article-html-content h6,
+.dark .article-html-content h1 *,
+.dark .article-html-content h2 *,
+.dark .article-html-content h3 *,
+.dark .article-html-content h4 *,
+.dark .article-html-content h5 *,
+.dark .article-html-content h6 * {
+  color: #f8fafc !important; /* slate-50 */
+}
+
+/* Links */
+.dark .article-html-content a,
+.dark .article-html-content a * {
+  color: #34d399 !important; /* emerald-400 */
+}
+
+.dark .article-html-content a:hover,
+.dark .article-html-content a:hover * {
+  color: #6ee7b7 !important; /* emerald-300 */
+}
+
+/* Bold/Strong */
+.dark .article-html-content strong,
+.dark .article-html-content b,
+.dark .article-html-content strong *,
+.dark .article-html-content b * {
+  color: #f8fafc !important; /* slate-50 */
+}
+
+/* Emphasis/Italic */
+.dark .article-html-content em,
+.dark .article-html-content i,
+.dark .article-html-content em *,
+.dark .article-html-content i * {
+  color: #94a3b8 !important; /* slate-400 */
+}
+
+/* Lists */
+.dark .article-html-content ul,
+.dark .article-html-content ol,
+.dark .article-html-content li {
+  color: #cbd5e1 !important;
+}
+
+/* Override any inline background colors */
+.dark .article-html-content [style*="background"],
+.dark .article-html-content [style*="background-color"] {
+  background-color: rgba(30, 41, 59, 0.5) !important;
+  background-image: none !important;
+}
+
+/* White backgrounds */
+.dark .article-html-content [style*="background:#fff"],
+.dark .article-html-content [style*="background: #fff"],
+.dark .article-html-content [style*="background-color:#fff"],
+.dark .article-html-content [style*="background-color: #fff"],
+.dark .article-html-content [style*="background:rgb(255"],
+.dark .article-html-content [style*="background-color:rgb(255"] {
+  background-color: rgba(15, 23, 42, 0.8) !important;
+}
+
+/* Light gray backgrounds */
+.dark .article-html-content [style*="background:#f"],
+.dark .article-html-content [style*="background: #f"],
+.dark .article-html-content [style*="background-color:#f"],
+.dark .article-html-content [style*="background-color: #f"] {
+  background-color: rgba(30, 41, 59, 0.6) !important;
+}
+
+/* Tables */
+.dark .article-html-content table,
+.dark .article-html-content table * {
+  background-color: rgba(30, 41, 59, 0.4) !important;
+  border-color: #334155 !important;
+}
+
+.dark .article-html-content th,
+.dark .article-html-content th * {
+  background-color: rgba(30, 41, 59, 0.8) !important;
+  color: #f8fafc !important;
+}
+
+.dark .article-html-content td,
+.dark .article-html-content td * {
+  color: #cbd5e1 !important;
+}
+
+/* Progress trackers, checklists, cards */
+.dark .article-html-content [class*="progress"],
+.dark .article-html-content [class*="tracker"],
+.dark .article-html-content [class*="checklist"],
+.dark .article-html-content [class*="card"] {
+  background-color: rgba(30, 41, 59, 0.6) !important;
+  border-color: #334155 !important;
+}
+
+/* Numbered sections/badges */
+.dark .article-html-content [class*="badge"],
+.dark .article-html-content [class*="number"],
+.dark .article-html-content [class*="step"] {
+  background-color: rgba(16, 185, 129, 0.15) !important;
+  border-color: rgba(16, 185, 129, 0.3) !important;
+  color: #6ee7b7 !important;
+}
+
+/* Blockquotes */
+.dark .article-html-content blockquote,
+.dark .article-html-content blockquote * {
+  background-color: rgba(6, 6, 14, 0.5) !important;
+  border-left-color: #10b981 !important;
+  color: #cbd5e1 !important;
+}
+
+/* Code elements */
+.dark .article-html-content code {
+  background-color: #1e293b !important;
+  color: #f472b6 !important;
+}
+
+.dark .article-html-content pre {
+  background-color: #0f172a !important;
+  color: #e2e8f0 !important;
+}
+
+/* Horizontal rules */
+.dark .article-html-content hr {
+  border-color: #334155 !important;
+}
+
+/* Summary/conclusion boxes */
+.dark .article-html-content [class*="summary"],
+.dark .article-html-content [class*="conclusion"],
+.dark .article-html-content [class*="highlight"] {
+  background-color: rgba(30, 41, 59, 0.6) !important;
+  border-color: #334155 !important;
+}
+
+/* Specific override for white backgrounds in content divs */
+.dark .article-html-content div[style*="background-color: white"],
+.dark .article-html-content div[style*="background-color:white"],
+.dark .article-html-content div[style*="background: white"],
+.dark .article-html-content div[style*="background:white"] {
+  background-color: rgba(30, 41, 59, 0.5) !important;
+}
+
+/* Override inline text colors */
+.dark .article-html-content span[style*="color:#000"],
+.dark .article-html-content span[style*="color: #000"],
+.dark .article-html-content span[style*="color:black"],
+.dark .article-html-content span[style*="color: black"],
+.dark .article-html-content span[style*="color:rgb(0"],
+.dark .article-html-content span[style*="color: rgb(0"] {
+  color: #cbd5e1 !important;
+}
+
+/* Paragraphs with inline styles */
+.dark .article-html-content p[style] {
+  color: #cbd5e1 !important;
+}
+
+/* Make sure checkboxes are visible */
+.dark .article-html-content input[type="checkbox"] {
+  background-color: #1e293b !important;
+  border-color: #475569 !important;
+}
+
+/* Any element with class containing bg-white */
+.dark .article-html-content [class*="bg-white"],
+.dark .article-html-content [class*="bg-gray-50"],
+.dark .article-html-content [class*="bg-slate-50"] {
+  background-color: rgba(30, 41, 59, 0.5) !important;
+}
