@@ -141,7 +141,7 @@ model BlogPost {
   coverImage  String?
   author      String
   categoryId  String?
-  publishedAt DateTime @default(now())
+  publishedAt DateTime?
   tags        String[]
   readTime    Int
   isFeatured  Boolean  @default(false)

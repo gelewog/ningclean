@@ -10,6 +10,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Badge } from '@/components/ui/badge'
 import { DataTable } from '@/components/admin/DataTable'
+import { ImageUpload } from '@/components/ui/ImageUpload'
 import { getGalleryItems, createGalleryItem, updateGalleryItem, deleteGalleryItem } from '@/lib/api'
 import { GalleryItem } from '@/types'
 import { formatDate } from '@/lib/utils'
@@ -119,20 +120,6 @@ function GalleryFormModal({
           {/* Scrollable Content */}
           <div className="flex-1 overflow-y-auto">
             <div className="p-6 space-y-5">
-              {/* Image Preview */}
-              {formData.imageUrl && (
-                <div className="relative aspect-video rounded-xl overflow-hidden border border-gray-200 dark:border-slate-700">
-                  <img
-                    src={formData.imageUrl}
-                    alt="Preview"
-                    className="w-full h-full object-cover"
-                    onError={(e) => {
-                      (e.target as HTMLImageElement).src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="100%25" height="100%25"%3E%3Crect width="100%25" height="100%25" fill="%23f3f4f6"/%3E%3Ctext x="50%25" y="50%25" dominant-baseline="middle" text-anchor="middle" fill="%239ca3af"%3EInvalid Image URL%3C/text%3E%3C/svg%3E'
-                    }}
-                  />
-                </div>
-              )}
-
               {/* Title */}
               <div className="space-y-2">
                 <label className="text-sm font-medium text-gray-700 dark:text-slate-200">
@@ -150,22 +137,19 @@ function GalleryFormModal({
                 {errors.title && <p className="text-sm text-red-500">{errors.title}</p>}
               </div>
 
-              {/* Image URL */}
-              <div className="space-y-2">
-                <label className="text-sm font-medium text-gray-700 dark:text-slate-200">
-                  Image URL <span className="text-red-500">*</span>
-                </label>
-                <Input
-                  value={formData.imageUrl}
-                  onChange={(e) => {
-                    setFormData({ ...formData, imageUrl: e.target.value })
-                    setErrors({ ...errors, imageUrl: '' })
-                  }}
-                  placeholder="https://images.unsplash.com/..."
-                  className={errors.imageUrl ? 'border-red-500 focus:border-red-500' : ''}
-                />
-                {errors.imageUrl && <p className="text-sm text-red-500">{errors.imageUrl}</p>}
-              </div>
+              {/* Image Upload */}
+              <ImageUpload
+                label="Gallery Image"
+                folder="gallery"
+                value={formData.imageUrl}
+                onChange={(url) => {
+                  setFormData({ ...formData, imageUrl: url })
+                  setErrors({ ...errors, imageUrl: '' })
+                }}
+                required
+                error={errors.imageUrl}
+                previewClassName="h-48 w-full"
+              />
 
               {/* Category & Order */}
               <div className="grid grid-cols-2 gap-4">

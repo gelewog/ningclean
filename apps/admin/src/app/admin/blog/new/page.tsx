@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Badge } from '@/components/ui/badge'
+import { RichTextEditor } from '@/components/editor/RichTextEditor'
 import Link from 'next/link'
 import { createBlogPost, getBlogCategories, BlogCategory } from '@/lib/api'
 import { toast } from 'sonner'
@@ -224,16 +225,15 @@ export default function NewBlogPostPage() {
               className="bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-700 rounded-2xl overflow-hidden"
             >
               <div className="px-6 py-4 border-b border-gray-100 dark:border-slate-700 bg-gray-50/50 dark:bg-slate-800/50 flex items-center justify-between">
-                <h3 className="font-semibold text-gray-900 dark:text-white">Content (Markdown supported)</h3>
-                <Badge variant="info" className="text-xs">Markdown</Badge>
+                <h3 className="font-semibold text-gray-900 dark:text-white">Content</h3>
+                <Badge variant="info" className="text-xs">Rich Text</Badge>
               </div>
               <div className="p-6">
-                <Textarea
-                  placeholder="Tulis konten artikel di sini... Markdown formatting didukung."
+                <RichTextEditor
                   value={formData.content}
-                  onChange={(e) => setFormData({ ...formData, content: e.target.value })}
-                  rows={20}
-                  className={`w-full font-mono text-sm bg-gray-50 dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-xl text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-slate-500 focus:outline-none focus:border-emerald-500 dark:focus:border-emerald-400 focus:ring-1 focus:ring-emerald-500/20 dark:focus:ring-1 dark:focus:ring-emerald-400/30 resize-none ${errors.content ? 'border-red-500 dark:border-red-500' : ''}`}
+                  onChange={(value) => setFormData({ ...formData, content: value })}
+                  placeholder="Tulis konten artikel di sini..."
+                  editable={true}
                 />
                 {errors.content && <p className="text-sm text-red-500 mt-2">{errors.content}</p>}
               </div>

@@ -8,6 +8,33 @@ module.exports = {
   darkMode: 'class',
   theme: {
     extend: {
+      typography: {
+        DEFAULT: {
+          css: {
+            'h1': {
+              fontSize: '2.25em',
+              fontWeight: '800',
+              marginTop: '0',
+              marginBottom: '0.8888889em',
+              lineHeight: '1.1111111',
+            },
+            'h2': {
+              fontSize: '1.75em',
+              fontWeight: '700',
+              marginTop: '1.5555556em',
+              marginBottom: '0.8888889em',
+              lineHeight: '1.3333333',
+            },
+            'h3': {
+              fontSize: '1.5em',
+              fontWeight: '600',
+              marginTop: '1.6em',
+              marginBottom: '0.6em',
+              lineHeight: '1.4',
+            },
+          },
+        },
+      },
       colors: {
         primary: {
           DEFAULT: '#2563EB',
@@ -60,5 +87,7 @@ module.exports = {
       },
     },
   },
-  plugins: [],
+  plugins: [
+    require('@tailwindcss/typography'),
+  ],
 }

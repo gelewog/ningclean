@@ -18,7 +18,7 @@ const mockBlogPosts: BlogPost[] = [
     slug: 'tips-membersihkan-sofa-kulit',
     excerpt: 'Sofa kulit memerlukan perawatan khusus untuk menjaga kelembabannya. Pelajari teknik pembersihan yang tepat agar sofa kulit Anda tetap mengkilap.',
     content: '...',
-    featuredImage: undefined,
+    coverImage: undefined,
     tags: ['sofa', 'tips', 'perawatan'],
     authorId: '1',
     author: {
@@ -45,7 +45,7 @@ const mockBlogPosts: BlogPost[] = [
     slug: 'deep-cleaning-rumah-waktu-tepat',
     excerpt: 'Deep cleaning tidak perlu dilakukan setiap hari. Kenali tanda-tanda rumah Anda membutuhkan deep cleaning dan manfaatnya untuk kesehatan keluarga.',
     content: '...',
-    featuredImage: undefined,
+    coverImage: undefined,
     tags: ['deep-cleaning', 'tips', 'kesehatan'],
     authorId: '1',
     author: {
@@ -72,7 +72,7 @@ const mockBlogPosts: BlogPost[] = [
     slug: 'alasan-post-construction-cleaning-penting',
     excerpt: 'Setelah renovasi, debu dan sisa material bangunan bisa mengganggu kesehatan. Pelajari mengapa post-construction cleaning sangat diperlukan.',
     content: '...',
-    featuredImage: undefined,
+    coverImage: undefined,
     tags: ['renovasi', 'post-construction', 'kesehatan'],
     authorId: '1',
     author: {

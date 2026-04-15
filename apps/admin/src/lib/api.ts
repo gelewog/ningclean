@@ -396,40 +396,61 @@ export async function getBlogPosts(params?: {
   page?: number
   limit?: number
   status?: string
+  search?: string
 }): Promise<PaginatedResponse<BlogPost>> {
+  const token = getToken()
+
+  if (!token) {
+    console.error('No auth token found')
+    return {
+      data: [],
+      total: 0,
+      page: params?.page || 1,
+      limit: params?.limit || 10,
+      totalPages: 0,
+    }
+  }
+
   const queryParams = new URLSearchParams()
   if (params?.page) queryParams.set('page', params.page.toString())
   if (params?.limit) queryParams.set('limit', params.limit.toString())
-  
+  if (params?.status) queryParams.set('status', params.status)
+  if (params?.search) queryParams.set('search', params.search)
+
   const query = queryParams.toString()
-  const endpoint = `/blog${query ? `?${query}` : ''}`
-  
-  const data = await fetchApi<any[]>(endpoint)
-  
-  let posts: BlogPost[] = data.map((p: any) => ({
+  const endpoint = `/blog/admin/all${query ? `?${query}` : ''}`
+
+  const data = await fetchApi<{
+    data: any[]
+    total: number
+    page: number
+    limit: number
+    totalPages: number
+  }>(endpoint, { token })
+
+  const posts: BlogPost[] = data.data.map((p: any) => ({
     id: p.id,
     title: p.title,
     slug: p.slug,
-    content: p.content,
-    excerpt: p.excerpt,
+    content: p.content || '',
+    excerpt: p.excerpt || '',
     coverImage: p.coverImage,
-    status: (p.publishedAt ? 'published' : 'draft') as 'draft' | 'published',
+    status: p.status,
     author: p.author,
     tags: p.tags || [],
+    categoryId: p.categoryId,
+    category: p.category,
+    isFeatured: p.isFeatured || false,
     createdAt: p.createdAt,
     updatedAt: p.updatedAt,
   }))
-  
-  if (params?.status) {
-    posts = posts.filter((p) => p.status === params.status)
-  }
-  
+
   return {
     data: posts,
-    total: posts.length,
-    page: 1,
-    limit: 10,
-    totalPages: 1,
+    total: data.total,
+    page: data.page,
+    limit: data.limit,
+    totalPages: data.totalPages,
   }
 }
 

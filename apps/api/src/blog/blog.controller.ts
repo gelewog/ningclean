@@ -6,6 +6,7 @@ import {
   Delete,
   Body,
   Param,
+  Query,
   UseGuards,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
@@ -24,6 +25,25 @@ export class BlogController {
   @ApiOperation({ summary: 'Get all blog posts (public)' })
   findAll() {
     return this.blogService.findAll();
+  }
+
+  @Get('admin/all')
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Roles(Role.ADMIN)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Get all blog posts for admin (including drafts) with pagination' })
+  findAllAdmin(
+    @Query('page') page?: number,
+    @Query('limit') limit?: number,
+    @Query('status') status?: 'draft' | 'published',
+    @Query('search') search?: string,
+  ) {
+    return this.blogService.findAllAdmin({
+      page: page ? Number(page) : 1,
+      limit: limit ? Number(limit) : 10,
+      status,
+      search,
+    });
   }
 
   @Get('slug/:slug')

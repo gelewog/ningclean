@@ -212,7 +212,7 @@ export default function BlogPage() {
 
                     {/* Actions */}
                     <div className="flex items-center gap-2">
-                      <Link href={`/blog/${post.slug}`} target="_blank">
+                      <Link href={`${process.env.NEXT_PUBLIC_WEB_URL || 'http://localhost:3001'}/blog/${post.slug}`} target="_blank">
                         <Button variant="ghost" size="sm" className="text-gray-400 dark:text-slate-500 hover:text-gray-600 dark:text-slate-300">
                           <ExternalLink className="h-4 w-4" />
                         </Button>

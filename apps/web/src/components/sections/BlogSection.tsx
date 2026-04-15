@@ -65,9 +65,9 @@ function FeaturedCard({ post }: { post: BlogPost }) {
       >
         {/* Image area */}
         <div className="relative h-[240px] overflow-hidden flex-shrink-0">
-          {post.featuredImage ? (
+          {post.coverImage ? (
             <img
-              src={post.featuredImage}
+              src={post.coverImage}
               alt={post.title}
               className="w-full h-full object-cover opacity-80 group-hover:scale-105 transition-transform duration-500"
             />
@@ -148,9 +148,9 @@ function SmallCard({ post, index }: { post: BlogPost; index: number }) {
       >
         {/* Thumbnail */}
         <div className="relative w-[110px] flex-shrink-0 overflow-hidden">
-          {post.featuredImage ? (
+          {post.coverImage ? (
             <img
-              src={post.featuredImage}
+              src={post.coverImage}
               alt={post.title}
               className="absolute inset-0 w-full h-full object-cover opacity-75 group-hover:scale-105 transition-transform duration-500"
             />

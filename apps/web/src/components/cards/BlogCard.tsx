@@ -33,12 +33,13 @@ export default function BlogCard({ post, featured = false, index = 0 }: BlogCard
               featured ? 'lg:w-1/2 h-64 lg:h-auto' : 'h-52'
             }`}
           >
-            {post.featuredImage ? (
+            {post.coverImage ? (
               <Image
-                src={post.featuredImage}
+                src={post.coverImage}
                 alt={post.title}
                 fill
                 className="object-cover group-hover:scale-110 transition-transform duration-700"
+                unoptimized={post.coverImage.startsWith('http')}
               />
             ) : (
               <div className="absolute inset-0 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 flex items-center justify-center">

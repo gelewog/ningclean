@@ -12,6 +12,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Badge } from '@/components/ui/badge'
+import { ImageUpload } from '@/components/ui/ImageUpload'
 import { getServices, createService, updateService, deleteService } from '@/lib/api'
 import { formatCurrency } from '@/lib/utils'
 import { toast } from 'sonner'
@@ -383,25 +384,15 @@ function ServiceModal({
                     </div>
                   </div>
 
-                  {/* Image URL */}
+                  {/* Image Upload */}
                   <div className="bg-gray-50 dark:bg-slate-800 rounded-xl p-4 border border-gray-100 dark:border-slate-700">
-                    <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-2">
-                      <div className="flex items-center gap-2">
-                        <ImageIcon className="w-4 h-4 text-pink-500" />
-                        Image URL
-                      </div>
-                    </label>
-                    <Input
-                      placeholder="https://images.unsplash.com/..."
+                    <ImageUpload
+                      label="Service Image"
+                      folder="services"
                       value={formData.image}
-                      onChange={(e) => setFormData({ ...formData, image: e.target.value })}
-                      className="bg-white dark:bg-slate-900"
+                      onChange={(url) => setFormData({ ...formData, image: url })}
+                      previewClassName="h-40 w-full"
                     />
-                    {formData.image && (
-                      <div className="mt-3 aspect-video rounded-xl overflow-hidden bg-gray-100 dark:bg-slate-700">
-                        <img src={formData.image} alt="Preview" className="w-full h-full object-cover" />
-                      </div>
-                    )}
                   </div>
                 </motion.div>
               )}

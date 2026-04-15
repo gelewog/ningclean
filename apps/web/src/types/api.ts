@@ -49,20 +49,21 @@ export interface BlogPost {
   title: string;
   slug: string;
   excerpt: string;
-  content: string;
-  featuredImage?: string;
+  content?: string;
+  coverImage?: string;
   tags: string[];
-  authorId: string;
-  author?: User;
+  author: string | { name: string; avatar?: string };
+  authorId?: string;
   category?: {
     slug: string;
     name: string;
-  };
+  } | null;
   publishedAt?: string;
   readTime?: number;
-  isPublished: boolean;
+  isPublished?: boolean;
+  isFeatured?: boolean;
   createdAt: string;
-  updatedAt: string;
+  updatedAt?: string;
 }
 
 export interface Testimonial {

@@ -88,8 +88,8 @@ export default function Navigation() {
         className={cn(
           'fixed top-0 left-0 right-0 z-50 transition-all duration-500',
           isScrolled
-            ? 'dark:bg-black/80 bg-white/95 backdrop-blur-xl dark:border-white/10 border-slate-200/50 py-3'
-            : 'dark:bg-transparent bg-transparent py-5'
+            ? 'bg-white/95 dark:bg-slate-950/95 backdrop-blur-xl border-b border-slate-200/50 dark:border-slate-800/50 py-3 shadow-sm'
+            : 'bg-white/80 dark:bg-slate-950/80 backdrop-blur-md border-b border-transparent py-4'
         )}
       >
         <div className="container-fluid">
@@ -113,9 +113,7 @@ export default function Navigation() {
               </div>
               <span className={cn(
                 'text-xl font-bold transition-colors',
-                isScrolled
-                  ? 'dark:text-white text-slate-900'
-                  : 'dark:text-white text-slate-900'
+                'text-slate-900 dark:text-white'
               )}>
                 Ningclean
               </span>
@@ -129,9 +127,7 @@ export default function Navigation() {
                   href={link.href}
                   className={cn(
                     'relative px-4 py-2 rounded-lg font-medium transition-all duration-300',
-                    isScrolled
-                      ? 'dark:text-white/80 dark:hover:text-white dark:hover:bg-white/5 text-slate-700 hover:text-slate-900 hover:bg-slate-100'
-                      : 'dark:text-white/80 dark:hover:text-white text-slate-700 hover:text-slate-900'
+                    'text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800'
                   )}
                 >
                   {link.label}
@@ -172,12 +168,7 @@ export default function Navigation() {
               <ThemeToggle />
               <button
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                className={cn(
-                  'p-2 rounded-lg transition-all duration-300',
-                  isScrolled
-                    ? 'dark:text-white text-slate-700 hover:bg-slate-100 dark:hover:bg-white/10'
-                    : 'text-slate-700 hover:bg-slate-100'
-                )}
+                className="p-2 rounded-lg transition-all duration-300 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800"
               >
                 <motion.div
                   animate={isMobileMenuOpen ? 'open' : 'closed'}
@@ -188,20 +179,14 @@ export default function Navigation() {
                       closed: { rotate: 0, y: 0 },
                       open: { rotate: 45, y: 9 }
                     }}
-                    className={cn(
-                      'w-full h-0.5 rounded-full origin-left',
-                      isScrolled ? 'dark:bg-white bg-slate-700' : 'bg-slate-700'
-                    )}
+                    className="w-full h-0.5 rounded-full origin-left bg-slate-700 dark:bg-slate-300"
                   />
                   <motion.span
                     variants={{
                       closed: { opacity: 1 },
                       open: { opacity: 0 }
                     }}
-                    className={cn(
-                      'w-full h-0.5 rounded-full',
-                      isScrolled ? 'dark:bg-white bg-slate-700' : 'bg-slate-700'
-                    )}
+                    className="w-full h-0.5 rounded-full bg-slate-700 dark:bg-slate-300"
                   />
                   <motion.span
                     variants={{

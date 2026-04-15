@@ -9,6 +9,7 @@ import {
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Badge } from '@/components/ui/badge'
+import { ImageUpload } from '@/components/ui/ImageUpload'
 import { DataTable } from '@/components/admin/DataTable'
 import { getTestimonials, createTestimonial, updateTestimonial, deleteTestimonial } from '@/lib/api'
 import { Testimonial } from '@/types'
@@ -178,20 +179,14 @@ function TestimonialFormModal({
                 {errors.content && <p className="text-sm text-red-500">{errors.content}</p>}
               </div>
 
-              {/* Image URL */}
-              <div className="space-y-2">
-                <label className="text-sm font-medium text-gray-700 dark:text-slate-200">
-                  Image URL (Optional)
-                </label>
-                <Input
-                  value={formData.image}
-                  onChange={(e) => setFormData({ ...formData, image: e.target.value })}
-                  placeholder="https://images.unsplash.com/..."
-                />
-                <p className="text-xs text-gray-400 dark:text-slate-500">
-                  Link gambar customer
-                </p>
-              </div>
+              {/* Image Upload */}
+              <ImageUpload
+                label="Customer Image"
+                folder="testimonials"
+                value={formData.image}
+                onChange={(url) => setFormData({ ...formData, image: url })}
+                previewClassName="h-32 w-32 mx-auto"
+              />
 
               {/* Role & Company Row */}
               <div className="grid grid-cols-2 gap-4">

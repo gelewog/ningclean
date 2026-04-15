@@ -24,6 +24,7 @@ import { FooterSettingsModule } from './footer-settings/footer-settings.module';
 import { BlogCategoriesModule } from './blog-categories/blog-categories.module';
 import { EmailTemplatesModule } from './email-templates/email-templates.module';
 import { InvoicesModule } from './invoices/invoices.module';
+import { UploadModule } from './upload/upload.module';
 
 @Module({
   imports: [
@@ -50,6 +51,7 @@ import { InvoicesModule } from './invoices/invoices.module';
     BlogCategoriesModule,
     EmailTemplatesModule,
     InvoicesModule,
+    UploadModule,
   ],
   controllers: [AppController],
   providers: [AppService],

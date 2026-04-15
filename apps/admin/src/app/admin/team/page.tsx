@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Badge } from '@/components/ui/badge'
+import { ImageUpload } from '@/components/ui/ImageUpload'
 import { Modal } from '@/components/admin/Modal'
 import { DataTable } from '@/components/admin/DataTable'
 import { getTeamMembers, createTeamMember, updateTeamMember, deleteTeamMember } from '@/lib/api'
@@ -496,16 +497,13 @@ export default function TeamPage() {
                 </div>
               </div>
               <div className="space-y-1.5">
-                <label className="block text-xs font-medium text-gray-500 dark:text-slate-400">URL Avatar</label>
-                <div className="relative">
-                  <Link2 className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-                  <Input
-                    placeholder="https://images.unsplash.com/..."
-                    value={formData.avatar}
-                    onChange={(e) => setFormData({ ...formData, avatar: e.target.value })}
-                    className="pl-10 bg-white dark:bg-slate-900 border-gray-200 dark:border-slate-700"
-                  />
-                </div>
+                <ImageUpload
+                  label="Avatar"
+                  folder="team"
+                  value={formData.avatar}
+                  onChange={(url) => setFormData({ ...formData, avatar: url })}
+                  previewClassName="h-32 w-32 mx-auto"
+                />
               </div>
             </div>
           </div>
