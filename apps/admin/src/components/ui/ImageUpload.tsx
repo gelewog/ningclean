@@ -33,11 +33,13 @@ export function ImageUpload({
 
   const handleDragOver = useCallback((e: React.DragEvent) => {
     e.preventDefault();
+    e.stopPropagation();
     setIsDragging(true);
   }, []);
 
   const handleDragLeave = useCallback((e: React.DragEvent) => {
     e.preventDefault();
+    e.stopPropagation();
     setIsDragging(false);
   }, []);
 
@@ -70,6 +72,7 @@ export function ImageUpload({
 
   const handleDrop = useCallback((e: React.DragEvent) => {
     e.preventDefault();
+    e.stopPropagation();
     setIsDragging(false);
 
     const file = e.dataTransfer.files[0];
@@ -79,15 +82,18 @@ export function ImageUpload({
   }, [folder]);
 
   const handleFileSelect = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    e.stopPropagation();
     const file = e.target.files?.[0];
     if (file) {
       uploadFile(file);
     }
   }, [folder]);
 
-  const handleButtonClick = () => {
+  const triggerFileInput = useCallback((e?: React.MouseEvent) => {
+    e?.preventDefault();
+    e?.stopPropagation();
     fileInputRef.current?.click();
-  };
+  }, []);
 
   const clearImage = () => {
     onChange('');
@@ -127,16 +133,7 @@ export function ImageUpload({
           </button>
         </div>
       ) : (
-        <div
-          onDragOver={handleDragOver}
-          onDragLeave={handleDragLeave}
-          onDrop={handleDrop}
-          className={`relative border-2 border-dashed rounded-lg p-6 transition-colors ${
-            isDragging
-              ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
-              : 'border-gray-300 dark:border-slate-600 hover:border-gray-400 dark:hover:border-slate-500'
-          } ${previewClassName} flex flex-col items-center justify-center`}
-        >
+        <div className="space-y-2">
           <input
             ref={fileInputRef}
             type="file"
@@ -145,29 +142,39 @@ export function ImageUpload({
             className="hidden"
           />
 
-          {isUploading ? (
-            <div className="flex flex-col items-center text-gray-500">
-              <Loader2 size={32} className="animate-spin mb-2" />
-              <span className="text-sm">Uploading...</span>
-            </div>
-          ) : (
-            <>
-              <ImageIcon size={32} className="text-gray-400 mb-2" />
-              <p className="text-sm text-gray-500 dark:text-slate-400 text-center">
-                Drag & drop image here, or{' '}
-                <button
-                  type="button"
-                  onClick={handleButtonClick}
-                  className="text-blue-600 hover:text-blue-700 font-medium"
-                >
-                  browse
-                </button>
-              </p>
-              <p className="text-xs text-gray-400 mt-1">
-                Supports: JPEG, PNG, WebP, GIF (max 5MB)
-              </p>
-            </>
-          )}
+          {/* Drop zone - also clickable */}
+          <div
+            onDragOver={handleDragOver}
+            onDragLeave={handleDragLeave}
+            onDrop={handleDrop}
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              triggerFileInput(e);
+            }}
+            className={`border-2 border-dashed rounded-lg p-6 transition-colors cursor-pointer hover:border-gray-400 dark:hover:border-slate-500 ${
+              isDragging
+                ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
+                : 'border-gray-300 dark:border-slate-600'
+            } ${previewClassName} flex flex-col items-center justify-center`}
+          >
+            {isUploading ? (
+              <div className="flex flex-col items-center text-gray-500">
+                <Loader2 size={32} className="animate-spin mb-2" />
+                <span className="text-sm">Uploading...</span>
+              </div>
+            ) : (
+              <div className="flex flex-col items-center">
+                <ImageIcon size={32} className="text-gray-400 mb-2" />
+                <p className="text-sm text-gray-500 dark:text-slate-400 text-center">
+                  Drag & drop image here
+                </p>
+                <p className="text-xs text-gray-400 dark:text-slate-500 mt-1">
+                  or click to browse
+                </p>
+              </div>
+            )}
+          </div>
         </div>
       )}
 
@@ -180,13 +187,17 @@ export function ImageUpload({
           placeholder={placeholder}
           className={`flex-1 px-3 py-2 border rounded-md text-sm bg-white dark:bg-slate-800 dark:border-slate-600 dark:text-white ${
             error || uploadError
-              ? 'border-red-500 focus:border-red-500'
+              ? 'border-red-500 focus:border-red-500 focus:ring-red-500'
               : 'border-gray-300 focus:border-blue-500 focus:ring-blue-500'
-          }`}
+          } focus:outline-none focus:ring-1`}
         />
         <button
           type="button"
-          onClick={handleButtonClick}
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            triggerFileInput(e);
+          }}
           className="px-3 py-2 bg-gray-100 hover:bg-gray-200 dark:bg-slate-700 dark:hover:bg-slate-600 text-gray-700 dark:text-slate-300 rounded-md transition-colors"
           title="Upload from computer"
         >

@@ -248,10 +248,15 @@ function GalleryFormModal({
 
           {/* Footer */}
           <div className="flex items-center justify-end gap-3 px-6 py-4 border-t border-gray-100 dark:border-slate-700 bg-gray-50/50 dark:bg-slate-800/50 flex-shrink-0">
-            <Button variant="outline" onClick={onClose}>
+            <Button 
+              type="button"
+              variant="outline" 
+              onClick={onClose}
+            >
               Batal
             </Button>
             <Button 
+              type="button"
               onClick={onSave} 
               disabled={saving}
               className="bg-emerald-600 hover:bg-emerald-700 gap-2"
