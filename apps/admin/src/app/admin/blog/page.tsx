@@ -172,7 +172,7 @@ export default function BlogPage() {
                     <div className="h-16 w-24 rounded-lg overflow-hidden bg-gray-100 dark:bg-slate-800 flex-shrink-0">
                       {post.coverImage ? (
                         <img
-                          src={post.coverImage}
+                          src={post.coverImage.startsWith('http') ? post.coverImage : `${process.env.NEXT_PUBLIC_API_URL?.replace('/api', '') || 'http://localhost:4000'}${post.coverImage}`}
                           alt={post.title}
                           className="h-full w-full object-cover"
                         />
