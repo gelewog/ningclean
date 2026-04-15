@@ -144,6 +144,29 @@ export default function NewBlogPostPage() {
             <Button variant="outline" onClick={() => router.push('/admin/blog')}>
               Batal
             </Button>
+            <Button 
+              variant="outline" 
+              onClick={() => {
+                // Simpan draft ke localStorage untuk preview
+                const draftData = {
+                  title: formData.title || 'Untitled',
+                  content: formData.content,
+                  excerpt: formData.excerpt,
+                  coverImage: formData.coverImage,
+                  author: 'Admin Ningclean',
+                  tags: formData.tags.split(',').map(t => t.trim()).filter(Boolean),
+                  readTime: 5,
+                  createdAt: new Date().toISOString(),
+                  slug: '',
+                  category: undefined,
+                }
+                localStorage.setItem('blog_draft_preview', JSON.stringify(draftData))
+                window.open('/admin/blog/preview', '_blank')
+              }}
+            >
+              <Eye className="w-4 h-4 mr-2" />
+              Preview Draft
+            </Button>
             <Button
               onClick={handleSubmit}
               disabled={loading}

@@ -1,0 +1,60 @@
+/* Blog Preview Styles - Same as web blog/[slug] */
+
+.blog-content h2 {
+  scroll-margin-top: 100px;
+}
+
+.blog-content h3 {
+  scroll-margin-top: 100px;
+}
+
+/* Ensure proper spacing for content */
+.blog-content > * {
+  margin-bottom: 1em;
+}
+
+.blog-content ul,
+.blog-content ol {
+  padding-left: 1.5em;
+  margin-bottom: 1em;
+}
+
+.blog-content li {
+  margin-bottom: 0.5em;
+}
+
+.blog-content img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 0.5rem;
+  margin: 1.5em 0;
+}
+
+.blog-content blockquote {
+  border-left: 4px solid #10b981;
+  padding-left: 1em;
+  margin-left: 0;
+  font-style: italic;
+  color: #6b7280;
+}
+
+.blog-content pre {
+  background-color: #1f2937;
+  color: #f3f4f6;
+  padding: 1em;
+  border-radius: 0.5rem;
+  overflow-x: auto;
+}
+
+.blog-content code {
+  font-family: 'Monaco', 'Consolas', monospace;
+}
+
+.blog-content a {
+  color: #059669;
+  text-decoration: none;
+}
+
+.blog-content a:hover {
+  text-decoration: underline;
+}

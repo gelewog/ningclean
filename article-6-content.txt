@@ -1,0 +1,230 @@
+<p>Bangun pagi, berangkat kerja, pulat malam, begadang sebentar, dan... tidur. Besoknya berulang lagi. Di tengah sibuknya hari, kapan waktunya membersihkan rumah?</p>
+
+<p>Bagi orang yang padat jadwal, membersihkan rumah seringkali jadi <em>lower priority</em>. Hasilnya? Rumah berantakan di akhir pekan, stres karena tidak ada waktu bersantai, atau—yang paling umum—membersihkan seadanya yang malah membuat capek dobel.</p>
+
+<p>Kabar baik: <strong>Anda tidak perlu membersihkan rumah sekaligus dalam satu hari</strong>. Rahasianya adalah <strong>sistem jadwal pintar</strong> yang membagi tugas kecil-kecil sepanjang minggu.</p>
+
+<h2>Prinsip Dasar: The 20-Minute Rule</h2>
+
+<p>Sebelum masuk ke jadwal, pahami dulu prinsip ini: <strong>Setiap tugas cleaning tidak boleh lebih dari 20 menit</strong>.</p>
+
+<div class="callout callout-info">
+  <span class="callout-icon">⏱️</span>
+  <p><strong>Kenapa 20 menit?</strong> Karena itu adalah <em>sweet spot</em>—cukup lama untuk menghasilkan perbedaan nyata, tapi cukup singkat untuk tidak terasa seperti beban.</p>
+</div>
+
+<h2>Jadwal Harian: 5-10 Menit per Hari</h2>
+
+<p>Ini adalah <strong>kebiasaan micro</strong> yang mencegah rumah berantakan:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Waktu</th>
+      <th>Tugas (5-10 menit)</th>
+      <th>Hasil</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Pagi</strong> (07:00)</td>
+      <td>Rapikan tempat tidur, buka jendela 5 menit</td>
+      <td>Kamar rapi, udara segar masuk</td>
+    </tr>
+    <tr>
+      <td><strong>Sebelum Berangkat</strong></td>
+      <td>Cuci piring kotor, lap wastafel</td>
+      <td>Dapur bersih pulang nanti</td>
+    </tr>
+    <tr>
+      <td><strong>Siang</strong> (jika WFH)</td>
+      <td>Buang sampah, lap meja kerja</td>
+      <td>Workspace produktif</td>
+    </tr>
+    <tr>
+      <td><strong>Malam</strong> (21:00)</td>
+      <td>Rapikan sofa, lipat pakaian kering</td>
+      <td>Ruang tamu siap untuk besok</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><strong>Total waktu harian: 15-20 menit</strong> (terbagi seharian, tidak terasa!)</p>
+
+<h2>Jadwal Mingguan: Rotasi Zona</h2>
+
+<p>Setiap hari fokus ke satu zona, maksimal 20 menit:</p>
+
+<h3>Senin: Dapur Deep Clean (20 menit)</h3>
+<ul>
+  <li>Bersihkan microwave dalam</li>
+  <li>Lap luar kulkas</li>
+  <li>Sikat wastafel dapur</li>
+  <li>Bersihkan kompor</li>
+</ul>
+
+<h3>Selasa: Kamar Mandi Refresh (20 menit)</h3>
+<ul>
+  <li>Sikat kloset</li>
+  <li>Lap cermin</li>
+  <li>Bersihkan shower curtain</li>
+  <li>Ganti handuk</li>
+</ul>
+
+<h3>Rabu: Laundry Day (30 menit, bisa sambil kerja)</h3>
+<ul>
+  <li>Cuci 1-2 mesin pakaian</li>
+  <li>Jemur/jemurin</li>
+  <li>Lipat yang sudah kering</li>
+</ul>
+
+<div class="callout callout-info">
+  <span class="callout-icon">💡</span>
+  <p><strong>Tip:</strong> Pakai timer! Set 20 menit dan lihat seberapa banyak yang bisa Anda kerjakan. Anda akan kaget betapa produktifnya waktu itu.</p>
+</div>
+
+<h3>Kamis: Bedroom Reset (20 menit)</h3>
+<ul>
+  <li>Ganti sprei (kalau jadwalnya)</li>
+  <li>Rapikan lemari</li>
+  <li>Vacuum kamar</li>
+  <li>Buang sampah kamar</li>
+</ul>
+
+<h3>Jumat: Living Area Quick Fix (20 menit)</h3>
+<ul>
+  <li>Vacuum sofa</li>
+  <li>Lap meja</li>
+  <li>Rapikan majalah/buku</li>
+  <li>Water tanaman</li>
+</ul>
+
+<h3>Sabtu: Zona Bebas (Optional)</h3>
+<p>Jika rumah sudah terawat dengan baik sepanjang minggu, Sabtu bisa untuk:</p>
+<ul>
+  <li>Istirahat total</li>
+  <li>Proyek kecil (dekorasi, reorganize)</li>
+  <li>Keluar rumah (self-care time!)</li>
+</ul>
+
+<h3>Minggu: Reset untuk Minggu Depan (30 menit)</h3>
+<ul>
+  <li>Review jadwal minggu depan</li>
+  <li>Belanja kebutuhan cleaning</li>
+  <li>Plan area mana yang butuh perhatian ekstra</li>
+  <li>Persiapan mental untuk Senin 😊</li>
+</ul>
+
+<h2>Jadwal Bulanan: Deep Cleaning Ringan</h2>
+
+<p>Setiap minggu pertama bulan, sisihkan <strong>2 jam di akhir pekan</strong> untuk:</p>
+
+<details>
+  <summary>🧽 Deep Cleaning Checklist Bulanan</summary>
+  <ul>
+    <li><input type="checkbox"> Cuci tirai/gorden</li>
+    <li><input type="checkbox"> Vacuum di bawah furniture (yang biasanya terlewat)</li>
+    <li><input type="checkbox"> Bersihkan dalam kulkas</li>
+    <li><input type="checkbox"> Sikat keramik kamar mandi</li>
+    <li><input type="checkbox"> Bersihkan AC filter</li>
+    <li><input type="checkbox"> Cuci tempat sampah dengan sabun</li>
+  </ul>
+</details>
+
+<h2>Tools Wajib untuk Orang Sibuk</h2>
+
+<p>Investasi di peralatan yang membuat cleaning lebih cepat:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Peralatan</th>
+      <th>Menghemat Waktu</th>
+      <th>Rekomendasi</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Robot vacuum</strong></td>
+      <td>30 menit/hari</td>
+      <td>Xiaomi, Ecovacs, iRobot</td>
+    </tr>
+    <tr>
+      <td><strong>Spray mop</strong></td>
+      <td>15 menit</td>
+      <td>Vileda, Scotch-Brite</td>
+    </tr>
+    <tr>
+      <td><strong>Microfiber cloths</strong></td>
+      <td>10 menit</td>
+      <td>Beli banyak, cuci bersamaan</td>
+    </tr>
+    <tr>
+      <td><strong>All-purpose cleaner</strong></td>
+      <td>5 menit</td>
+      <td>1 produk untuk semua permukaan</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2>Template Jadwal Printable</h2>
+
+<p>Print dan tempel di kulkas:</p>
+
+<pre><code>┌─────────────────────────────────────┐
+│     JADWAL CLEANING ORANG SIBUK     │
+├─────────────────────────────────────┤
+│ HARIAN (15-20 menit total)          │
+│ ☑ Pagi: Rapikan tempat tidur        │
+│ ☑ Siang: Buang sampah               │
+│ ☑ Malam: Rapikan ruang tamu         │
+├─────────────────────────────────────┤
+│ MINGGUAN (20 menit/hari)            │
+│ ☑ Senin: Dapur                      │
+│ ☑ Selasa: Kamar mandi               │
+│ ☑ Rabu: Laundry                     │
+│ ☑ Kamis: Kamar tidur                │
+│ ☑ Jumat: Ruang tamu                 │
+│ ☑ Sabtu: ISTIRAHAT ⭐               │
+│ ☑ Minggu: Plan minggu depan         │
+├─────────────────────────────────────┤
+│ BULANAN (2 jam di akhir pekan)      │
+│ ☑ Deep cleaning ringan              │
+└─────────────────────────────────────┘</code></pre>
+
+<h2>FAQ</h2>
+
+<details>
+  <summary>Bagaimana kalau skip satu hari?</summary>
+  <p><strong>Jangan panik!</strong> Jadwal ini fleksibel. Kalau skip Senin, lanjutkan Selasa seperti biasa. Atau kalau punya waktu ekstra di akhir pekan, "kejar" yang tertinggal.</p>
+</details>
+
+<details>
+  <summary>Cocok untuk rumah dengan anak kecil?</summary>
+  <p>Anak kecil = lebih banyak kekacauan. Modifikasi: tambahkan 10 menit di siang hari untuk quick pickup. Libatkan anak dengan <strong>game cleaning</strong> (siapa paling cepat mengumpulkan mainan?)</p>
+</details>
+
+<details>
+  <summary>Bagaimana kalau tinggal sendiri di apartemen studio?</summary>
+  <p>Semakin mudah! Jadwal mingguan bisa dipersingkat. Fokus ke <strong>tidak meninggalkan jejak</strong>—setiap barang kembali ke tempatnya setelah digunakan.</p>
+</details>
+
+<h2>Kesimpulan</h2>
+
+<p>Orang sibuk juga berhak punya rumah bersih. Kuncinya bukan menghabiskan akhir pekan untuk bersih-bersih, tapi <strong>konsistensi harian yang minimalis</strong>.</p>
+
+<p>Dengan sistem ini, Anda:</p>
+<ul>
+  <li>Hanya menghabiskan <strong>1.5-2 jam per minggu</strong> untuk cleaning</li>
+  <li>Punya <strong>akhir pekan bebas</strong> untuk bersantai atau keluarga</li>
+  <li>Selalu datang ke rumah yang <strong>siap dan nyaman</strong></li>
+</ul>
+
+<div class="callout">
+  <span class="callout-icon">🎯</span>
+  <p><strong>Start small:</strong> Pilih <em>satu</em> kebiasaan dari jadwal ini dan jalankan selama seminggu. Setelah terbiasa, tambahkan yang berikutnya.</p>
+</div>
+
+<p>Kalau tetap kewalahan, ingat: <strong>NingClean</strong> punya paket weekly cleaning yang bisa mengambil alih jadwal Anda! 🏠⏰</p>
+
+<p><em>Sibuk bukan alasan, tapi tantangan untuk lebih pintar mengatur waktu. 💪</em></p>

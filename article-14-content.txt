@@ -1,0 +1,215 @@
+<p>Pandemi COVID-19 mengubah cara kita memandang kebersihan di tempat kerja. Yang dulu dianggap "nice to have" sekarang menjadi <strong>essential</strong>. Kebersihan bukan lagi soal estetika—ini tentang <strong>keselamatan dan kelangsungan bisnis</strong>.</p>
+
+<p>Banyak perusahaan yang sudah kembali ke kantor, tapi protokol hygiene yang diterapkan saat pandemi tetap perlu dilanjutkan. Bukan untuk panik, tapi untuk <strong>preventif dan produktif</strong>.</p>
+
+<h2>Mengapa Protokol Hygiene Tetap Penting?</h2>
+
+<p>Meskipun COVID sudah tidak se-urgent dulu, flu,感冒, dan penyakit contagious lainnya tetap ada. Dan di lingkungan kantor yang ramai:</p>
+
+<ul>
+  <li>Virus dan bakteri <strong>spread cepat</strong> di ruangan ber-AC</li>
+  <li>1 employee sakit bisa <strong>menularkan seluruh tim</strong></li>
+  <li>Absenteeism meningkat <strong>15-30%</strong> saat musim flu</li>
+  <li>Produktivitas turun jika team sakit</li>
+</ul>
+
+<div class="callout callout-info">
+  <span class="callout-icon">🦠</span>
+  <p><strong>CDC Recommendation:</strong> Encourage sick employees to stay home, promote vaccination, dan maintain good hygiene practices sebagai layer defense against respiratory illnesses.</p>
+</div>
+
+<h2>Protokol Harian yang Harus Diterapkan</h2>
+
+<h3>1. Sanitization Rutin Permukaan</h3>
+
+<p>Area yang sering disentuh harus di-disinfect minimal <strong>2x sehari</strong>:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Area</th>
+      <th>Frekuensi</th>
+      <th>Responsible</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Door handles</td>
+      <td>3-4x sehari</td>
+      <td>Cleaning staff</td>
+    </tr>
+    <tr>
+      <td>Elevator buttons</td>
+      <td>3-4x sehari</td>
+      <td>Cleaning staff</td>
+    </tr>
+    <tr>
+      <td>Keyboard &amp; mouse</td>
+      <td>2x sehari</td>
+      <td>Individual</td>
+    </tr>
+    <tr>
+      <td>Telepon &amp; headset</td>
+      <td>2x sehari</td>
+      <td>Individual</td>
+    </tr>
+    <tr>
+      <td>Remote meeting room</td>
+      <td>After each use</td>
+      <td>Last user</td>
+    </tr>
+    <tr>
+      <td>Pantry/kitchen appliances</td>
+      <td>After each use</td>
+      <td>Last user</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3>2. Hand Hygiene Station</h3>
+
+<p>Pastikan tersedia:</p>
+
+<ul>
+  <li><input type="checkbox"> <strong>Hand sanitizer</strong> di setiap entrance, meeting room, pantry</li>
+  <li><input type="checkbox"> <strong>Soap + tissue</strong> di semua bathroom</li>
+  <li><input type="checkbox"> <strong>Signage</strong> yang reminder untuk wash hands</li>
+</ul>
+
+<h3>3. Ventilasi dan Sirkulasi Udara</h3>
+
+<p>Udara yang bagus = spreading disease lebih sulit:</p>
+
+<ul>
+  <li>Buka jendela jika memungkinkan</li>
+  <li>Service AC secara berkala</li>
+  <li>Gunakan air purifier dengan HEPA filter</li>
+  <li>Check CO2 levels (indikator ventilasi)</li>
+</ul>
+
+<h2>Protokol Mingguan</h2>
+
+<ul>
+  <li><input type="checkbox"> Deep clean all restrooms</li>
+  <li><input type="checkbox"> Sanitize pantry dan kitchen area</li>
+  <li><input type="checkbox"> Vacuum dan mop all floors</li>
+  <li><input type="checkbox"> Clean air vents dan AC filters</li>
+  <li><input type="checkbox"> Replace hand towels dengan fresh ones</li>
+</ul>
+
+<h2>Protokol Bulanan</h2>
+
+<ul>
+  <li><input type="checkbox"> Deep sanitize seluruh kantor</li>
+  <li><input type="checkbox"> Professional fogging/disinfection</li>
+  <li><input type="checkbox"> Check dan replace air filters</li>
+  <li><input type="checkbox"> Audit hygiene supplies</li>
+  <li><input type="checkbox"> Review dan update protokol jika perlu</li>
+</ul>
+
+<h2>Checklist Implementasi untuk HR/Admin</h2>
+
+<details>
+  <summary>📋 Checklist Setup Protokol</summary>
+  <p><strong>Week 1 - Setup:</strong></p>
+  <ul>
+    <li><input type="checkbox"> Audit current cleaning practices</li>
+    <li><input type="checkbox"> Budget allocation untuk hygiene supplies</li>
+    <li><input type="checkbox"> Purchase hand sanitizers, soaps, tissues</li>
+    <li><input type="checkbox"> Pasang signage di critical areas</li>
+    <li><input type="checkbox"> Briefing ke cleaning staff tentang protokol baru</li>
+  </ul>
+  <p><strong>Week 2 - Training:</strong></p>
+  <ul>
+    <li><input type="checkbox"> Company-wide briefing tentang new normal hygiene</li>
+    <li><input type="checkbox"> Buat SOP dan tempel di visible areas</li>
+    <li><input type="checkbox"> Assign hygiene champion per department</li>
+  </ul>
+  <p><strong>Week 3-4 - Monitoring:</strong></p>
+  <ul>
+    <li><input type="checkbox"> Daily check supplies availability</li>
+    <li><input type="checkbox"> Weekly review compliance</li>
+    <li><input type="checkbox"> Collect feedback dari employees</li>
+  </ul>
+</details>
+
+<h2>Budget Checklist</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Item</th>
+      <th>Perkiraan Biaya/Bulan</th>
+      <th>Notes</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Hand sanitizer (10L/month)</td>
+      <td>Rp300-500rb</td>
+      <td>Berdasarkan 50 employees</td>
+    </tr>
+    <tr>
+      <td>Soap, tissue, paper towels</td>
+      <td>Rp200-400rb</td>
+      <td>Depends on usage</td>
+    </tr>
+    <tr>
+      <td>Disinfectant spray/wipes</td>
+      <td>Rp150-300rb</td>
+      <td>Untuk shared surfaces</td>
+    </tr>
+    <tr>
+      <td>Professional deep cleaning</td>
+      <td>Rp500rb-2jt</td>
+      <td>Monthly/bi-monthly</td>
+    </tr>
+    <tr>
+      <td>AC maintenance</td>
+      <td>Rp300-600rb</td>
+      <td>Quarterly service</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="callout callout-warning">
+  <span class="callout-icon">💰</span>
+  <p><strong>Total Budget:</strong> Rata-rata Rp1.5-4jt/bulan untuk kantor 50 orang. Ini adalah investasi yang jauh lebih murah dari kehilangan produktivitas karena sick leave massal.</p>
+</div>
+
+<h2>FAQ</h2>
+
+<details>
+  <summary>Apakah perlu fogging setiap minggu?</summary>
+  <p><strong>Tidak perlu.</strong> Fogging berguna setelah ada confirmed case atau monthly maintenance. Untuk daily protection, surface sanitization sudah cukup. Over-sanitizing bisa counterproductive (chemical exposure).</p>
+</details>
+
+<details>
+  <summary>Bagaimana kalau employee refuses to comply?</summary>
+  <p>Pertama, edukasi tentang <strong>why it matters</strong>. Kedua, buat kebijakan company yang jelas. Ketiga,lead by example dari management. Hygiene adalah <strong>collective responsibility</strong>, bukan individual choice yang affect others.</p>
+</details>
+
+<details>
+  <summary>Perlu mask mandate lagi?</summary>
+  <p>Untuk saat ini (2024), tidak必要 kecuali ada outbreak specific. Tapi encourage employees untuk <strong>stay home when sick</strong> dan mask up jika symptomatic adalah kebijakan yang masuk akal.</p>
+</details>
+
+<h2>Kesimpulan</h2>
+
+<p>Protokol hygiene new normal bukan soal takut—it's about being <strong>prepared dan responsible</strong>. Dengan investasi yang reasonable, perusahaan bisa:</p>
+
+<ul>
+  <li>Reduce sick days dan maintain productivity</li>
+  <li>Show employees they are valued through care</li>
+  <li>Build culture of health dan wellness</li>
+  <li>Be prepared untuk future health emergencies</li>
+</ul>
+
+<div class="callout">
+  <span class="callout-icon">🏢</span>
+  <p><strong>Action:</strong> Review protokol kesehatan kantor Anda sekarang. Apakah masih relevan? Apakah sudah ada budget untuk sustain? Jika tidak, sekarang adalah waktu yang tepat untuk upgrade.</p>
+</div>
+
+<p><strong>NingClean</strong> menyediakan <strong>commercial cleaning packages</strong> yang mencakup daily, weekly, dan monthly protocols. Kami bisa bantu设计和 implement protokol hygiene yang sesuai untuk kebutuhan kantor Anda. Hubungi kami untuk konsultasi! 🏢✨</p>
+
+<p><em>Kantor sehat = Bisnis sehat = Masyarakat sehat. 💚</em></p>

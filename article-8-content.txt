@@ -1,0 +1,219 @@
+<p>Sedang mempertimbangkan beli sofa baru atau bingung cara merawat sofa yang sudah ada? Memahami perbedaan perawatan antara <strong>sofa fabric</strong> dan <strong>sofa kulit</strong> adalah kunci untuk menjaga furniture Anda tetap prima bertahun-tahun.</p>
+
+<p>Sayangnya, banyak pemilik sofa yang salah treatment—menggunakan pembersih fabric di kulit, atau sebaliknya. Hasilnya? Kerusakan permanen yang sebenarnya bisa dihindari.</p>
+
+<h2>Fabric vs Kulit: Karakteristik Dasar</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Aspek</th>
+      <th>Sofa Fabric</th>
+      <th>Sofa Kulit</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Porositas</strong></td>
+      <td>Menyerap cairan &amp; noda cepat</td>
+      <td>Tahan air, tahan noda</td>
+    </tr>
+    <tr>
+      <td><strong>Sensitif terhadap</strong></td>
+      <td>Kelembaban, debu, tungau</td>
+      <td>Keringat, sinar UV, minyak</td>
+    </tr>
+    <tr>
+      <td><strong>Rentan</strong></td>
+      <td>Noda menetap, pudar</td>
+      <td>Retak, mengelupas, mengeras</td>
+    </tr>
+    <tr>
+      <td><strong>Cocok untuk</strong></td>
+      <td>Rumah dengan anak/anabul</td>
+      <td>Area formal, kantor</td>
+    </tr>
+    <tr>
+      <td><strong>Harga maintenance</strong></td>
+      <td>Lebih sering, lebih murah</td>
+      <td>Jarang, tapi lebih mahal</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2>Perawatan Sofa Fabric</h2>
+
+<h3>Keunggulan Fabric:</h3>
+<ul>
+  <li>Lebih lembut dan nyaman</li>
+  <li>Banyak pilihan warna &amp; motif</li>
+  <li>Tidak panas saat duduk lama</li>
+  <li>Harga lebih terjangkau</li>
+</ul>
+
+<h3>Jadwal Perawatan Fabric:</h3>
+
+<details>
+  <summary>📅 Harian - 5 menit</summary>
+  <ul>
+    <li>Lap debu dengan kering microfiber</li>
+    <li>Rapikan bantal dan selimut</li>
+    <li>Cek tumpahan &amp; bersihkan segera jika ada</li>
+  </ul>
+</details>
+
+<details>
+  <summary>📅 Mingguan - 15 menit</summary>
+  <ul>
+    <li>Vacuum seluruh permukaan (termasuk celah)</li>
+    <li>Plump bantal (pukul-pukul agar tetap fluffy)</li>
+    <li>Rotate cushion (balik posisi)</li>
+  </ul>
+</details>
+
+<details>
+  <summary>📅 Bulanan - 30 menit</summary>
+  <ul>
+    <li>Deep vacuum di bawah cushion</li>
+    <li>Spot clean noda ringan</li>
+    <li>Cuci sarung bantal (jika removable)</li>
+  </ul>
+</details>
+
+<div class="callout callout-info">
+  <span class="callout-icon">🧴</span>
+  <p><strong>Pembersih Aman untuk Fabric:</strong> Campuran 1 cup air hangat + 1/4 tsp sabun cuci piring mild. Tes di area tersembunyi dulu!</p>
+</div>
+
+<h2>Perawatan Sofa Kulit</h2>
+
+<h3>Keunggulan Kulit:</h3>
+<ul>
+  <li>Tahan lama (bisa bertahan 10-20 tahun)</li>
+  <li>Makin lama makin bagus (patina)</li>
+  <li>Mudah dibersihkan dari tumpahan</li>
+  <li>Tampilan premium &amp; elegan</li>
+</ul>
+
+<h3>Jadwal Perawatan Kulit:</h3>
+
+<details>
+  <summary>📅 Harian - 2 menit</summary>
+  <ul>
+    <li>Lap dengan kain kering lembut</li>
+    <li>Hindari duduk dengan pakaian basah</li>
+  </ul>
+</details>
+
+<details>
+  <summary>📅 Mingguan - 10 menit</summary>
+  <ul>
+    <li>Lap dengan kain sedikit lembab (air murni)</li>
+    <li>Keringkan dengan kain kering</li>
+    <li>Jauhkan dari sinar matahari langsung</li>
+  </ul>
+</details>
+
+<details>
+  <summary>📅 3 Bulanan - 30 menit</summary>
+  <ul>
+    <li>Bersihkan dengan leather cleaner khusus</li>
+    <li>Apply leather conditioner</li>
+    <li>Cek retak atau kerusakan awal</li>
+  </ul>
+</details>
+
+<div class="callout callout-warning">
+  <span class="callout-icon">⚠️</span>
+  <p><strong>JANGAN pernah gunakan:</strong> Alkohol, cuka, ammonia, atau pembersih all-purpose di sofa kulit. Bisa merusak finishing dan mengeringkan kulit!</p>
+</div>
+
+<h2>Do's &amp; Don'ts Comparison</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Situasi</th>
+      <th>✅ DO (Fabric)</th>
+      <th>❌ DON'T (Fabric)</th>
+      <th>✅ DO (Kulit)</th>
+      <th>❌ DON'T (Kulit)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Noda tumpahan</td>
+      <td>Blot segera dengan kain kering</td>
+      <td>Jangan digosok</td>
+      <td>Lap dengan kain lembab</td>
+      <td>Jangan biarkan basah</td>
+    </tr>
+    <tr>
+      <td>Pembersihan rutin</td>
+      <td>Vacuum dengan brush attachment</td>
+      <td>Jangan terlalu keras</td>
+      <td>Lap dengan kain microfiber</td>
+      <td>Jangan abrasive cleaner</td>
+    </tr>
+    <tr>
+      <td>Pengharum</td>
+      <td>Fabric refresher spray</td>
+      <td>Jangan terlalu basah</td>
+      <td>Leather conditioner wangi</td>
+      <td>Jangan semprot langsung</td>
+    </tr>
+    <tr>
+      <td>Posisi</td>
+      <td>Hindari sinar matahari</td>
+      <td>Jangan dekat heat source</td>
+      <td>Jauh dari jendela</td>
+      <td>Jangan radiators/dehumidifiers</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2>Kapan Pindah ke Profesional?</h2>
+
+<p><strong>Sofa Fabric:</strong></p>
+<ul>
+  <li>Setiap 6-12 bulan untuk deep extraction cleaning</li>
+  <li>Jika ada bau persisten (tungau, hewan)</li>
+  <li>Noda besar yang tidak bisa dihilangkan sendiri</li>
+</ul>
+
+<p><strong>Sofa Kulit:</strong></p>
+<ul>
+  <li>Setiap 12-18 bulan untuk professional conditioning</li>
+  <li>Jika mulai kering/retak</li>
+  <li>Warna pudar atau mengelupas</li>
+</ul>
+
+<h2>FAQ</h2>
+
+<details>
+  <summary>Bisa pakai vacuum di sofa kulit?</summary>
+  <p>Bisa, tapi pakai <strong>brush attachment yang lembut</strong> dan suction yang tidak terlalu kuat. Hindari bagian yang sudah retak.</p>
+</details>
+
+<details>
+  <summary>Sofa kulit sintetis beda perawatannya?</summary>
+  <p>Sintetis (bonded/PVC) lebih tahan air tapi lebih cepat retak. Perawatan mirip, tapi lebih sering pakai conditioner untuk mencegah cracking.</p>
+</details>
+
+<details>
+  <summary>Sofa fabric apa yang paling tahan noda?</summary>
+  <p>Microfiber dan canvas berlapis (treated). Hindari velvet dan suede untuk area high-traffic.</p>
+</details>
+
+<h2>Kesimpulan</h2>
+
+<p>Baik fabric maupun kulit, keduanya bisa bertahan lama dengan <strong>perawatan yang tepat</strong>. Pilih berdasarkan lifestyle Anda: fabric untuk kenyamanan dan budget, kulit untuk durability dan tampilan elegan.</p>
+
+<div class="callout">
+  <span class="callout-icon">💡</span>
+  <p><strong>Golden Rule:</strong> Konsistensi lebih penting dari intensitas. Cleaning 10 menit rutin lebih baik daripada 3 jam sebulan sekali.</p>
+</div>
+
+<p>Bingung merawat sofa Anda? <strong>NingClean</strong> punya paket perawatan khusus untuk fabric &amp; leather sofa dengan produk yang aman dan efektif! 🛋️✨</p>
+
+<p><em>Sofa yang dirawat = Investasi yang terjaga. 🏠</em></p>
