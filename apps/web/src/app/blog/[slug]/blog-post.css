@@ -1,7 +1,212 @@
-/* Blog Post Dark Mode Styles */
-/* Force override any inline styles from database content */
+/* Blog Post Base Styles + Dark Mode Overrides */
 
-/* Dark mode - force all content text to be readable - ULTRA AGGRESSIVE */
+/* ============================================
+   BASE STYLES - Spacing & Typography
+   ============================================ */
+
+.article-html-content {
+  line-height: 1.8;
+  color: inherit;
+}
+
+/* Headings */
+.article-html-content h1,
+.article-html-content h2,
+.article-html-content h3,
+.article-html-content h4,
+.article-html-content h5,
+.article-html-content h6 {
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.article-html-content h1 {
+  font-size: 2rem;
+  margin-top: 0;
+}
+
+.article-html-content h2 {
+  font-size: 1.75rem;
+}
+
+.article-html-content h3 {
+  font-size: 1.5rem;
+}
+
+.article-html-content h4 {
+  font-size: 1.25rem;
+}
+
+.article-html-content h5,
+.article-html-content h6 {
+  font-size: 1.125rem;
+}
+
+/* Paragraphs */
+.article-html-content p {
+  margin-bottom: 1.25rem;
+  margin-top: 0;
+}
+
+/* Lists */
+.article-html-content ul,
+.article-html-content ol {
+  margin-bottom: 1.25rem;
+  margin-top: 0;
+  padding-left: 1.5rem;
+}
+
+.article-html-content li {
+  margin-bottom: 0.5rem;
+}
+
+.article-html-content ul li {
+  list-style-type: disc;
+}
+
+.article-html-content ol li {
+  list-style-type: decimal;
+}
+
+/* Nested lists */
+.article-html-content ul ul,
+.article-html-content ol ol,
+.article-html-content ul ol,
+.article-html-content ol ul {
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+/* Blockquotes */
+.article-html-content blockquote {
+  margin: 1.5rem 0;
+  padding: 1rem 1.5rem;
+  border-left: 4px solid #10b981;
+  background-color: #f8fafc;
+  border-radius: 0 0.5rem 0.5rem 0;
+}
+
+/* Code */
+.article-html-content code {
+  padding: 0.2rem 0.4rem;
+  border-radius: 0.25rem;
+  font-size: 0.875em;
+  background-color: #f1f5f9;
+}
+
+.article-html-content pre {
+  padding: 1rem;
+  border-radius: 0.5rem;
+  overflow-x: auto;
+  margin: 1.25rem 0;
+}
+
+.article-html-content pre code {
+  padding: 0;
+  background: none;
+}
+
+/* Tables */
+.article-html-content table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.5rem 0;
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.article-html-content th,
+.article-html-content td {
+  padding: 0.75rem 1rem;
+  text-align: left;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.article-html-content th {
+  font-weight: 600;
+  background-color: #f8fafc;
+}
+
+.article-html-content tr:last-child td {
+  border-bottom: none;
+}
+
+/* Horizontal rule */
+.article-html-content hr {
+  margin: 2rem 0;
+  border: 0;
+  border-top: 1px solid #e2e8f0;
+}
+
+/* Images */
+.article-html-content img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 0.5rem;
+  margin: 1.25rem 0;
+}
+
+/* Links */
+.article-html-content a {
+  color: #059669;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.article-html-content a:hover {
+  color: #047857;
+}
+
+/* Strong & Emphasis */
+.article-html-content strong,
+.article-html-content b {
+  font-weight: 600;
+}
+
+/* Checkboxes in content */
+.article-html-content input[type="checkbox"] {
+  margin-right: 0.5rem;
+  width: 1rem;
+  height: 1rem;
+  vertical-align: middle;
+}
+
+/* Div containers with backgrounds */
+.article-html-content > div {
+  margin: 1.5rem 0;
+}
+
+/* Cards/boxes from HTML content */
+.article-html-content .bg-white,
+.article-html-content [class*="bg-"] {
+  padding: 1.5rem;
+  border-radius: 0.75rem;
+  margin: 1.5rem 0;
+}
+
+/* Grid layouts */
+.article-html-content .grid {
+  gap: 1rem;
+  margin: 1.5rem 0;
+}
+
+/* First child no margin top */
+.article-html-content > *:first-child {
+  margin-top: 0;
+}
+
+/* Last child no margin bottom */
+.article-html-content > *:last-child {
+  margin-bottom: 0;
+}
+
+/* ============================================
+   DARK MODE OVERRIDES
+   ============================================ */
+
+/* Dark mode - force all content text to be readable */
 .dark .article-html-content,
 .dark .article-html-content *,
 .dark .article-html-content *::before,
@@ -35,7 +240,7 @@
   color: #f8fafc !important; /* slate-50 */
 }
 
-/* Links */
+/* Links in dark mode */
 .dark .article-html-content a,
 .dark .article-html-content a * {
   color: #34d399 !important; /* emerald-400 */
@@ -46,7 +251,7 @@
   color: #6ee7b7 !important; /* emerald-300 */
 }
 
-/* Bold/Strong */
+/* Bold/Strong in dark mode */
 .dark .article-html-content strong,
 .dark .article-html-content b,
 .dark .article-html-content strong *,
@@ -54,7 +259,7 @@
   color: #f8fafc !important; /* slate-50 */
 }
 
-/* Emphasis/Italic */
+/* Emphasis/Italic in dark mode */
 .dark .article-html-content em,
 .dark .article-html-content i,
 .dark .article-html-content em *,
@@ -62,39 +267,33 @@
   color: #94a3b8 !important; /* slate-400 */
 }
 
-/* Lists */
+/* Lists in dark mode */
 .dark .article-html-content ul,
 .dark .article-html-content ol,
 .dark .article-html-content li {
   color: #cbd5e1 !important;
 }
 
-/* Override any inline background colors */
-.dark .article-html-content [style*="background"],
-.dark .article-html-content [style*="background-color"] {
-  background-color: rgba(30, 41, 59, 0.5) !important;
-  background-image: none !important;
+/* Blockquotes in dark mode */
+.dark .article-html-content blockquote,
+.dark .article-html-content blockquote * {
+  background-color: rgba(6, 6, 14, 0.5) !important;
+  border-left-color: #10b981 !important;
+  color: #cbd5e1 !important;
 }
 
-/* White backgrounds */
-.dark .article-html-content [style*="background:#fff"],
-.dark .article-html-content [style*="background: #fff"],
-.dark .article-html-content [style*="background-color:#fff"],
-.dark .article-html-content [style*="background-color: #fff"],
-.dark .article-html-content [style*="background:rgb(255"],
-.dark .article-html-content [style*="background-color:rgb(255"] {
-  background-color: rgba(15, 23, 42, 0.8) !important;
+/* Code elements in dark mode */
+.dark .article-html-content code {
+  background-color: #1e293b !important;
+  color: #f472b6 !important;
 }
 
-/* Light gray backgrounds */
-.dark .article-html-content [style*="background:#f"],
-.dark .article-html-content [style*="background: #f"],
-.dark .article-html-content [style*="background-color:#f"],
-.dark .article-html-content [style*="background-color: #f"] {
-  background-color: rgba(30, 41, 59, 0.6) !important;
+.dark .article-html-content pre {
+  background-color: #0f172a !important;
+  color: #e2e8f0 !important;
 }
 
-/* Tables */
+/* Tables in dark mode */
 .dark .article-html-content table,
 .dark .article-html-content table * {
   background-color: rgba(30, 41, 59, 0.4) !important;
@@ -112,7 +311,36 @@
   color: #cbd5e1 !important;
 }
 
-/* Progress trackers, checklists, cards */
+.dark .article-html-content tr:last-child td {
+  border-bottom: none;
+}
+
+/* Override any inline background colors in dark mode */
+.dark .article-html-content [style*="background"],
+.dark .article-html-content [style*="background-color"] {
+  background-color: rgba(30, 41, 59, 0.5) !important;
+  background-image: none !important;
+}
+
+/* White backgrounds in dark mode */
+.dark .article-html-content [style*="background:#fff"],
+.dark .article-html-content [style*="background: #fff"],
+.dark .article-html-content [style*="background-color:#fff"],
+.dark .article-html-content [style*="background-color: #fff"],
+.dark .article-html-content [style*="background:rgb(255"],
+.dark .article-html-content [style*="background-color:rgb(255"] {
+  background-color: rgba(15, 23, 42, 0.8) !important;
+}
+
+/* Light gray backgrounds in dark mode */
+.dark .article-html-content [style*="background:#f"],
+.dark .article-html-content [style*="background: #f"],
+.dark .article-html-content [style*="background-color:#f"],
+.dark .article-html-content [style*="background-color: #f"] {
+  background-color: rgba(30, 41, 59, 0.6) !important;
+}
+
+/* Progress trackers, checklists, cards in dark mode */
 .dark .article-html-content [class*="progress"],
 .dark .article-html-content [class*="tracker"],
 .dark .article-html-content [class*="checklist"],
@@ -121,7 +349,7 @@
   border-color: #334155 !important;
 }
 
-/* Numbered sections/badges */
+/* Numbered sections/badges in dark mode */
 .dark .article-html-content [class*="badge"],
 .dark .article-html-content [class*="number"],
 .dark .article-html-content [class*="step"] {
@@ -130,31 +358,12 @@
   color: #6ee7b7 !important;
 }
 
-/* Blockquotes */
-.dark .article-html-content blockquote,
-.dark .article-html-content blockquote * {
-  background-color: rgba(6, 6, 14, 0.5) !important;
-  border-left-color: #10b981 !important;
-  color: #cbd5e1 !important;
-}
-
-/* Code elements */
-.dark .article-html-content code {
-  background-color: #1e293b !important;
-  color: #f472b6 !important;
-}
-
-.dark .article-html-content pre {
-  background-color: #0f172a !important;
-  color: #e2e8f0 !important;
-}
-
-/* Horizontal rules */
+/* Horizontal rules in dark mode */
 .dark .article-html-content hr {
   border-color: #334155 !important;
 }
 
-/* Summary/conclusion boxes */
+/* Summary/conclusion boxes in dark mode */
 .dark .article-html-content [class*="summary"],
 .dark .article-html-content [class*="conclusion"],
 .dark .article-html-content [class*="highlight"] {
@@ -162,7 +371,7 @@
   border-color: #334155 !important;
 }
 
-/* Specific override for white backgrounds in content divs */
+/* Specific override for white backgrounds in content divs (dark mode) */
 .dark .article-html-content div[style*="background-color: white"],
 .dark .article-html-content div[style*="background-color:white"],
 .dark .article-html-content div[style*="background: white"],
@@ -170,7 +379,7 @@
   background-color: rgba(30, 41, 59, 0.5) !important;
 }
 
-/* Override inline text colors */
+/* Override inline text colors in dark mode */
 .dark .article-html-content span[style*="color:#000"],
 .dark .article-html-content span[style*="color: #000"],
 .dark .article-html-content span[style*="color:black"],
@@ -180,18 +389,18 @@
   color: #cbd5e1 !important;
 }
 
-/* Paragraphs with inline styles */
+/* Paragraphs with inline styles in dark mode */
 .dark .article-html-content p[style] {
   color: #cbd5e1 !important;
 }
 
-/* Make sure checkboxes are visible */
+/* Make sure checkboxes are visible in dark mode */
 .dark .article-html-content input[type="checkbox"] {
   background-color: #1e293b !important;
   border-color: #475569 !important;
 }
 
-/* Any element with class containing bg-white */
+/* Any element with class containing bg-white in dark mode */
 .dark .article-html-content [class*="bg-white"],
 .dark .article-html-content [class*="bg-gray-50"],
 .dark .article-html-content [class*="bg-slate-50"] {
