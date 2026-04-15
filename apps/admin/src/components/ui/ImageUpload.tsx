@@ -191,6 +191,10 @@ export function ImageUpload({
       setLocalPreview(null);
       setSelectedFile(null);
       
+      // Log compression info
+      console.log('[ImageUpload] Compressed:', data.data.compression, 'saved');
+      console.log('[ImageUpload] Original:', data.data.originalSize, '→ WebP:', data.data.size);
+      
       onChange(data.data.url);
       onFileSelect?.(null);
       return data.data.url;

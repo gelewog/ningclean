@@ -147,9 +147,12 @@ export default function BlogPostPage() {
           <div className="container-fluid max-w-4xl">
             <div className="relative rounded-2xl overflow-hidden h-64 md:h-96 shadow-2xl shadow-slate-200/50 dark:shadow-slate-900/50">
               <img
-                src={post.coverImage.startsWith('http') ? post.coverImage : `${process.env.NEXT_PUBLIC_API_URL?.replace('/api', '') || 'http://localhost:4000'}${post.coverImage}`}
+                src={post.coverImage.startsWith('http') 
+                  ? post.coverImage 
+                  : `${process.env.NEXT_PUBLIC_API_URL?.replace('/api', '') || 'http://localhost:4000'}${post.coverImage}`}
                 alt={post.title}
                 className="object-cover w-full h-full"
+                loading="eager"
               />
             </div>
           </div>

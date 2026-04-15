@@ -11,8 +11,9 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { Response } from 'express';
-import { existsSync, mkdirSync } from 'fs';
+import { existsSync, mkdirSync, promises as fs } from 'fs';
 import { extname, join } from 'path';
+import * as sharp from 'sharp';
 
 const UPLOAD_DIR = join(process.cwd(), 'uploads');
 
@@ -27,6 +28,11 @@ folders.forEach((folder) => {
   const folderPath = join(UPLOAD_DIR, folder);
   if (!existsSync(folderPath)) {
     mkdirSync(folderPath, { recursive: true });
+  }
+  // Create thumbs subdirectory
+  const thumbsPath = join(folderPath, 'thumbs');
+  if (!existsSync(thumbsPath)) {
+    mkdirSync(thumbsPath, { recursive: true });
   }
 });
 
@@ -74,20 +80,62 @@ export class UploadController {
       throw new BadRequestException('No file uploaded');
     }
 
-    const fileUrl = `/api/upload/${folder}/${file.filename}`;
+    const originalPath = join(UPLOAD_DIR, folder, file.filename);
+    const baseName = file.filename.replace(extname(file.filename), '');
+    const webpFilename = `${baseName}.webp`;
+    const webpPath = join(UPLOAD_DIR, folder, webpFilename);
+    const thumbPath = join(UPLOAD_DIR, folder, 'thumbs', webpFilename);
 
-    return {
-      success: true,
-      message: 'File uploaded successfully',
-      data: {
-        filename: file.filename,
-        originalName: file.originalname,
-        size: file.size,
-        mimetype: file.mimetype,
-        url: fileUrl,
-        folder: folder,
-      },
-    };
+    try {
+      // Convert original to WebP (quality 85 for good balance)
+      await sharp(originalPath)
+        .webp({ quality: 85, effort: 6 })
+        .toFile(webpPath);
+
+      // Generate thumbnail (300x200, cover fit)
+      await sharp(originalPath)
+        .resize(300, 200, { fit: 'cover', position: 'center' })
+        .webp({ quality: 80, effort: 4 })
+        .toFile(thumbPath);
+
+      // Delete original file (keep only WebP)
+      await fs.unlink(originalPath);
+
+      // Get file stats
+      const webpStats = await fs.stat(webpPath);
+      const thumbStats = await fs.stat(thumbPath);
+
+      const fileUrl = `/api/upload/${folder}/${webpFilename}`;
+      const thumbUrl = `/api/upload/${folder}/thumbs/${webpFilename}`;
+
+      // Calculate savings
+      const savings = ((file.size - webpStats.size) / file.size * 100).toFixed(1);
+
+      return {
+        success: true,
+        message: 'File uploaded and optimized successfully',
+        data: {
+          filename: webpFilename,
+          originalName: file.originalname,
+          originalSize: file.size,
+          size: webpStats.size,
+          thumbnailSize: thumbStats.size,
+          compression: `${savings}%`,
+          mimetype: 'image/webp',
+          url: fileUrl,
+          thumbnailUrl: thumbUrl,
+          folder: folder,
+        },
+      };
+    } catch (error) {
+      // Cleanup on error
+      try {
+        if (existsSync(originalPath)) await fs.unlink(originalPath);
+        if (existsSync(webpPath)) await fs.unlink(webpPath);
+        if (existsSync(thumbPath)) await fs.unlink(thumbPath);
+      } catch {}
+      throw new BadRequestException('Failed to process image: ' + error.message);
+    }
   }
 
   @Get(':folder/:filename')
@@ -100,6 +148,21 @@ export class UploadController {
     
     if (!existsSync(filePath)) {
       throw new BadRequestException('File not found');
+    }
+
+    res.sendFile(filePath);
+  }
+
+  @Get(':folder/thumbs/:filename')
+  async serveThumbnail(
+    @Param('folder') folder: string,
+    @Param('filename') filename: string,
+    @Res() res: Response,
+  ) {
+    const filePath = join(UPLOAD_DIR, folder, 'thumbs', filename);
+    
+    if (!existsSync(filePath)) {
+      throw new BadRequestException('Thumbnail not found');
     }
 
     res.sendFile(filePath);
