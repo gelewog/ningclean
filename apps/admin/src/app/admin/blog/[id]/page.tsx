@@ -111,10 +111,10 @@ export default function EditBlogPostPage() {
       }
 
       const tags = formData.tags.split(',').map(t => t.trim()).filter(Boolean)
-      
+
       // Konversi status ke publishedAt untuk database
       const publishedAt = formData.status === 'published' ? new Date().toISOString() : null
-      
+
       await updateBlogPost(postId, {
         title: formData.title,
         content: formData.content,
@@ -194,8 +194,8 @@ export default function EditBlogPostPage() {
               <Trash2 className="w-4 h-4 mr-2" />
               Hapus
             </Button>
-            <Button 
-              variant="outline" 
+            <Button
+              variant="outline"
               onClick={() => {
                 // Simpan draft ke localStorage untuk preview
                 const draftData = {
@@ -207,11 +207,12 @@ export default function EditBlogPostPage() {
                   tags: formData.tags.split(',').map(t => t.trim()).filter(Boolean),
                   readTime: 5,
                   createdAt: new Date().toISOString(),
-                  slug: post?.slug || '',
+                  slug: post?.slug || 'draft-preview',
                   category: categories.find(c => c.id === formData.categoryId),
                 }
                 localStorage.setItem('blog_draft_preview', JSON.stringify(draftData))
-                window.open('/admin/blog/preview', '_blank')
+                // Buka preview menggunakan template blog web (apps/web/blog/[slug])
+                window.open('/blog/draft-preview/preview', '_blank')
               }}
             >
               <Eye className="w-4 h-4 mr-2" />
