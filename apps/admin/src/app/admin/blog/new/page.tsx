@@ -3,7 +3,8 @@
 import * as React from 'react'
 import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
-import { ArrowLeft, Save, Image as ImageIcon, Eye, Star, FolderOpen, ChevronRight, X } from 'lucide-react'
+import { ArrowLeft, Save, Eye, Star, FolderOpen, ChevronRight } from 'lucide-react'
+import { ImageUpload, useImageUpload } from '@/components/ui/ImageUpload'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
@@ -39,6 +40,8 @@ export default function NewBlogPostPage() {
     isFeatured: false,
   })
   const [errors, setErrors] = React.useState<Partial<BlogFormData>>({})
+  const [selectedCoverFile, setSelectedCoverFile] = React.useState<File | null>(null)
+  const { uploadImage } = useImageUpload()
 
   React.useEffect(() => {
     fetchCategories()
@@ -68,11 +71,26 @@ export default function NewBlogPostPage() {
 
     setLoading(true)
     try {
+      // Upload cover image jika ada file yang dipilih
+      let coverImageUrl = formData.coverImage
+      if (selectedCoverFile) {
+        const uploadedUrl = await uploadImage(selectedCoverFile, 'gallery')
+        if (uploadedUrl) {
+          coverImageUrl = uploadedUrl
+        } else {
+          toast.error('Gagal upload cover image')
+          setLoading(false)
+          return
+        }
+      }
+
       const tags = formData.tags.split(',').map(t => t.trim()).filter(Boolean)
       await createBlogPost({
         ...formData,
+        coverImage: coverImageUrl,
         tags,
       })
+      setSelectedCoverFile(null)
       toast.success('Post berhasil dibuat')
       router.push('/admin/blog')
     } catch (error: any) {
@@ -162,35 +180,15 @@ export default function NewBlogPostPage() {
                 <h3 className="font-semibold text-gray-900 dark:text-white">Cover Image</h3>
               </div>
               <div className="p-6">
-                {formData.coverImage ? (
-                  <div className="relative rounded-xl overflow-hidden">
-                    <img
-                      src={formData.coverImage}
-                      alt="Cover"
-                      className="w-full h-64 object-cover"
-                    />
-                    <button
-                      onClick={() => setFormData({ ...formData, coverImage: '' })}
-                      className="absolute top-3 right-3 p-2 bg-black/50 rounded-lg text-white hover:bg-black/70 transition-colors"
-                    >
-                      <X className="w-4 h-4" />
-                    </button>
-                  </div>
-                ) : (
-                  <div
-                    onClick={() => setFormData({ ...formData, coverImage: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800' })}
-                    className="border-2 border-dashed border-gray-200 dark:border-slate-700 rounded-xl p-12 text-center cursor-pointer hover:border-emerald-500 hover:bg-emerald-50/50 dark:hover:bg-emerald-900/20 transition-colors"
-                  >
-                    <ImageIcon className="w-12 h-12 text-gray-300 dark:text-slate-600 mx-auto mb-3" />
-                    <p className="text-gray-500 dark:text-slate-400">Klik untuk set cover image (demo)</p>
-                    <p className="text-xs text-gray-400 dark:text-slate-500 mt-1">atau paste URL image</p>
-                  </div>
-                )}
-                <Input
-                  placeholder="Atau paste URL gambar..."
+                <ImageUpload
+                  folder="gallery"
                   value={formData.coverImage}
-                  onChange={(e) => setFormData({ ...formData, coverImage: e.target.value })}
-                  className="mt-3 bg-gray-50 dark:bg-slate-800 border-gray-200 dark:border-slate-700"
+                  onChange={(url) => setFormData({ ...formData, coverImage: url })}
+                  onFileSelect={(file) => setSelectedCoverFile(file)}
+                  autoUpload={false}
+                  label=""
+                  placeholder="https://... atau paste URL gambar"
+                  previewClassName="h-64 w-full"
                 />
               </div>
             </motion.div>
