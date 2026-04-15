@@ -146,13 +146,10 @@ export default function BlogPostPage() {
         <section className="py-8 -mt-6 relative z-10">
           <div className="container-fluid max-w-4xl">
             <div className="relative rounded-2xl overflow-hidden h-64 md:h-96 shadow-2xl shadow-slate-200/50 dark:shadow-slate-900/50">
-              <Image
-                src={post.coverImage}
+              <img
+                src={post.coverImage.startsWith('http') ? post.coverImage : `${process.env.NEXT_PUBLIC_API_URL?.replace('/api', '') || 'http://localhost:4000'}${post.coverImage}`}
                 alt={post.title}
-                fill
-                className="object-cover"
-                priority
-                unoptimized={post.coverImage.startsWith('http')}
+                className="object-cover w-full h-full"
               />
             </div>
           </div>
