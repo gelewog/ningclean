@@ -66,6 +66,15 @@ export default function BlogPage() {
     post.slug.toLowerCase().includes(search.toLowerCase())
   )
 
+  // Helper untuk mendapatkan URL thumbnail
+  const getThumbnailUrl = (coverImage: string | undefined): string => {
+    if (!coverImage) return '';
+    const baseUrl = process.env.NEXT_PUBLIC_API_URL?.replace('/api', '') || 'http://localhost:4000';
+    const fullUrl = coverImage.startsWith('http') ? coverImage : `${baseUrl}${coverImage}`;
+    // Ganti path ke thumbs
+    return fullUrl.replace('/gallery/', '/gallery/thumbs/');
+  };
+
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-slate-900 text-gray-900 dark:text-white">
       {/* Topbar */}
@@ -172,9 +181,7 @@ export default function BlogPage() {
                     <div className="h-16 w-24 rounded-lg overflow-hidden bg-gray-100 dark:bg-slate-800 flex-shrink-0">
                       {post.coverImage ? (
                         <img
-                          src={post.coverImage.startsWith('http') 
-                            ? post.coverImage 
-                            : `${process.env.NEXT_PUBLIC_API_URL?.replace('/api', '') || 'http://localhost:4000'}${post.coverImage}`}
+                          src={getThumbnailUrl(post.coverImage)}
                           alt={post.title}
                           className="h-full w-full object-cover"
                           loading="lazy"
