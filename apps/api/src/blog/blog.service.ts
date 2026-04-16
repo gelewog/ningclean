@@ -18,6 +18,7 @@ export class BlogService {
 
     // Category filter
     if (category) {
+      console.log('[BlogService] Category filter:', category);
       where.category = {
         OR: [
           { slug: category },

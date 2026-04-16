@@ -158,6 +158,8 @@ export default function BlogPostPage() {
       
       setRelatedLoading(true);
       console.log('[Related Posts] Fetching for category:', post.category.slug);
+      console.log('[Related Posts] Current post ID:', post.id);
+      console.log('[Related Posts] Current post category ID:', post.category.id);
       
       try {
         // Fetch posts from same category, excluding current post
@@ -167,9 +169,16 @@ export default function BlogPostPage() {
         });
         
         console.log('[Related Posts] API Response:', response);
+        console.log('[Related Posts] Response structure:', {
+          hasData: !!response.data,
+          isArray: Array.isArray(response),
+          dataType: typeof response,
+          keys: response?.data ? Object.keys(response.data) : 'N/A'
+        });
         
         const posts = response.data || response;
         console.log('[Related Posts] Posts found:', posts.length);
+        console.log('[Related Posts] All posts:', posts.map((p: BlogPost) => ({ id: p.id, title: p.title })));
         
         const filtered = posts.filter((p: BlogPost) => p.id !== post.id).slice(0, 3);
         console.log('[Related Posts] Filtered posts:', filtered.length);
