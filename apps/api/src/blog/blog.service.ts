@@ -35,7 +35,7 @@ export class BlogService {
       this.prisma.blogPost.findMany({
         where,
         orderBy: { publishedAt: 'desc' },
-        skip,
+        ...(skip > 0 && { skip }),
         take,
         select: {
           id: true,
