@@ -22,7 +22,6 @@ export class BlogService {
       where.category = {
         OR: [
           { slug: category },
-          { name: { equals: category, mode: 'insensitive' } },
         ],
       };
     }
