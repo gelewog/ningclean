@@ -224,12 +224,13 @@ export default function BlogPostPage() {
             {/* Tags */}
             <div className="flex flex-wrap gap-2 mb-4">
               {post.tags?.map((tag, idx) => (
-                <span 
-                  key={idx} 
-                  className="px-3 py-1 bg-white/20 backdrop-blur-sm rounded-full text-xs font-medium text-white border border-white/20"
+                <Link
+                  key={idx}
+                  href={`/blog?tag=${encodeURIComponent(tag)}`}
+                  className="px-3 py-1 bg-white/20 backdrop-blur-sm rounded-full text-xs font-medium text-white border border-white/20 hover:bg-white/30 transition-colors"
                 >
                   {tag}
-                </span>
+                </Link>
               ))}
             </div>
 

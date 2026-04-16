@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState, useMemo } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { Navigation } from '@/components/navigation';
 import { Footer } from '@/components/footer';
@@ -19,6 +20,7 @@ import Image from 'next/image';
 type ViewMode = 'grid' | 'list';
 
 export default function BlogPage() {
+  const searchParams = useSearchParams();
   const [posts, setPosts] = useState<BlogPost[]>([]);
   const [categories, setCategories] = useState<BlogCategory[]>([]);
   const [loading, setLoading] = useState(true);
@@ -26,6 +28,7 @@ export default function BlogPage() {
   const [hasMore, setHasMore] = useState(true);
   const [viewMode, setViewMode] = useState<ViewMode>('grid');
   const [activeCategory, setActiveCategory] = useState('all');
+  const [activeTag, setActiveTag] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [totalPosts, setTotalPosts] = useState(0);
   const [email, setEmail] = useState('');
@@ -78,6 +81,14 @@ export default function BlogPage() {
     fetchPosts();
   }, [page]);
 
+  // Handle tag query param
+  useEffect(() => {
+    const tagParam = searchParams.get('tag');
+    if (tagParam) {
+      setActiveTag(tagParam);
+    }
+  }, [searchParams]);
+
   // Filter posts based on active filters
   const filteredPosts = useMemo(() => {
     let result = posts;
@@ -92,6 +103,12 @@ export default function BlogPage() {
       });
     }
 
+    if (activeTag) {
+      result = result.filter((post) =>
+        post.tags?.includes(activeTag)
+      );
+    }
+
     if (searchQuery.trim()) {
       const query = searchQuery.toLowerCase();
       result = result.filter(
@@ -102,17 +119,18 @@ export default function BlogPage() {
     }
 
     return result;
-  }, [posts, activeCategory, searchQuery]);
+  }, [posts, activeCategory, activeTag, searchQuery]);
 
   // Get popular posts (first 4 posts as popular)
   const popularPosts = useMemo(() => posts.slice(0, 4), [posts]);
 
   const clearAllFilters = () => {
     setActiveCategory('all');
+    setActiveTag(null);
     setSearchQuery('');
   };
 
-  const hasActiveFilters = activeCategory !== 'all' || searchQuery.trim() !== '';
+  const hasActiveFilters = activeCategory !== 'all' || activeTag !== null || searchQuery.trim() !== '';
 
   const handleSubscribe = (e: React.FormEvent) => {
     e.preventDefault();
@@ -311,7 +329,7 @@ export default function BlogPage() {
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
                   <div>
                     <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
-                      {activeCategory === 'all' ? 'Semua Artikel' : activeCategory}
+                      {activeTag ? `Tag: ${activeTag}` : activeCategory === 'all' ? 'Semua Artikel' : activeCategory}
                     </h2>
                     <p className="text-sm text-gray-500 dark:text-slate-400 mt-1">
                       {filteredPosts.length} artikel ditemukan
@@ -336,6 +354,14 @@ export default function BlogPage() {
                       <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-xs font-medium">
                         Kategori: {activeCategory}
                         <button onClick={() => setActiveCategory('all')}>
+                          <X className="w-3 h-3" />
+                        </button>
+                      </span>
+                    )}
+                    {activeTag && (
+                      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-xs font-medium">
+                        Tag: {activeTag}
+                        <button onClick={() => setActiveTag(null)}>
                           <X className="w-3 h-3" />
                         </button>
                       </span>
