@@ -7,41 +7,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum Role {
-  CUSTOMER
-  ADMIN
-  STAFF
-}
-
-enum BookingStatus {
-  PENDING
-  CONFIRMED
-  IN_PROGRESS
-  COMPLETED
-  CANCELLED
-}
-
-enum InvoiceStatus {
-  DRAFT
-  ISSUED
-  PAID
-  CANCELLED
-}
-
-enum NotificationType {
-  BOOKING_NEW
-  BOOKING_STATUS
-  SYSTEM
-}
-
-enum TemplateType {
-  BOOKING_CONFIRMED
-  BOOKING_STATUS_UPDATED
-  BOOKING_REMINDER
-  BOOKING_CANCELLED
-  CUSTOMER_WELCOME
-}
-
 model User {
   id        String   @id @default(uuid())
   email     String   @unique
@@ -57,42 +22,40 @@ model User {
 }
 
 model Customer {
-  id          String   @id @default(uuid())
-  name        String
-  email       String
-  phone       String?
-  isVip       Boolean  @default(false)
-  notes       String?  @db.Text
-  addresses   Json     @default("[]")
-  source      String   @default("guest")
-  userId      String?  @unique
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-
-  bookings Booking[]
+  id        String    @id @default(uuid())
+  name      String
+  email     String
+  phone     String?
+  isVip     Boolean   @default(false)
+  notes     String?
+  addresses Json      @default("[]")
+  source    String    @default("guest")
+  userId    String?   @unique
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  bookings  Booking[]
 
   @@map("customers")
 }
 
 model Service {
-  id          String   @id @default(uuid())
-  name        String
-  slug        String   @unique
-  description String
-  price       Decimal  @db.Decimal(10, 2)
-  duration    Int
-  category    String   @default("general")
-  image       String?
-  icon        String?
-  features    String[] @default([])
-  isActive    Boolean  @default(true)
-  isFeatured  Boolean  @default(false)
-  availableCities String[] @default([])  // Empty = all cities, e.g. ['surabaya', 'sidoarjo', 'gresik']
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-
-  bookingItems BookingItem[]
-  galleryItems GalleryItem[]
+  id              String        @id @default(uuid())
+  name            String
+  slug            String        @unique
+  description     String
+  price           Decimal       @db.Decimal(10, 2)
+  duration        Int
+  icon            String?
+  isActive        Boolean       @default(true)
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  category        String        @default("general")
+  features        String[]      @default([])
+  image           String?
+  isFeatured      Boolean       @default(false)
+  availableCities String[]      @default([])
+  bookingItems    BookingItem[]
+  galleryItems    GalleryItem[]
 
   @@map("services")
 }
@@ -107,14 +70,13 @@ model Booking {
   address       String
   area          String
   notes         String?
-  internalNotes String?
   totalAmount   Decimal       @db.Decimal(10, 2)
   createdAt     DateTime      @default(now())
   updatedAt     DateTime      @updatedAt
-
-  customer Customer  @relation(fields: [customerId], references: [id])
-  items    BookingItem[]
-  invoice  Invoice?
+  internalNotes String?
+  items         BookingItem[]
+  customer      Customer      @relation(fields: [customerId], references: [id])
+  invoice       Invoice?
 
   @@map("bookings")
 }
@@ -125,33 +87,31 @@ model BookingItem {
   serviceId String
   quantity  Int     @default(1)
   price     Decimal @db.Decimal(10, 2)
-
-  booking Booking @relation(fields: [bookingId], references: [id], onDelete: Cascade)
-  service Service @relation(fields: [serviceId], references: [id])
+  booking   Booking @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  service   Service @relation(fields: [serviceId], references: [id])
 
   @@map("booking_items")
 }
 
 model BlogPost {
-  id          String   @id @default(uuid())
-  slug        String   @unique
+  id          String         @id @default(uuid())
+  slug        String         @unique
   title       String
   excerpt     String
-  content     String   @db.Text
+  content     String
   coverImage  String?
   author      String
-  categoryId  String?
   publishedAt DateTime?
   tags        String[]
   readTime    Int
-  isFeatured  Boolean  @default(false)
-  viewCount   Int      @default(0)
-  likeCount   Int      @default(0)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-
-  category BlogCategory? @relation(fields: [categoryId], references: [id])
-  likes    BlogPostLike[]
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+  categoryId  String?
+  isFeatured  Boolean        @default(false)
+  likeCount   Int            @default(0)
+  viewCount   Int            @default(0)
+  likes       BlogPostLike[]
+  category    BlogCategory?  @relation(fields: [categoryId], references: [id])
 
   @@map("blog_posts")
 }
@@ -159,25 +119,23 @@ model BlogPost {
 model BlogPostLike {
   id        String   @id @default(uuid())
   postId    String
-  sessionId String   // Anonymous user tracking via session/localStorage
+  sessionId String
   createdAt DateTime @default(now())
-
-  post BlogPost @relation(fields: [postId], references: [id], onDelete: Cascade)
+  post      BlogPost @relation(fields: [postId], references: [id], onDelete: Cascade)
 
   @@unique([postId, sessionId])
   @@map("blog_post_likes")
 }
 
 model BlogCategory {
-  id          String   @id @default(uuid())
-  name        String   @unique
-  slug        String   @unique
-  description String?  @db.Text
-  order       Int      @default(0)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-
-  posts BlogPost[]
+  id          String     @id @default(uuid())
+  name        String     @unique
+  slug        String     @unique
+  description String?
+  order       Int        @default(0)
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  posts       BlogPost[]
 
   @@map("blog_categories")
 }
@@ -185,17 +143,17 @@ model BlogCategory {
 model Testimonial {
   id         String   @id @default(uuid())
   name       String
-  role       String?
-  company    String?
-  content    String   @db.Text
+  content    String
   rating     Int      @default(5)
-  image      String?
   isActive   Boolean  @default(true)
-  isFeatured Boolean  @default(false)
-  order      Int      @default(0)
-  areaSlug   String?
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
+  image      String?
+  company    String?
+  isFeatured Boolean  @default(false)
+  order      Int      @default(0)
+  role       String?
+  areaSlug   String?
 
   @@map("testimonials")
 }
@@ -205,7 +163,7 @@ model TeamMember {
   name        String
   position    String
   department  String
-  bio         String?  @db.Text
+  bio         String?
   avatar      String?
   email       String?  @unique
   phone       String?
@@ -235,7 +193,7 @@ model CompanyStat {
 model GalleryItem {
   id          String   @id @default(uuid())
   title       String
-  description String?  @db.Text
+  description String?
   category    String
   imageUrl    String
   beforeImage String?
@@ -247,21 +205,20 @@ model GalleryItem {
   order       Int      @default(0)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-
-  service Service? @relation(fields: [serviceId], references: [id])
+  service     Service? @relation(fields: [serviceId], references: [id])
 
   @@map("gallery_items")
 }
 
 model FAQ {
-  id          String   @id @default(uuid())
-  question    String
-  answer      String   @db.Text
-  category    String
-  order       Int      @default(0)
-  isActive    Boolean  @default(true)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id        String   @id @default(uuid())
+  question  String
+  answer    String
+  category  String
+  order     Int      @default(0)
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@map("faqs")
 }
@@ -271,31 +228,31 @@ model ServiceArea {
   city        String
   slug        String   @unique
   region      String
-  description String?  @db.Text
-  coverage    String[]
+  description String?
   isActive    Boolean  @default(true)
   isFeatured  Boolean  @default(false)
   image       String?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+  coverage    String[]
 
   @@map("service_areas")
 }
 
 model JobListing {
-  id           String   @id @default(uuid())
+  id           String    @id @default(uuid())
   title        String
   department   String
   location     String
   type         String
-  description  String   @db.Text
+  description  String
   requirements String[]
   benefits     String[]
   salaryRange  String?
-  isActive     Boolean  @default(true)
+  isActive     Boolean   @default(true)
   expiresAt    DateTime?
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
 
   @@map("job_listings")
 }
@@ -318,12 +275,12 @@ model PricingPlan {
 }
 
 model NotificationSettings {
-  id      String @id @default(uuid())
-  name    String @unique @default("default")  // Identifier untuk settings (default, production, dll)
-  config  Json   @default("{}")              // Semua pengaturan: whatsapp, email, twilio, dll
-  secrets Json?                              // Secrets terpisah: twilioAuthToken, emailPassword, dll
+  id        String   @id @default(uuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  config    Json     @default("{}")
+  name      String   @unique @default("default")
+  secrets   Json?
 
   @@map("notification_settings")
 }
@@ -394,17 +351,17 @@ model SiteSettings {
 }
 
 model NavigationSettings {
-  id                   String   @id @default(uuid())
-  navLinks             Json     @default("[]")
-  showServicesDropdown Boolean  @default(true)
-  servicesDropdownLabel String  @default("Layanan")
-  ctaButtonText        String   @default("Booking")
-  ctaButtonLink        String   @default("/booking")
-  showCtaButton        Boolean  @default(true)
-  mobileMenuType       String   @default("slide")
-  activeIndicatorStyle String   @default("dot")
-  createdAt            DateTime @default(now())
-  updatedAt            DateTime @updatedAt
+  id                    String   @id @default(uuid())
+  navLinks              Json     @default("[]")
+  showServicesDropdown  Boolean  @default(true)
+  servicesDropdownLabel String   @default("Layanan")
+  ctaButtonText         String   @default("Booking")
+  ctaButtonLink         String   @default("/booking")
+  showCtaButton         Boolean  @default(true)
+  mobileMenuType        String   @default("slide")
+  activeIndicatorStyle  String   @default("dot")
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
 
   @@map("navigation_settings")
 }
@@ -475,53 +432,43 @@ model EmailTemplate {
 }
 
 model InvoiceTemplate {
-  id             String   @id @default(uuid())
-  name           String   @default("Default")
-  headerText     String   @default("INVOICE")
-  companyName    String   @default("NingClean")
+  id             String    @id @default(uuid())
+  name           String    @default("Default")
+  headerText     String    @default("INVOICE")
+  companyName    String    @default("NingClean")
   companyAddress String?
   companyPhone   String?
   companyEmail   String?
   companyLogo    String?
   footerText     String?
-  taxRate        Decimal  @default(0) @db.Decimal(5, 2)
+  taxRate        Decimal   @default(0) @db.Decimal(5, 2)
   notes          String?
-  isDefault      Boolean  @default(false)
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
-
-  invoices Invoice[]
+  isDefault      Boolean   @default(false)
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+  invoices       Invoice[]
 
   @@map("invoice_templates")
 }
 
 model Invoice {
-  id            String        @id @default(uuid())
-  invoiceNumber String        @unique
-  bookingId     String        @unique
-  booking       Booking       @relation(fields: [bookingId], references: [id])
-  
-  // Template Reference
+  id            String           @id @default(uuid())
+  invoiceNumber String           @unique
+  bookingId     String           @unique
   templateId    String?
-  template      InvoiceTemplate? @relation(fields: [templateId], references: [id])
-  
-  // Amounts
-  subtotal      Decimal       @db.Decimal(10, 2)
-  taxRate       Decimal       @default(0) @db.Decimal(5, 2)
-  taxAmount     Decimal       @db.Decimal(10, 2)
-  total         Decimal       @db.Decimal(10, 2)
-  
-  // Status & Dates
-  status        InvoiceStatus @default(DRAFT)
+  subtotal      Decimal          @db.Decimal(10, 2)
+  taxRate       Decimal          @default(0) @db.Decimal(5, 2)
+  taxAmount     Decimal          @db.Decimal(10, 2)
+  total         Decimal          @db.Decimal(10, 2)
+  status        InvoiceStatus    @default(DRAFT)
   issuedAt      DateTime?
   dueDate       DateTime?
   paidAt        DateTime?
-  
-  // PDF/Document
   pdfUrl        String?
-  
-  createdAt     DateTime      @default(now())
-  updatedAt     DateTime      @updatedAt
+  createdAt     DateTime         @default(now())
+  updatedAt     DateTime         @updatedAt
+  booking       Booking          @relation(fields: [bookingId], references: [id])
+  template      InvoiceTemplate? @relation(fields: [templateId], references: [id])
 
   @@map("invoices")
 }
@@ -537,4 +484,39 @@ model AuditLog {
   createdAt  DateTime @default(now())
 
   @@map("audit_logs")
+}
+
+enum Role {
+  CUSTOMER
+  ADMIN
+  STAFF
+}
+
+enum BookingStatus {
+  PENDING
+  CONFIRMED
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+}
+
+enum InvoiceStatus {
+  DRAFT
+  ISSUED
+  PAID
+  CANCELLED
+}
+
+enum NotificationType {
+  BOOKING_NEW
+  BOOKING_STATUS
+  SYSTEM
+}
+
+enum TemplateType {
+  BOOKING_CONFIRMED
+  BOOKING_STATUS_UPDATED
+  BOOKING_REMINDER
+  BOOKING_CANCELLED
+  CUSTOMER_WELCOME
 }
