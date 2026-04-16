@@ -82,8 +82,9 @@ export default function BlogPage() {
 
     if (activeCategory !== 'all') {
       result = result.filter((post) => {
-        if (typeof post.category === 'string') {
-          return post.category.slug === activeCategory || post.category.name === activeCategory;
+        if (post.category) {
+          const catName = post.category.name || '';
+          return catName === activeCategory || post.category.slug === activeCategory;
         }
         return false;
       });

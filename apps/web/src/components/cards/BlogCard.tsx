@@ -26,7 +26,7 @@ export default function BlogCard({ post, featured = false, index = 0, variant = 
   return <GridCard post={post} featured={featured} readTime={readTime} authorName={authorName} authorInitial={authorInitial} index={index} />;
 }
 
-function GridCard({ post, featured, readTime, authorName, authorInitial, index }: BlogCardProps & { readTime: number; authorName: string; authorInitial: string }) {
+function GridCard({ post, featured, readTime, authorName, authorInitial, index = 0 }: BlogCardProps & { readTime: number; authorName: string; authorInitial: string }) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 24 }}
@@ -125,7 +125,7 @@ function GridCard({ post, featured, readTime, authorName, authorInitial, index }
   );
 }
 
-function ListCard({ post, readTime, authorName, authorInitial, index }: { post: BlogPost; readTime: number; authorName: string; authorInitial: string; index: number }) {
+function ListCard({ post, readTime, authorName, authorInitial, index = 0 }: { post: BlogPost; readTime: number; authorName: string; authorInitial: string; index: number }) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
