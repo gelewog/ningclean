@@ -44,6 +44,16 @@ export interface Booking {
   customer?: User;
 }
 
+export interface BlogCategory {
+  id: string;
+  name: string;
+  slug: string;
+  description?: string;
+  isActive?: boolean;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
 export interface BlogPost {
   id: string;
   title: string;
@@ -62,6 +72,9 @@ export interface BlogPost {
   readTime?: number;
   isPublished?: boolean;
   isFeatured?: boolean;
+  viewCount?: number;
+  likeCount?: number;
+  isLiked?: boolean;
   createdAt: string;
   updatedAt?: string;
 }

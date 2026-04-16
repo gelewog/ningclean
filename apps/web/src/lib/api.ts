@@ -109,6 +109,38 @@ export const blogCategoriesApi = {
   },
 }
 
+// Blog Post Like API
+export const blogPostLikeApi = {
+  like: async (postId: string) => {
+    const response = await fetch(`${API_BASE}/blog/${postId}/like`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include',
+    });
+    if (!response.ok) {
+      const error = await response.json().catch(() => ({ message: 'An error occurred' }));
+      throw new Error(error.message || `HTTP error! status: ${response.status}`);
+    }
+    return response.json();
+  },
+  unlike: async (postId: string) => {
+    const response = await fetch(`${API_BASE}/blog/${postId}/like`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include',
+    });
+    if (!response.ok) {
+      const error = await response.json().catch(() => ({ message: 'An error occurred' }));
+      throw new Error(error.message || `HTTP error! status: ${response.status}`);
+    }
+    return response.json();
+  },
+}
+
 // Team Members (Public)
 export async function getTeamMembers() {
   try {

@@ -5,7 +5,20 @@ import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { BlogPost } from '@/types/api';
 import { formatDate } from '@/lib/utils';
-import { Clock, Calendar, ArrowRight } from 'lucide-react';
+import { Clock, Calendar, ArrowRight, Star } from 'lucide-react';
+
+// Helper untuk memastikan URL gambar lengkap
+const API_URL = process.env.NEXT_PUBLIC_API_URL?.replace('/api', '') || 'http://localhost:4000';
+
+function getImageUrl(src: string | undefined): string {
+  if (!src) return '';
+  // Jika sudah URL lengkap (http/https), gunakan langsung
+  if (src.startsWith('http://') || src.startsWith('https://')) {
+    return src;
+  }
+  // Jika path relatif, tambahkan base URL API
+  return `${API_URL}${src.startsWith('/') ? '' : '/'}${src}`;
+}
 
 interface BlogCardProps {
   post: BlogPost;
@@ -43,11 +56,11 @@ function GridCard({ post, readTime, authorName, authorInitial, categoryName, ind
           <div className="relative h-48 overflow-hidden">
             {post.coverImage ? (
               <Image
-                src={post.coverImage}
+                src={getImageUrl(post.coverImage)}
                 alt={post.title}
                 fill
                 className="object-cover transition-transform duration-700 group-hover:scale-110"
-                unoptimized={post.coverImage.startsWith('http')}
+                unoptimized={true}
               />
             ) : (
               <div className="absolute inset-0 bg-gradient-to-br from-emerald-500 via-teal-500 to-cyan-500 flex items-center justify-center">
@@ -68,6 +81,16 @@ function GridCard({ post, readTime, authorName, authorInitial, categoryName, ind
               <div className="absolute top-4 left-4">
                 <span className="px-3 py-1.5 rounded-full text-xs font-semibold bg-white/95 dark:bg-slate-900/95 text-emerald-600 dark:text-emerald-400 shadow-lg backdrop-blur-sm">
                   {categoryName}
+                </span>
+              </div>
+            )}
+            
+            {/* Featured Badge */}
+            {post.isFeatured && (
+              <div className="absolute top-4 right-4">
+                <span className="flex items-center gap-1 px-3 py-1.5 rounded-full text-xs font-semibold bg-amber-500 text-white shadow-lg backdrop-blur-sm">
+                  <Star className="w-3 h-3 fill-current" />
+                  Featured
                 </span>
               </div>
             )}
@@ -128,12 +151,12 @@ function ListCard({ post, readTime, authorName, authorInitial, categoryName, ind
           <div className="w-28 h-28 rounded-xl overflow-hidden flex-shrink-0 bg-gradient-to-br from-emerald-500 via-teal-500 to-cyan-500">
             {post.coverImage ? (
               <Image
-                src={post.coverImage}
+                src={getImageUrl(post.coverImage)}
                 alt={post.title}
                 width={112}
                 height={112}
                 className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                unoptimized={post.coverImage.startsWith('http')}
+                unoptimized={true}
               />
             ) : (
               <div className="w-full h-full flex items-center justify-center">
@@ -153,6 +176,12 @@ function ListCard({ post, readTime, authorName, authorInitial, categoryName, ind
                 {categoryName && (
                   <span className="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-50 dark:bg-emerald-500/15 text-emerald-600 dark:text-emerald-400">
                     {categoryName}
+                  </span>
+                )}
+                {post.isFeatured && (
+                  <span className="flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-amber-50 dark:bg-amber-500/15 text-amber-600 dark:text-amber-400">
+                    <Star className="w-3 h-3 fill-current" />
+                    Featured
                   </span>
                 )}
                 <span className="text-xs text-gray-400 dark:text-slate-500 flex items-center gap-1">

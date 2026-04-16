@@ -53,6 +53,8 @@ export class BlogService {
           createdAt: true,
           category: true,
           isFeatured: true,
+          viewCount: true,
+          likeCount: true,
         },
       }),
       this.prisma.blogPost.count({ where }),
@@ -116,6 +118,8 @@ export class BlogService {
           updatedAt: true,
           category: true,
           isFeatured: true,
+          viewCount: true,
+          likeCount: true,
         },
       }),
       this.prisma.blogPost.count({ where }),
@@ -133,14 +137,34 @@ export class BlogService {
     }
   }
 
-  async findBySlug(slug: string) {
+  async findBySlug(slug: string, sessionId?: string) {
     const post = await this.prisma.blogPost.findUnique({
       where: { slug },
     });
     if (!post) {
       throw new NotFoundException('Blog post not found');
     }
-    return post;
+
+    // Increment view count
+    await this.prisma.blogPost.update({
+      where: { id: post.id },
+      data: { viewCount: { increment: 1 } },
+    });
+
+    // Check if user has liked this post
+    const hasLiked = sessionId ? await this.prisma.blogPostLike.findUnique({
+      where: {
+        postId_sessionId: {
+          postId: post.id,
+          sessionId: sessionId,
+        },
+      },
+    }) : null;
+
+    return {
+      ...post,
+      isLiked: !!hasLiked,
+    };
   }
 
   async findOne(id: string) {
@@ -165,6 +189,8 @@ export class BlogService {
         categoryId: dto.categoryId || null,
         isFeatured: dto.isFeatured || false,
         publishedAt: dto.publishedAt || null,
+        viewCount: 0,
+        likeCount: 0,
       },
     });
   }
@@ -195,6 +221,80 @@ export class BlogService {
 
   async remove(id: string) {
     await this.findOne(id);
+    // Delete likes first
+    await this.prisma.blogPostLike.deleteMany({
+      where: { postId: id },
+    });
     return this.prisma.blogPost.delete({ where: { id } });
+  }
+
+  async like(postId: string, sessionId: string) {
+    const post = await this.findOne(postId);
+    
+    // Check if already liked
+    const existingLike = await this.prisma.blogPostLike.findUnique({
+      where: {
+        postId_sessionId: {
+          postId,
+          sessionId,
+        },
+      },
+    });
+
+    if (existingLike) {
+      return { liked: true, likeCount: post.likeCount };
+    }
+
+    // Create like and increment count
+    await this.prisma.$transaction([
+      this.prisma.blogPostLike.create({
+        data: {
+          postId,
+          sessionId,
+        },
+      }),
+      this.prisma.blogPost.update({
+        where: { id: postId },
+        data: { likeCount: { increment: 1 } },
+      }),
+    ]);
+
+    return { liked: true, likeCount: post.likeCount + 1 };
+  }
+
+  async unlike(postId: string, sessionId: string) {
+    const post = await this.findOne(postId);
+    
+    // Check if like exists
+    const existingLike = await this.prisma.blogPostLike.findUnique({
+      where: {
+        postId_sessionId: {
+          postId,
+          sessionId,
+        },
+      },
+    });
+
+    if (!existingLike) {
+      return { liked: false, likeCount: post.likeCount };
+    }
+
+    // Delete like and decrement count
+    await this.prisma.$transaction([
+      this.prisma.blogPostLike.delete({
+        where: {
+          postId_sessionId: {
+            postId,
+            sessionId,
+          },
+        },
+      }),
+      this.prisma.blogPost.update({
+        where: { id: postId },
+        data: { likeCount: { decrement: 1 } },
+      }),
+    ]);
+
+    return { liked: false, likeCount: Math.max(0, post.likeCount - 1) };
   }
 }

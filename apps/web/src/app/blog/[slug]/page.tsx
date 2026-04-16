@@ -10,17 +10,24 @@ import { Footer } from '@/components/footer';
 import { PageLoader } from '@/components/ui/Spinner';
 import Badge from '@/components/ui/Badge';
 import Button from '@/components/ui/Button';
-import { blogApi } from '@/lib/api';
+import { blogApi, blogPostLikeApi } from '@/lib/api';
 import { BlogPost } from '@/types/api';
 import { formatDate } from '@/lib/utils';
 import './blog-post.css';
 import { BlogContent } from './BlogContent';
+import { Eye, Heart, Share2, Facebook, Twitter, Link as LinkIcon, Bookmark, Printer, Check } from 'lucide-react';
+
+const SAVED_POSTS_KEY = 'ningclean_saved_posts';
 
 export default function BlogPostPage() {
   const params = useParams();
   const [post, setPost] = useState<BlogPost | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [isLiking, setIsLiking] = useState(false);
+  const [showShareToast, setShowShareToast] = useState(false);
+  const [isSaved, setIsSaved] = useState(false);
+  const [showSaveToast, setShowSaveToast] = useState(false);
 
   useEffect(() => {
     const fetchPost = async () => {
@@ -38,6 +45,10 @@ export default function BlogPostPage() {
         }
         
         setPost(data);
+        
+        // Check if post is saved in localStorage
+        const savedPosts = JSON.parse(localStorage.getItem(SAVED_POSTS_KEY) || '[]');
+        setIsSaved(savedPosts.some((p: any) => p.id === data.id));
       } catch (err: any) {
         console.error('[Blog Post] Error:', err);
         setError('Artikel tidak ditemukan');
@@ -50,6 +61,131 @@ export default function BlogPostPage() {
       fetchPost();
     }
   }, [params.slug]);
+
+  const handleLike = async () => {
+    if (!post || isLiking) return;
+    
+    setIsLiking(true);
+    try {
+      if (post.isLiked) {
+        await blogPostLikeApi.unlike(post.id);
+        setPost(prev => prev ? {
+          ...prev,
+          isLiked: false,
+          likeCount: Math.max(0, (prev.likeCount || 0) - 1)
+        } : null);
+      } else {
+        await blogPostLikeApi.like(post.id);
+        setPost(prev => prev ? {
+          ...prev,
+          isLiked: true,
+          likeCount: (prev.likeCount || 0) + 1
+        } : null);
+      }
+    } catch (err) {
+      console.error('Failed to toggle like:', err);
+    } finally {
+      setIsLiking(false);
+    }
+  };
+
+  const handleSave = () => {
+    if (!post) return;
+    
+    const savedPosts = JSON.parse(localStorage.getItem(SAVED_POSTS_KEY) || '[]');
+    
+    if (isSaved) {
+      // Remove from saved
+      const filtered = savedPosts.filter((p: any) => p.id !== post.id);
+      localStorage.setItem(SAVED_POSTS_KEY, JSON.stringify(filtered));
+      setIsSaved(false);
+    } else {
+      // Add to saved
+      const postToSave = {
+        id: post.id,
+        title: post.title,
+        slug: post.slug,
+        excerpt: post.excerpt,
+        coverImage: post.coverImage,
+        author: post.author,
+        publishedAt: post.publishedAt,
+        readTime: post.readTime,
+        savedAt: new Date().toISOString(),
+      };
+      savedPosts.unshift(postToSave);
+      localStorage.setItem(SAVED_POSTS_KEY, JSON.stringify(savedPosts));
+      setIsSaved(true);
+    }
+    
+    setShowSaveToast(true);
+    setTimeout(() => setShowSaveToast(false), 2000);
+  };
+
+  const handlePrint = () => {
+    window.print();
+  };
+
+  const handleShare = async (platform: string) => {
+    if (!post) return;
+    
+    const url = window.location.href;
+    const text = `Baca artikel: ${post.title}`;
+    
+    switch (platform) {
+      case 'facebook':
+        window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`, '_blank');
+        break;
+      case 'twitter':
+        window.open(`https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}&text=${encodeURIComponent(text)}`, '_blank');
+        break;
+      case 'copy':
+        await navigator.clipboard.writeText(url);
+        setShowShareToast(true);
+        setTimeout(() => setShowShareToast(false), 2000);
+        break;
+    }
+  };
+
+  const [relatedPosts, setRelatedPosts] = useState<BlogPost[]>([]);
+  const [relatedLoading, setRelatedLoading] = useState(false);
+  
+  useEffect(() => {
+    const fetchRelatedPosts = async () => {
+      if (!post?.category?.slug) {
+        console.log('[Related Posts] No category slug available');
+        return;
+      }
+      
+      setRelatedLoading(true);
+      console.log('[Related Posts] Fetching for category:', post.category.slug);
+      
+      try {
+        // Fetch posts from same category, excluding current post
+        const response = await blogApi.getAll({ 
+          limit: 10, 
+          category: post.category.slug 
+        });
+        
+        console.log('[Related Posts] API Response:', response);
+        
+        const posts = response.data || response;
+        console.log('[Related Posts] Posts found:', posts.length);
+        
+        const filtered = posts.filter((p: BlogPost) => p.id !== post.id).slice(0, 3);
+        console.log('[Related Posts] Filtered posts:', filtered.length);
+        
+        setRelatedPosts(filtered);
+      } catch (err) {
+        console.error('[Related Posts] Failed to fetch:', err);
+      } finally {
+        setRelatedLoading(false);
+      }
+    };
+    
+    if (post) {
+      fetchRelatedPosts();
+    }
+  }, [post?.id, post?.category?.slug]);
 
   if (loading) {
     return <PageLoader />;
@@ -71,6 +207,9 @@ export default function BlogPostPage() {
   }
 
   const headings = post.content?.match(/^##\s+(.+)$/gm) || [];
+  const imageUrl = post.coverImage?.startsWith('http') 
+    ? post.coverImage 
+    : `${process.env.NEXT_PUBLIC_API_URL?.replace('/api', '') || 'http://localhost:4000'}${post.coverImage}`;
 
   return (
     <div className="min-h-screen bg-white dark:bg-slate-950">
@@ -147,9 +286,7 @@ export default function BlogPostPage() {
           <div className="container-fluid max-w-4xl">
             <div className="relative rounded-2xl overflow-hidden h-64 md:h-96 shadow-2xl shadow-slate-200/50 dark:shadow-slate-900/50">
               <img
-                src={post.coverImage.startsWith('http') 
-                  ? post.coverImage 
-                  : `${process.env.NEXT_PUBLIC_API_URL?.replace('/api', '') || 'http://localhost:4000'}${post.coverImage}`}
+                src={imageUrl}
                 alt={post.title}
                 className="object-cover w-full h-full"
                 loading="eager"
@@ -162,7 +299,7 @@ export default function BlogPostPage() {
       {/* Article Content */}
       <section className="py-12">
         <div className="container-fluid max-w-4xl">
-          <div className="grid lg:grid-cols-4 gap-8">
+          <div className="grid lg:grid-cols-3 gap-8">
             {/* Table of Contents - Desktop */}
             {headings.length > 0 && (
               <div className="hidden lg:block">
@@ -212,31 +349,97 @@ export default function BlogPostPage() {
                 <BlogContent content={post.content} />
               </motion.article>
 
-              {/* Share Buttons */}
+              {/* Engagement Bar */}
               <div className="mt-12 pt-8 border-t border-slate-200 dark:border-slate-800">
-                <p className="font-semibold text-slate-900 dark:text-white mb-4">Bagikan Artikel</p>
-                <div className="flex gap-3">
-                  <button className="w-10 h-10 rounded-lg bg-[#1877F2] text-white flex items-center justify-center hover:bg-[#166fe5] transition-colors">
-                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z" />
-                    </svg>
-                  </button>
-                  <button className="w-10 h-10 rounded-lg bg-[#1DA1F2] text-white flex items-center justify-center hover:bg-[#1a91da] transition-colors">
-                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M23.953 4.57a10 10 0 01-2.825.885 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z" />
-                    </svg>
-                  </button>
-                  <button className="w-10 h-10 rounded-lg bg-[#25D366] text-white flex items-center justify-center hover:bg-[#22c35e] transition-colors">
-                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.263.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413z" />
-                    </svg>
-                  </button>
-                  <button className="w-10 h-10 rounded-lg bg-slate-600 dark:bg-slate-700 text-white flex items-center justify-center hover:bg-slate-700 dark:hover:bg-slate-600 transition-colors">
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
-                    </svg>
-                  </button>
+                <div className="flex flex-wrap items-center justify-between gap-4">
+                  {/* View Count & Like */}
+                  <div className="flex items-center gap-4">
+                    {/* View Count */}
+                    <div className="flex items-center gap-2 text-slate-500 dark:text-slate-400">
+                      <Eye className="w-5 h-5" />
+                      <span className="text-sm font-medium">{(post.viewCount || 0).toLocaleString('id-ID')} views</span>
+                    </div>
+                    
+                    {/* Like Button */}
+                    <button
+                      onClick={handleLike}
+                      disabled={isLiking}
+                      className={`flex items-center gap-2 px-4 py-2 rounded-full transition-all duration-200 ${
+                        post.isLiked
+                          ? 'bg-rose-50 text-rose-600 dark:bg-rose-500/10 dark:text-rose-400 border border-rose-200 dark:border-rose-500/30'
+                          : 'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400 hover:bg-rose-50 hover:text-rose-600 dark:hover:bg-rose-500/10 dark:hover:text-rose-400 border border-transparent'
+                      }`}
+                    >
+                      <Heart className={`w-5 h-5 ${post.isLiked ? 'fill-current' : ''} ${isLiking ? 'animate-pulse' : ''}`} />
+                      <span className="text-sm font-medium">{(post.likeCount || 0).toLocaleString('id-ID')}</span>
+                    </button>
+                  </div>
+
+                  {/* Action Buttons */}
+                  <div className="flex items-center gap-2">
+                    {/* Save Button */}
+                    <button
+                      onClick={handleSave}
+                      className={`flex items-center gap-2 px-4 py-2 rounded-full transition-all duration-200 ${
+                        isSaved
+                          ? 'bg-amber-50 text-amber-600 dark:bg-amber-500/10 dark:text-amber-400 border border-amber-200 dark:border-amber-500/30'
+                          : 'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400 hover:bg-amber-50 hover:text-amber-600 dark:hover:bg-amber-500/10 dark:hover:text-amber-400 border border-transparent'
+                      }`}
+                      title={isSaved ? 'Hapus dari simpanan' : 'Simpan artikel'}
+                    >
+                      <Bookmark className={`w-5 h-5 ${isSaved ? 'fill-current' : ''}`} />
+                      <span className="text-sm font-medium hidden sm:inline">{isSaved ? 'Tersimpan' : 'Simpan'}</span>
+                    </button>
+
+                    {/* Print Button */}
+                    <button
+                      onClick={handlePrint}
+                      className="flex items-center gap-2 px-4 py-2 rounded-full bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all duration-200 border border-transparent"
+                      title="Print artikel"
+                    >
+                      <Printer className="w-5 h-5" />
+                      <span className="text-sm font-medium hidden sm:inline">Print</span>
+                    </button>
+
+                    <span className="w-px h-8 bg-slate-200 dark:bg-slate-700 mx-2" />
+
+                    {/* Share Buttons */}
+                    <button
+                      onClick={() => handleShare('facebook')}
+                      className="w-10 h-10 rounded-full bg-[#1877F2] text-white flex items-center justify-center hover:bg-[#166fe5] transition-colors hover:scale-110"
+                      title="Share ke Facebook"
+                    >
+                      <Facebook className="w-5 h-5" />
+                    </button>
+                    <button
+                      onClick={() => handleShare('twitter')}
+                      className="w-10 h-10 rounded-full bg-[#1DA1F2] text-white flex items-center justify-center hover:bg-[#1a91da] transition-colors hover:scale-110"
+                      title="Share ke Twitter"
+                    >
+                      <Twitter className="w-5 h-5" />
+                    </button>
+                    <button
+                      onClick={() => handleShare('copy')}
+                      className="w-10 h-10 rounded-full bg-slate-600 dark:bg-slate-700 text-white flex items-center justify-center hover:bg-slate-700 dark:hover:bg-slate-600 transition-colors hover:scale-110"
+                      title="Copy link"
+                    >
+                      <LinkIcon className="w-5 h-5" />
+                    </button>
+                  </div>
                 </div>
+
+                {/* Share Toast */}
+                {showShareToast && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    className="mt-4 inline-flex items-center gap-2 px-4 py-2 bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 rounded-full text-sm"
+                  >
+                    <Share2 className="w-4 h-4" />
+                    Link berhasil disalin!
+                  </motion.div>
+                )}
               </div>
             </div>
           </div>
@@ -248,12 +451,57 @@ export default function BlogPostPage() {
         <div className="container-fluid max-w-4xl">
           <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-8">Artikel Terkait</h2>
           <div className="grid md:grid-cols-2 gap-6">
-            <div className="bg-white dark:bg-slate-800 rounded-xl p-6 text-center text-slate-400 dark:text-slate-500 border border-slate-200 dark:border-slate-700">
-              <p>Artikel terkait akan muncul di sini</p>
-            </div>
-            <div className="bg-white dark:bg-slate-800 rounded-xl p-6 text-center text-slate-400 dark:text-slate-500 border border-slate-200 dark:border-slate-700">
-              <p>Artikel terkait akan muncul di sini</p>
-            </div>
+            {relatedPosts.length > 0 ? (
+              relatedPosts.map((relatedPost, index) => (
+                <motion.div
+                  key={relatedPost.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: index * 0.1, duration: 0.4 }}
+                >
+                  <Link href={`/blog/${relatedPost.slug}`}>
+                    <article className="group bg-white dark:bg-slate-800 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-700 hover:border-emerald-300 dark:hover:border-emerald-500/50 transition-all duration-300 h-full">
+                      {/* Thumbnail */}
+                      <div className="relative h-40 overflow-hidden">
+                        {relatedPost.coverImage ? (
+                          <Image
+                            src={relatedPost.coverImage.startsWith('http') 
+                              ? relatedPost.coverImage 
+                              : `${process.env.NEXT_PUBLIC_API_URL?.replace('/api', '') || 'http://localhost:4000'}${relatedPost.coverImage}`}
+                            alt={relatedPost.title}
+                            fill
+                            className="object-cover group-hover:scale-105 transition-transform duration-500"
+                            unoptimized={true}
+                          />
+                        ) : (
+                          <div className="absolute inset-0 bg-gradient-to-br from-emerald-500 via-teal-500 to-cyan-500" />
+                        )}
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                      </div>
+
+                      {/* Content */}
+                      <div className="p-5">
+                        <h3 className="font-bold text-slate-900 dark:text-white text-base leading-snug mb-2 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors line-clamp-2">
+                          {relatedPost.title}
+                        </h3>
+                        <p className="text-sm text-slate-500 dark:text-slate-400 line-clamp-2 mb-3">
+                          {relatedPost.excerpt}
+                        </p>
+                        <div className="flex items-center justify-between text-xs text-slate-400 dark:text-slate-500">
+                          <span>{relatedPost.readTime || 5} menit baca</span>
+                          <span>{formatDate(relatedPost.createdAt)}</span>
+                        </div>
+                      </div>
+                    </article>
+                  </Link>
+                </motion.div>
+              ))
+            ) : (
+              <div className="col-span-2 bg-white dark:bg-slate-800 rounded-xl p-6 text-center text-slate-400 dark:text-slate-500 border border-slate-200 dark:border-slate-700">
+                <p>Tidak ada artikel terkait</p>
+              </div>
+            )}
           </div>
         </div>
       </section>
