@@ -141,6 +141,7 @@ export class BlogService {
   async findBySlug(slug: string, sessionId?: string) {
     const post = await this.prisma.blogPost.findUnique({
       where: { slug },
+      include: { category: true },
     });
     if (!post) {
       throw new NotFoundException('Blog post not found');
