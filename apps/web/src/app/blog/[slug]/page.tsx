@@ -38,7 +38,7 @@ export default function BlogPostPage() {
         console.log('[Blog Post] Decoded slug:', slug);
         
         const data = await blogApi.getBySlug(slug);
-        console.log('[Blog Post] API Response:', data);
+        console.log('[Blog Post] Raw API data:', JSON.stringify(data, null, 2));
         
         if (!data || typeof data !== 'object') {
           throw new Error('Invalid response from API');
@@ -151,6 +151,11 @@ export default function BlogPostPage() {
   
   useEffect(() => {
     const fetchRelatedPosts = async () => {
+      console.log('[Related Posts] Effect triggered');
+      console.log('[Related Posts] Post structure:', JSON.stringify(post, null, 2));
+      console.log('[Related Posts] post.category:', post?.category);
+      console.log('[Related Posts] post.category.slug:', post?.category?.slug);
+      
       if (!post?.category?.slug) {
         console.log('[Related Posts] No category slug available');
         return;
