@@ -211,8 +211,9 @@ export default function EditBlogPostPage() {
                   category: categories.find(c => c.id === formData.categoryId),
                 }
                 // Pass via URL-encoded JSON ke web preview (port 3001)
+                // NOTE: encodeURIComponent(encoded) is critical! btoa output contains +, /, = which break URLs
                 const encoded = btoa(encodeURIComponent(JSON.stringify(draftData)))
-                window.open(`http://localhost:3001/blog/draft-preview/preview?draft=${encoded}`, '_blank')
+                window.open(`http://localhost:3001/blog/draft-preview/preview?draft=${encodeURIComponent(encoded)}`, '_blank')
               }}
             >
               <Eye className="w-4 h-4 mr-2" />
