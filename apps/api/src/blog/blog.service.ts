@@ -7,25 +7,69 @@ import { Prisma } from '@prisma/client';
 export class BlogService {
   constructor(private prisma: PrismaService) {}
 
-  async findAll() {
-    return this.prisma.blogPost.findMany({
-      where: { publishedAt: { not: null } },
-      orderBy: { publishedAt: 'desc' },
-      select: {
-        id: true,
-        slug: true,
-        title: true,
-        excerpt: true,
-        coverImage: true,
-        author: true,
-        publishedAt: true,
-        tags: true,
-        readTime: true,
-        createdAt: true,
-        category: true,
-        isFeatured: true,
-      },
-    });
+  async findAll(params?: { page?: number; limit?: number; category?: string; search?: string }) {
+    const { page = 1, limit, category, search } = params || {}
+    const take = limit || 100;
+    const skip = (page - 1) * take;
+
+    const where: Prisma.BlogPostWhereInput = {
+      publishedAt: { not: null },
+    };
+
+    // Category filter
+    if (category) {
+      where.category = {
+        OR: [
+          { slug: category },
+          { name: { equals: category, mode: 'insensitive' } },
+        ],
+      };
+    }
+
+    // Search filter
+    if (search) {
+      where.OR = [
+        { title: { contains: search, mode: 'insensitive' } },
+        { excerpt: { contains: search, mode: 'insensitive' } },
+      ];
+    }
+
+    const [posts, total] = await Promise.all([
+      this.prisma.blogPost.findMany({
+        where,
+        orderBy: { publishedAt: 'desc' },
+        skip,
+        take,
+        select: {
+          id: true,
+          slug: true,
+          title: true,
+          excerpt: true,
+          coverImage: true,
+          author: true,
+          publishedAt: true,
+          tags: true,
+          readTime: true,
+          createdAt: true,
+          category: true,
+          isFeatured: true,
+        },
+      }),
+      this.prisma.blogPost.count({ where }),
+    ]);
+
+    // If no limit specified, return array directly (backward compatible)
+    if (!limit) {
+      return posts;
+    }
+
+    return {
+      data: posts,
+      total,
+      page,
+      limit: take,
+      totalPages: Math.ceil(total / take),
+    };
   }
 
   async findAllAdmin(params: {

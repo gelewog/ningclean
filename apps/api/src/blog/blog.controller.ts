@@ -23,8 +23,13 @@ export class BlogController {
 
   @Get()
   @ApiOperation({ summary: 'Get all blog posts (public)' })
-  findAll() {
-    return this.blogService.findAll();
+  findAll(
+    @Query('page') page?: number,
+    @Query('limit') limit?: number,
+    @Query('category') category?: string,
+    @Query('search') search?: string,
+  ) {
+    return this.blogService.findAll({ page, limit, category, search });
   }
 
   @Get('admin/all')

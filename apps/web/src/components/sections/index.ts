@@ -15,7 +15,6 @@ export { default as ScheduleStep } from './ScheduleStep';
 export { default as AddressStep } from './AddressStep';
 export { default as ConfirmationStep } from './ConfirmationStep';
 export { default as BlogHeroSection } from './BlogHeroSection';
-export { default as BlogListSection } from './BlogListSection';
 export { default as NewsletterSection } from './NewsletterSection';
 export { default as AuthHeaderSection } from './AuthHeaderSection';
 export { default as ImageShowcase } from './ImageShowcase';

@@ -310,7 +310,7 @@ export default function AboutPage() {
             >
               {displayTeam.map((member, idx) => (
                 <motion.div
-                  key={member.id || idx}
+                  key={idx}
                   variants={motionItem}
                   className="bg-white dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 text-center shadow-sm hover:shadow-md transition-shadow"
                 >

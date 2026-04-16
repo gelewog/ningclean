@@ -103,10 +103,10 @@ function FeaturedCard({ post }: { post: BlogPost }) {
               <div className="w-7 h-7 rounded-full dark:bg-emerald-500/10 dark:border-emerald-500/20 dark:text-emerald-400
                               bg-emerald-100 border border-emerald-200 text-emerald-600
                               flex items-center justify-center text-[10px] font-bold">
-                {post.author?.name?.slice(0, 2).toUpperCase() ?? 'NC'}
+                {typeof post.author === 'string' ? post.author.slice(0, 2).toUpperCase() : post.author?.name?.slice(0, 2).toUpperCase() ?? 'NC'}
               </div>
               <div>
-                <p className="text-[12px] font-semibold dark:text-white/60 text-slate-700 leading-tight">{post.author?.name ?? 'Ningclean'}</p>
+                <p className="text-[12px] font-semibold dark:text-white/60 text-slate-700 leading-tight">{typeof post.author === 'string' ? post.author : post.author?.name ?? 'Ningclean'}</p>
                 <p className="text-[11px] dark:text-white/30 text-slate-400">
                   {post.publishedAt ? new Date(post.publishedAt).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' }) : ''}
                 </p>

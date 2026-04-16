@@ -3,7 +3,7 @@
 import { useEffect, useRef } from 'react';
 
 interface BlogContentProps {
-  content: string;
+  content?: string;
 }
 
 export function BlogContent({ content }: BlogContentProps) {
@@ -56,7 +56,7 @@ export function BlogContent({ content }: BlogContentProps) {
       ref={containerRef}
       className="article-html-content"
       style={{ color: 'inherit' }}
-      dangerouslySetInnerHTML={{ __html: content }}
+      dangerouslySetInnerHTML={{ __html: content || '' }}
     />
   );
 }

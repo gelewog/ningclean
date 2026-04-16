@@ -14,16 +14,23 @@ export function BlogCardSkeleton({ variant = 'grid', index = 0 }: BlogCardSkelet
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: index * 0.05 }}
-        className="bg-white dark:bg-slate-900/80 rounded-xl p-4 border border-slate-100 dark:border-white/10"
+        className="flex gap-4 p-4 bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-white/5"
       >
-        <div className="flex gap-4">
-          {/* Thumbnail skeleton */}
-          <div className="w-20 h-20 rounded-lg bg-slate-200 dark:bg-slate-800 animate-pulse" />
-          {/* Content skeleton */}
-          <div className="flex-1 space-y-3">
-            <div className="h-4 bg-slate-200 dark:bg-slate-800 rounded w-3/4 animate-pulse" />
-            <div className="h-3 bg-slate-200 dark:bg-slate-800 rounded w-1/2 animate-pulse" />
-            <div className="h-3 bg-slate-200 dark:bg-slate-800 rounded w-1/4 animate-pulse" />
+        {/* Thumbnail */}
+        <div className="w-28 h-28 rounded-xl bg-slate-200 dark:bg-slate-800 animate-pulse flex-shrink-0" />
+        
+        {/* Content */}
+        <div className="flex-1 space-y-3 py-1">
+          <div className="flex gap-2">
+            <div className="w-16 h-5 rounded-full bg-slate-200 dark:bg-slate-800 animate-pulse" />
+            <div className="w-20 h-5 rounded-full bg-slate-200 dark:bg-slate-800 animate-pulse" />
+          </div>
+          <div className="w-3/4 h-5 rounded bg-slate-200 dark:bg-slate-800 animate-pulse" />
+          <div className="w-full h-4 rounded bg-slate-200 dark:bg-slate-800 animate-pulse" />
+          <div className="w-1/2 h-4 rounded bg-slate-200 dark:bg-slate-800 animate-pulse" />
+          <div className="flex gap-3 pt-2">
+            <div className="w-20 h-4 rounded bg-slate-200 dark:bg-slate-800 animate-pulse" />
+            <div className="w-16 h-4 rounded bg-slate-200 dark:bg-slate-800 animate-pulse" />
           </div>
         </div>
       </motion.div>
@@ -34,25 +41,36 @@ export function BlogCardSkeleton({ variant = 'grid', index = 0 }: BlogCardSkelet
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: index * 0.05 }}
-      className="bg-white dark:bg-slate-900/80 rounded-2xl overflow-hidden border border-slate-100 dark:border-white/10"
+      transition={{ delay: index * 0.06 }}
+      className="bg-white dark:bg-slate-900 rounded-2xl overflow-hidden border border-slate-100 dark:border-white/5"
     >
-      {/* Image skeleton */}
+      {/* Image */}
       <div className="h-48 bg-slate-200 dark:bg-slate-800 animate-pulse" />
-      {/* Content skeleton */}
-      <div className="p-5 space-y-3">
-        <div className="flex gap-2">
-          <div className="h-6 w-20 bg-slate-200 dark:bg-slate-800 rounded-full animate-pulse" />
-          <div className="h-6 w-16 bg-slate-200 dark:bg-slate-800 rounded-full animate-pulse" />
+      
+      {/* Content */}
+      <div className="p-5 space-y-4">
+        {/* Category */}
+        <div className="w-20 h-5 rounded-full bg-slate-200 dark:bg-slate-800 animate-pulse" />
+        
+        {/* Title */}
+        <div className="space-y-2">
+          <div className="w-full h-5 rounded bg-slate-200 dark:bg-slate-800 animate-pulse" />
+          <div className="w-2/3 h-5 rounded bg-slate-200 dark:bg-slate-800 animate-pulse" />
         </div>
-        <div className="h-5 bg-slate-200 dark:bg-slate-800 rounded w-full animate-pulse" />
-        <div className="h-5 bg-slate-200 dark:bg-slate-800 rounded w-2/3 animate-pulse" />
-        <div className="h-3 bg-slate-200 dark:bg-slate-800 rounded w-full animate-pulse" />
-        <div className="h-3 bg-slate-200 dark:bg-slate-800 rounded w-4/5 animate-pulse" />
-        <div className="flex gap-4 pt-2">
-          <div className="h-3 w-16 bg-slate-200 dark:bg-slate-800 rounded animate-pulse" />
-          <div className="h-3 w-12 bg-slate-200 dark:bg-slate-800 rounded animate-pulse" />
-          <div className="h-3 w-20 bg-slate-200 dark:bg-slate-800 rounded animate-pulse" />
+        
+        {/* Excerpt */}
+        <div className="space-y-2">
+          <div className="w-full h-4 rounded bg-slate-200 dark:bg-slate-800 animate-pulse" />
+          <div className="w-4/5 h-4 rounded bg-slate-200 dark:bg-slate-800 animate-pulse" />
+        </div>
+        
+        {/* Meta */}
+        <div className="flex items-center justify-between pt-4 border-t border-slate-100 dark:border-slate-800/50">
+          <div className="flex items-center gap-2">
+            <div className="w-7 h-7 rounded-full bg-slate-200 dark:bg-slate-800 animate-pulse" />
+            <div className="w-16 h-4 rounded bg-slate-200 dark:bg-slate-800 animate-pulse" />
+          </div>
+          <div className="w-16 h-4 rounded bg-slate-200 dark:bg-slate-800 animate-pulse" />
         </div>
       </div>
     </motion.div>

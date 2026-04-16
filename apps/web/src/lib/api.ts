@@ -82,10 +82,12 @@ export async function getBlogPost(slug: string) {
 
 // Blog API
 export const blogApi = {
-  getAll: (params?: { page?: number; limit?: number }) => {
+  getAll: (params?: { page?: number; limit?: number; category?: string; search?: string }) => {
     const queryParams = new URLSearchParams()
     if (params?.page) queryParams.set('page', params.page.toString())
     if (params?.limit) queryParams.set('limit', params.limit.toString())
+    if (params?.category) queryParams.set('category', params.category)
+    if (params?.search) queryParams.set('search', params.search)
     const query = queryParams.toString()
     return fetchApi<any>(`/blog${query ? `?${query}` : ''}`)
   },
@@ -94,6 +96,16 @@ export const blogApi = {
   },
   getBySlug: (slug: string) => {
     return fetchApi<any>(`/blog/slug/${slug}`)
+  },
+}
+
+// Blog Categories API
+export const blogCategoriesApi = {
+  getAll: () => {
+    return fetchApi<any[]>('/blog-categories')
+  },
+  getBySlug: (slug: string) => {
+    return fetchApi<any>(`/blog-categories/slug/${slug}`)
   },
 }
 
