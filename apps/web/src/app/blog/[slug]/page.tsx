@@ -34,11 +34,8 @@ export default function BlogPostPage() {
       try {
         const rawSlug = params.slug as string;
         const slug = decodeURIComponent(rawSlug);
-        console.log('[Blog Post] Raw slug:', rawSlug);
-        console.log('[Blog Post] Decoded slug:', slug);
         
         const data = await blogApi.getBySlug(slug);
-        console.log('[Blog Post] Raw API data:', JSON.stringify(data, null, 2));
         
         if (!data || typeof data !== 'object') {
           throw new Error('Invalid response from API');
@@ -151,20 +148,11 @@ export default function BlogPostPage() {
   
   useEffect(() => {
     const fetchRelatedPosts = async () => {
-      console.log('[Related Posts] Effect triggered');
-      console.log('[Related Posts] Post structure:', JSON.stringify(post, null, 2));
-      console.log('[Related Posts] post.category:', post?.category);
-      console.log('[Related Posts] post.category.slug:', post?.category?.slug);
-      
       if (!post?.category?.slug) {
-        console.log('[Related Posts] No category slug available');
         return;
       }
       
       setRelatedLoading(true);
-      console.log('[Related Posts] Fetching for category:', post.category.slug);
-      console.log('[Related Posts] Current post ID:', post.id);
-      console.log('[Related Posts] Current post category ID:', post.category.id);
       
       try {
         // Fetch posts from same category, excluding current post
@@ -173,20 +161,8 @@ export default function BlogPostPage() {
           category: post.category.slug 
         });
         
-        console.log('[Related Posts] API Response:', response);
-        console.log('[Related Posts] Response structure:', {
-          hasData: !!response.data,
-          isArray: Array.isArray(response),
-          dataType: typeof response,
-          keys: response?.data ? Object.keys(response.data) : 'N/A'
-        });
-        
         const posts = response.data || response;
-        console.log('[Related Posts] Posts found:', posts.length);
-        console.log('[Related Posts] All posts:', posts.map((p: BlogPost) => ({ id: p.id, title: p.title })));
-        
         const filtered = posts.filter((p: BlogPost) => p.id !== post.id).slice(0, 3);
-        console.log('[Related Posts] Filtered posts:', filtered.length);
         
         setRelatedPosts(filtered);
       } catch (err) {
