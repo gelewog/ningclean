@@ -54,14 +54,17 @@ export default function BlogPreviewPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Read draft data from localStorage (set by admin)
-    const draftData = localStorage.getItem('blog_draft_preview');
-    if (draftData) {
+    // Read draft data from URL (from admin on port 3000 cross-origin)
+    const params = new URLSearchParams(window.location.search);
+    const draftEncoded = params.get('draft');
+    
+    if (draftEncoded) {
       try {
-        const parsed = JSON.parse(draftData);
+        const decoded = decodeURIComponent(atob(draftEncoded));
+        const parsed = JSON.parse(decoded);
         setPost(parsed);
       } catch (e) {
-        console.error('Failed to parse draft data from localStorage', e);
+        console.error('Failed to parse draft data from URL', e);
       }
     }
     setLoading(false);

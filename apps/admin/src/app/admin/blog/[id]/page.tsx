@@ -197,7 +197,7 @@ export default function EditBlogPostPage() {
             <Button
               variant="outline"
               onClick={() => {
-                // Simpan draft ke localStorage untuk preview
+                // Encode data untuk preview via URL
                 const draftData = {
                   title: formData.title,
                   content: formData.content,
@@ -210,9 +210,9 @@ export default function EditBlogPostPage() {
                   slug: post?.slug || 'draft-preview',
                   category: categories.find(c => c.id === formData.categoryId),
                 }
-                // Simpan ke localStorage untuk preview (lebih reliable dari URL encoding)
-                localStorage.setItem('blog_draft_preview', JSON.stringify(draftData))
-                window.open('http://localhost:3001/blog/draft-preview/preview', '_blank')
+                // Encode dengan btoa + encodeURIComponent (karakter +, /, = harus di-encode untuk URL)
+                const encoded = btoa(encodeURIComponent(JSON.stringify(draftData)))
+                window.open(`http://localhost:3001/blog/draft-preview/preview?draft=${encodeURIComponent(encoded)}`, '_blank')
               }}
             >
               <Eye className="w-4 h-4 mr-2" />
