@@ -11,7 +11,7 @@ import { Textarea } from '@/components/ui/textarea'
 import { Badge } from '@/components/ui/badge'
 import { RichTextEditor } from '@/components/editor/RichTextEditor'
 import Link from 'next/link'
-import { getBlogPostById, updateBlogPost, deleteBlogPost, getBlogCategories, BlogCategory } from '@/lib/api'
+import { getBlogPostById, updateBlogPost, deleteBlogPost, getBlogCategories, BlogCategory, createDraftPreview } from '@/lib/api'
 import { BlogPost } from '@/types'
 import { toast } from 'sonner'
 
@@ -196,8 +196,8 @@ export default function EditBlogPostPage() {
             </Button>
             <Button
               variant="outline"
-              onClick={() => {
-                // Encode data untuk preview via URL
+              onClick={async () => {
+                // Build draft data
                 const draftData = {
                   title: formData.title,
                   content: formData.content,
@@ -210,9 +210,14 @@ export default function EditBlogPostPage() {
                   slug: post?.slug || 'draft-preview',
                   category: categories.find(c => c.id === formData.categoryId),
                 }
-                // Encode dengan btoa + encodeURIComponent (karakter +, /, = harus di-encode untuk URL)
-                const encoded = btoa(encodeURIComponent(JSON.stringify(draftData)))
-                window.open(`http://localhost:3001/blog/draft-preview/preview?draft=${encodeURIComponent(encoded)}`, '_blank')
+                // Save to API and get temp ID
+                try {
+                  const { id } = await createDraftPreview(draftData)
+                  window.open(`http://localhost:3001/blog/draft-preview/preview?id=${id}`, '_blank')
+                } catch (e) {
+                  console.error('Failed to create draft preview:', e)
+                  toast.error('Gagal membuat preview')
+                }
               }}
             >
               <Eye className="w-4 h-4 mr-2" />

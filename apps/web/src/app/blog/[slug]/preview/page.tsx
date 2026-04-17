@@ -54,20 +54,28 @@ export default function BlogPreviewPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Read draft data from URL (from admin on port 3000 cross-origin)
+    // Read draft ID from URL and fetch from API
     const params = new URLSearchParams(window.location.search);
-    const draftEncoded = params.get('draft');
+    const draftId = params.get('id');
     
-    if (draftEncoded) {
-      try {
-        const decoded = decodeURIComponent(atob(draftEncoded));
-        const parsed = JSON.parse(decoded);
-        setPost(parsed);
-      } catch (e) {
-        console.error('Failed to parse draft data from URL', e);
-      }
+    if (draftId) {
+      fetch(`http://localhost:4000/api/drafts/preview/${draftId}`)
+        .then(res => {
+          if (!res.ok) throw new Error('Draft not found or expired');
+          return res.json();
+        })
+        .then(data => {
+          setPost(data);
+        })
+        .catch(e => {
+          console.error('Failed to fetch draft:', e);
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    } else {
+      setLoading(false);
     }
-    setLoading(false);
   }, []);
 
   // Helper to get full image URL

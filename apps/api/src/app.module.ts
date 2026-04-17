@@ -25,6 +25,7 @@ import { BlogCategoriesModule } from './blog-categories/blog-categories.module';
 import { EmailTemplatesModule } from './email-templates/email-templates.module';
 import { InvoicesModule } from './invoices/invoices.module';
 import { UploadModule } from './upload/upload.module';
+import { DraftPreviewModule } from './draft-preview/draft-preview.module';
 
 @Module({
   imports: [
@@ -52,6 +53,7 @@ import { UploadModule } from './upload/upload.module';
     EmailTemplatesModule,
     InvoicesModule,
     UploadModule,
+    DraftPreviewModule,
   ],
   controllers: [AppController],
   providers: [AppService],

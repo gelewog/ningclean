@@ -1359,3 +1359,10 @@ export async function getInvoiceById(invoiceId: string): Promise<any> {
   const token = getToken()
   return fetchApi<any>(`/invoices/${invoiceId}`, { token })
 }
+
+export async function createDraftPreview(data: any): Promise<{ id: string }> {
+  return fetchApi<{ id: string }>('/drafts/preview', {
+    method: 'POST',
+    body: JSON.stringify(data),
+  })
+}
