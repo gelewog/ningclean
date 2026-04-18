@@ -30,23 +30,23 @@ function SuccessOverlay({ onClose }: { onClose: () => void }) {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4"
+      className="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4"
       onClick={onClose}
     >
       <motion.div
         initial={{ scale: 0.9, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         exit={{ scale: 0.9, opacity: 0 }}
-        className="bg-white rounded-2xl p-8 max-w-md w-full text-center"
+        className="dark:bg-slate-900 bg-white rounded-2xl p-8 max-w-md w-full text-center shadow-2xl"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-          <svg className="w-8 h-8 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <div className="w-16 h-16 dark:bg-emerald-500/20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+          <svg className="w-8 h-8 dark:text-emerald-400 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
           </svg>
         </div>
-        <h2 className="text-2xl font-bold text-gray-900 mb-2">Booking Berhasil!</h2>
-        <p className="text-gray-600 mb-6">
+        <h2 className="text-2xl font-bold dark:text-white text-gray-900 mb-2">Booking Berhasil!</h2>
+        <p className="dark:text-white/60 text-gray-600 mb-6">
           Terima kasih telah melakukan booking. Tim kami akan segera menghubungi Anda melalui WhatsApp untuk konfirmasi lebih lanjut.
         </p>
         <Button onClick={onClose} className="w-full">
@@ -63,13 +63,13 @@ function ErrorMessage({ message, onClose }: { message: string; onClose: () => vo
       initial={{ opacity: 0, y: -10 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -10 }}
-      className="fixed top-24 left-1/2 -translate-x-1/2 z-50 bg-red-50 border border-red-200 text-red-700 px-6 py-3 rounded-xl shadow-lg flex items-center gap-3"
+      className="fixed top-24 left-1/2 -translate-x-1/2 z-50 dark:bg-red-900/30 dark:border-red-500/30 dark:text-red-400 bg-red-50 border border-red-200 text-red-700 px-6 py-3 rounded-xl shadow-lg flex items-center gap-3"
     >
-      <svg className="w-5 h-5 text-red-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <svg className="w-5 h-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
       </svg>
       <span>{message}</span>
-      <button onClick={onClose} className="ml-2 text-red-400 hover:text-red-600">
+      <button onClick={onClose} className="ml-2 dark:text-red-400 hover:dark:text-red-300 text-red-400 hover:text-red-600">
         <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
         </svg>
