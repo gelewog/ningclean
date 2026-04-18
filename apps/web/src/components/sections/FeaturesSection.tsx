@@ -280,8 +280,8 @@ export default function FeaturesSection() {
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -100 }}
               transition={{ duration: 0.5 }}
-              className="dark:bg-gradient-to-br dark:from-white/[0.08] dark:to-white/[0.02] dark:backdrop-blur-xl dark:border-white/10
-                         bg-white border border-slate-200 rounded-2xl p-6"
+              className="dark:bg-slate-900/80 dark:backdrop-blur-xl dark:border-white/10 dark:shadow-2xl dark:shadow-black/30
+                         bg-white border border-slate-200 rounded-2xl p-6 shadow-lg"
             >
               {features.find(f => f.id === activeFeature) && (
                 <>
@@ -344,7 +344,8 @@ export default function FeaturesSection() {
                 whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true }}
                 transition={{ delay: 0.5 + idx * 0.1 }}
-                className="text-center p-4 dark:bg-white/[0.03] dark:border-white/[0.08] bg-white border border-slate-200 rounded-2xl group"
+                className="text-center p-4 dark:bg-slate-900/50 dark:border-white/[0.08] dark:shadow-lg dark:shadow-black/20
+                           bg-white border border-slate-200 rounded-2xl group"
               >
                 <div className="text-2xl mb-2">
                   {prop.icon}
