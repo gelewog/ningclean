@@ -111,6 +111,7 @@ export class AuthService {
         name: true,
         role: true,
         phone: true,
+        avatar: true,
         createdAt: true,
       },
     });
@@ -120,7 +121,7 @@ export class AuthService {
     return user;
   }
 
-  async updateProfile(userId: string, data: { name?: string; email?: string }) {
+  async updateProfile(userId: string, data: { name?: string; email?: string; phone?: string; avatar?: string }) {
     const user = await this.prisma.user.findUnique({ where: { id: userId } });
     if (!user) {
       return { success: false, message: 'User not found' };
@@ -141,6 +142,8 @@ export class AuthService {
       data: {
         name: data.name ?? user.name,
         email: data.email ?? user.email,
+        phone: data.phone !== undefined ? data.phone : user.phone,
+        avatar: data.avatar !== undefined ? data.avatar : user.avatar,
       },
       select: {
         id: true,
@@ -148,6 +151,7 @@ export class AuthService {
         name: true,
         role: true,
         phone: true,
+        avatar: true,
         createdAt: true,
       },
     });
@@ -158,7 +162,7 @@ export class AuthService {
       entityId: userId,
       userId: userId,
       userEmail: user.email,
-      changes: { name: data.name, email: data.email },
+      changes: { name: data.name, email: data.email, phone: data.phone, avatar: data.avatar },
     });
 
     return { success: true, message: 'Profile updated successfully', data: updatedUser };
