@@ -272,7 +272,13 @@ export default function TermsPage() {
                       key={item.id}
                       onClick={() => {
                         setActiveSection(item.id);
-                        document.getElementById(item.id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        const element = document.getElementById(item.id);
+                        if (element) {
+                          const offset = 100; // Offset for fixed navbar
+                          const elementPosition = element.getBoundingClientRect().top;
+                          const offsetPosition = elementPosition + window.pageYOffset - offset;
+                          window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
+                        }
                       }}
                       className={`flex items-center gap-2.5 px-3 py-2 rounded-xl text-left transition-all duration-200 ${
                         activeSection === item.id
