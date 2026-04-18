@@ -54,7 +54,7 @@ function BeforeAfterSlider({ before, after, title }: { before: string; after: st
       onMouseLeave={() => setIsDragging(false)}
     >
       {/* BEFORE Image (grayscale - dirty state) */}
-      <div className="absolute inset-0">
+      <div className="absolute inset-0 z-0">
         <img
           src={before}
           alt="Before cleaning"
@@ -64,23 +64,20 @@ function BeforeAfterSlider({ before, after, title }: { before: string; after: st
         <div className="absolute inset-0 bg-gradient-to-r from-black/20 to-transparent" />
       </div>
 
-      {/* AFTER Image (clean state) - clipped */}
-      <div
-        className="absolute inset-0 overflow-hidden"
-        style={{ width: `${sliderPosition}%` }}
-      >
+      {/* AFTER Image (uses clip-path to reveal portion) */}
+      <div className="absolute inset-0 z-10">
         <img
           src={after}
           alt="After cleaning"
-          className="absolute inset-0 h-full object-cover"
-          style={{ width: containerRef.current ? `${100 / (sliderPosition / 100)}%` : '100%' }}
+          className="w-full h-full object-cover"
+          style={{ clipPath: `inset(0 ${100 - sliderPosition}% 0 0)` }}
           draggable={false}
         />
       </div>
 
       {/* Divider line */}
       <div
-        className="absolute top-0 bottom-0 w-1 bg-white cursor-col-resize z-10"
+        className="absolute top-0 bottom-0 w-0.5 bg-white cursor-col-resize z-20"
         style={{ left: `${sliderPosition}%`, transform: 'translateX(-50%)' }}
       >
         {/* Handle */}

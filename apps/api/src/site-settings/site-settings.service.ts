@@ -1,9 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
+import { AuditService } from '../audit/audit.service';
 
 @Injectable()
 export class SiteSettingsService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private auditService: AuditService,
+  ) {}
 
   async getSettings() {
     let settings = await this.prisma.siteSettings.findFirst();
@@ -21,19 +25,19 @@ export class SiteSettingsService {
     return settings;
   }
 
-  async updateSettings(data: any) {
+  async updateSettings(data: any, user?: any) {
     let settings = await this.prisma.siteSettings.findFirst();
-    
+
     // Build update data - only include fields that are explicitly provided (not undefined)
     const updateData: any = {};
-    
+
     // Helper to add field if defined (including empty string)
     const addField = (key: string, value: any) => {
       if (value !== undefined) {
         updateData[key] = value;
       }
     };
-    
+
     addField('companyName', data.companyName);
     addField('tagline', data.tagline);
     addField('description', data.description);
@@ -78,7 +82,7 @@ export class SiteSettingsService {
     addField('minAdvanceDays', data.minAdvanceDays);
     addField('maxAdvanceDays', data.maxAdvanceDays);
     addField('cancellationHours', data.cancellationHours);
-    
+
     if (!settings) {
       // Create new with defaults + updates
       settings = await this.prisma.siteSettings.create({
@@ -88,16 +92,42 @@ export class SiteSettingsService {
           ...updateData,
         },
       });
+
+      // Audit log for create
+      await this.auditService.log({
+        action: 'CREATE',
+        entityType: 'SiteSettings',
+        entityId: settings.id,
+        userId: user?.id,
+        userEmail: user?.email,
+        changes: updateData,
+      });
     } else {
       // Update only if there's data to update
       if (Object.keys(updateData).length > 0) {
+        // Get old values for comparison
+        const oldSettings = await this.prisma.siteSettings.findUnique({ where: { id: settings.id } });
+
         settings = await this.prisma.siteSettings.update({
           where: { id: settings.id },
           data: updateData,
         });
+
+        // Audit log for update
+        await this.auditService.log({
+          action: 'UPDATE',
+          entityType: 'SiteSettings',
+          entityId: settings.id,
+          userId: user?.id,
+          userEmail: user?.email,
+          changes: {
+            before: oldSettings,
+            after: settings,
+          },
+        });
       }
     }
-    
+
     return settings;
   }
 }

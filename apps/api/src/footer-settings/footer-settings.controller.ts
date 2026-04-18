@@ -3,6 +3,7 @@ import { FooterSettingsService } from './footer-settings.service';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { RolesGuard } from '../common/guards/roles.guard';
 import { Roles } from '../common/decorators/roles.decorator';
+import { CurrentUser } from '../common/decorators/current-user.decorator';
 import { Role } from '@prisma/client';
 
 @Controller('footer-settings')
@@ -10,7 +11,6 @@ export class FooterSettingsController {
   constructor(private readonly footerSettingsService: FooterSettingsService) {}
 
   @Get()
-  @UseGuards(JwtAuthGuard)
   async getFooterSettings() {
     return this.footerSettingsService.getFooterSettings();
   }
@@ -18,7 +18,7 @@ export class FooterSettingsController {
   @Put()
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(Role.ADMIN)
-  async updateFooterSettings(@Body() data: any) {
-    return this.footerSettingsService.updateFooterSettings(data);
+  async updateFooterSettings(@Body() data: any, @CurrentUser() user: any) {
+    return this.footerSettingsService.updateFooterSettings(data, user);
   }
 }

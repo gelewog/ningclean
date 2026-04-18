@@ -75,3 +75,8 @@ export function truncate(str: string, length: number): string {
 export function generateId(): string {
   return Math.random().toString(36).substring(2) + Date.now().toString(36)
 }
+
+export function getDiceBearAvatar(seed: string, style: 'avataaars' | 'adventurer' | 'bottts' | 'initials' = 'avataaars'): string {
+  const encodedSeed = encodeURIComponent(seed)
+  return `https://api.dicebear.com/7.x/${style}/svg?seed=${encodedSeed}`
+}

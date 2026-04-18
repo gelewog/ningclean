@@ -1,0 +1,393 @@
+- generic [active] [ref=e21]:
+  - generic [ref=e5] [cursor=pointer]:
+    - button "Open Next.js Dev Tools" [ref=e6]:
+      - img [ref=e7]
+    - generic [ref=e567]:
+      - button "Open issues overlay" [ref=e568]:
+        - generic [ref=e569]:
+          - generic [ref=e570]: "0"
+          - generic [ref=e571]: "1"
+        - generic [ref=e572]: Issue
+      - button "Collapse issues badge" [ref=e573]:
+        - img [ref=e574]
+  - alert [ref=e10]
+  - generic [ref=e23]:
+    - banner [ref=e25]:
+      - generic [ref=e26]:
+        - text: NINGCLEAN
+        - generic [ref=e27]: NINGCLEAN
+      - navigation [ref=e28]:
+        - link "Work" [ref=e29] [cursor=pointer]:
+          - /url: "#work"
+          - text: Work
+        - link "Services" [ref=e30] [cursor=pointer]:
+          - /url: "#services"
+          - text: Services
+        - link "About" [ref=e31] [cursor=pointer]:
+          - /url: "#about"
+          - text: About
+        - link "Stories" [ref=e32] [cursor=pointer]:
+          - /url: "#stories"
+          - text: Stories
+        - link "Contact" [ref=e33] [cursor=pointer]:
+          - /url: "#contact"
+          - text: Contact
+      - button "Get in Touch" [ref=e35] [cursor=pointer]
+    - generic [ref=e46]: 03 / 06
+    - generic [ref=e47]:
+      - generic [ref=e48]:
+        - generic [ref=e51]: You say jump,
+        - generic [ref=e54]: we dance.
+        - paragraph [ref=e56]: We are NINGCLEAN, magicians of cleaning services, dancing on the edge of perfection for more than two decades.
+        - generic [ref=e58]:
+          - button "View Our Work" [ref=e60] [cursor=pointer]:
+            - generic [ref=e61]: View Our Work
+            - img [ref=e62]
+          - button "Learn More" [ref=e65] [cursor=pointer]
+      - generic [ref=e67]: Scroll to explore
+    - generic [ref=e75]:
+      - generic [ref=e76]:
+        - generic [ref=e78]: T
+        - generic [ref=e80]: h
+        - generic [ref=e82]: e
+        - generic [ref=e86]: "N"
+        - generic [ref=e88]: u
+        - generic [ref=e90]: m
+        - generic [ref=e92]: b
+        - generic [ref=e94]: e
+        - generic [ref=e96]: r
+        - generic [ref=e98]: s
+        - generic [ref=e100]: D
+        - generic [ref=e102]: o
+        - generic [ref=e104]: "n"
+        - generic [ref=e106]: "'"
+        - generic [ref=e108]: t
+        - generic [ref=e112]: L
+        - generic [ref=e114]: i
+        - generic [ref=e116]: e
+      - generic [ref=e117]:
+        - generic [ref=e120]:
+          - generic [ref=e121]: 0+
+          - generic [ref=e122]: Digital Magicians
+        - generic [ref=e126]:
+          - generic [ref=e127]: "0"
+          - generic [ref=e128]: Fortune 500 Companies
+        - generic [ref=e132]:
+          - generic [ref=e133]: 0%
+          - generic [ref=e134]: Client Satisfaction
+        - generic [ref=e138]:
+          - generic [ref=e139]: 0+
+          - generic [ref=e140]: Years Experience
+      - generic [ref=e142]:
+        - generic [ref=e143]:
+          - img [ref=e145]
+          - generic [ref=e147]: Certified Professionals
+        - generic [ref=e148]:
+          - img [ref=e150]
+          - generic [ref=e152]: 24/7 Support
+        - generic [ref=e153]:
+          - img [ref=e155]
+          - generic [ref=e157]: Eco-Friendly Products
+    - generic [ref=e158]:
+      - generic:
+        - generic: PROJECTS PROJECTS PROJECTS
+      - generic [ref=e159]:
+        - generic [ref=e160]:
+          - generic [ref=e162]: S
+          - generic [ref=e164]: e
+          - generic [ref=e166]: l
+          - generic [ref=e168]: e
+          - generic [ref=e170]: c
+          - generic [ref=e172]: t
+          - generic [ref=e174]: e
+          - generic [ref=e176]: d
+          - generic [ref=e178]: P
+          - generic [ref=e180]: r
+          - generic [ref=e182]: o
+          - generic [ref=e184]: j
+          - generic [ref=e186]: e
+          - generic [ref=e188]: c
+          - generic [ref=e190]: t
+          - generic [ref=e192]: s
+        - generic [ref=e193]:
+          - button "All" [ref=e194] [cursor=pointer]
+          - button "Interior" [ref=e195] [cursor=pointer]
+          - button "Kitchen" [ref=e196] [cursor=pointer]
+          - button "Bathroom" [ref=e197] [cursor=pointer]
+          - button "Outdoor" [ref=e198] [cursor=pointer]
+        - generic [ref=e199]:
+          - generic [ref=e200] [cursor=pointer]:
+            - generic [ref=e201]:
+              - img "Ruang Tamu Modern" [ref=e203]
+              - generic [ref=e205]: Living Room
+              - generic [ref=e206]: "24"
+            - generic [ref=e207]:
+              - paragraph [ref=e208]: Complete interior deep cleaning with eco-friendly products
+              - heading "Ruang Tamu Modern" [level=3] [ref=e209]
+              - generic [ref=e210]:
+                - generic [ref=e211]: View Project
+                - img [ref=e212]
+          - generic [ref=e214] [cursor=pointer]:
+            - generic [ref=e215]:
+              - img "Dapur Minimalis" [ref=e217]
+              - generic [ref=e219]: Kitchen
+              - generic [ref=e220]: "24"
+            - generic [ref=e221]:
+              - paragraph [ref=e222]: Grease removal and sanitization for commercial kitchen
+              - heading "Dapur Minimalis" [level=3] [ref=e223]
+              - generic [ref=e224]:
+                - generic [ref=e225]: View Project
+                - img [ref=e226]
+          - generic [ref=e228] [cursor=pointer]:
+            - generic [ref=e229]:
+              - img "Kamar Mandi Spa" [ref=e231]
+              - generic [ref=e233]: Bathroom
+              - generic [ref=e234]: "24"
+            - generic [ref=e235]:
+              - paragraph [ref=e236]: Anti-bacterial treatment with premium materials
+              - heading "Kamar Mandi Spa" [level=3] [ref=e237]
+              - generic [ref=e238]:
+                - generic [ref=e239]: View Project
+                - img [ref=e240]
+          - generic [ref=e242] [cursor=pointer]:
+            - generic [ref=e243]:
+              - img "Exterior Cleaning" [ref=e245]
+              - generic [ref=e247]: Outdoor
+              - generic [ref=e248]: "24"
+            - generic [ref=e249]:
+              - paragraph [ref=e250]: Pressure washing and facade restoration services
+              - heading "Exterior Cleaning" [level=3] [ref=e251]
+              - generic [ref=e252]:
+                - generic [ref=e253]: View Project
+                - img [ref=e254]
+        - button "View All Projects" [ref=e257] [cursor=pointer]:
+          - text: View All Projects
+          - img [ref=e258]
+    - generic [ref=e261]:
+      - generic [ref=e262]:
+        - generic [ref=e264]: W
+        - generic [ref=e266]: h
+        - generic [ref=e268]: a
+        - generic [ref=e270]: t
+        - generic [ref=e274]: W
+        - generic [ref=e276]: e
+        - generic [ref=e278]: D
+        - generic [ref=e280]: o
+        - generic [ref=e284]: B
+        - generic [ref=e286]: e
+        - generic [ref=e288]: s
+        - generic [ref=e290]: t
+      - generic [ref=e291]:
+        - generic [ref=e294] [cursor=pointer]:
+          - generic [ref=e295]:
+            - generic [ref=e296]: ✨
+            - generic [ref=e297]:
+              - heading "Deep Cleaning" [level=3] [ref=e298]
+              - paragraph [ref=e299]: Pembersihan menyeluruh dari floor ke ceiling
+              - generic [ref=e300]:
+                - generic [ref=e301]:
+                  - img [ref=e302]
+                  - text: 360° Coverage
+                - generic [ref=e304]:
+                  - img [ref=e305]
+                  - text: Eco Products
+                - generic [ref=e307]:
+                  - img [ref=e308]
+                  - text: ISO Certified
+          - generic [ref=e310]:
+            - generic [ref=e311]: Click for details
+            - img [ref=e313]
+        - generic [ref=e317] [cursor=pointer]:
+          - generic [ref=e318]:
+            - generic [ref=e319]: ⭐
+            - generic [ref=e320]:
+              - heading "Premium Package" [level=3] [ref=e321]
+              - paragraph [ref=e322]: Full service dengan quality assurance
+              - generic [ref=e323]:
+                - generic [ref=e324]:
+                  - img [ref=e325]
+                  - text: Priority Support
+                - generic [ref=e327]:
+                  - img [ref=e328]
+                  - text: Dedicated Team
+                - generic [ref=e330]:
+                  - img [ref=e331]
+                  - text: Warranty
+          - generic [ref=e333]:
+            - generic [ref=e334]: Click for details
+            - img [ref=e336]
+        - generic [ref=e340] [cursor=pointer]:
+          - generic [ref=e341]:
+            - generic [ref=e342]: ⚡
+            - generic [ref=e343]:
+              - heading "Express Clean" [level=3] [ref=e344]
+              - paragraph [ref=e345]: Quick cleaning untuk kebutuhan mendesak
+              - generic [ref=e346]:
+                - generic [ref=e347]:
+                  - img [ref=e348]
+                  - text: Fast Response
+                - generic [ref=e350]:
+                  - img [ref=e351]
+                  - text: Same Day
+                - generic [ref=e353]:
+                  - img [ref=e354]
+                  - text: Flexible Hours
+          - generic [ref=e356]:
+            - generic [ref=e357]: Click for details
+            - img [ref=e359]
+      - generic [ref=e363]:
+        - generic [ref=e364]: Deep Cleaning
+        - generic [ref=e365]: Premium Package
+        - generic [ref=e366]: Express Clean
+        - generic [ref=e367]: Sanitization
+        - generic [ref=e368]: Maintenance
+        - generic [ref=e369]: Deep Cleaning
+        - generic [ref=e370]: Premium Package
+        - generic [ref=e371]: Express Clean
+        - generic [ref=e372]: Sanitization
+        - generic [ref=e373]: Maintenance
+    - generic [ref=e375]:
+      - generic [ref=e376]:
+        - generic [ref=e378]: R
+        - generic [ref=e380]: e
+        - generic [ref=e382]: l
+        - generic [ref=e384]: a
+        - generic [ref=e386]: t
+        - generic [ref=e388]: i
+        - generic [ref=e390]: o
+        - generic [ref=e392]: "n"
+        - generic [ref=e394]: s
+        - generic [ref=e396]: h
+        - generic [ref=e398]: i
+        - generic [ref=e400]: p
+        - generic [ref=e402]: s
+        - generic [ref=e406]: T
+        - generic [ref=e408]: h
+        - generic [ref=e410]: i
+        - generic [ref=e412]: s
+        - generic [ref=e414]: I
+        - generic [ref=e416]: "n"
+        - generic [ref=e418]: t
+        - generic [ref=e420]: i
+        - generic [ref=e422]: m
+        - generic [ref=e424]: a
+        - generic [ref=e426]: t
+        - generic [ref=e428]: e
+        - generic [ref=e432]: A
+        - generic [ref=e434]: r
+        - generic [ref=e436]: e
+        - generic [ref=e440]: I
+        - generic [ref=e442]: l
+        - generic [ref=e444]: l
+        - generic [ref=e446]: e
+        - generic [ref=e448]: g
+        - generic [ref=e450]: a
+        - generic [ref=e452]: l
+        - generic [ref=e454]: I
+        - generic [ref=e456]: "n"
+        - generic [ref=e460]: S
+        - generic [ref=e462]: o
+        - generic [ref=e464]: m
+        - generic [ref=e466]: e
+        - generic [ref=e470]: C
+        - generic [ref=e472]: o
+        - generic [ref=e474]: u
+        - generic [ref=e476]: "n"
+        - generic [ref=e478]: t
+        - generic [ref=e480]: r
+        - generic [ref=e482]: i
+        - generic [ref=e484]: e
+        - generic [ref=e486]: s
+      - generic [ref=e487]:
+        - generic [ref=e488] [cursor=pointer]:
+          - generic [ref=e489]: Samsung Indonesia
+          - generic: Click to learn more
+        - generic [ref=e490] [cursor=pointer]:
+          - generic [ref=e491]: Gojek Indonesia
+          - generic: Click to learn more
+        - generic [ref=e492] [cursor=pointer]:
+          - generic [ref=e493]: Tokopedia
+          - generic: Click to learn more
+        - generic [ref=e494] [cursor=pointer]:
+          - generic [ref=e495]: Bank BCA
+          - generic: Click to learn more
+        - generic [ref=e496] [cursor=pointer]:
+          - generic [ref=e497]: Hotel Santika
+          - generic: Click to learn more
+        - generic [ref=e498] [cursor=pointer]:
+          - generic [ref=e499]: Apartment Jakarta
+          - generic: Click to learn more
+      - generic [ref=e500]:
+        - generic [ref=e501]:
+          - generic [ref=e502]: 98%
+          - generic [ref=e503]: Client Satisfaction Rate
+          - img [ref=e505]
+        - generic [ref=e507]:
+          - generic [ref=e508]: 500+
+          - generic [ref=e509]: Projects Completed
+          - img [ref=e511]
+        - generic [ref=e513]:
+          - generic [ref=e514]: 24h
+          - generic [ref=e515]: Average Response Time
+          - img [ref=e517]
+    - generic [ref=e523]:
+      - generic [ref=e525]: Ready to
+      - generic [ref=e527]: Transform?
+      - paragraph [ref=e529]: Jadwalkan cleaning profesional sekarang. Booking gratis, tanpa komitmen.
+      - generic [ref=e530]:
+        - button "Let's Talk 🚀" [ref=e532] [cursor=pointer]:
+          - generic [ref=e533]: Let's Talk 🚀
+          - img [ref=e534]
+        - button "View Services" [ref=e537] [cursor=pointer]
+    - generic [ref=e545]: Available for booking 24/7
+    - contentinfo [ref=e546]:
+      - generic [ref=e547]:
+        - generic [ref=e548]:
+          - generic [ref=e549] [cursor=pointer]: NINGCLEAN
+          - navigation [ref=e551]:
+            - link "Privacy Policy" [ref=e552] [cursor=pointer]:
+              - /url: "#"
+              - text: Privacy Policy
+            - link "Terms of Service" [ref=e554] [cursor=pointer]:
+              - /url: "#"
+              - text: Terms of Service
+            - link "Contact" [ref=e556] [cursor=pointer]:
+              - /url: "#"
+              - text: Contact
+          - generic [ref=e558]:
+            - link "T" [ref=e559] [cursor=pointer]:
+              - /url: "#"
+              - generic [ref=e560]: T
+            - link "I" [ref=e561] [cursor=pointer]:
+              - /url: "#"
+              - generic [ref=e562]: I
+            - link "L" [ref=e563] [cursor=pointer]:
+              - /url: "#"
+              - generic [ref=e564]: L
+        - generic [ref=e565]:
+          - text: © 2026 NingClean. All rights reserved. Made with
+          - generic [ref=e566]: 💚
+    - generic [ref=e583]:
+      - generic [ref=e584]:
+        - heading "Deep Cleaning" [level=2] [ref=e585]
+        - button [ref=e586] [cursor=pointer]:
+          - img [ref=e587]
+      - generic [ref=e589]:
+        - generic [ref=e590]: ✨
+        - paragraph [ref=e591]: Pembersihan menyeluruh dari floor ke ceiling
+        - generic [ref=e592]:
+          - heading "Features:" [level=4] [ref=e593]
+          - generic [ref=e594]:
+            - img [ref=e596]
+            - generic [ref=e598]: 360° Coverage
+          - generic [ref=e599]:
+            - img [ref=e601]
+            - generic [ref=e603]: Eco Products
+          - generic [ref=e604]:
+            - img [ref=e606]
+            - generic [ref=e608]: ISO Certified
+        - generic [ref=e609]:
+          - button "Book Now" [ref=e610] [cursor=pointer]:
+            - text: Book Now
+            - img [ref=e611]
+          - button "Learn More" [ref=e613] [cursor=pointer]

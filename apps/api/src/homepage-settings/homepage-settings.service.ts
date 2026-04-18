@@ -1,9 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
+import { AuditService } from '../audit/audit.service';
 
 @Injectable()
 export class HomepageSettingsService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private auditService: AuditService,
+  ) {}
 
   // Default slides
   private defaultSlides = [
@@ -66,11 +70,11 @@ export class HomepageSettingsService {
     };
   }
 
-  async updateHomepageSettings(data: any) {
+  async updateHomepageSettings(data: any, user?: any) {
     const current = await this.getHomepageSettings();
-    
+
     const updateData: any = {};
-    
+
     if (data.heroHeadline !== undefined) updateData.heroHeadline = data.heroHeadline;
     if (data.heroSubheadline !== undefined) updateData.heroSubheadline = data.heroSubheadline;
     if (data.heroImage !== undefined) updateData.heroImage = data.heroImage;
@@ -98,13 +102,26 @@ export class HomepageSettingsService {
       data: updateData,
     });
 
+    // Audit log
+    await this.auditService.log({
+      action: 'UPDATE',
+      entityType: 'HomepageSettings',
+      entityId: settings.id,
+      userId: user?.id,
+      userEmail: user?.email,
+      changes: {
+        before: current,
+        after: data,
+      },
+    });
+
     return {
       ...settings,
-      featuredServiceIds: typeof settings.featuredServiceIds === 'string' 
-        ? JSON.parse(settings.featuredServiceIds) 
+      featuredServiceIds: typeof settings.featuredServiceIds === 'string'
+        ? JSON.parse(settings.featuredServiceIds)
         : settings.featuredServiceIds,
-      beforeAfterSlides: typeof settings.beforeAfterSlides === 'string' 
-        ? JSON.parse(settings.beforeAfterSlides) 
+      beforeAfterSlides: typeof settings.beforeAfterSlides === 'string'
+        ? JSON.parse(settings.beforeAfterSlides)
         : settings.beforeAfterSlides,
     };
   }

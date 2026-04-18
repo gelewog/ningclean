@@ -7,6 +7,7 @@ import {
   Get,
   Res,
   Param,
+  Query,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
@@ -36,6 +37,16 @@ folders.forEach((folder) => {
   }
 });
 
+// Create gallery subdirectories (before-after)
+const beforeAfterPath = join(UPLOAD_DIR, 'gallery', 'before-after');
+if (!existsSync(beforeAfterPath)) {
+  mkdirSync(beforeAfterPath, { recursive: true });
+}
+const beforeAfterThumbsPath = join(beforeAfterPath, 'thumbs');
+if (!existsSync(beforeAfterThumbsPath)) {
+  mkdirSync(beforeAfterThumbsPath, { recursive: true });
+}
+
 @Controller('upload')
 export class UploadController {
   @Post(':folder')
@@ -44,14 +55,21 @@ export class UploadController {
       storage: diskStorage({
         destination: (req, file, cb) => {
           const folder = req.params.folder;
+          const subfolder = req.query.subfolder as string;
           const allowedFolders = ['gallery', 'services', 'team', 'testimonials', 'settings'];
-          
+
           if (!allowedFolders.includes(folder)) {
             return cb(new BadRequestException('Invalid upload folder'), '');
           }
-          
-          const folderPath = join(UPLOAD_DIR, folder);
-          cb(null, folderPath);
+
+          // If subfolder is specified (e.g., gallery?subfolder=before-after)
+          if (subfolder) {
+            const folderPath = join(UPLOAD_DIR, folder, subfolder);
+            cb(null, folderPath);
+          } else {
+            const folderPath = join(UPLOAD_DIR, folder);
+            cb(null, folderPath);
+          }
         },
         filename: (req, file, cb) => {
           const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
@@ -75,16 +93,22 @@ export class UploadController {
   async uploadFile(
     @UploadedFile() file: Express.Multer.File,
     @Param('folder') folder: string,
+    @Query('subfolder') subfolder: string,
   ) {
     if (!file) {
       throw new BadRequestException('No file uploaded');
     }
 
-    const originalPath = join(UPLOAD_DIR, folder, file.filename);
+    // Build the actual path (including subfolder if present)
+    const folderPath = subfolder
+      ? join(UPLOAD_DIR, folder, subfolder)
+      : join(UPLOAD_DIR, folder);
+
+    const originalPath = join(folderPath, file.filename);
     const baseName = file.filename.replace(extname(file.filename), '');
     const webpFilename = `${baseName}.webp`;
-    const webpPath = join(UPLOAD_DIR, folder, webpFilename);
-    const thumbPath = join(UPLOAD_DIR, folder, 'thumbs', webpFilename);
+    const webpPath = join(folderPath, webpFilename);
+    const thumbPath = join(folderPath, 'thumbs', webpFilename);
 
     try {
       // Convert original to WebP (quality 85 for good balance)
@@ -105,8 +129,13 @@ export class UploadController {
       const webpStats = await fs.stat(webpPath);
       const thumbStats = await fs.stat(thumbPath);
 
-      const fileUrl = `/api/upload/${folder}/${webpFilename}`;
-      const thumbUrl = `/api/upload/${folder}/thumbs/${webpFilename}`;
+      // Build the URL based on whether subfolder is used
+      const fileUrl = subfolder
+        ? `/api/upload/${folder}/${subfolder}/${webpFilename}`
+        : `/api/upload/${folder}/${webpFilename}`;
+      const thumbUrl = subfolder
+        ? `/api/upload/${folder}/${subfolder}/thumbs/${webpFilename}`
+        : `/api/upload/${folder}/thumbs/${webpFilename}`;
 
       // Calculate savings
       const savings = ((file.size - webpStats.size) / file.size * 100).toFixed(1);
@@ -124,7 +153,7 @@ export class UploadController {
           mimetype: 'image/webp',
           url: fileUrl,
           thumbnailUrl: thumbUrl,
-          folder: folder,
+          folder: subfolder ? `${folder}/${subfolder}` : folder,
         },
       };
     } catch (error) {
@@ -138,6 +167,38 @@ export class UploadController {
     }
   }
 
+  @Get(':folder/:subfolder/:filename')
+  async serveFileWithSubfolder(
+    @Param('folder') folder: string,
+    @Param('subfolder') subfolder: string,
+    @Param('filename') filename: string,
+    @Res() res: Response,
+  ) {
+    const filePath = join(UPLOAD_DIR, folder, subfolder, filename);
+
+    if (!existsSync(filePath)) {
+      throw new BadRequestException('File not found');
+    }
+
+    res.sendFile(filePath);
+  }
+
+  @Get(':folder/:subfolder/thumbs/:filename')
+  async serveThumbnailWithSubfolder(
+    @Param('folder') folder: string,
+    @Param('subfolder') subfolder: string,
+    @Param('filename') filename: string,
+    @Res() res: Response,
+  ) {
+    const filePath = join(UPLOAD_DIR, folder, subfolder, 'thumbs', filename);
+
+    if (!existsSync(filePath)) {
+      throw new BadRequestException('Thumbnail not found');
+    }
+
+    res.sendFile(filePath);
+  }
+
   @Get(':folder/:filename')
   async serveFile(
     @Param('folder') folder: string,
@@ -145,7 +206,7 @@ export class UploadController {
     @Res() res: Response,
   ) {
     const filePath = join(UPLOAD_DIR, folder, filename);
-    
+
     if (!existsSync(filePath)) {
       throw new BadRequestException('File not found');
     }
@@ -160,7 +221,7 @@ export class UploadController {
     @Res() res: Response,
   ) {
     const filePath = join(UPLOAD_DIR, folder, 'thumbs', filename);
-    
+
     if (!existsSync(filePath)) {
       throw new BadRequestException('Thumbnail not found');
     }

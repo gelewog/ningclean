@@ -1,5 +1,4 @@
-import { Controller, Post, Get, Param, Body, Res, HttpException, HttpStatus } from '@nestjs/common';
-import { Response } from 'express';
+import { Controller, Post, Get, Param, Body, HttpException, HttpStatus } from '@nestjs/common';
 import { DraftPreviewService, DraftData } from './draft-preview.service';
 
 @Controller('drafts')
@@ -13,15 +12,12 @@ export class DraftPreviewController {
   }
 
   @Get('preview/:id')
-  async getDraft(@Param('id') id: string, @Res() res: Response) {
+  async getDraft(@Param('id') id: string) {
     const draft = this.draftPreviewService.getDraft(id);
-    
+
     if (!draft) {
       throw new HttpException('Draft not found or expired', HttpStatus.NOT_FOUND);
     }
-
-    // Optionally delete after fetching (one-time use)
-    // this.draftPreviewService.deleteDraft(id);
 
     return draft;
   }

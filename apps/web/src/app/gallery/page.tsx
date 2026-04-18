@@ -46,13 +46,21 @@ export default function GalleryPage() {
     ? galleryItems.filter(item => item.isActive)
     : galleryItems.filter((item) => item.category === selectedCategory && item.isActive);
 
+  // Helper to get full image URL
+  const getImageUrl = (url: string | undefined | null): string => {
+    if (!url) return '';
+    if (url.startsWith('http')) return url;
+    const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api';
+    return `${API_BASE.replace('/api', '')}${url}`;
+  };
+
   // Transform API data to match BeforeAfterSlider expected format
   const transformedItems = filteredItems.map(item => ({
     id: item.id,
     title: item.title,
     location: item.location || '',
-    beforeImage: item.imageUrl,
-    afterImage: item.imageUrl,
+    beforeImage: getImageUrl(item.beforeImage || item.imageUrl),
+    afterImage: getImageUrl(item.afterImage || item.imageUrl),
     description: item.description || '',
     category: item.category,
   }));
@@ -207,7 +215,7 @@ export default function GalleryPage() {
                     {/* Image */}
                     <div className="relative aspect-[4/3] overflow-hidden">
                       <img
-                        src={item.afterImage}
+                        src={getImageUrl(item.afterImage)}
                         alt={item.title}
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                       />

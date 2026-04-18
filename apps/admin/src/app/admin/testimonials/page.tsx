@@ -2,8 +2,8 @@
 
 import * as React from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { 
-  Plus, Edit, Trash2, Star, Calendar, Quote, X, 
+import {
+  Plus, Edit, Trash2, Star, Calendar, Quote, X,
   AlertCircle, MessageSquare, User
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
@@ -13,7 +13,7 @@ import { ImageUpload, useImageUpload } from '@/components/ui/ImageUpload'
 import { DataTable } from '@/components/admin/DataTable'
 import { getTestimonials, createTestimonial, updateTestimonial, deleteTestimonial } from '@/lib/api'
 import { Testimonial } from '@/types'
-import { formatDate } from '@/lib/utils'
+import { formatDate, getDiceBearAvatar } from '@/lib/utils'
 import { toast } from 'sonner'
 
 interface TestimonialFormData {
@@ -40,6 +40,8 @@ function TestimonialFormModal({
   setErrors,
   saving,
   onSave,
+  selectedImageFile,
+  setSelectedImageFile,
 }: {
   isOpen: boolean
   onClose: () => void
@@ -50,6 +52,8 @@ function TestimonialFormModal({
   setErrors: (errors: Partial<TestimonialFormData>) => void
   saving: boolean
   onSave: () => void
+  selectedImageFile: File | null
+  setSelectedImageFile: (file: File | null) => void
 }) {
   const [mounted, setMounted] = React.useState(false)
 
@@ -369,11 +373,11 @@ function TestimonialDeleteModal({
                 {testimonial.image ? (
                   <img src={testimonial.image} alt="" className="h-12 w-12 rounded-full object-cover" />
                 ) : (
-                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-emerald-100 dark:bg-emerald-900/40">
-                    <span className="text-lg font-medium text-emerald-600 dark:text-emerald-400">
-                      {testimonial.name.charAt(0).toUpperCase()}
-                    </span>
-                  </div>
+                  <img
+                    src={getDiceBearAvatar(testimonial.name, 'adventurer')}
+                    alt=""
+                    className="h-12 w-12 rounded-full bg-gray-100 dark:bg-slate-700"
+                  />
                 )}
                 <div>
                   <p className="text-sm font-medium text-gray-900 dark:text-white">{testimonial.name}</p>
@@ -597,9 +601,11 @@ export default function TestimonialsPage() {
               className="h-10 w-10 rounded-full object-cover ring-2 ring-gray-100 dark:ring-slate-700"
             />
           ) : (
-            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-emerald-500 to-emerald-600 text-sm font-bold text-white shadow-lg shadow-emerald-500/20">
-              {value.charAt(0).toUpperCase()}
-            </div>
+            <img
+              src={getDiceBearAvatar(row.name, 'adventurer')}
+              alt=""
+              className="h-10 w-10 rounded-full bg-gray-100 dark:bg-slate-700"
+            />
           )}
           <div>
             <p className="font-semibold text-gray-900 dark:text-white">{value}</p>
@@ -785,6 +791,8 @@ export default function TestimonialsPage() {
         setErrors={setErrors}
         saving={saving}
         onSave={handleSubmit}
+        selectedImageFile={selectedImageFile}
+        setSelectedImageFile={setSelectedImageFile}
       />
 
       {/* Delete Modal */}

@@ -136,7 +136,7 @@ function PricingFormModal({
                     value={formData.name}
                     onChange={(e) => {
                       const name = e.target.value
-                      setFormData(prev => ({ ...prev, name, slug: isEditing ? prev.slug : generateSlug(name) }))
+                      setFormData({ ...formData, name, slug: isEditing ? formData.slug : generateSlug(name) })
                       setErrors({ ...errors, name: '' })
                     }}
                     placeholder="e.g., Premium"

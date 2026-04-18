@@ -1,9 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
+import { AuditService } from '../audit/audit.service';
 
 @Injectable()
 export class FooterSettingsService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private auditService: AuditService,
+  ) {}
 
   // Default footer columns
   private defaultColumns = [
@@ -79,11 +83,11 @@ export class FooterSettingsService {
     };
   }
 
-  async updateFooterSettings(data: any) {
+  async updateFooterSettings(data: any, user?: any) {
     const current = await this.getFooterSettings();
-    
+
     const updateData: any = {};
-    
+
     if (data.footerColumns !== undefined) updateData.footerColumns = JSON.stringify(data.footerColumns);
     if (data.showContact !== undefined) updateData.showContact = data.showContact;
     if (data.contactEmail !== undefined) updateData.contactEmail = data.contactEmail;
@@ -104,13 +108,26 @@ export class FooterSettingsService {
       data: updateData,
     });
 
+    // Audit log
+    await this.auditService.log({
+      action: 'UPDATE',
+      entityType: 'FooterSettings',
+      entityId: settings.id,
+      userId: user?.id,
+      userEmail: user?.email,
+      changes: {
+        before: current,
+        after: data,
+      },
+    });
+
     return {
       ...settings,
-      footerColumns: typeof settings.footerColumns === 'string' 
-        ? JSON.parse(settings.footerColumns) 
+      footerColumns: typeof settings.footerColumns === 'string'
+        ? JSON.parse(settings.footerColumns)
         : settings.footerColumns,
-      socialLinks: typeof settings.socialLinks === 'string' 
-        ? JSON.parse(settings.socialLinks) 
+      socialLinks: typeof settings.socialLinks === 'string'
+        ? JSON.parse(settings.socialLinks)
         : settings.socialLinks,
     };
   }

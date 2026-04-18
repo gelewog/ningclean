@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
-import { isAuthenticated, getNavigationSettings } from '@/lib/api';
+import { isAuthenticated, getNavigationSettings, getSiteSettings } from '@/lib/api';
 import ThemeToggle from '@/components/ui/ThemeToggle';
 
 interface NavLink {
@@ -41,6 +41,7 @@ export default function Navigation() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [navSettings, setNavSettings] = useState<NavigationSettings | null>(null);
+  const [siteSettings, setSiteSettings] = useState<any>(null);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -62,9 +63,21 @@ export default function Navigation() {
       }
     };
 
+    const fetchSiteSettings = async () => {
+      try {
+        const settings = await getSiteSettings();
+        if (settings) {
+          setSiteSettings(settings);
+        }
+      } catch {
+        // Use defaults
+      }
+    };
+
     window.addEventListener('scroll', handleScroll);
     checkAuth();
     fetchNavSettings();
+    fetchSiteSettings();
     handleScroll();
 
     return () => window.removeEventListener('scroll', handleScroll);
@@ -78,6 +91,7 @@ export default function Navigation() {
   const ctaButtonText = navSettings?.ctaButtonText || 'Booking';
   const ctaButtonLink = navSettings?.ctaButtonLink || '/booking';
   const showCtaButton = navSettings?.showCtaButton !== false;
+  const companyName = siteSettings?.companyName || 'Ningclean';
 
   return (
     <>
@@ -115,7 +129,7 @@ export default function Navigation() {
                 'text-xl font-bold transition-colors',
                 'text-slate-900 dark:text-white'
               )}>
-                Ningclean
+                {companyName}
               </span>
             </Link>
 

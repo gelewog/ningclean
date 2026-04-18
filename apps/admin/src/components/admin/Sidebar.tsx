@@ -33,6 +33,7 @@ import {
   Tag,
   Layers,
   MessageSquare,
+  HardDrive,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { logout } from '@/lib/api'
@@ -91,9 +92,10 @@ const NAV_SECTIONS: { label: string; items: NavItem[] }[] = [
           { href: '/admin/blog/categories', label: 'Categories', icon: FolderOpen },
         ],
       },
-      { href: '/admin/gallery',      label: 'Gallery',      icon: Image },
-      { href: '/admin/testimonials', label: 'Testimonials', icon: MessageSquare },
-      { href: '/admin/faq',          label: 'FAQ',          icon: HelpCircle },
+      { href: '/admin/gallery',        label: 'Gallery',        icon: Image },
+      { href: '/admin/file-manager',   label: 'File Manager',   icon: HardDrive },
+      { href: '/admin/testimonials',   label: 'Testimonials',   icon: MessageSquare },
+      { href: '/admin/faq',            label: 'FAQ',            icon: HelpCircle },
     ],
   },
   {

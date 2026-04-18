@@ -323,31 +323,54 @@ export function ImageUpload({
 export function useImageUpload() {
   const uploadImage = async (
     file: File | null,
-    folder: 'gallery' | 'services' | 'team' | 'testimonials' | 'settings'
+    folder: 'gallery' | 'services' | 'team' | 'testimonials' | 'settings',
+    subfolder?: string
   ): Promise<string | null> => {
-    if (!file) return null;
+    if (!file) {
+      console.log('[useImageUpload] No file provided, returning null')
+      return null;
+    }
 
     const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
     const BASE_URL = API_URL.replace(/\/api$/, '');
+
+    // Build URL with optional subfolder query parameter
+    let uploadUrl = `${BASE_URL}/api/upload/${folder}`;
+    if (subfolder) {
+      uploadUrl += `?subfolder=${subfolder}`;
+    }
+
+    console.log('[useImageUpload] Starting upload:', {
+      fileName: file.name,
+      fileSize: file.size,
+      fileType: file.type,
+      folder,
+      subfolder,
+      uploadUrl
+    })
 
     try {
       const formData = new FormData();
       formData.append('file', file);
 
-      const response = await fetch(`${BASE_URL}/api/upload/${folder}`, {
+      const response = await fetch(uploadUrl, {
         method: 'POST',
         body: formData,
       });
 
+      console.log('[useImageUpload] Response status:', response.status)
+
       if (!response.ok) {
         const errorData = await response.json();
+        console.error('[useImageUpload] Upload failed:', errorData)
         throw new Error(errorData.message || 'Upload failed');
       }
 
       const data = await response.json();
+      console.log('[useImageUpload] Upload success:', data.data.url)
       return data.data.url;
     } catch (err) {
-      console.error('Upload error:', err);
+      console.error('[useImageUpload] Upload error:', err);
       return null;
     }
   };

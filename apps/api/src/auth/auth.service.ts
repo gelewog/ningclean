@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from '../prisma/prisma.service';
+import { AuditService } from '../audit/audit.service';
 import * as bcrypt from 'bcrypt';
 import { Role } from '@prisma/client';
 
@@ -25,6 +26,7 @@ export class AuthService {
   constructor(
     private prisma: PrismaService,
     private jwtService: JwtService,
+    private auditService: AuditService,
   ) {}
 
   async register(data: {
@@ -70,6 +72,16 @@ export class AuthService {
     if (!isPasswordValid) {
       return null;
     }
+
+    // Audit log for successful login
+    await this.auditService.log({
+      action: 'LOGIN',
+      entityType: 'User',
+      entityId: user.id,
+      userId: user.id,
+      userEmail: user.email,
+      changes: { email: user.email, role: user.role },
+    });
 
     const payload: JwtPayload = { sub: user.id, email: user.email, role: user.role };
 

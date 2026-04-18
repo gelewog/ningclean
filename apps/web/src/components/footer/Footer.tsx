@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
-import { getFooterSettings } from '@/lib/api';
+import { getFooterSettings, getSiteSettings } from '@/lib/api';
 
 interface SocialLink {
   name: string;
@@ -254,7 +254,12 @@ function LinkColumn({ title, links }: { title: string; links: FooterLink[] }) {
 
 // ─── Contact items ───────────────────────────────────────────────────────────
 
-function ContactItems({ settings }: { settings: FooterSettings }) {
+function ContactItems({ settings, siteSettings }: { settings: FooterSettings; siteSettings?: any }) {
+  const email = siteSettings?.email || settings.contactEmail || DEFAULT_FOOTER.contactEmail;
+  const phone = siteSettings?.phone || settings.contactPhone || DEFAULT_FOOTER.contactPhone;
+  const whatsapp = siteSettings?.whatsapp || settings.contactWhatsapp || DEFAULT_FOOTER.contactWhatsapp;
+  const address = siteSettings?.address || settings.contactAddress || DEFAULT_FOOTER.contactAddress;
+
   const items = [
     {
       icon: (
@@ -263,8 +268,8 @@ function ContactItems({ settings }: { settings: FooterSettings }) {
           <path d="M1 5l7 5 7-5" stroke="currentColor" strokeWidth="1.2" />
         </svg>
       ),
-      label: settings.contactEmail || DEFAULT_FOOTER.contactEmail,
-      href: `mailto:${settings.contactEmail || DEFAULT_FOOTER.contactEmail}`,
+      label: email,
+      href: `mailto:${email}`,
     },
     {
       icon: (
@@ -272,8 +277,8 @@ function ContactItems({ settings }: { settings: FooterSettings }) {
           <path d="M3 3.5a1 1 0 011-1h.5l1.5 3-.75.75a6.5 6.5 0 003.5 3.5l.75-.75 3 1.5v.5a1 1 0 01-1 1C6.268 12.5 3.5 9.732 3.5 6.5c0-.553.197-1.5.5-3z" stroke="currentColor" strokeWidth="1.2" strokeLinejoin="round" />
         </svg>
       ),
-      label: settings.contactPhone || DEFAULT_FOOTER.contactPhone,
-      href: `https://wa.me/${settings.contactWhatsapp || DEFAULT_FOOTER.contactWhatsapp}`,
+      label: phone,
+      href: `https://wa.me/${whatsapp}`,
     },
     {
       icon: (
@@ -281,7 +286,7 @@ function ContactItems({ settings }: { settings: FooterSettings }) {
           <path d="M8 1C5.24 1 3 3.24 3 6c0 3.75 5 9 5 9s5-5.25 5-9c0-2.76-2.24-5-5-5zm0 6.5a1.5 1.5 0 110-3 1.5 1.5 0 010 3z" stroke="currentColor" strokeWidth="1.2" />
         </svg>
       ),
-      label: settings.contactAddress || DEFAULT_FOOTER.contactAddress,
+      label: address,
       href: undefined,
     },
   ];
@@ -350,6 +355,7 @@ function SocialLinks({ socialLinks }: { socialLinks: SocialLink[] }) {
 
 export default function Footer() {
   const [settings, setSettings] = useState<FooterSettings | null>(null);
+  const [siteSettings, setSiteSettings] = useState<any>(null);
 
   useEffect(() => {
     const fetchFooterSettings = async () => {
@@ -362,7 +368,20 @@ export default function Footer() {
         // Use defaults
       }
     };
+
+    const fetchSiteSettings = async () => {
+      try {
+        const data = await getSiteSettings();
+        if (data) {
+          setSiteSettings(data);
+        }
+      } catch {
+        // Use defaults
+      }
+    };
+
     fetchFooterSettings();
+    fetchSiteSettings();
   }, []);
 
   // Merge with defaults
@@ -377,6 +396,13 @@ export default function Footer() {
   const showSocials = footer.showSocials !== false;
   const showNewsletter = footer.showNewsletter !== false;
   const showStatusBadge = footer.showStatusBadge !== false;
+
+  // Use site settings contact info if available
+  const contactEmail = siteSettings?.email || footer.contactEmail;
+  const contactPhone = siteSettings?.phone || footer.contactPhone;
+  const contactWhatsapp = siteSettings?.whatsapp || footer.contactWhatsapp;
+  const contactAddress = siteSettings?.address || footer.contactAddress;
+  const companyName = siteSettings?.companyName || 'Ningclean';
 
   return (
     <footer className="relative dark:bg-[#09090f] bg-slate-50 text-white dark:text-white overflow-hidden">
@@ -409,7 +435,7 @@ export default function Footer() {
                   />
                 </svg>
               </div>
-              <span className="font-serif text-[22px] font-normal tracking-[-0.3px] dark:text-white text-slate-900">Ningclean</span>
+              <span className="font-serif text-[22px] font-normal tracking-[-0.3px] dark:text-white text-slate-900">{companyName}</span>
             </Link>
 
             <p className="text-[13px] dark:text-white/38 text-slate-500 leading-[1.7] max-w-[240px] mb-6">
@@ -420,7 +446,7 @@ export default function Footer() {
             {showSocials && <SocialLinks socialLinks={footer.socialLinks} />}
 
             {/* Contact */}
-            {showContact && <ContactItems settings={footer} />}
+            {showContact && <ContactItems settings={footer} siteSettings={siteSettings} />}
           </div>
 
           {/* Link columns */}
@@ -433,7 +459,7 @@ export default function Footer() {
         <div className="flex items-center justify-between flex-wrap gap-4 py-5">
           <div className="flex items-center flex-wrap gap-4">
             <span className="text-[12px] dark:text-white/28 text-slate-400">
-              © {new Date().getFullYear()} Ningclean. {footer.copyrightText || 'All rights reserved.'}
+              © {new Date().getFullYear()} {companyName}. {footer.copyrightText || 'All rights reserved.'}
             </span>
             <span className="w-px h-3.5 dark:bg-white/10 bg-slate-200 hidden sm:block" />
             {[['Privasi','/privacy'], ['Syarat','/terms'], ['Sitemap','/sitemap']].map(([label, href]) => (

@@ -26,6 +26,8 @@ import { EmailTemplatesModule } from './email-templates/email-templates.module';
 import { InvoicesModule } from './invoices/invoices.module';
 import { UploadModule } from './upload/upload.module';
 import { DraftPreviewModule } from './draft-preview/draft-preview.module';
+import { FileManagerModule } from './file-manager/file-manager.module';
+import { AuditModule } from './audit/audit.module';
 
 @Module({
   imports: [
@@ -54,6 +56,8 @@ import { DraftPreviewModule } from './draft-preview/draft-preview.module';
     InvoicesModule,
     UploadModule,
     DraftPreviewModule,
+    FileManagerModule,
+    AuditModule,
   ],
   controllers: [AppController],
   providers: [AppService],

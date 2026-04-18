@@ -1,9 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
+import { AuditService } from '../audit/audit.service';
 
 @Injectable()
 export class NavigationSettingsService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private auditService: AuditService,
+  ) {}
 
   // Default navigation links
   private defaultNavLinks = [
@@ -54,9 +58,9 @@ export class NavigationSettingsService {
     showCtaButton?: boolean;
     mobileMenuType?: string;
     activeIndicatorStyle?: string;
-  }) {
+  }, user?: any) {
     const updateData: any = {};
-    
+
     if (data.navLinks !== undefined) updateData.navLinks = JSON.stringify(data.navLinks);
     if (data.showServicesDropdown !== undefined) updateData.showServicesDropdown = data.showServicesDropdown;
     if (data.servicesDropdownLabel !== undefined) updateData.servicesDropdownLabel = data.servicesDropdownLabel;
@@ -66,8 +70,11 @@ export class NavigationSettingsService {
     if (data.mobileMenuType !== undefined) updateData.mobileMenuType = data.mobileMenuType;
     if (data.activeIndicatorStyle !== undefined) updateData.activeIndicatorStyle = data.activeIndicatorStyle;
 
+    const existingSettings = await this.getNavigationSettings();
+    const oldNavLinks = existingSettings.navLinks;
+
     const settings = await this.prisma.navigationSettings.upsert({
-      where: { id: (await this.getNavigationSettings()).id },
+      where: { id: existingSettings.id },
       update: updateData,
       create: {
         navLinks: JSON.stringify(this.defaultNavLinks),
@@ -79,6 +86,19 @@ export class NavigationSettingsService {
         mobileMenuType: 'slide',
         activeIndicatorStyle: 'dot',
         ...updateData,
+      },
+    });
+
+    // Audit log
+    await this.auditService.log({
+      action: 'UPDATE',
+      entityType: 'NavigationSettings',
+      entityId: settings.id,
+      userId: user?.id,
+      userEmail: user?.email,
+      changes: {
+        before: { navLinks: oldNavLinks },
+        after: { navLinks: data.navLinks },
       },
     });
 

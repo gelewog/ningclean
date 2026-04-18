@@ -1366,3 +1366,159 @@ export async function createDraftPreview(data: any): Promise<{ id: string }> {
     body: JSON.stringify(data),
   })
 }
+
+// File Manager
+export interface FileInfo {
+  name: string
+  path: string
+  url: string
+  size: number
+  sizeFormatted: string
+  extension: string
+  type: string
+  createdAt: string
+  modifiedAt: string
+  isImage: boolean
+  dimensions?: { width: number; height: number }
+}
+
+export interface FolderInfo {
+  name: string
+  path: string
+  fileCount: number
+  totalSize: number
+  totalSizeFormatted: string
+}
+
+export interface FileManagerResult {
+  files: FileInfo[]
+  folders: FolderInfo[]
+  totalFiles: number
+  totalSize: number
+  totalSizeFormatted: string
+  apiBaseUrl: string
+}
+
+export interface StorageStats {
+  totalSpace: string
+  usedSpace: string
+  fileCount: number
+  folderCount: number
+  byFolder: { name: string; count: number; size: string }[]
+}
+
+export async function getFiles(folder?: string): Promise<FileManagerResult> {
+  const token = getToken()
+  const query = folder ? `?folder=${folder}` : ''
+  return fetchApi<FileManagerResult>(`/file-manager${query}`, { token })
+}
+
+export async function uploadFile(file: File, folder?: string): Promise<{
+  success: boolean
+  message: string
+  data?: {
+    name: string
+    path: string
+    url: string
+    size: number
+    sizeFormatted: string
+    extension: string
+    isImage: boolean
+  }
+}> {
+  const token = getToken()
+  const formData = new FormData()
+  formData.append('file', file)
+  if (folder) formData.append('folder', folder)
+
+  const response = await fetch(`${API_BASE}/file-manager/upload`, {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${token}`,
+    },
+    body: formData,
+  })
+
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({ message: 'Upload failed' }))
+    throw new Error(error.message || `HTTP error! status: ${response.status}`)
+  }
+
+  return response.json()
+}
+
+export async function getStorageStats(): Promise<StorageStats> {
+  const token = getToken()
+  return fetchApi<StorageStats>('/file-manager/stats', { token })
+}
+
+export async function deleteFile(filePath: string): Promise<{ success: boolean; message: string }> {
+  const token = getToken()
+  return fetchApi<{ success: boolean; message: string }>(`/file-manager/${encodeURIComponent(filePath)}`, {
+    method: 'DELETE',
+    token,
+  })
+}
+
+export async function deleteFiles(filePaths: string[], types?: ('file' | 'folder')[]): Promise<{ success: boolean; deleted: number; failed: number; errors: string[] }> {
+  const token = getToken()
+  return fetchApi<{ success: boolean; deleted: number; failed: number; errors: string[] }>('/file-manager', {
+    method: 'DELETE',
+    token,
+    body: JSON.stringify({ paths: filePaths, types }),
+  })
+}
+
+export async function copyFile(sourcePath: string, targetDir: string): Promise<{ success: boolean; message: string; newPath?: string }> {
+  const token = getToken()
+  return fetchApi<{ success: boolean; message: string; newPath?: string }>('/file-manager/copy', {
+    method: 'POST',
+    token,
+    body: JSON.stringify({ sourcePath, targetDir }),
+  })
+}
+
+export async function moveFile(sourcePath: string, targetDir: string): Promise<{ success: boolean; message: string; newPath?: string }> {
+  const token = getToken()
+  return fetchApi<{ success: boolean; message: string; newPath?: string }>('/file-manager/move', {
+    method: 'POST',
+    token,
+    body: JSON.stringify({ sourcePath, targetDir }),
+  })
+}
+
+export async function copyFolder(sourcePath: string, targetDir: string): Promise<{ success: boolean; message: string; newPath?: string }> {
+  const token = getToken()
+  return fetchApi<{ success: boolean; message: string; newPath?: string }>('/file-manager/folder/copy', {
+    method: 'POST',
+    token,
+    body: JSON.stringify({ sourcePath, targetDir }),
+  })
+}
+
+export async function moveFolder(sourcePath: string, targetDir: string): Promise<{ success: boolean; message: string; newPath?: string }> {
+  const token = getToken()
+  return fetchApi<{ success: boolean; message: string; newPath?: string }>('/file-manager/folder/move', {
+    method: 'POST',
+    token,
+    body: JSON.stringify({ sourcePath, targetDir }),
+  })
+}
+
+export async function renameItem(sourcePath: string, newName: string): Promise<{ success: boolean; message: string; newPath?: string }> {
+  const token = getToken()
+  return fetchApi<{ success: boolean; message: string; newPath?: string }>('/file-manager/rename', {
+    method: 'PUT',
+    token,
+    body: JSON.stringify({ sourcePath, newName }),
+  })
+}
+
+export async function createFolder(folderPath: string, folderName: string): Promise<{ success: boolean; message: string; newPath?: string }> {
+  const token = getToken()
+  return fetchApi<{ success: boolean; message: string; newPath?: string }>('/file-manager/folder/create', {
+    method: 'POST',
+    token,
+    body: JSON.stringify({ folderPath, folderName }),
+  })
+}

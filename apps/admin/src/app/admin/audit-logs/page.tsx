@@ -15,11 +15,11 @@ import { formatDateTime } from '@/lib/utils'
 interface AuditLog {
   id: string
   action: string
-  entity_type: string
-  entity_id: string
-  user_email: string | null
+  entityType: string
+  entityId: string
+  userEmail: string | null
   changes: any
-  created_at: string
+  createdAt: string
 }
 
 const ACTION_COLORS: Record<string, string> = {
@@ -69,13 +69,13 @@ export default function AuditLogPage() {
   }
 
   const filteredLogs = logs.filter(log => {
-    const matchesSearch = 
+    const matchesSearch =
       log.action.toLowerCase().includes(search.toLowerCase()) ||
-      log.entity_type.toLowerCase().includes(search.toLowerCase()) ||
-      (log.user_email?.toLowerCase().includes(search.toLowerCase()) ?? false)
-    
+      log.entityType.toLowerCase().includes(search.toLowerCase()) ||
+      (log.userEmail?.toLowerCase().includes(search.toLowerCase()) ?? false)
+
     const matchesFilter = filter === 'ALL' || log.action === filter
-    
+
     return matchesSearch && matchesFilter
   })
 
@@ -84,7 +84,7 @@ export default function AuditLogPage() {
   const createCount = logs.filter(l => l.action === 'CREATE').length
   const updateCount = logs.filter(l => l.action === 'UPDATE').length
   const deleteCount = logs.filter(l => l.action === 'DELETE').length
-  const todayCount = mounted ? logs.filter(l => new Date(l.created_at).toDateString() === new Date().toDateString()).length : 0
+  const todayCount = mounted ? logs.filter(l => new Date(l.createdAt).toDateString() === new Date().toDateString()).length : 0
 
   // Loading skeleton
   if (!mounted) {
@@ -147,6 +147,7 @@ export default function AuditLogPage() {
             <FilterButton active={filter === 'CREATE'} onClick={() => setFilter('CREATE')} label="Create" color="emerald" />
             <FilterButton active={filter === 'UPDATE'} onClick={() => setFilter('UPDATE')} label="Update" color="blue" />
             <FilterButton active={filter === 'DELETE'} onClick={() => setFilter('DELETE')} label="Delete" color="red" />
+            <FilterButton active={filter === 'LOGIN'} onClick={() => setFilter('LOGIN')} label="Login" color="purple" />
           </div>
           <div className="relative flex-1 max-w-md">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
@@ -195,10 +196,10 @@ export default function AuditLogPage() {
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2 flex-wrap">
                           <p className="text-sm font-medium text-gray-900 dark:text-white">
-                            {log.action} <span className="text-gray-400">on</span> {log.entity_type}
+                            {log.action} <span className="text-gray-400">on</span> {log.entityType}
                           </p>
                           <Badge variant="outline" className="text-xs">
-                            {log.entity_id.slice(0, 8)}...
+                            {log.entityId.slice(0, 8)}...
                           </Badge>
                         </div>
                         {log.changes && (
@@ -211,11 +212,11 @@ export default function AuditLogPage() {
                       <div className="flex-shrink-0 text-right">
                         <div className="flex items-center gap-1 text-xs text-gray-500 dark:text-slate-400">
                           <User className="w-3 h-3" />
-                          {log.user_email || 'System'}
+                          {log.userEmail || 'System'}
                         </div>
                         <div className="flex items-center gap-1 text-xs text-gray-400 dark:text-slate-500 mt-1">
                           <Clock className="w-3 h-3" />
-                          {formatDateTime(log.created_at)}
+                          {formatDateTime(log.createdAt)}
                         </div>
                       </div>
                     </div>

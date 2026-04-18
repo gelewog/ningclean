@@ -73,7 +73,7 @@ export function BeforeAfterSlider({ item, index, large }: BeforeAfterSliderProps
       {/* Slider */}
       <div
         ref={containerRef}
-        className={`relative select-none ${large ? 'aspect-[16/10]' : 'aspect-[4/3]'} cursor-col-resize group`}
+        className={`relative select-none ${large ? 'aspect-[16/10]' : 'aspect-[4/3]'} cursor-col-resize group overflow-hidden`}
         onMouseDown={handleMouseDown}
         onMouseMove={handleMouseMove}
         onMouseUp={handleMouseUp}
@@ -81,8 +81,8 @@ export function BeforeAfterSlider({ item, index, large }: BeforeAfterSliderProps
         onTouchMove={handleTouchMove}
         onTouchEnd={handleMouseUp}
       >
-        {/* Before Image (full) */}
-        <div className="absolute inset-0">
+        {/* Before Image (full width, fixed) */}
+        <div className="absolute inset-0 z-0">
           <img
             src={item.beforeImage}
             alt="Before"
@@ -91,23 +91,20 @@ export function BeforeAfterSlider({ item, index, large }: BeforeAfterSliderProps
           />
         </div>
 
-        {/* After Image (clipped) */}
-        <div
-          className="absolute inset-0 overflow-hidden"
-          style={{ width: `${sliderPosition}%` }}
-        >
+        {/* After Image (uses clip-path to reveal portion) */}
+        <div className="absolute inset-0 z-10">
           <img
             src={item.afterImage}
             alt="After"
-            className="absolute inset-0 w-full h-full object-cover"
-            style={{ width: containerRef.current ? `${100 / (sliderPosition / 100)}%` : '100%' }}
+            className="w-full h-full object-cover"
+            style={{ clipPath: `inset(0 ${100 - sliderPosition}% 0 0)` }}
             draggable={false}
           />
         </div>
 
         {/* Divider line */}
         <div
-          className="absolute top-0 bottom-0 w-1 bg-white/80 cursor-col-resize z-10"
+          className="absolute top-0 bottom-0 w-1 bg-white/80 cursor-col-resize z-20"
           style={{ left: `${sliderPosition}%`, transform: 'translateX(-50%)' }}
         >
           {/* Slider handle */}
