@@ -1,11 +1,15 @@
 import { Controller, Post, Body, HttpCode, HttpStatus } from '@nestjs/common';
-import { NewsletterService } from './newsletter.service';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { NewsletterService } from './newsletter.service';
+import { NewsletterScheduler } from './newsletter.scheduler';
 
 @ApiTags('Newsletter')
 @Controller('newsletter')
 export class NewsletterController {
-  constructor(private readonly newsletterService: NewsletterService) {}
+  constructor(
+    private readonly newsletterService: NewsletterService,
+    private readonly newsletterScheduler: NewsletterScheduler,
+  ) {}
 
   @Post('subscribe')
   @HttpCode(HttpStatus.OK)
@@ -19,5 +23,13 @@ export class NewsletterController {
   @ApiOperation({ summary: 'Unsubscribe from newsletter' })
   async unsubscribe(@Body() body: { email: string }) {
     return this.newsletterService.unsubscribe(body.email);
+  }
+
+  @Post('send-test')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Send weekly newsletter now (for testing)' })
+  async sendTest() {
+    await this.newsletterScheduler.sendWeeklyNewsletterNow();
+    return { success: true, message: 'Weekly newsletter sent to all subscribers' };
   }
 }
