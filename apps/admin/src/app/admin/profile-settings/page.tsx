@@ -1,15 +1,28 @@
 'use client'
 
 import * as React from 'react'
-import { motion } from 'framer-motion'
-import { User, Mail, Lock, Save, RefreshCw, AlertCircle, CheckCircle, Phone, Camera } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
+import { motion, AnimatePresence } from 'framer-motion'
+import { 
+  User, Mail, Lock, Save, Phone, Camera, Shield, 
+  Eye, EyeOff, CheckCircle2, AlertCircle, X, Upload,
+  Settings, Bell, Key, UserCircle
+} from 'lucide-react'
 import { getUser, getToken, uploadFile } from '@/lib/api'
 import { toast } from 'sonner'
+import { cn } from '@/lib/utils'
+
+type Tab = 'profile' | 'password' | 'preferences'
 
 export default function ProfileSettingsPage() {
-  const [user, setUser] = React.useState<{ id?: string; name: string; email: string; role: string; phone?: string; avatar?: string }>({
+  const [activeTab, setActiveTab] = React.useState<Tab>('profile')
+  const [user, setUser] = React.useState<{ 
+    id?: string; 
+    name: string; 
+    email: string; 
+    role: string; 
+    phone?: string; 
+    avatar?: string 
+  }>({
     name: '',
     email: '',
     role: '',
@@ -19,23 +32,32 @@ export default function ProfileSettingsPage() {
   const [loading, setLoading] = React.useState(true)
   const [saving, setSaving] = React.useState(false)
   const [uploadingAvatar, setUploadingAvatar] = React.useState(false)
+  const [mounted, setMounted] = React.useState(false)
 
   // Form fields
   const [name, setName] = React.useState('')
   const [email, setEmail] = React.useState('')
   const [phone, setPhone] = React.useState('')
   const [avatar, setAvatar] = React.useState('')
+
+  // Password fields
   const [currentPassword, setCurrentPassword] = React.useState('')
   const [newPassword, setNewPassword] = React.useState('')
   const [confirmPassword, setConfirmPassword] = React.useState('')
-
-  // Password change state
+  const [showCurrentPassword, setShowCurrentPassword] = React.useState(false)
+  const [showNewPassword, setShowNewPassword] = React.useState(false)
+  const [showConfirmPassword, setShowConfirmPassword] = React.useState(false)
   const [passwordChanged, setPasswordChanged] = React.useState(false)
 
-  // Email validation
+  // Validation
   const [isValidEmail, setIsValidEmail] = React.useState(true)
+  const [emailTouched, setEmailTouched] = React.useState(false)
+
+  // Password strength
+  const [passwordStrength, setPasswordStrength] = React.useState(0)
 
   React.useEffect(() => {
+    setMounted(true)
     loadProfile()
   }, [])
 
@@ -46,11 +68,30 @@ export default function ProfileSettingsPage() {
 
   const handleEmailChange = (value: string) => {
     setEmail(value)
-    if (value) {
+    if (emailTouched) {
       setIsValidEmail(validateEmailFormat(value))
-    } else {
-      setIsValidEmail(true)
     }
+  }
+
+  const handleEmailBlur = () => {
+    setEmailTouched(true)
+    setIsValidEmail(validateEmailFormat(email))
+  }
+
+  const getPasswordStrength = (pwd: string): number => {
+    let strength = 0
+    if (pwd.length >= 6) strength++
+    if (pwd.length >= 10) strength++
+    if (/[A-Z]/.test(pwd)) strength++
+    if (/[0-9]/.test(pwd)) strength++
+    if (/[^A-Za-z0-9]/.test(pwd)) strength++
+    return Math.min(strength, 4)
+  }
+
+  const handleNewPasswordChange = (value: string) => {
+    setNewPassword(value)
+    setPasswordChanged(true)
+    setPasswordStrength(getPasswordStrength(value))
   }
 
   const loadProfile = async () => {
@@ -65,7 +106,6 @@ export default function ProfileSettingsPage() {
         setAvatar(userData.avatar || '')
       }
 
-      // Try to fetch full profile from API
       const token = getToken()
       if (token) {
         const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api'}/auth/me`, {
@@ -86,6 +126,7 @@ export default function ProfileSettingsPage() {
       }
     } catch (error) {
       console.error('Failed to load profile:', error)
+      toast.error('Gagal memuat profil')
     }
     setLoading(false)
   }
@@ -94,13 +135,11 @@ export default function ProfileSettingsPage() {
     const file = e.target.files?.[0]
     if (!file) return
 
-    // Validate file type
     if (!file.type.startsWith('image/')) {
       toast.error('Please select an image file')
       return
     }
 
-    // Validate file size (max 2MB)
     if (file.size > 2 * 1024 * 1024) {
       toast.error('Image size must be less than 2MB')
       return
@@ -147,10 +186,8 @@ export default function ProfileSettingsPage() {
 
       if (res.ok) {
         const data = await res.json()
-        // Update local storage
         localStorage.setItem('admin_user', JSON.stringify({ ...user, name, email, phone, avatar }))
         toast.success('Profil berhasil diperbarui')
-        // Reload to get fresh data
         loadProfile()
       } else {
         const error = await res.json()
@@ -190,10 +227,7 @@ export default function ProfileSettingsPage() {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          currentPassword,
-          newPassword,
-        }),
+        body: JSON.stringify({ currentPassword, newPassword }),
       })
 
       if (res.ok) {
@@ -202,6 +236,7 @@ export default function ProfileSettingsPage() {
         setNewPassword('')
         setConfirmPassword('')
         setPasswordChanged(false)
+        setPasswordStrength(0)
       } else {
         const error = await res.json()
         toast.error(error.message || 'Gagal mengubah password')
@@ -213,270 +248,380 @@ export default function ProfileSettingsPage() {
     setSaving(false)
   }
 
-  if (loading) {
+  const tabs = [
+    { id: 'profile' as Tab, label: 'Profil', icon: UserCircle },
+    { id: 'password' as Tab, label: 'Keamanan', icon: Shield },
+  ]
+
+  const passwordStrengthLabel = ['Sangat Lemah', 'Lemah', 'Cukup', 'Kuat', 'Sangat Kuat']
+  const passwordStrengthColor = ['bg-red-500', 'bg-orange-500', 'bg-yellow-500', 'bg-emerald-500', 'bg-emerald-600']
+
+  if (!mounted) {
     return (
-      <div className="min-h-screen bg-gray-50 dark:bg-slate-900 text-gray-900 dark:text-white">
-        <div className="sticky top-0 z-20 bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border-b border-gray-100 dark:border-slate-700 px-4 md:px-6 py-3 flex items-center justify-between">
-          <div className="flex items-center gap-2 text-xs text-gray-500 dark:text-slate-400">
-            <span>NingClean Admin</span>
-            <span>/</span>
-            <span className="text-gray-700 dark:text-slate-200">Profile Settings</span>
-          </div>
-        </div>
-        <div className="flex items-center justify-center py-20">
-          <div className="h-8 w-8 animate-spin rounded-full border-4 border-gray-200 border-t-emerald-500" />
-        </div>
+      <div className="min-h-screen bg-slate-50 dark:bg-slate-950 flex items-center justify-center">
+        <div className="h-8 w-8 animate-spin rounded-full border-4 border-slate-200 border-t-emerald-500" />
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-slate-900 text-gray-900 dark:text-white">
-      {/* Topbar */}
-      <div className="sticky top-0 z-20 bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border-b border-gray-100 dark:border-slate-700 px-4 md:px-6 py-3 flex items-center justify-between">
-        <div className="flex items-center gap-2 text-xs text-gray-500 dark:text-slate-400">
-          <span>NingClean Admin</span>
-          <span>/</span>
-          <span className="text-gray-700 dark:text-slate-200">Profile Settings</span>
-        </div>
-        <div className="flex items-center gap-1.5">
-          <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-          <span className="text-[11px] text-gray-500 dark:text-slate-400">Live</span>
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-950">
+      {/* Header */}
+      <div className="sticky top-0 z-20 bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border-b border-slate-200/60 dark:border-slate-800/60">
+        <div className="px-4 md:px-6 py-4">
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+            <div>
+              <h1 className="text-xl font-bold text-slate-900 dark:text-white">Pengaturan Profil</h1>
+              <p className="text-sm text-slate-500 dark:text-slate-400 mt-0.5">Kelola informasi akun dan keamanan Anda</p>
+            </div>
+            
+            {/* Tab Navigation */}
+            <div className="flex items-center gap-1 p-1 bg-slate-100 dark:bg-slate-800/50 rounded-xl">
+              {tabs.map((tab) => {
+                const Icon = tab.icon
+                return (
+                  <button
+                    key={tab.id}
+                    onClick={() => setActiveTab(tab.id)}
+                    className={cn(
+                      'flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all',
+                      activeTab === tab.id
+                        ? 'bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-sm'
+                        : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300'
+                    )}
+                  >
+                    <Icon className="h-4 w-4" />
+                    <span className="hidden sm:inline">{tab.label}</span>
+                  </button>
+                )
+              })}
+            </div>
+          </div>
         </div>
       </div>
 
-      <div className="w-full px-4 md:px-6 py-6 space-y-6">
-        {/* Page Header */}
-        <motion.div
-          initial={{ opacity: 0, y: -16 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"
-        >
-          <div>
-            <h1 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Profile Settings</h1>
-            <p className="text-sm text-gray-500 dark:text-slate-400 mt-0.5">Kelola informasi akun dan password Anda</p>
-          </div>
-        </motion.div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* Profile Info */}
-          <motion.div
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="bg-white dark:bg-slate-900 border border-gray-100 dark:border-slate-700 rounded-2xl overflow-hidden shadow-sm dark:shadow-slate-900/50"
-          >
-            <div className="p-6 border-b border-gray-100 dark:border-slate-700">
-              <div className="flex items-center gap-3">
-                <div className="h-10 w-10 rounded-xl bg-emerald-100 dark:bg-emerald-900/40 flex items-center justify-center">
-                  <User className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
-                </div>
-                <div>
-                  <h2 className="text-base font-semibold text-gray-900 dark:text-white">Informasi Profil</h2>
-                  <p className="text-xs text-gray-500 dark:text-slate-400">Nama, email, dan foto profil Anda</p>
-                </div>
-              </div>
-            </div>
-            <div className="p-6 space-y-5">
-              {/* Avatar Section */}
-              <div className="flex flex-col items-center pb-4">
-                <div className="relative">
-                  {avatar ? (
-                    <img
-                      src={avatar}
-                      alt="Avatar"
-                      className="h-24 w-24 rounded-full object-cover border-4 border-gray-100 dark:border-slate-700"
-                    />
-                  ) : (
-                    <div className="h-24 w-24 rounded-full bg-emerald-100 dark:bg-emerald-900/40 flex items-center justify-center border-4 border-gray-100 dark:border-slate-700">
-                      <User className="h-10 w-10 text-emerald-600 dark:text-emerald-400" />
+      <div className="px-4 md:px-6 py-6">
+        <AnimatePresence mode="wait">
+          {activeTab === 'profile' && (
+            <motion.div
+              key="profile"
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -12 }}
+              transition={{ duration: 0.2 }}
+              className="max-w-4xl mx-auto"
+            >
+              {/* Profile Card */}
+              <div className="bg-white dark:bg-slate-900 border border-slate-200/60 dark:border-slate-800/60 rounded-2xl overflow-hidden shadow-sm">
+                {/* Avatar Section */}
+                <div className="relative h-32 bg-gradient-to-br from-emerald-500 via-emerald-600 to-teal-600">
+                  <div className="absolute -bottom-12 left-6">
+                    <div className="relative group">
+                      {avatar ? (
+                        <img
+                          src={avatar}
+                          alt="Avatar"
+                          className="h-24 w-24 rounded-2xl object-cover border-4 border-white dark:border-slate-900 shadow-lg"
+                        />
+                      ) : (
+                        <div className="h-24 w-24 rounded-2xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center border-4 border-white dark:border-slate-900 shadow-lg">
+                          <span className="text-3xl font-bold text-slate-400 dark:text-slate-500">
+                            {name?.charAt(0)?.toUpperCase() || 'U'}
+                          </span>
+                        </div>
+                      )}
+                      <label className="absolute inset-0 flex items-center justify-center bg-black/50 opacity-0 group-hover:opacity-100 rounded-2xl cursor-pointer transition-opacity">
+                        <div className="flex flex-col items-center text-white">
+                          {uploadingAvatar ? (
+                            <div className="h-6 w-6 animate-spin rounded-full border-2 border-white/30 border-t-white" />
+                          ) : (
+                            <>
+                              <Camera className="h-6 w-6 mb-1" />
+                              <span className="text-xs font-medium">Upload</span>
+                            </>
+                          )}
+                        </div>
+                        <input
+                          type="file"
+                          accept="image/*"
+                          onChange={handleAvatarUpload}
+                          className="hidden"
+                          disabled={uploadingAvatar}
+                        />
+                      </label>
                     </div>
-                  )}
-                  <label className="absolute bottom-0 right-0 h-8 w-8 rounded-full bg-emerald-500 text-white flex items-center justify-center cursor-pointer hover:bg-emerald-600 transition-all shadow-lg">
-                    {uploadingAvatar ? (
-                      <div className="h-4 w-4 animate-spin rounded-full border-2 border-white/30 border-t-white" />
-                    ) : (
-                      <Camera className="h-4 w-4" />
+                  </div>
+                  
+                  {/* Role Badge */}
+                  <div className="absolute top-4 right-4">
+                    <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/20 backdrop-blur-sm text-white text-xs font-medium">
+                      <Shield className="h-3.5 w-3.5" />
+                      {user.role || 'Administrator'}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Form */}
+                <div className="p-6 pt-16 space-y-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {/* Name */}
+                    <div className="md:col-span-2">
+                      <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                        Nama Lengkap
+                      </label>
+                      <div className="relative">
+                        <User className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400 dark:text-slate-500 pointer-events-none" />
+                        <input
+                          type="text"
+                          value={name}
+                          onChange={e => setName(e.target.value)}
+                          placeholder="Masukkan nama lengkap"
+                          className="w-full pl-12 pr-4 py-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all"
+                        />
+                      </div>
+                    </div>
+
+                    {/* Email */}
+                    <div>
+                      <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                        Email
+                      </label>
+                      <div className="relative">
+                        <Mail className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400 dark:text-slate-500 pointer-events-none" />
+                        <input
+                          type="email"
+                          value={email}
+                          onChange={e => handleEmailChange(e.target.value)}
+                          onBlur={handleEmailBlur}
+                          placeholder="email@contoh.com"
+                          className={cn(
+                            'w-full pl-12 pr-4 py-3 bg-slate-50 dark:bg-slate-800 border rounded-xl text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:ring-2 transition-all',
+                            !isValidEmail && emailTouched
+                              ? 'border-red-500 focus:border-red-500 focus:ring-red-500/20'
+                              : 'border-slate-200 dark:border-slate-700 focus:border-emerald-500 focus:ring-emerald-500/20'
+                          )}
+                        />
+                        {email && (
+                          <div className="absolute right-4 top-1/2 -translate-y-1/2">
+                            {isValidEmail ? (
+                              <CheckCircle2 className="h-5 w-5 text-emerald-500" />
+                            ) : (
+                              <AlertCircle className="h-5 w-5 text-red-500" />
+                            )}
+                          </div>
+                        )}
+                      </div>
+                      {!isValidEmail && emailTouched && (
+                        <p className="text-xs text-red-500 mt-1.5">Format email tidak valid</p>
+                      )}
+                    </div>
+
+                    {/* Phone */}
+                    <div>
+                      <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                        Nomor Telepon
+                      </label>
+                      <div className="relative">
+                        <Phone className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400 dark:text-slate-500 pointer-events-none" />
+                        <input
+                          type="tel"
+                          value={phone}
+                          onChange={e => setPhone(e.target.value)}
+                          placeholder="081234567890"
+                          className="w-full pl-12 pr-4 py-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all"
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Save Button */}
+                  <div className="flex items-center justify-end pt-4 border-t border-slate-100 dark:border-slate-800">
+                    <button
+                      onClick={handleSaveProfile}
+                      disabled={saving || !isValidEmail}
+                      className="inline-flex items-center gap-2 px-6 py-3 bg-emerald-500 hover:bg-emerald-600 text-white rounded-xl font-medium text-sm transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-sm hover:shadow-md"
+                    >
+                      {saving ? (
+                        <div className="h-4 w-4 animate-spin rounded-full border-2 border-white/30 border-t-white" />
+                      ) : (
+                        <Save className="h-4 w-4" />
+                      )}
+                      Simpan Perubahan
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+
+          {activeTab === 'password' && (
+            <motion.div
+              key="password"
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -12 }}
+              transition={{ duration: 0.2 }}
+              className="max-w-2xl mx-auto"
+            >
+              {/* Password Card */}
+              <div className="bg-white dark:bg-slate-900 border border-slate-200/60 dark:border-slate-800/60 rounded-2xl overflow-hidden shadow-sm">
+                <div className="p-6 border-b border-slate-100 dark:border-slate-800">
+                  <div className="flex items-center gap-3">
+                    <div className="h-12 w-12 rounded-xl bg-amber-100 dark:bg-amber-900/30 flex items-center justify-center">
+                      <Key className="h-6 w-6 text-amber-600 dark:text-amber-400" />
+                    </div>
+                    <div>
+                      <h2 className="text-lg font-semibold text-slate-900 dark:text-white">Ubah Password</h2>
+                      <p className="text-sm text-slate-500 dark:text-slate-400">Pastikan password Anda sulit ditebak</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="p-6 space-y-6">
+                  {/* Current Password */}
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                      Password Saat Ini
+                    </label>
+                    <div className="relative">
+                      <Lock className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400 dark:text-slate-500 pointer-events-none" />
+                      <input
+                        type={showCurrentPassword ? 'text' : 'password'}
+                        value={currentPassword}
+                        onChange={e => setCurrentPassword(e.target.value)}
+                        placeholder="Masukkan password saat ini"
+                        className="w-full pl-12 pr-12 py-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowCurrentPassword(!showCurrentPassword)}
+                        className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300"
+                      >
+                        {showCurrentPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* New Password */}
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                      Password Baru
+                    </label>
+                    <div className="relative">
+                      <Lock className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400 dark:text-slate-500 pointer-events-none" />
+                      <input
+                        type={showNewPassword ? 'text' : 'password'}
+                        value={newPassword}
+                        onChange={e => handleNewPasswordChange(e.target.value)}
+                        placeholder="Minimal 6 karakter"
+                        className="w-full pl-12 pr-12 py-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowNewPassword(!showNewPassword)}
+                        className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300"
+                      >
+                        {showNewPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                      </button>
+                    </div>
+                    
+                    {/* Password Strength Indicator */}
+                    {newPassword && (
+                      <div className="mt-3">
+                        <div className="flex items-center gap-2 mb-1.5">
+                          <div className="flex-1 h-1.5 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
+                            <div
+                              className={cn('h-full transition-all', passwordStrengthColor[passwordStrength])}
+                              style={{ width: `${(passwordStrength / 4) * 100}%` }}
+                            />
+                          </div>
+                          <span className="text-xs font-medium text-slate-500 dark:text-slate-400">
+                            {passwordStrengthLabel[passwordStrength]}
+                          </span>
+                        </div>
+                        <p className="text-xs text-slate-400 dark:text-slate-500">
+                          Gunakan kombinasi huruf besar, angka, dan simbol
+                        </p>
+                      </div>
                     )}
-                    <input
-                      type="file"
-                      accept="image/*"
-                      onChange={handleAvatarUpload}
-                      className="hidden"
-                      disabled={uploadingAvatar}
-                    />
-                  </label>
-                </div>
-                <p className="text-xs text-gray-500 dark:text-slate-400 mt-2">Klik ikon kamera untuk upload foto</p>
-              </div>
-
-              {/* Name Field */}
-              <div>
-                <label className="block text-xs font-medium text-gray-700 dark:text-slate-200 mb-1.5">
-                  Nama Lengkap
-                </label>
-                <div className="relative">
-                  <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-slate-500 pointer-events-none" />
-                  <input
-                    type="text"
-                    value={name}
-                    onChange={e => setName(e.target.value)}
-                    placeholder="Masukkan nama lengkap"
-                    className="w-full bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-xl text-sm text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-slate-500 focus:outline-none focus:border-emerald-500 dark:focus:border-emerald-400 focus:ring-1 focus:ring-emerald-500/20 pl-10 pr-4 py-2.5 transition-all"
-                  />
-                </div>
-              </div>
-
-              {/* Email Field */}
-              <div>
-                <label className="block text-xs font-medium text-gray-700 dark:text-slate-200 mb-1.5">
-                  Email
-                </label>
-                <div className="relative">
-                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-slate-500 pointer-events-none" />
-                  <input
-                    type="email"
-                    value={email}
-                    onChange={e => handleEmailChange(e.target.value)}
-                    placeholder="Masukkan email"
-                    className={`w-full bg-white dark:bg-slate-800 border rounded-xl text-sm text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-slate-500 focus:outline-none focus:ring-1 pl-10 pr-4 py-2.5 transition-all ${
-                      !isValidEmail
-                        ? 'border-red-500 focus:border-red-500 focus:ring-red-500/20'
-                        : 'border-gray-200 dark:border-slate-700 focus:border-emerald-500 dark:focus:border-emerald-400 focus:ring-emerald-500/20'
-                    }`}
-                  />
-                </div>
-                {!isValidEmail && (
-                  <p className="text-xs text-red-500 mt-1">Format email tidak valid</p>
-                )}
-              </div>
-
-              {/* Phone Field */}
-              <div>
-                <label className="block text-xs font-medium text-gray-700 dark:text-slate-200 mb-1.5">
-                  Nomor Telepon
-                </label>
-                <div className="relative">
-                  <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-slate-500 pointer-events-none" />
-                  <input
-                    type="tel"
-                    value={phone}
-                    onChange={e => setPhone(e.target.value)}
-                    placeholder="Contoh: 081234567890"
-                    className="w-full bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-xl text-sm text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-slate-500 focus:outline-none focus:border-emerald-500 dark:focus:border-emerald-400 focus:ring-1 focus:ring-emerald-500/20 pl-10 pr-4 py-2.5 transition-all"
-                  />
-                </div>
-              </div>
-
-              {/* Role Display */}
-              <div className="pt-2">
-                <div className="flex items-center gap-3 p-4 bg-gray-50 dark:bg-slate-800 rounded-xl">
-                  <div className="h-10 w-10 rounded-xl bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center">
-                    <CheckCircle className="h-5 w-5 text-blue-600 dark:text-blue-400" />
                   </div>
-                  <div className="flex-1">
-                    <p className="text-sm font-medium text-gray-700 dark:text-slate-200">Role</p>
-                    <p className="text-xs text-gray-500 dark:text-slate-400 capitalize">{user.role || 'Administrator'}</p>
+
+                  {/* Confirm Password */}
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                      Konfirmasi Password Baru
+                    </label>
+                    <div className="relative">
+                      <Lock className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400 dark:text-slate-500 pointer-events-none" />
+                      <input
+                        type={showConfirmPassword ? 'text' : 'password'}
+                        value={confirmPassword}
+                        onChange={e => setConfirmPassword(e.target.value)}
+                        placeholder="Ulangi password baru"
+                        className="w-full pl-12 pr-12 py-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                        className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300"
+                      >
+                        {showConfirmPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                      </button>
+                    </div>
+                    {confirmPassword && newPassword !== confirmPassword && (
+                      <p className="text-xs text-red-500 mt-1.5">Password tidak cocok</p>
+                    )}
+                  </div>
+
+                  {/* Save Button */}
+                  <div className="pt-4">
+                    <button
+                      onClick={handleChangePassword}
+                      disabled={saving || !passwordChanged || (confirmPassword !== '' && newPassword !== confirmPassword)}
+                      className="w-full inline-flex items-center justify-center gap-2 px-6 py-3 bg-amber-500 hover:bg-amber-600 text-white rounded-xl font-medium text-sm transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-sm hover:shadow-md"
+                    >
+                      {saving ? (
+                        <div className="h-4 w-4 animate-spin rounded-full border-2 border-white/30 border-t-white" />
+                      ) : (
+                        <Lock className="h-4 w-4" />
+                      )}
+                      Ubah Password
+                    </button>
                   </div>
                 </div>
               </div>
 
-              <button
-                onClick={handleSaveProfile}
-                disabled={saving || !isValidEmail}
-                className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-emerald-500 text-white text-sm font-medium hover:bg-emerald-600 transition-all disabled:opacity-50"
-              >
-                {saving ? (
-                  <div className="h-4 w-4 animate-spin rounded-full border-2 border-white/30 border-t-white" />
-                ) : (
-                  <Save className="h-4 w-4" />
-                )}
-                Simpan Perubahan
-              </button>
-            </div>
-          </motion.div>
-
-          {/* Change Password */}
-          <motion.div
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-            className="bg-white dark:bg-slate-900 border border-gray-100 dark:border-slate-700 rounded-2xl overflow-hidden shadow-sm dark:shadow-slate-900/50"
-          >
-            <div className="p-6 border-b border-gray-100 dark:border-slate-700">
-              <div className="flex items-center gap-3">
-                <div className="h-10 w-10 rounded-xl bg-amber-100 dark:bg-amber-900/40 flex items-center justify-center">
-                  <Lock className="h-5 w-5 text-amber-600 dark:text-amber-400" />
-                </div>
-                <div>
-                  <h2 className="text-base font-semibold text-gray-900 dark:text-white">Ubah Password</h2>
-                  <p className="text-xs text-gray-500 dark:text-slate-400">Perbarui password akun Anda</p>
+              {/* Security Tips */}
+              <div className="mt-6 p-4 bg-slate-100 dark:bg-slate-800/50 rounded-xl border border-slate-200 dark:border-slate-800">
+                <div className="flex items-start gap-3">
+                  <div className="h-8 w-8 rounded-lg bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center flex-shrink-0">
+                    <Shield className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+                  </div>
+                  <div>
+                    <h3 className="text-sm font-medium text-slate-700 dark:text-slate-300">Tips Keamanan</h3>
+                    <ul className="mt-2 space-y-1.5 text-xs text-slate-500 dark:text-slate-400">
+                      <li className="flex items-center gap-2">
+                        <CheckCircle2 className="h-3.5 w-3.5 text-emerald-500" />
+                        Gunakan minimal 12 karakter
+                      </li>
+                      <li className="flex items-center gap-2">
+                        <CheckCircle2 className="h-3.5 w-3.5 text-emerald-500" />
+                        Kombinasikan huruf besar dan kecil
+                      </li>
+                      <li className="flex items-center gap-2">
+                        <CheckCircle2 className="h-3.5 w-3.5 text-emerald-500" />
+                        Tambahkan angka dan simbol
+                      </li>
+                      <li className="flex items-center gap-2">
+                        <CheckCircle2 className="h-3.5 w-3.5 text-emerald-500" />
+                        Jangan gunakan password yang sama di其他地方
+                      </li>
+                    </ul>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div className="p-6 space-y-5">
-              <div>
-                <label className="block text-xs font-medium text-gray-700 dark:text-slate-200 mb-1.5">
-                  Password Saat Ini
-                </label>
-                <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-slate-500 pointer-events-none" />
-                  <input
-                    type="password"
-                    value={currentPassword}
-                    onChange={e => setCurrentPassword(e.target.value)}
-                    placeholder="Masukkan password saat ini"
-                    className="w-full bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-xl text-sm text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-slate-500 focus:outline-none focus:border-emerald-500 dark:focus:border-emerald-400 focus:ring-1 focus:ring-emerald-500/20 pl-10 pr-4 py-2.5 transition-all"
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-xs font-medium text-gray-700 dark:text-slate-200 mb-1.5">
-                  Password Baru
-                </label>
-                <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-slate-500 pointer-events-none" />
-                  <input
-                    type="password"
-                    value={newPassword}
-                    onChange={e => { setNewPassword(e.target.value); setPasswordChanged(true) }}
-                    placeholder="Minimal 6 karakter"
-                    className="w-full bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-xl text-sm text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-slate-500 focus:outline-none focus:border-emerald-500 dark:focus:border-emerald-400 focus:ring-1 focus:ring-emerald-500/20 pl-10 pr-4 py-2.5 transition-all"
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-xs font-medium text-gray-700 dark:text-slate-200 mb-1.5">
-                  Konfirmasi Password Baru
-                </label>
-                <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-slate-500 pointer-events-none" />
-                  <input
-                    type="password"
-                    value={confirmPassword}
-                    onChange={e => setConfirmPassword(e.target.value)}
-                    placeholder="Ulangi password baru"
-                    className="w-full bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-xl text-sm text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-slate-500 focus:outline-none focus:border-emerald-500 dark:focus:border-emerald-400 focus:ring-1 focus:ring-emerald-500/20 pl-10 pr-4 py-2.5 transition-all"
-                  />
-                </div>
-              </div>
-
-              <button
-                onClick={handleChangePassword}
-                disabled={saving || !passwordChanged}
-                className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-amber-500 text-white text-sm font-medium hover:bg-amber-600 transition-all disabled:opacity-50"
-              >
-                {saving ? (
-                  <div className="h-4 w-4 animate-spin rounded-full border-2 border-white/30 border-t-white" />
-                ) : (
-                  <Lock className="h-4 w-4" />
-                )}
-                Ubah Password
-              </button>
-            </div>
-          </motion.div>
-        </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </div>
   )
