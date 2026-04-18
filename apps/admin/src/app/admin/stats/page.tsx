@@ -12,6 +12,7 @@ import { Modal } from '@/components/admin/Modal'
 import { DataTable } from '@/components/admin/DataTable'
 import { getCompanyStats, createCompanyStat, updateCompanyStat, deleteCompanyStat } from '@/lib/api'
 import { CompanyStat } from '@/types'
+import { Breadcrumb } from '@/components/admin/Breadcrumb'
 import { formatDate } from '@/lib/utils'
 import { toast } from 'sonner'
 
@@ -247,19 +248,7 @@ export default function CompanyStatsPage() {
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-slate-900 text-gray-900 dark:text-white">
       {/* Topbar */}
-      <div className="sticky top-0 z-20 bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border-b border-gray-100 dark:border-slate-700 px-6 py-3 flex items-center justify-between">
-        <div className="flex items-center gap-2 text-xs text-gray-500 dark:text-slate-400">
-          <span>NingClean Admin</span>
-          <span>/</span>
-          <span className="text-gray-700 dark:text-slate-200">Company Stats</span>
-        </div>
-        <div className="flex items-center gap-3">
-          <div className="flex items-center gap-1.5">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-            <span className="text-[11px] text-gray-400 dark:text-slate-500">Live</span>
-          </div>
-        </div>
-      </div>
+      <Breadcrumb items={[{ label: 'Company Stats' }]} />
 
       <div className="max-w-screen px-6 py-8 space-y-6">
         {/* Page Header */}

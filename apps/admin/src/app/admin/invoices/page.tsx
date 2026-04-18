@@ -11,6 +11,7 @@ import { Modal } from '@/components/admin/Modal'
 import { Pagination } from '@/components/admin/Pagination'
 import { getBookings, getBookingInvoice, InvoiceData, createInvoice, updateInvoiceStatus } from '@/lib/api'
 import { formatDate } from '@/lib/utils'
+import { Breadcrumb } from '@/components/admin/Breadcrumb'
 import { toast } from 'sonner'
 
 // Booking Status (lowercase keys to match API)
@@ -170,13 +171,7 @@ export default function InvoicesPage() {
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-slate-900 text-gray-900 dark:text-white">
       {/* Topbar */}
-      <div className="sticky top-0 z-20 bg-white dark:bg-slate-900/80 dark:bg-slate-900/80 backdrop-blur-xl border-b border-gray-100 dark:border-slate-700 px-4 md:px-6 py-3 flex items-center justify-between">
-        <div className="flex items-center gap-2 text-xs text-gray-500 dark:text-slate-400">
-          <span>NingClean Admin</span>
-          <span>/</span>
-          <span className="text-gray-700 dark:text-slate-200">Invoices</span>
-        </div>
-      </div>
+      <Breadcrumb items={[{ label: 'Invoices' }]} />
 
       <div className="w-full px-4 md:px-6 py-6 space-y-6">
         {/* Header */}

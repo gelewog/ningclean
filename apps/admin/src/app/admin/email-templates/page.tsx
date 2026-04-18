@@ -11,6 +11,7 @@ import { Input } from '@/components/ui/input'
 import { Badge } from '@/components/ui/badge'
 import { getEmailTemplates, updateEmailTemplate, EmailTemplate } from '@/lib/api'
 import { toast } from 'sonner'
+import { Breadcrumb } from '@/components/admin/Breadcrumb'
 
 const TEMPLATE_INFO: Record<string, { label: string; description: string; icon: React.ReactNode; color: string }> = {
   BOOKING_CONFIRMED: { 
@@ -108,13 +109,7 @@ export default function EmailTemplatesPage() {
   return (
     <div className="min-h-screen bg-gray-50/50 dark:bg-slate-900 text-gray-900 dark:text-white">
       {/* Topbar */}
-      <div className="sticky top-0 z-20 bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border-b border-gray-200 dark:border-slate-700 px-4 md:px-6 py-4">
-        <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-slate-400">
-          <span>Admin</span>
-          <span className="text-gray-400 dark:text-slate-500">/</span>
-          <span className="text-gray-900 dark:text-white font-medium">Email Templates</span>
-        </div>
-      </div>
+      <Breadcrumb items={[{ label: 'Email Templates' }]} />
 
       <div className="w-full px-4 md:px-6 py-6 space-y-6">
         {/* Header */}
