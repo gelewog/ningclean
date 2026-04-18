@@ -525,8 +525,8 @@ export default function SettingsPage() {
                 onClick={() => setActiveTab(tab.id)}
                 className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-700 text-sm font-medium transition-all ${
                   isActive
-                    ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-500/20'
-                    : 'bg-white text-gray-700 dark:text-slate-200 border border-gray-200 hover:bg-gray-50 dark:hover:bg-slate-800'
+                    ? 'bg-emerald-600 dark:bg-emerald-500 text-white shadow-lg shadow-emerald-500/20'
+                    : 'bg-white text-gray-700 dark:text-slate-200 border border-gray-200 dark:border-slate-700 hover:bg-gray-50 dark:hover:bg-slate-800'
                 }`}
               >
                 <Icon className="w-4 h-4" />
