@@ -52,13 +52,13 @@ export function removeToken(): void {
   localStorage.removeItem(USER_KEY)
 }
 
-export function getUser(): { id: string; name: string; email: string; role: string } | null {
+export function getUser(): { id: string; name: string; email: string; role: string; phone?: string; avatar?: string } | null {
   if (typeof window === 'undefined') return null
   const user = localStorage.getItem(USER_KEY)
   return user ? JSON.parse(user) : null
 }
 
-export function setUser(user: { id: string; name: string; email: string; role: string }): void {
+export function setUser(user: { id: string; name: string; email: string; role: string; phone?: string; avatar?: string }): void {
   if (typeof window === 'undefined') return
   localStorage.setItem(USER_KEY, JSON.stringify(user))
 }

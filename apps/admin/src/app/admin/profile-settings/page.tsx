@@ -452,6 +452,7 @@ export default function ProfileSettingsPage() {
                 </div>
               </div>
             </motion.div>
+          )}
 
           {activeTab === 'password' && (
             <motion.div
