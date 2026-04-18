@@ -1,7 +1,9 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
 import Link from 'next/link';
 import { Navigation } from '@/components/navigation';
 import { Footer } from '@/components/footer';
@@ -310,36 +312,9 @@ export default function TermsPage() {
                       <h2 className="text-xl font-semibold page-text">{section.title}</h2>
                     </div>
 
-                    <div className="text-[14px] page-text-muted leading-[1.9] space-y-4">
-                      {section.content.split('\n\n').map((para, pIdx) => {
-                        if (para.startsWith('**') && para.endsWith('**')) {
-                          return <p key={pIdx} className="font-semibold page-text-muted">{para.replace(/\*\*/g, '')}</p>;
-                        }
-                        if (para.startsWith('-') || /^\d+\./.test(para)) {
-                          const items = para.split('\n').filter((l) => l.trim());
-                          return (
-                            <ul key={pIdx} className="space-y-2 list-none pl-0">
-                              {items.map((item, iIdx) => {
-                                const clean = item.replace(/^-\s*/, '').replace(/^\d+\.\s*/, '');
-                                const isBold = clean.startsWith('**') && clean.includes('**');
-                                const boldEnd = isBold ? clean.indexOf('**', 2) : -1;
-                                return (
-                                  <li key={iIdx} className="flex items-start gap-2.5">
-                                    <span className="text-emerald-400/50 mt-1.5">•</span>
-                                    <span>
-                                      {isBold && boldEnd > 0 ? (
-                                        <><strong className="page-text-muted font-semibold">{clean.slice(2, boldEnd)}</strong>{clean.slice(boldEnd + 2)}</>
-                                      ) : clean}
-                                    </span>
-                                  </li>
-                                );
-                              })}
-                            </ul>
-                          );
-                        }
-                        return <p key={pIdx}>{para}</p>;
-                      })}
-                    </div>
+                    <div className="text-[14px] page-text-muted leading-[1.9] space-y-4 prose dark:prose-invert max-w-none">
+                        <ReactMarkdown remarkPlugins={[remarkGfm]}>{section.content}</ReactMarkdown>
+                      </div>
                   </div>
                 </motion.div>
               ))}
