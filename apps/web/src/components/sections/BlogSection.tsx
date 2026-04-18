@@ -39,7 +39,7 @@ const badgeStyles = {
 };
 
 function getCategoryStyle(slug?: string) {
-  const key = slug ?? 'default';
+  const key = (slug ?? 'default') as keyof typeof badgeStyles;
   return badgeStyles[key] ?? badgeStyles.default;
 }
 

@@ -178,9 +178,9 @@ export default function HeroSection({
       {/* Main Content */}
       <motion.div
         style={{ y: heroY, opacity: heroOpacity }}
-        className="relative z-10 container mx-auto px-6 max-w-5xl pt-20"
+        className="relative z-10 container mx-auto px-4 sm:px-6 md:px-8 max-w-5xl pt-16 sm:pt-20 md:pt-24"
       >
-        <div className="grid lg:grid-cols-2 gap-12 xl:gap-16 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 xl:gap-16 items-center">
           {/* Left Column - Content */}
           <div className="text-left">
             {/* Live tag */}
@@ -202,7 +202,7 @@ export default function HeroSection({
               initial={{ opacity: 0, x: -30 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.3 }}
-              className="font-serif text-4xl md:text-5xl lg:text-[56px] leading-[1.07] font-normal dark:text-white text-slate-900 mb-6"
+              className="font-serif text-3xl sm:text-4xl md:text-5xl lg:text-[56px] leading-[1.07] font-normal dark:text-white text-slate-900 mb-4 sm:mb-6"
             >
               {headline.split('|').map((part, i) => (
                 <span key={i}>{i > 0 ? <><br /><em className="italic dark:text-emerald-400 text-emerald-600">{part}</em></> : part}</span>
@@ -224,7 +224,7 @@ export default function HeroSection({
               initial={{ opacity: 0, x: -30 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.6 }}
-              className="flex flex-col sm:flex-row items-center gap-5 mb-12"
+              className="flex flex-col sm:flex-row items-center gap-4 sm:gap-5 mb-8 sm:mb-12"
             >
               <Link href={ctaPrimaryLink} className="w-full sm:w-auto group">
                 <Button
@@ -265,7 +265,7 @@ export default function HeroSection({
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.7 }}
-              className="inline-flex items-center gap-0 rounded-2xl dark:bg-white/[0.03] dark:border-white/[0.08]
+              className="grid grid-cols-2 lg:flex lg:items-center lg:gap-0 rounded-2xl dark:bg-white/[0.03] dark:border-white/[0.08]
                          bg-white border border-slate-200 p-1.5"
             >
               {[
@@ -282,7 +282,12 @@ export default function HeroSection({
                       <p className="text-[11px] dark:text-white/35 text-slate-400 mt-0.5">{stat.label}</p>
                     </div>
                   </div>
-                  {idx < arr.length - 1 && <div className="w-px h-8 dark:bg-white/[0.08] bg-slate-200" />}
+                  {idx < arr.length - 1 && idx % 2 === 1 && (
+                    <div className="w-px h-8 mx-1 lg:hidden dark:bg-white/[0.08] bg-slate-200" />
+                  )}
+                  {idx < arr.length - 1 && idx % 2 !== 1 && (
+                    <div className="hidden lg:block w-px h-8 dark:bg-white/[0.08] bg-slate-200" />
+                  )}
                 </div>
               ))}
             </motion.div>
@@ -293,7 +298,7 @@ export default function HeroSection({
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.4, type: 'spring' }}
-            className="relative hidden lg:block"
+            className="relative hidden md:block"
           >
             <div className="relative">
               {/* Glow */}
