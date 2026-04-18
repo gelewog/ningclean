@@ -99,8 +99,10 @@ export default function HomePage() {
           setServices(mockServices);
         }
 
-        if (blogData.data && blogData.data.length > 0) {
-          setBlogPosts(blogData.data);
+        // Handle both paginated response { data, total, ... } and direct array
+        const postsData = blogData.data || blogData;
+        if (postsData && postsData.length > 0) {
+          setBlogPosts(postsData);
         } else {
           setBlogPosts(mockBlogPosts);
         }

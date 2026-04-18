@@ -80,7 +80,9 @@ function ServiceModal({
   setFormData,
   errors,
   onSubmit,
-  loading
+  loading,
+  selectedImageFile,
+  setSelectedImageFile,
 }: {
   isOpen: boolean
   onClose: () => void
@@ -90,6 +92,8 @@ function ServiceModal({
   errors: Partial<ServiceFormData>
   onSubmit: (e: React.FormEvent) => void
   loading: boolean
+  selectedImageFile: File | null
+  setSelectedImageFile: (file: File | null) => void
 }) {
   const modalRef = React.useRef<HTMLDivElement>(null)
   const [activeTab, setActiveTab] = React.useState<'basic' | 'details' | 'features' | 'cities'>('basic')
@@ -589,8 +593,8 @@ function DeleteModal({
             <Button variant="outline" onClick={onClose} disabled={loading}>
               Cancel
             </Button>
-            <Button 
-              variant="destructive" 
+            <Button
+              variant="error" 
               onClick={onConfirm}
               disabled={loading}
               className="gap-2"
@@ -1032,6 +1036,8 @@ export default function ServicesPage() {
         errors={errors}
         onSubmit={handleSubmit}
         loading={formLoading}
+        selectedImageFile={selectedImageFile}
+        setSelectedImageFile={setSelectedImageFile}
       />
 
       {/* Delete Confirmation Modal */}

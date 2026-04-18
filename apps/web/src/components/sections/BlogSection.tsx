@@ -5,30 +5,42 @@ import { motion, useInView } from 'framer-motion';
 import { useRef } from 'react';
 import { BlogPost } from '@/types/api';
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL?.replace('/api', '') || 'http://localhost:4000';
+
+function getImageUrl(src: string | undefined): string {
+  if (!src) return '';
+  if (src.startsWith('http://') || src.startsWith('https://')) {
+    return src;
+  }
+  return `${API_URL}${src.startsWith('/') ? '' : '/'}${src}`;
+}
+
 interface BlogSectionProps {
   posts: BlogPost[];
 }
 
-const categoryStyleDark: Record<string, string> = {
-  'deep-cleaning': 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20',
-  'perawatan-sofa': 'bg-blue-500/10 text-blue-400 border border-blue-500/20',
-  'tips-harian': 'bg-amber-400/10 text-amber-400 border border-amber-400/20',
-  default: 'bg-white/[0.06] text-white/50 border border-white/10',
-};
-
-const categoryStyleLight: Record<string, string> = {
-  'deep-cleaning': 'bg-emerald-50 text-emerald-600 border border-emerald-200',
-  'perawatan-sofa': 'bg-blue-50 text-blue-600 border border-blue-200',
-  'tips-harian': 'bg-amber-50 text-amber-600 border border-amber-200',
-  default: 'bg-slate-100 text-slate-500 border border-slate-200',
+const badgeStyles = {
+  'deep-cleaning': {
+    dark: 'dark:bg-emerald-500/10 dark:text-emerald-400 dark:border dark:border-emerald-500/20',
+    light: 'bg-emerald-100 text-emerald-700 border border-emerald-300',
+  },
+  'perawatan-sofa': {
+    dark: 'dark:bg-blue-500/10 dark:text-blue-400 dark:border dark:border-blue-500/20',
+    light: 'bg-blue-100 text-blue-700 border border-blue-300',
+  },
+  'tips-harian': {
+    dark: 'dark:bg-amber-400/10 dark:text-amber-400 dark:border dark:border-amber-400/20',
+    light: 'bg-amber-100 text-amber-700 border border-amber-300',
+  },
+  default: {
+    dark: 'dark:bg-white/[0.06] dark:text-white/70 dark:border dark:border-white/10',
+    light: 'bg-slate-200 text-slate-700 border border-slate-400',
+  },
 };
 
 function getCategoryStyle(slug?: string) {
   const key = slug ?? 'default';
-  return {
-    dark: categoryStyleDark[key] ?? categoryStyleDark.default,
-    light: categoryStyleLight[key] ?? categoryStyleLight.default,
-  };
+  return badgeStyles[key] ?? badgeStyles.default;
 }
 
 function ClockIcon() {
@@ -67,7 +79,7 @@ function FeaturedCard({ post }: { post: BlogPost }) {
         <div className="relative h-[240px] overflow-hidden flex-shrink-0">
           {post.coverImage ? (
             <img
-              src={post.coverImage}
+              src={getImageUrl(post.coverImage)}
               alt={post.title}
               className="w-full h-full object-cover opacity-80 group-hover:scale-105 transition-transform duration-500"
             />
@@ -85,7 +97,7 @@ function FeaturedCard({ post }: { post: BlogPost }) {
 
         {/* Body */}
         <div className="flex flex-col flex-1 px-6 py-6">
-          <span className={`inline-block px-2.5 py-[3px] rounded-full text-[11px] font-semibold mb-3 self-start dark:${catStyle.dark} ${catStyle.light}`}>
+          <span className={`inline-block px-2.5 py-[3px] rounded-full text-[11px] font-semibold mb-3 self-start ${catStyle.dark} ${catStyle.light}`}>
             {post.category?.name ?? 'Artikel'}
           </span>
 
@@ -107,13 +119,13 @@ function FeaturedCard({ post }: { post: BlogPost }) {
               </div>
               <div>
                 <p className="text-[12px] font-semibold dark:text-white/60 text-slate-700 leading-tight">{typeof post.author === 'string' ? post.author : post.author?.name ?? 'Ningclean'}</p>
-                <p className="text-[11px] dark:text-white/30 text-slate-400">
+                <p className="text-[11px] dark:text-white/30 text-slate-500">
                   {post.publishedAt ? new Date(post.publishedAt).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' }) : ''}
                 </p>
               </div>
             </div>
             {post.readTime && (
-              <span className="flex items-center gap-1.5 text-[11px] dark:text-white/30 text-slate-400">
+              <span className="flex items-center gap-1.5 text-[11px] dark:text-white/30 text-slate-500">
                 <ClockIcon />
                 {post.readTime} min baca
               </span>
@@ -121,7 +133,7 @@ function FeaturedCard({ post }: { post: BlogPost }) {
           </div>
 
           <div className="inline-flex items-center gap-1.5 mt-4 text-[12px] font-semibold
-                          dark:text-white/30 text-slate-400 group-hover:dark:text-emerald-400 group-hover:text-emerald-600 transition-colors duration-200">
+                          dark:text-white/30 text-slate-500 group-hover:dark:text-emerald-400 group-hover:text-emerald-600 transition-colors duration-200">
             Baca selengkapnya <span>→</span>
           </div>
         </div>
@@ -150,7 +162,7 @@ function SmallCard({ post, index }: { post: BlogPost; index: number }) {
         <div className="relative w-[110px] flex-shrink-0 overflow-hidden">
           {post.coverImage ? (
             <img
-              src={post.coverImage}
+              src={getImageUrl(post.coverImage)}
               alt={post.title}
               className="absolute inset-0 w-full h-full object-cover opacity-75 group-hover:scale-105 transition-transform duration-500"
             />
@@ -162,7 +174,7 @@ function SmallCard({ post, index }: { post: BlogPost; index: number }) {
         {/* Body */}
         <div className="flex flex-col justify-between px-5 py-4 flex-1 min-w-0">
           <div>
-            <span className={`inline-block px-2 py-[2px] rounded-full text-[10px] font-semibold mb-2 dark:${catStyle.dark} ${catStyle.light}`}>
+            <span className={`inline-block px-2 py-[2px] rounded-full text-[10px] font-semibold mb-2 ${catStyle.dark} ${catStyle.light}`}>
               {post.category?.name ?? 'Artikel'}
             </span>
             <h3 className="font-serif text-[clamp(15px,1.7vw,18px)] font-normal leading-[1.3] dark:text-white text-slate-900 line-clamp-2">
@@ -173,11 +185,11 @@ function SmallCard({ post, index }: { post: BlogPost; index: number }) {
             </p>
           </div>
           <div className="flex items-center justify-between mt-2.5">
-            <span className="text-[11px] dark:text-white/30 text-slate-400">
+            <span className="text-[11px] dark:text-white/30 text-slate-500">
               {post.publishedAt ? new Date(post.publishedAt).toLocaleDateString('id-ID', { day: 'numeric', month: 'short' }) : ''}
               {post.readTime ? ` · ${post.readTime} min` : ''}
             </span>
-            <span className="text-[12px] dark:text-white/30 text-slate-400 group-hover:dark:text-emerald-400 group-hover:text-emerald-600 transition-colors duration-200">→</span>
+            <span className="text-[12px] dark:text-white/30 text-slate-500 group-hover:dark:text-emerald-400 group-hover:text-emerald-600 transition-colors duration-200">→</span>
           </div>
         </div>
       </motion.div>
@@ -204,7 +216,7 @@ function BottomBar({ total }: { total: number }) {
     >
       <div className="flex items-center flex-wrap gap-5">
         {bottomStats.map((s) => (
-          <div key={s.label} className="flex items-center gap-2 text-[12px] dark:text-white/38 text-slate-500">
+          <div key={s.label} className="flex items-center gap-2 text-[12px] dark:text-white/38 text-slate-600">
             <span className={`w-1.5 h-1.5 rounded-full ${s.darkColor} ${s.color}`} />
             {s.label}
           </div>

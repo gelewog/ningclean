@@ -7,12 +7,15 @@ import {
   FileText, Search, Save, RefreshCw, Bell, CheckCircle, ExternalLink,
   Instagram, Facebook, Twitter, Youtube, Linkedin, AlertCircle,
   Calendar, DollarSign, Globe2, MessageSquare, Menu, ArrowUpDown, Home, Image, Link2,
-  Settings, Shield, Palette, Layout, Smartphone, CheckSquare, Hash, Users
+  Settings, Shield, Palette, Layout, Smartphone, CheckSquare, Hash, Users,
+  User, Moon, Sun, Monitor
 } from 'lucide-react'
+import { useTheme } from 'next-themes'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { getSiteSettings, updateSiteSettings, getNotificationSettings, updateNotificationSettings, getNavigationSettings, updateNavigationSettings, getHomepageSettings, updateHomepageSettings, getFooterSettings, updateFooterSettings, SiteSettings, NavigationSettings, NavLink, HomepageSettings, BeforeAfterSlide, FooterSettings, FooterColumn, SocialLink } from '@/lib/api'
+import { useAdminPreferences } from '@/lib/useAdminPreferences'
 import { toast } from 'sonner'
 
 const DAYS = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']
@@ -132,9 +135,9 @@ function SectionCard({ title, subtitle, children, accent = 'from-gray-600 to-gra
   )
 }
 
-function SettingRow({ label, description, children }: { label: string; description?: string; children: React.ReactNode }) {
+function SettingRow({ label, description, children, className }: { label: string; description?: string; children: React.ReactNode; className?: string }) {
   return (
-    <div className="flex items-center justify-between py-4 border-b border-gray-50 dark:border-slate-800 last:border-0">
+    <div className={`flex items-center justify-between py-4 border-b border-gray-50 dark:border-slate-800 last:border-0 ${className || ''}`}>
       <div>
         <p className="text-sm font-medium text-gray-700 dark:text-slate-200">{label}</p>
         {description && <p className="text-xs text-gray-400 dark:text-slate-500 mt-0.5">{description}</p>}
@@ -264,6 +267,8 @@ const defaultFooterSettings: Partial<FooterSettings> = {
 }
 
 export default function SettingsPage() {
+  const { theme, setTheme } = useTheme()
+  const { preferences, updatePreference } = useAdminPreferences()
   const [settings, setSettings] = React.useState<Partial<SiteSettings>>(defaultSiteSettings)
   const [notificationSettings, setNotificationSettings] = React.useState<Record<string, any>>(defaultNotificationSettings)
   const [navSettings, setNavSettings] = React.useState<Partial<NavigationSettings>>(defaultNavSettings)
@@ -276,6 +281,14 @@ export default function SettingsPage() {
 
   React.useEffect(() => {
     loadSettings()
+  }, [])
+
+  React.useEffect(() => {
+    const params = new URLSearchParams(window.location.search)
+    const tab = params.get('tab')
+    if (tab && tab !== activeTab) {
+      setActiveTab(tab)
+    }
   }, [])
 
   const loadSettings = async () => {
@@ -421,6 +434,7 @@ export default function SettingsPage() {
     { id: 'navigation', label: 'Navigation', icon: Menu },
     { id: 'homepage', label: 'Homepage', icon: Home },
     { id: 'notifications', label: 'Notifikasi', icon: Bell },
+    { id: 'personal', label: 'Personal', icon: User },
   ]
 
   return (
@@ -1648,6 +1662,128 @@ export default function SettingsPage() {
                       </div>
                     </div>
                   )}
+                </SectionCard>
+              </motion.div>
+            )}
+
+            {/* Personal Tab */}
+            {activeTab === 'personal' && (
+              <motion.div
+                key="personal"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                className="space-y-6"
+              >
+                <SectionCard
+                  title="Tampilan"
+                  subtitle="Pengaturan tema dan tampilan dashboard"
+                  accent="from-purple-600 to-purple-400"
+                  icon={Palette}
+                >
+                  <div className="space-y-5">
+                    <div>
+                      <label className="block text-xs font-medium text-gray-700 dark:text-slate-200 mb-3">
+                        Tema
+                      </label>
+                      <div className="grid grid-cols-3 gap-3">
+                        <button
+                          onClick={() => setTheme('light')}
+                          className={`flex flex-col items-center gap-2 p-4 rounded-xl border-2 transition-all ${
+                            theme === 'light'
+                              ? 'border-emerald-500 bg-emerald-50 dark:bg-emerald-900/20'
+                              : 'border-gray-200 dark:border-slate-700 hover:border-gray-300 dark:hover:border-slate-600'
+                          }`}
+                        >
+                          <Sun className="h-6 w-6 text-amber-500" />
+                          <span className="text-xs font-medium text-gray-700 dark:text-slate-200">Light</span>
+                        </button>
+                        <button
+                          onClick={() => setTheme('dark')}
+                          className={`flex flex-col items-center gap-2 p-4 rounded-xl border-2 transition-all ${
+                            theme === 'dark'
+                              ? 'border-emerald-500 bg-emerald-50 dark:bg-emerald-900/20'
+                              : 'border-gray-200 dark:border-slate-700 hover:border-gray-300 dark:hover:border-slate-600'
+                          }`}
+                        >
+                          <Moon className="h-6 w-6 text-purple-500" />
+                          <span className="text-xs font-medium text-gray-700 dark:text-slate-200">Dark</span>
+                        </button>
+                        <button
+                          onClick={() => setTheme('system')}
+                          className={`flex flex-col items-center gap-2 p-4 rounded-xl border-2 transition-all ${
+                            theme === 'system'
+                              ? 'border-emerald-500 bg-emerald-50 dark:bg-emerald-900/20'
+                              : 'border-gray-200 dark:border-slate-700 hover:border-gray-300 dark:hover:border-slate-600'
+                          }`}
+                        >
+                          <Monitor className="h-6 w-6 text-blue-500" />
+                          <span className="text-xs font-medium text-gray-700 dark:text-slate-200">System</span>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </SectionCard>
+
+                <SectionCard
+                  title="Preferensi Dashboard"
+                  subtitle="Pengaturan tampilan dan perilaku dashboard"
+                  accent="from-blue-600 to-blue-400"
+                  icon={Layout}
+                >
+                  <div className="space-y-0">
+                    <div className="flex items-center justify-between py-4 border-b border-gray-50 dark:border-slate-800">
+                      <div>
+                        <p className="text-sm font-medium text-gray-700 dark:text-slate-200">Compact View</p>
+                        <p className="text-xs text-gray-400 dark:text-slate-500 mt-0.5">Tampilkan lebih banyak data per halaman</p>
+                      </div>
+                      <Toggle
+                        checked={preferences.compactView}
+                        onChange={(v) => updatePreference('compactView', v)}
+                      />
+                    </div>
+
+                    <div className="flex items-center justify-between py-4 border-b border-gray-50 dark:border-slate-800">
+                      <div>
+                        <p className="text-sm font-medium text-gray-700 dark:text-slate-200">Show Live Indicator</p>
+                        <p className="text-xs text-gray-400 dark:text-slate-500 mt-0.5">Tampilkan indikator live di header</p>
+                      </div>
+                      <Toggle
+                        checked={preferences.showLiveIndicator}
+                        onChange={(v) => updatePreference('showLiveIndicator', v)}
+                      />
+                    </div>
+
+                    <div className="flex items-center justify-between py-4">
+                      <div>
+                        <p className="text-sm font-medium text-gray-700 dark:text-slate-200">Auto Refresh</p>
+                        <p className="text-xs text-gray-400 dark:text-slate-500 mt-0.5">Refresh data secara otomatis</p>
+                      </div>
+                      <Toggle
+                        checked={preferences.autoRefresh}
+                        onChange={(v) => updatePreference('autoRefresh', v)}
+                      />
+                    </div>
+                  </div>
+                </SectionCard>
+
+                <SectionCard
+                  title="Info"
+                  subtitle="Tentang preferensi Anda"
+                  accent="from-gray-600 to-gray-400"
+                  icon={User}
+                >
+                  <div className="flex items-start gap-3 p-4 bg-gray-50 dark:bg-slate-800 rounded-xl">
+                    <div className="h-10 w-10 rounded-xl bg-emerald-100 dark:bg-emerald-900/40 flex items-center justify-center flex-shrink-0">
+                      <CheckCircle className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
+                    </div>
+                    <div>
+                      <p className="text-sm font-medium text-gray-700 dark:text-slate-200">Preferensi Tersimpan</p>
+                      <p className="text-xs text-gray-500 dark:text-slate-400 mt-1 leading-relaxed">
+                        Preferensi Anda disimpan di browser ini saja dan tidak dibagikan ke admin lain.
+                      </p>
+                    </div>
+                  </div>
                 </SectionCard>
               </motion.div>
             )}

@@ -628,3 +628,85 @@ body {
 .dark .table-modern td {
   color: #F1F5F9;
 }
+
+/* Compact View Styles */
+.admin-compact .table-modern th {
+  padding: 0.5rem 0.75rem;
+  font-size: 0.6875rem;
+}
+
+.admin-compact .table-modern td {
+  padding: 0.625rem 0.75rem;
+  font-size: 0.8125rem;
+}
+
+.admin-compact .table-modern tbody tr {
+  border-bottom-width: 1px;
+}
+
+.admin-compact .card-modern {
+  border-radius: 12px;
+  padding: 0.75rem;
+}
+
+.admin-compact .btn-primary,
+.admin-compact .btn-secondary {
+  padding: 0.5rem 0.875rem;
+  border-radius: 0.625rem;
+  font-size: 0.8125rem;
+}
+
+.admin-compact .px-4,
+.admin-compact .px-6 {
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
+}
+
+.admin-compact .py-3,
+.admin-compact .py-4,
+.admin-compact .py-5,
+.admin-compact .py-6 {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+
+.admin-compact .gap-3,
+.admin-compact .gap-4,
+.admin-compact .gap-5,
+.admin-compact .gap-6 {
+  gap: 0.5rem;
+}
+
+.admin-compact .text-sm {
+  font-size: 0.8125rem;
+}
+
+.admin-compact .text-xs {
+  font-size: 0.6875rem;
+}
+
+.admin-compact .min-h-screen {
+  min-height: 100vh;
+}
+
+.admin-compact .sticky top-0 z-20 {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+
+.admin-compact .rounded-2xl {
+  border-radius: 0.75rem;
+}
+
+.admin-compact .rounded-xl {
+  border-radius: 0.5rem;
+}
+
+/* Dark mode compact */
+.dark.admin-compact .table-modern thead {
+  background-color: rgba(30, 41, 59, 0.6);
+}
+
+.dark.admin-compact .table-modern tbody tr:hover {
+  background-color: rgba(59, 130, 246, 0.08);
+}

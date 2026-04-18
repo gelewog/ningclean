@@ -47,7 +47,7 @@ function AreaFormModal({
   onClose: () => void
   isEditing: boolean
   formData: AreaFormData
-  setFormData: (data: AreaFormData) => void
+  setFormData: (data: AreaFormData | ((prev: AreaFormData) => AreaFormData)) => void
   errors: Partial<AreaFormData>
   setErrors: (errors: Partial<AreaFormData>) => void
   saving: boolean

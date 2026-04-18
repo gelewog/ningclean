@@ -7,6 +7,8 @@ import { Sidebar } from '@/components/admin/Sidebar'
 import { Header } from '@/components/admin/Header'
 import { usePathname } from 'next/navigation'
 import { getToken } from '@/lib/api'
+import { useAdminPreferences } from '@/lib/useAdminPreferences'
+import { cn } from '@/lib/utils'
 
 interface AdminLayoutProps {
   children: React.ReactNode
@@ -16,6 +18,7 @@ export function AdminLayout({ children }: AdminLayoutProps) {
   const [sidebarCollapsed, setSidebarCollapsed] = React.useState(false)
   const pathname = usePathname()
   const router = useRouter()
+  const { preferences } = useAdminPreferences()
 
   // Auth check
   React.useEffect(() => {
@@ -31,7 +34,7 @@ export function AdminLayout({ children }: AdminLayoutProps) {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-950">
+    <div className={cn('min-h-screen bg-slate-50 dark:bg-slate-950', preferences.compactView && 'admin-compact')}>
       <Sidebar collapsed={sidebarCollapsed} onToggle={() => setSidebarCollapsed(!sidebarCollapsed)} />
 
       <motion.div

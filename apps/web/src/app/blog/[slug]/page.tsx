@@ -198,7 +198,7 @@ export default function BlogPostPage() {
 
   const headings = post.content?.match(/^##\s+(.+)$/gm) || [];
   const imageUrl = post.coverImage?.startsWith('http') 
-    ? post.coverImage 
+    ? post.coverImage
     : `${process.env.NEXT_PUBLIC_API_URL?.replace('/api', '') || 'http://localhost:4000'}${post.coverImage}`;
 
   return (

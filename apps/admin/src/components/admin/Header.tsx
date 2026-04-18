@@ -10,6 +10,7 @@ import { getUser, removeToken } from '@/lib/api'
 import { useRouter } from 'next/navigation'
 import { useTheme } from 'next-themes'
 import { cn } from '@/lib/utils'
+import { useAdminPreferences } from '@/lib/useAdminPreferences'
 
 // ─── Types ─────────────────────────────────────────────────────────────────────
 
@@ -199,9 +200,13 @@ function NotificationPanel({
 function UserPanel({
   user,
   onLogout,
+  onClose,
+  onNavigate,
 }: {
   user: { name: string; email: string; role: string } | null
   onLogout: () => void
+  onClose: () => void
+  onNavigate: (path: string) => void
 }) {
   return (
     <motion.div
@@ -225,11 +230,17 @@ function UserPanel({
 
       {/* Items */}
       <div className="p-1.5 space-y-0.5">
-        <button className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-[13px] text-gray-600 dark:text-slate-400 hover:bg-gray-100 dark:hover:bg-slate-800 hover:text-gray-900 dark:hover:text-slate-100 transition-all text-left">
+        <button
+          onClick={() => { onClose(); onNavigate('/admin/profile-settings') }}
+          className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-[13px] text-gray-600 dark:text-slate-400 hover:bg-gray-100 dark:hover:bg-slate-800 hover:text-gray-900 dark:hover:text-slate-100 transition-all text-left"
+        >
           <User className="w-4 h-4 flex-shrink-0" />
           Profile Settings
         </button>
-        <button className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-[13px] text-gray-600 dark:text-slate-400 hover:bg-gray-100 dark:hover:bg-slate-800 hover:text-gray-900 dark:hover:text-slate-100 transition-all text-left">
+        <button
+          onClick={() => { onClose(); onNavigate('/admin/settings?tab=personal') }}
+          className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-[13px] text-gray-600 dark:text-slate-400 hover:bg-gray-100 dark:hover:bg-slate-800 hover:text-gray-900 dark:hover:text-slate-100 transition-all text-left"
+        >
           <Settings className="w-4 h-4 flex-shrink-0" />
           Preferences
         </button>
@@ -251,6 +262,7 @@ function UserPanel({
 export function Header({ onMenuClick }: HeaderProps) {
   const router = useRouter()
   const { theme, setTheme } = useTheme()
+  const { preferences } = useAdminPreferences()
 
   const [searchQuery, setSearchQuery] = React.useState('')
   const [user, setUser] = React.useState<{ name: string; email: string; role: string } | null>(null)
@@ -288,9 +300,11 @@ export function Header({ onMenuClick }: HeaderProps) {
 
   React.useEffect(() => {
     fetchNotifications()
-    const interval = setInterval(fetchNotifications, 30000)
-    return () => clearInterval(interval)
-  }, [fetchNotifications])
+    if (preferences.autoRefresh) {
+      const interval = setInterval(fetchNotifications, (preferences.refreshInterval || 30) * 1000)
+      return () => clearInterval(interval)
+    }
+  }, [fetchNotifications, preferences.autoRefresh, preferences.refreshInterval])
 
   // ── Click outside ──
   React.useEffect(() => {
@@ -416,10 +430,12 @@ export function Header({ onMenuClick }: HeaderProps) {
         </button>
 
         {/* Live indicator */}
-        <div className="hidden sm:flex items-center gap-1.5 mr-2">
-          <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-          <span className="text-[11px] text-gray-500 dark:text-slate-400 font-medium">Live</span>
-        </div>
+        {preferences.showLiveIndicator && (
+          <div className="hidden sm:flex items-center gap-1.5 mr-2">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+            <span className="text-[11px] text-gray-500 dark:text-slate-400 font-medium">Live</span>
+          </div>
+        )}
 
         <div className="w-px h-5 bg-gray-200 mx-1 hidden sm:block" />
 
@@ -487,7 +503,7 @@ export function Header({ onMenuClick }: HeaderProps) {
 
           <AnimatePresence>
             {showUserMenu && (
-              <UserPanel user={user} onLogout={handleLogout} />
+              <UserPanel user={user} onLogout={handleLogout} onClose={() => setShowUserMenu(false)} onNavigate={(path) => router.push(path)} />
             )}
           </AnimatePresence>
         </div>

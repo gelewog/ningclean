@@ -119,4 +119,81 @@ export class AuthService {
     }
     return user;
   }
+
+  async updateProfile(userId: string, data: { name?: string; email?: string }) {
+    const user = await this.prisma.user.findUnique({ where: { id: userId } });
+    if (!user) {
+      return { success: false, message: 'User not found' };
+    }
+
+    // Check if email is being changed and if it's already taken
+    if (data.email && data.email !== user.email) {
+      const existingUser = await this.prisma.user.findUnique({
+        where: { email: data.email },
+      });
+      if (existingUser) {
+        return { success: false, message: 'Email already in use' };
+      }
+    }
+
+    const updatedUser = await this.prisma.user.update({
+      where: { id: userId },
+      data: {
+        name: data.name ?? user.name,
+        email: data.email ?? user.email,
+      },
+      select: {
+        id: true,
+        email: true,
+        name: true,
+        role: true,
+        phone: true,
+        createdAt: true,
+      },
+    });
+
+    await this.auditService.log({
+      action: 'UPDATE',
+      entityType: 'User',
+      entityId: userId,
+      userId: userId,
+      userEmail: user.email,
+      changes: { name: data.name, email: data.email },
+    });
+
+    return { success: true, message: 'Profile updated successfully', data: updatedUser };
+  }
+
+  async changePassword(userId: string, currentPassword: string, newPassword: string) {
+    const user = await this.prisma.user.findUnique({ where: { id: userId } });
+    if (!user) {
+      return { success: false, message: 'User not found' };
+    }
+
+    const isPasswordValid = await bcrypt.compare(currentPassword, user.password);
+    if (!isPasswordValid) {
+      return { success: false, message: 'Current password is incorrect' };
+    }
+
+    if (newPassword.length < 6) {
+      return { success: false, message: 'New password must be at least 6 characters' };
+    }
+
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    await this.prisma.user.update({
+      where: { id: userId },
+      data: { password: hashedPassword },
+    });
+
+    await this.auditService.log({
+      action: 'PASSWORD_CHANGE',
+      entityType: 'User',
+      entityId: userId,
+      userId: userId,
+      userEmail: user.email,
+      changes: { passwordChanged: true },
+    });
+
+    return { success: true, message: 'Password changed successfully' };
+  }
 }

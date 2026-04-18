@@ -8,11 +8,26 @@ import { join } from 'path';
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
-  // CORS configuration - allow all origins for development/tunnel
+  // CORS configuration - allow specified origins
+  const allowedOrigins = process.env.ALLOWED_ORIGINS?.split(',') || [];
   app.enableCors({
     origin: (origin, callback) => {
-      // Allow all origins (including null for same-origin requests)
-      callback(null, true);
+      // Allow same-origin requests (null origin)
+      if (!origin) {
+        callback(null, true);
+        return;
+      }
+      // In development, allow localhost
+      if (process.env.NODE_ENV !== 'production') {
+        callback(null, true);
+        return;
+      }
+      // In production, check against allowed list
+      if (allowedOrigins.includes(origin)) {
+        callback(null, true);
+        return;
+      }
+      callback(new Error('Not allowed by CORS'));
     },
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     credentials: true,

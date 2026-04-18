@@ -79,7 +79,8 @@ export default function AboutPage() {
   useEffect(() => {
     async function fetchTeam() {
       try {
-        const res = await fetch('http://localhost:4000/api/team-members', {
+        const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api';
+        const res = await fetch(`${API_BASE}/team-members`, {
           cache: 'no-store'
         });
         if (!res.ok) throw new Error('Failed to fetch team');

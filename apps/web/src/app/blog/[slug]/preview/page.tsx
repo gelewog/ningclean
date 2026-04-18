@@ -59,7 +59,8 @@ export default function BlogPreviewPage() {
     const draftId = params.get('id');
     
     if (draftId) {
-      fetch(`http://localhost:4000/api/drafts/preview/${draftId}`)
+      const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api';
+      fetch(`${API_BASE}/drafts/preview/${draftId}`)
         .then(res => {
           if (!res.ok) throw new Error('Draft not found or expired');
           return res.json();
@@ -82,8 +83,8 @@ export default function BlogPreviewPage() {
   const getImageUrl = (url: string | undefined): string => {
     if (!url) return '';
     if (url.startsWith('http')) return url;
-    const apiBase = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api';
-    return `${apiBase.replace('/api', '')}${url}`;
+    const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api';
+    return `${API_BASE.replace('/api', '')}${url}`;
   };
 
   // Helper for TOC extraction

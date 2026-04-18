@@ -104,7 +104,7 @@ export default function BlogPreviewPage() {
             Kembali ke Blog Admin
           </Link>
         </div>
-        <Footer />
+        <PreviewFooter />
       </div>
     )
   }

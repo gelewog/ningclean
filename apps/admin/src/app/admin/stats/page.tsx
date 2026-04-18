@@ -184,7 +184,7 @@ export default function CompanyStatsPage() {
       key: 'icon',
       label: 'Icon',
       render: (value: string) => (
-        <Badge variant="secondary" className="font-mono text-xs">
+        <Badge variant="info" className="font-mono text-xs">
           {value || 'TrendingUp'}
         </Badge>
       ),
@@ -201,7 +201,7 @@ export default function CompanyStatsPage() {
       label: 'Status',
       render: (value: boolean) => (
         <Badge
-          variant={value ? 'default' : 'secondary'}
+          variant={value ? 'default' : 'info'}
           className={value ? 'bg-emerald-100 text-emerald-700 hover:bg-emerald-100' : ''}
         >
           {value ? 'Active' : 'Inactive'}
@@ -439,7 +439,7 @@ export default function CompanyStatsPage() {
             <Button variant="outline" onClick={() => setIsDeleteModalOpen(false)}>
               Cancel
             </Button>
-            <Button variant="destructive" onClick={handleDelete}>
+            <Button variant="error" onClick={handleDelete}>
               Delete
             </Button>
           </div>
