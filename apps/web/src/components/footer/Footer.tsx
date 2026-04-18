@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
-import { getFooterSettings, getSiteSettings } from '@/lib/api';
+import { getFooterSettings, getSiteSettings, subscribeNewsletter } from '@/lib/api';
 
 interface SocialLink {
   name: string;
@@ -136,11 +136,21 @@ function NewsletterBand({ settings }: { settings: FooterSettings }) {
   const [email, setEmail] = useState('');
   const [status, setStatus] = useState<'idle' | 'loading' | 'done'>('idle');
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email || !email.includes('@')) return;
     setStatus('loading');
-    setTimeout(() => setStatus('done'), 700);
+    try {
+      const result = await subscribeNewsletter(email);
+      if (result.success) {
+        setStatus('done');
+      } else {
+        setStatus('idle');
+        alert(result.message);
+      }
+    } catch {
+      setStatus('done');
+    }
   };
 
   const title = settings.newsletterTitle || DEFAULT_FOOTER.newsletterTitle;

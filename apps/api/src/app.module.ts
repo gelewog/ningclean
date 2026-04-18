@@ -28,6 +28,7 @@ import { UploadModule } from './upload/upload.module';
 import { DraftPreviewModule } from './draft-preview/draft-preview.module';
 import { FileManagerModule } from './file-manager/file-manager.module';
 import { AuditModule } from './audit/audit.module';
+import { NewsletterModule } from './newsletter/newsletter.module';
 
 @Module({
   imports: [
@@ -58,6 +59,7 @@ import { AuditModule } from './audit/audit.module';
     DraftPreviewModule,
     FileManagerModule,
     AuditModule,
+    NewsletterModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -395,6 +395,16 @@ model HomepageSettings {
   @@map("homepage_settings")
 }
 
+model NewsletterSubscriber {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  isActive  Boolean  @default(true)
+  subscribedAt DateTime @default(now())
+  unsubscribedAt DateTime?
+
+  @@map("newsletter_subscribers")
+}
+
 model FooterSettings {
   id                 String   @id @default(uuid())
   footerColumns      Json     @default("[]")

@@ -268,6 +268,34 @@ export async function getFooterSettings() {
   }
 }
 
+// Newsletter
+interface NewsletterResponse {
+  success: boolean
+  message: string
+}
+
+export async function subscribeNewsletter(email: string): Promise<NewsletterResponse> {
+  try {
+    return await fetchApi<NewsletterResponse>('/newsletter/subscribe', {
+      method: 'POST',
+      body: JSON.stringify({ email }),
+    })
+  } catch {
+    return { success: false, message: 'Terjadi kesalahan. Coba lagi.' }
+  }
+}
+
+export async function unsubscribeNewsletter(email: string): Promise<NewsletterResponse> {
+  try {
+    return await fetchApi<NewsletterResponse>('/newsletter/unsubscribe', {
+      method: 'POST',
+      body: JSON.stringify({ email }),
+    })
+  } catch {
+    return { success: false, message: 'Terjadi kesalahan. Coba lagi.' }
+  }
+}
+
 // Bookings
 export async function createBooking(data: any) {
   return fetchApi<{ success: boolean; message: string; data: any }>('/bookings', {
