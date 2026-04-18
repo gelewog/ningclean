@@ -91,9 +91,7 @@ export default function AuditLogPage() {
   if (!mounted) {
     return (
       <div className="min-h-screen bg-gray-50/50 dark:bg-slate-900 text-gray-900 dark:text-white">
-        <div className="sticky top-0 z-20 bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border-b border-gray-200 dark:border-slate-700 px-4 md:px-6 py-4">
-          <div className="text-sm text-gray-500 dark:text-slate-400">Admin / Audit Logs</div>
-        </div>
+        <Breadcrumb items={[{ label: 'Audit Logs' }]} />
         <div className="w-full px-4 md:px-6 py-6">
           <div className="h-8 w-32 bg-gray-200 dark:bg-slate-700 rounded mb-4" />
           <div className="h-4 w-48 bg-gray-200 dark:bg-slate-700 rounded mb-8" />

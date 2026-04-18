@@ -10,6 +10,7 @@ import {
 import { getUser, getToken, uploadFile } from '@/lib/api'
 import { toast } from 'sonner'
 import { cn } from '@/lib/utils'
+import { Breadcrumb } from '@/components/admin/Breadcrumb'
 
 type Tab = 'profile' | 'password' | 'preferences'
 
@@ -266,41 +267,42 @@ export default function ProfileSettingsPage() {
 
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950">
-      {/* Header */}
-      <div className="sticky top-0 z-20 bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border-b border-slate-200/60 dark:border-slate-800/60">
-        <div className="px-4 md:px-6 py-4">
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-            <div>
-              <h1 className="text-xl font-bold text-slate-900 dark:text-white">Pengaturan Profil</h1>
-              <p className="text-sm text-slate-500 dark:text-slate-400 mt-0.5">Kelola informasi akun dan keamanan Anda</p>
-            </div>
-            
-            {/* Tab Navigation */}
-            <div className="flex items-center gap-1 p-1 bg-slate-100 dark:bg-slate-800/50 rounded-xl">
-              {tabs.map((tab) => {
-                const Icon = tab.icon
-                return (
-                  <button
-                    key={tab.id}
-                    onClick={() => setActiveTab(tab.id)}
-                    className={cn(
-                      'flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all',
-                      activeTab === tab.id
-                        ? 'bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-sm'
-                        : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300'
-                    )}
-                  >
-                    <Icon className="h-4 w-4" />
-                    <span className="hidden sm:inline">{tab.label}</span>
-                  </button>
-                )
-              })}
-            </div>
-          </div>
-        </div>
-      </div>
+      {/* Breadcrumb */}
+      <Breadcrumb items={[{ label: 'Profile Settings' }]} />
 
-      <div className="px-4 md:px-6 py-6">
+      <div className="px-4 md:px-6 py-6 space-y-6">
+        {/* Page Header with Tabs */}
+        <motion.div
+          initial={{ opacity: 0, y: -16 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"
+        >
+          <div>
+            <h1 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">Pengaturan Profil</h1>
+            <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">Kelola informasi akun dan keamanan Anda</p>
+          </div>
+          <div className="flex items-center gap-1 p-1 bg-white dark:bg-slate-800 rounded-xl shadow-sm">
+            {tabs.map((tab) => {
+              const Icon = tab.icon
+              return (
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id)}
+                  className={cn(
+                    'flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all',
+                    activeTab === tab.id
+                      ? 'bg-emerald-600 text-white shadow-sm'
+                      : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300'
+                  )}
+                >
+                  <Icon className="h-4 w-4" />
+                  <span className="hidden sm:inline">{tab.label}</span>
+                </button>
+              )
+            })}
+          </div>
+        </motion.div>
+
         <AnimatePresence mode="wait">
           {activeTab === 'profile' && (
             <motion.div
