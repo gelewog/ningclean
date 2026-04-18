@@ -150,8 +150,23 @@ export default function ProfileSettingsPage() {
     try {
       const result = await uploadFile(file, 'avatars')
       if (result.success && result.data) {
-        setAvatar(result.data.url)
-        toast.success('Avatar uploaded successfully')
+        // Auto-save avatar to database
+        const token = getToken()
+        const saveRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api'}/auth/profile`, {
+          method: 'PUT',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ avatar: result.data.url }),
+        })
+        if (saveRes.ok) {
+          setAvatar(result.data.url)
+          localStorage.setItem('admin_user', JSON.stringify({ ...user, name, email, phone, avatar: result.data.url }))
+          toast.success('Avatar uploaded and saved successfully')
+        } else {
+          toast.error('Avatar uploaded but failed to save. Please click Simpan Changes.')
+        }
       } else {
         toast.error(result.message || 'Failed to upload avatar')
       }
