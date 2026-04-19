@@ -1522,3 +1522,32 @@ export async function createFolder(folderPath: string, folderName: string): Prom
     body: JSON.stringify({ folderPath, folderName }),
   })
 }
+
+// --- Newsletter ----------------------------------------------------------------
+
+export interface NewsletterSubscriber {
+  id: string
+  email: string
+  isActive: boolean
+  subscribedAt: string
+  unsubscribedAt?: string
+}
+
+export async function getSubscribers(): Promise<NewsletterSubscriber[]> {
+  const token = getToken()
+  return fetchApi<NewsletterSubscriber[]>('/newsletter/subscribers', { token })
+}
+
+export async function unsubscribeSubscriber(email: string): Promise<{ success: boolean; message: string }> {
+  const token = getToken()
+  return fetchApi<{ success: boolean; message: string }>('/newsletter/unsubscribe', {
+    method: 'POST',
+    token,
+    body: JSON.stringify({ email }),
+  })
+}
+
+export async function sendTestNewsletter(): Promise<{ success: boolean; message: string }> {
+  const token = getToken()
+  return fetchApi<{ success: boolean; message: string }>('/newsletter/send-test', { method: 'POST', token })
+}

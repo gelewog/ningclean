@@ -71,6 +71,7 @@ const NAV_SECTIONS: { label: string; items: NavItem[] }[] = [
       { href: '/admin/services',      label: 'Services',      icon: Briefcase },
       { href: '/admin/customers',     label: 'Customers',     icon: Users },
       { href: '/admin/notifications', label: 'Notifications', icon: Bell,        badge: 5, badgeVariant: 'blue' },
+      { href: '/admin/newsletter',    label: 'Newsletter',   icon: Mail },
       { href: '/admin/invoices',      label: 'Invoices',      icon: FileText },
     ],
   },
