@@ -30,10 +30,6 @@
     }
   ],
   "env": {
-    "NEXT_PUBLIC_API_URL": "https://api.ningclean.com/api",
-    "DATABASE_URL": "@database_url",
-    "SUPABASE_URL": "@supabase_url",
-    "SUPABASE_SERVICE_ROLE_KEY": "@supabase_service_key",
-    "JWT_SECRET": "@jwt_secret"
+    "NEXT_PUBLIC_API_URL": "https://api.ningclean.com/api"
   }
 }
