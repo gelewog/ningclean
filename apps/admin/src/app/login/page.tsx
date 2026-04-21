@@ -21,7 +21,7 @@ export default function LoginPage() {
   React.useEffect(() => {
     const token = getToken()
     if (token) {
-      router.push('/admin')
+      router.push('/dashboard')
     }
   }, [router])
 
@@ -34,7 +34,7 @@ export default function LoginPage() {
       const result = await login(email, password)
       
       if (result.access_token) {
-        router.push('/admin')
+        router.push('/dashboard')
       } else {
         setError('Invalid credentials')
       }
