@@ -11,7 +11,7 @@ import { BlogModule } from './blog/blog.module';
 import { TestimonialsModule } from './testimonials/testimonials.module';
 import { TeamMembersModule } from './team-members/team-members.module';
 import { GalleryModule } from './gallery/gallery.module';
-import { FAQModule } from './faq/faq.module';
+import { FaqModule } from './faq/faq.module';
 import { ServiceAreasModule } from './service-areas/service-areas.module';
 import { JobListingsModule } from './job-listings/job-listings.module';
 import { PricingPlansModule } from './pricing-plans/pricing-plans.module';
@@ -45,7 +45,7 @@ import { DraftPreviewModule } from './draft-preview/draft-preview.module';
     TestimonialsModule,
     TeamMembersModule,
     GalleryModule,
-    FAQModule,
+    FaqModule,
     ServiceAreasModule,
     JobListingsModule,
     PricingPlansModule,
