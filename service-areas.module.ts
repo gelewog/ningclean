@@ -1,1 +1,0 @@
-import { Module } from '@nestjs/common'; echo import { ServiceAreasController } from './service-areas.controller'; echo import { ServiceAreasService } from './service-areas.service'; echo.; echo @Module({; echo   controllers: [ServiceAreasController],; echo   providers: [ServiceAreasService],; echo }); echo export class ServiceAreasModule {} 

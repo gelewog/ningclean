@@ -1,1 +1,0 @@
-const fs = require('fs'); fs.writeFileSync('apps/admin/src/app/admin/team/page.tsx', "'use client'\nimport * as React from 'react'\nexport default function TeamPage() { return <div>Team Page</div> }");  
