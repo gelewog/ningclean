@@ -21,6 +21,10 @@
       "dest": "apps/api/dist/main.js"
     },
     {
+      "src": "/admin",
+      "dest": "apps/admin/index.html"
+    },
+    {
       "src": "/admin/(.*)",
       "dest": "apps/admin/$1"
     },
