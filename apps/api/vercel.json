@@ -1,15 +1,8 @@
 {
   "version": 2,
-  "builds": [
-    {
-      "src": "api/index.js",
-      "use": "@vercel/node"
-    }
-  ],
-  "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "api/index.js"
-    }
-  ]
+  "name": "ningclean-api",
+  "buildCommand": "npx prisma generate \u0026\u0026 npx nest build",
+  "outputDirectory": "dist",
+  "installCommand": "npm install",
+  "framework": null
 }
