@@ -2,7 +2,7 @@ import { Injectable, BadRequestException } from '@nestjs/common';
 import { promises as fs } from 'fs';
 import { existsSync } from 'fs';
 import { join, extname, basename, dirname } from 'path';
-import * as sharp from 'sharp';
+// import * as sharp from 'sharp'; // Disabled for Vercel
 
 export interface FileInfo {
   name: string;
@@ -191,6 +191,7 @@ export class FileManagerService {
 
   /**
    * Upload a file to a specific folder
+   * NOTE: Sharp/WebP conversion disabled for Vercel (native deps issue)
    */
   async uploadFile(file: Express.Multer.File, folder?: string): Promise<{
     success: boolean
@@ -209,7 +210,8 @@ export class FileManagerService {
       const targetDir = folder ? join(this.UPLOAD_DIR, folder) : this.UPLOAD_DIR;
       const ext = extname(file.originalname).toLowerCase();
       const baseName = basename(file.originalname, ext);
-      const fileName = `${baseName.replace(/[^a-zA-Z0-9]/g, '_')}_${Date.now()}.webp`;
+      // Keep original extension (no WebP conversion)
+      const fileName = `${baseName.replace(/[^a-zA-Z0-9]/g, '_')}_${Date.now()}${ext || '.bin'}`;
       const filePath = join(targetDir, fileName);
       const originalPath = file.path;
 
@@ -218,28 +220,11 @@ export class FileManagerService {
         await fs.mkdir(targetDir, { recursive: true });
       }
 
-      // Convert to WebP for optimization
-      let finalSize = file.size;
-      if (['.jpg', '.jpeg', '.png', '.gif', '.webp'].includes(ext)) {
-        try {
-          await sharp(originalPath)
-            .webp({ quality: 85, effort: 6 })
-            .toFile(filePath);
-          const stats = await fs.stat(filePath);
-          finalSize = stats.size;
-          // Delete original
-          await fs.unlink(originalPath);
-        } catch {
-          // If sharp fails, use original file
-          await fs.copyFile(originalPath, filePath);
-          await fs.unlink(originalPath);
-        }
-      } else {
-        // Non-image files - just copy
-        await fs.copyFile(originalPath, filePath);
-        await fs.unlink(originalPath);
-      }
+      // Copy file without conversion (sharp disabled for Vercel)
+      await fs.copyFile(originalPath, filePath);
+      await fs.unlink(originalPath);
 
+      const finalSize = file.size;
       const relativePath = folder ? `${folder}/${fileName}` : fileName;
       const url = `${this.API_BASE_URL}/api/upload/${relativePath.replace(/\\/g, '/')}`;
 
@@ -252,8 +237,8 @@ export class FileManagerService {
           url,
           size: finalSize,
           sizeFormatted: this.formatBytes(finalSize),
-          extension: '.webp',
-          isImage: ['.jpg', '.jpeg', '.png', '.gif', '.webp'].includes(ext),
+          extension: ext || '.bin',
+          isImage: this.isImageFile(ext),
         },
       };
     } catch (error: any) {

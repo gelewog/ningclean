@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import * as twilio from 'twilio';
 import { PrismaService } from '../prisma/prisma.service';
 
 export interface TwilioMessage {
@@ -9,15 +8,16 @@ export interface TwilioMessage {
 
 @Injectable()
 export class TwilioService {
-  private client: twilio.Twilio | null = null;
+  private client: any | null = null;
   private settings: any = null;
   private fromNumber: string = '';
+  private twilioModule: any = null;
 
   constructor(private prisma: PrismaService) {}
 
   async onModuleInit() {
     await this.loadSettings();
-    this.initializeClient();
+    // Don't initialize client here - lazy load when needed
   }
 
   private async loadSettings() {
@@ -69,30 +69,50 @@ export class TwilioService {
 
   async refreshSettings() {
     await this.loadSettings();
-    this.initializeClient();
   }
 
-  private initializeClient() {
+  private async getTwilioModule() {
+    if (!this.twilioModule) {
+      try {
+        this.twilioModule = await import('twilio');
+      } catch (error) {
+        console.error('Failed to load twilio module:', error);
+        return null;
+      }
+    }
+    return this.twilioModule;
+  }
+
+  private async initializeClient() {
+    if (this.client) return true;
+    
+    const twilio = await this.getTwilioModule();
+    if (!twilio) return false;
+    
     // Use camelCase property names from settings object
     if (this.settings?.twilioAccountSid && this.settings?.twilioAuthToken) {
       try {
-        this.client = twilio(
+        this.client = twilio.default(
           this.settings.twilioAccountSid,
           this.settings.twilioAuthToken
         );
         this.fromNumber = this.settings.twilioFromNumber || this.settings.whatsappNumber || '';
         console.log('Twilio client initialized');
+        return true;
       } catch (error) {
         console.error('Failed to initialize Twilio client:', error);
+        return false;
       }
     }
+    return false;
   }
 
   /**
    * Send WhatsApp message via Twilio
    */
   async sendWhatsAppMessage(to: string, body: string): Promise<{ success: boolean; messageId?: string; error?: string }> {
-    if (!this.client) {
+    const initialized = await this.initializeClient();
+    if (!initialized || !this.client) {
       return { success: false, error: 'Twilio not configured. Please add your credentials in settings.' };
     }
 

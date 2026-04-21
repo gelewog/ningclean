@@ -14,7 +14,6 @@ import { diskStorage } from 'multer';
 import { Response } from 'express';
 import { existsSync, mkdirSync, promises as fs } from 'fs';
 import { extname, join } from 'path';
-import * as sharp from 'sharp';
 
 const UPLOAD_DIR = join(process.cwd(), 'uploads');
 
@@ -30,22 +29,7 @@ folders.forEach((folder) => {
   if (!existsSync(folderPath)) {
     mkdirSync(folderPath, { recursive: true });
   }
-  // Create thumbs subdirectory
-  const thumbsPath = join(folderPath, 'thumbs');
-  if (!existsSync(thumbsPath)) {
-    mkdirSync(thumbsPath, { recursive: true });
-  }
 });
-
-// Create gallery subdirectories (before-after)
-const beforeAfterPath = join(UPLOAD_DIR, 'gallery', 'before-after');
-if (!existsSync(beforeAfterPath)) {
-  mkdirSync(beforeAfterPath, { recursive: true });
-}
-const beforeAfterThumbsPath = join(beforeAfterPath, 'thumbs');
-if (!existsSync(beforeAfterThumbsPath)) {
-  mkdirSync(beforeAfterThumbsPath, { recursive: true });
-}
 
 @Controller('upload')
 export class UploadController {
@@ -62,9 +46,12 @@ export class UploadController {
             return cb(new BadRequestException('Invalid upload folder'), '');
           }
 
-          // If subfolder is specified (e.g., gallery?subfolder=before-after)
+          // If subfolder is specified
           if (subfolder) {
             const folderPath = join(UPLOAD_DIR, folder, subfolder);
+            if (!existsSync(folderPath)) {
+              mkdirSync(folderPath, { recursive: true });
+            }
             cb(null, folderPath);
           } else {
             const folderPath = join(UPLOAD_DIR, folder);
@@ -99,72 +86,24 @@ export class UploadController {
       throw new BadRequestException('No file uploaded');
     }
 
-    // Build the actual path (including subfolder if present)
-    const folderPath = subfolder
-      ? join(UPLOAD_DIR, folder, subfolder)
-      : join(UPLOAD_DIR, folder);
+    // Build URLs
+    const fileUrl = subfolder
+      ? `/api/upload/${folder}/${subfolder}/${file.filename}`
+      : `/api/upload/${folder}/${file.filename}`;
 
-    const originalPath = join(folderPath, file.filename);
-    const baseName = file.filename.replace(extname(file.filename), '');
-    const webpFilename = `${baseName}.webp`;
-    const webpPath = join(folderPath, webpFilename);
-    const thumbPath = join(folderPath, 'thumbs', webpFilename);
-
-    try {
-      // Convert original to WebP (quality 85 for good balance)
-      await sharp(originalPath)
-        .webp({ quality: 85, effort: 6 })
-        .toFile(webpPath);
-
-      // Generate thumbnail (300x200, cover fit)
-      await sharp(originalPath)
-        .resize(300, 200, { fit: 'cover', position: 'center' })
-        .webp({ quality: 80, effort: 4 })
-        .toFile(thumbPath);
-
-      // Delete original file (keep only WebP)
-      await fs.unlink(originalPath);
-
-      // Get file stats
-      const webpStats = await fs.stat(webpPath);
-      const thumbStats = await fs.stat(thumbPath);
-
-      // Build the URL based on whether subfolder is used
-      const fileUrl = subfolder
-        ? `/api/upload/${folder}/${subfolder}/${webpFilename}`
-        : `/api/upload/${folder}/${webpFilename}`;
-      const thumbUrl = subfolder
-        ? `/api/upload/${folder}/${subfolder}/thumbs/${webpFilename}`
-        : `/api/upload/${folder}/thumbs/${webpFilename}`;
-
-      // Calculate savings
-      const savings = ((file.size - webpStats.size) / file.size * 100).toFixed(1);
-
-      return {
-        success: true,
-        message: 'File uploaded and optimized successfully',
-        data: {
-          filename: webpFilename,
-          originalName: file.originalname,
-          originalSize: file.size,
-          size: webpStats.size,
-          thumbnailSize: thumbStats.size,
-          compression: `${savings}%`,
-          mimetype: 'image/webp',
-          url: fileUrl,
-          thumbnailUrl: thumbUrl,
-          folder: subfolder ? `${folder}/${subfolder}` : folder,
-        },
-      };
-    } catch (error) {
-      // Cleanup on error
-      try {
-        if (existsSync(originalPath)) await fs.unlink(originalPath);
-        if (existsSync(webpPath)) await fs.unlink(webpPath);
-        if (existsSync(thumbPath)) await fs.unlink(thumbPath);
-      } catch {}
-      throw new BadRequestException('Failed to process image: ' + error.message);
-    }
+    return {
+      success: true,
+      message: 'File uploaded successfully',
+      data: {
+        filename: file.filename,
+        originalName: file.originalname,
+        size: file.size,
+        mimetype: file.mimetype,
+        url: fileUrl,
+        thumbnailUrl: fileUrl, // Same as original (no thumbnail processing)
+        folder: subfolder ? `${folder}/${subfolder}` : folder,
+      },
+    };
   }
 
   @Get(':folder/:subfolder/:filename')
@@ -183,22 +122,6 @@ export class UploadController {
     res.sendFile(filePath);
   }
 
-  @Get(':folder/:subfolder/thumbs/:filename')
-  async serveThumbnailWithSubfolder(
-    @Param('folder') folder: string,
-    @Param('subfolder') subfolder: string,
-    @Param('filename') filename: string,
-    @Res() res: Response,
-  ) {
-    const filePath = join(UPLOAD_DIR, folder, subfolder, 'thumbs', filename);
-
-    if (!existsSync(filePath)) {
-      throw new BadRequestException('Thumbnail not found');
-    }
-
-    res.sendFile(filePath);
-  }
-
   @Get(':folder/:filename')
   async serveFile(
     @Param('folder') folder: string,
@@ -209,21 +132,6 @@ export class UploadController {
 
     if (!existsSync(filePath)) {
       throw new BadRequestException('File not found');
-    }
-
-    res.sendFile(filePath);
-  }
-
-  @Get(':folder/thumbs/:filename')
-  async serveThumbnail(
-    @Param('folder') folder: string,
-    @Param('filename') filename: string,
-    @Res() res: Response,
-  ) {
-    const filePath = join(UPLOAD_DIR, folder, 'thumbs', filename);
-
-    if (!existsSync(filePath)) {
-      throw new BadRequestException('Thumbnail not found');
     }
 
     res.sendFile(filePath);
