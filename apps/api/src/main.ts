@@ -5,8 +5,13 @@ import { NestExpressApplication } from '@nestjs/platform-express';
 import { AppModule } from './app.module';
 import { join } from 'path';
 
+let app: NestExpressApplication | null = null;
+let isInitialized = false;
+
 async function bootstrap() {
-  const app = await NestFactory.create<NestExpressApplication>(AppModule);
+  if (app) return app;
+  
+  app = await NestFactory.create<NestExpressApplication>(AppModule);
 
   // CORS configuration
   const allowedOrigins = process.env.ALLOWED_ORIGINS?.split(',') || [
@@ -57,26 +62,31 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api/docs', app, document);
 
-  // Vercel serverless support
-  const port = process.env.PORT || 4000;
+  await app.init();
+  isInitialized = true;
+  console.log('🚀 Ningclean API initialized');
   
-  if (process.env.VERCEL) {
-    // Export for serverless
-    return app.init();
-  }
-  
-  await app.listen(port);
-  console.log(`🚀 Ningclean API running on http://localhost:${port}`);
-  console.log(`📚 Swagger docs available at http://localhost:${port}/api/docs`);
+  return app;
 }
 
-bootstrap();
+// Local development
+if (!process.env.VERCEL) {
+  bootstrap().then(async (app) => {
+    const port = process.env.PORT || 4000;
+    await app.listen(port);
+    console.log(`🚀 Ningclean API running on http://localhost:${port}`);
+    console.log(`📚 Swagger docs available at http://localhost:${port}/api/docs`);
+  });
+}
 
 // Vercel serverless export
 export default async function handler(req: any, res: any) {
-  const app = await NestFactory.create(AppModule);
-  app.setGlobalPrefix('api');
-  await app.init();
-  const expressApp = app.getHttpAdapter().getInstance();
-  return expressApp(req, res);
+  try {
+    const app = await bootstrap();
+    const expressApp = app.getHttpAdapter().getInstance();
+    return expressApp(req, res);
+  } catch (error) {
+    console.error('Handler error:', error);
+    res.status(500).json({ error: 'Internal Server Error', message: error.message });
+  }
 }
