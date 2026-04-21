@@ -1,19 +1,39 @@
 {
   "version": 2,
-  "name": "ningclean-admin",
+  "name": "ningclean",
   "builds": [
+    {
+      "src": "apps/web/package.json",
+      "use": "@vercel/next"
+    },
     {
       "src": "apps/admin/package.json",
       "use": "@vercel/next"
+    },
+    {
+      "src": "apps/api/dist/main.js",
+      "use": "@vercel/node"
     }
   ],
   "routes": [
     {
-      "src": "/(.*)",
+      "src": "/api/(.*)",
+      "dest": "apps/api/dist/main.js"
+    },
+    {
+      "src": "/admin/(.*)",
       "dest": "apps/admin/$1"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "apps/web/$1"
     }
   ],
   "env": {
-    "NEXT_PUBLIC_API_URL": "https://api.ningclean.com/api"
+    "NEXT_PUBLIC_API_URL": "https://api.ningclean.com/api",
+    "DATABASE_URL": "@database_url",
+    "SUPABASE_URL": "@supabase_url",
+    "SUPABASE_SERVICE_ROLE_KEY": "@supabase_service_key",
+    "JWT_SECRET": "@jwt_secret"
   }
 }

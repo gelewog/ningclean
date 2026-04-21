@@ -1,4 +1,4 @@
-import { NestFactory } from '@nestjs/core';
+import { NestFactory } from '@nestjs/common';
 import { ValidationPipe } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { NestExpressApplication } from '@nestjs/platform-express';
@@ -8,22 +8,21 @@ import { join } from 'path';
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
-  // CORS configuration - allow specified origins
-  const allowedOrigins = process.env.ALLOWED_ORIGINS?.split(',') || [];
+  // CORS configuration
+  const allowedOrigins = process.env.ALLOWED_ORIGINS?.split(',') || [
+    'https://ningclean.vercel.app',
+    'https://ningclean-admin.vercel.app',
+    'http://localhost:3000',
+    'http://localhost:3001',
+  ];
+  
   app.enableCors({
     origin: (origin, callback) => {
-      // Allow same-origin requests (null origin)
-      if (!origin) {
+      if (!origin || allowedOrigins.includes(origin)) {
         callback(null, true);
         return;
       }
-      // In development, allow localhost
       if (process.env.NODE_ENV !== 'production') {
-        callback(null, true);
-        return;
-      }
-      // In production, check against allowed list
-      if (allowedOrigins.includes(origin)) {
         callback(null, true);
         return;
       }
@@ -44,23 +43,40 @@ async function bootstrap() {
 
   app.setGlobalPrefix('api');
 
-  // Serve static files from uploads directory
+  // Serve static files
   app.useStaticAssets(join(process.cwd(), 'uploads'), {
     prefix: '/api/upload',
   });
 
   const config = new DocumentBuilder()
     .setTitle('Ningclean API')
-    .setDescription('API documentation for Ningclean - Jasa Cleaning Rumah')
+    .setDescription('API documentation for Ningclean')
     .setVersion('1.0')
     .addBearerAuth()
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api/docs', app, document);
 
+  // Vercel serverless support
   const port = process.env.PORT || 4000;
+  
+  if (process.env.VERCEL) {
+    // Export for serverless
+    return app.init();
+  }
+  
   await app.listen(port);
   console.log(`🚀 Ningclean API running on http://localhost:${port}`);
   console.log(`📚 Swagger docs available at http://localhost:${port}/api/docs`);
 }
+
 bootstrap();
+
+// Vercel serverless export
+export default async function handler(req: any, res: any) {
+  const app = await NestFactory.create(AppModule);
+  app.setGlobalPrefix('api');
+  await app.init();
+  const expressApp = app.getHttpAdapter().getInstance();
+  return expressApp(req, res);
+}

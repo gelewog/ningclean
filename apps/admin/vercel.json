@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "name": "ningclean-admin",
+  "buildCommand": "cd ../.. && npm run build:admin",
+  "outputDirectory": "dist",
+  "framework": "nextjs",
+  "env": {
+    "NEXT_PUBLIC_API_URL": "https://api.ningclean.com/api"
+  }
+}

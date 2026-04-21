@@ -12,9 +12,14 @@
     "dev:web": "cd apps/web && npm run dev",
     "dev:api": "cd apps/api && npm run start:dev",
     "dev:admin": "cd apps/admin && npm run dev",
-    "build": "npm run build --workspace=@ningclean/web",
+    "build": "turbo run build",
+    "build:web": "cd apps/web && npm run build",
     "build:admin": "cd apps/admin && npm run build",
-    "lint": "npm run lint --workspace=@ningclean/web"
+    "build:api": "cd apps/api && npm run build",
+    "lint": "turbo run lint",
+    "db:migrate": "prisma migrate deploy",
+    "db:generate": "prisma generate",
+    "db:seed": "prisma db seed"
   },
   "devDependencies": {
     "bcryptjs": "^3.0.3",
