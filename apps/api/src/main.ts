@@ -6,12 +6,16 @@ import { AppModule } from './app.module';
 import { join } from 'path';
 
 let app: NestExpressApplication | null = null;
+let initError: Error | null = null;
 
 async function bootstrap() {
   if (app) return app;
+  if (initError) throw initError;
   
   console.log('🔧 Starting bootstrap...');
   console.log('📊 DATABASE_URL exists:', !!process.env.DATABASE_URL);
+  console.log('📊 NODE_ENV:', process.env.NODE_ENV);
+  console.log('📊 VERCEL:', process.env.VERCEL);
   
   try {
     app = await NestFactory.create<NestExpressApplication>(AppModule);
@@ -72,6 +76,7 @@ async function bootstrap() {
     return app;
   } catch (error) {
     console.error('❌ Bootstrap error:', error);
+    initError = error as Error;
     throw error;
   }
 }
@@ -86,15 +91,39 @@ if (!process.env.VERCEL) {
   });
 }
 
+// Simple health check that doesn't need database
+const simpleHealthCheck = (req: any, res: any) => {
+  res.status(200).json({
+    status: 'ok',
+    message: 'Ningclean API is running (simple mode)',
+    timestamp: new Date().toISOString(),
+    env: {
+      hasDatabaseUrl: !!process.env.DATABASE_URL,
+      nodeEnv: process.env.NODE_ENV,
+      vercel: !!process.env.VERCEL,
+    }
+  });
+};
+
 // Vercel serverless export
 export default async function handler(req: any, res: any) {
-  console.log('📥 Incoming request:', req.url);
+  console.log('📥 Incoming request:', req.url, req.method);
+  
+  // Health check endpoint that works even if app fails
+  if (req.url === '/api/health' || req.url === '/api') {
+    try {
+      const app = await bootstrap();
+      const expressApp = app.getHttpAdapter().getInstance();
+      return expressApp(req, res);
+    } catch (error) {
+      console.error('Health check failed, using simple response');
+      return simpleHealthCheck(req, res);
+    }
+  }
   
   try {
     const app = await bootstrap();
-    console.log('✅ Got app, getting express instance...');
     const expressApp = app.getHttpAdapter().getInstance();
-    console.log('✅ Got express instance, handling request...');
     return expressApp(req, res);
   } catch (error: any) {
     console.error('❌ Handler error:', error);
