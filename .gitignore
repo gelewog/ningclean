@@ -43,3 +43,33 @@ next-env.d.ts
 
 # Claude
 .claude/
+
+# Temporary files
+*.tmp
+*.temp
+
+# Debug & test scripts
+check-*.js
+test-*.js
+verify-*.js
+simulate-*.js
+update-*.js
+update-*.sql
+backup-*.js
+enable-*.js
+reset-*.js
+auto-*.js
+
+# Article content temp files
+article-*.txt
+articles-*.json
+
+# Folders
+dto/
+scripts-cek-db/
+.sixth/
+.playwright-mcp/
+
+# Uploaded files (should be in storage, not git)
+apps/api/uploads/
+uploads/
