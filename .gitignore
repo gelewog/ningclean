@@ -73,3 +73,4 @@ scripts-cek-db/
 # Uploaded files (should be in storage, not git)
 apps/api/uploads/
 uploads/
+.vercel

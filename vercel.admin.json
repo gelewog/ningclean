@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "buildCommand": "cd ../.. && npm install && cd apps/admin && next build",
+  "outputDirectory": "apps/admin/.next",
+  "framework": "nextjs",
+  "installCommand": "npm install",
+  "env": {
+    "NEXT_PUBLIC_API_URL": "https://ningclean-api.vercel.app/api"
+  }
+}
