@@ -1,10 +1,9 @@
 {
   "version": 2,
   "name": "ningclean-web",
-  "buildCommand": "cd ../.. && npm run build:web",
-  "outputDirectory": "dist",
+  "buildCommand": "next build",
   "framework": "nextjs",
   "env": {
-    "NEXT_PUBLIC_API_URL": "https://api.ningclean.com/api"
+    "NEXT_PUBLIC_API_URL": "https://ningclean-api.vercel.app/api"
   }
 }
