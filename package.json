@@ -32,6 +32,7 @@
     "seed": "npx tsx prisma/seed.ts"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.104.0",
     "@tiptap/extension-character-count": "^3.22.3",
     "@tiptap/extension-color": "^3.22.3",
     "@tiptap/extension-highlight": "^3.22.3",
@@ -43,6 +44,7 @@
     "@tiptap/extension-text-style": "^3.22.3",
     "@tiptap/extension-typography": "^3.22.3",
     "@types/multer": "^2.1.0",
+    "dotenv": "^17.4.2",
     "multer": "^2.1.1"
   }
 }

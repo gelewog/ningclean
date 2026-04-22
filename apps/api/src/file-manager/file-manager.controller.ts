@@ -1,7 +1,8 @@
-import { Controller, Get, Delete, Post, Put, Param, Query, Body, UseGuards, UseInterceptors, UploadedFile } from '@nestjs/common';
+import { Controller, Get, Delete, Post, Put, Param, Query, Body, UseGuards, UseInterceptors, UploadedFile, BadRequestException } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { memoryStorage } from 'multer';
 import { FileManagerService } from './file-manager.service';
 import { RolesGuard, Roles } from '../common';
 import { Role } from '@prisma/client';
@@ -21,9 +22,12 @@ export class FileManagerController {
   }
 
   @Post('upload')
-  @UseInterceptors(FileInterceptor('file'))
+  @UseInterceptors(FileInterceptor('file', { storage: memoryStorage() }))
   @ApiOperation({ summary: 'Upload a file to the file manager' })
   uploadFile(@UploadedFile() file: Express.Multer.File, @Body() body: { folder?: string }) {
+    if (!file) {
+      throw new BadRequestException('No file uploaded');
+    }
     return this.fileManagerService.uploadFile(file, body.folder);
   }
 

@@ -1,8 +1,6 @@
 import { Injectable, BadRequestException } from '@nestjs/common';
-import { promises as fs } from 'fs';
-import { existsSync } from 'fs';
-import { join, extname, basename, dirname } from 'path';
-// import * as sharp from 'sharp'; // Disabled for Vercel
+import { SupabaseService } from '../supabase/supabase.service';
+import { extname, basename } from 'path';
 
 export interface FileInfo {
   name: string;
@@ -44,8 +42,10 @@ export interface ClipboardItem {
 
 @Injectable()
 export class FileManagerService {
-  private readonly UPLOAD_DIR = join(process.cwd(), 'uploads');
-  private readonly API_BASE_URL = process.env.API_BASE_URL || 'http://localhost:4000';
+  private readonly BUCKET_NAME = 'uploads';
+  private readonly SUPABASE_URL = process.env.SUPABASE_URL || '';
+
+  constructor(private readonly supabaseService: SupabaseService) {}
 
   /**
    * Format bytes to human readable string
@@ -88,110 +88,101 @@ export class FileManagerService {
   }
 
   /**
-   * Ensure path is within uploads directory (security check)
+   * Get public URL for a file
    */
-  private validatePath(filePath: string): string {
-    const fullPath = join(this.UPLOAD_DIR, filePath);
-    if (!fullPath.startsWith(this.UPLOAD_DIR)) {
-      throw new BadRequestException('Invalid file path - path traversal detected');
-    }
-    return fullPath;
+  private getPublicUrl(path: string): string {
+    return `${this.SUPABASE_URL}/storage/v1/object/public/${this.BUCKET_NAME}/${path}`;
   }
 
   /**
-   * List all files and folders in a directory
+   * List all files and folders in a directory (prefix)
    */
   async listFiles(folder?: string): Promise<FileManagerResult> {
-    const baseDir = this.UPLOAD_DIR;
-    const targetDir = folder ? join(baseDir, folder) : baseDir;
+    const supabase = this.supabaseService.getClient();
+    if (!supabase) {
+      throw new BadRequestException('Supabase not configured');
+    }
 
-    if (!existsSync(targetDir)) {
+    const prefix = folder ? `${folder}/` : '';
+    
+    const { data: listData, error } = await supabase.storage
+      .from(this.BUCKET_NAME)
+      .list(prefix, {
+        limit: 1000,
+        offset: 0,
+        sortBy: { column: 'name', order: 'asc' },
+      });
+
+    if (error) {
+      console.error('[FileManager] List error:', error);
       return {
         files: [],
         folders: [],
         totalFiles: 0,
         totalSize: 0,
         totalSizeFormatted: '0 B',
-        apiBaseUrl: `${this.API_BASE_URL}/api/upload`,
+        apiBaseUrl: `${this.SUPABASE_URL}/storage/v1/object/public/${this.BUCKET_NAME}`,
       };
     }
 
     const files: FileInfo[] = [];
-    const folders: Map<string, { fileCount: number; totalSize: number }> = new Map();
+    const folders: FolderInfo[] = [];
     let totalSize = 0;
 
-    const entries = await fs.readdir(targetDir, { withFileTypes: true });
+    for (const item of listData || []) {
+      // Skip placeholder files
+      if (item.name === '.emptyFolderPlaceholder') continue;
 
-    for (const entry of entries) {
-      const fullPath = join(targetDir, entry.name);
-      const relativePath = folder ? `${folder}/${entry.name}` : entry.name;
+      const itemPath = folder ? `${folder}/${item.name}` : item.name;
 
-      if (entry.isDirectory()) {
-        // Skip certain directories
-        if (['node_modules', '.git'].includes(entry.name)) continue;
-
-        // Count files in directory recursively
-        const folderStats = await this.countAllFiles(fullPath)
-        folders.set(entry.name, {
+      if (item.id === null) {
+        // It's a folder (folder entries don't have an id)
+        const folderStats = await this.countAllFiles(itemPath);
+        folders.push({
+          name: item.name,
+          path: itemPath,
           fileCount: folderStats.fileCount,
           totalSize: folderStats.totalSize,
-        })
-      } else if (entry.isFile()) {
-        const stats = await fs.stat(fullPath);
-        const ext = extname(entry.name);
+          totalSizeFormatted: this.formatBytes(folderStats.totalSize),
+        });
+      } else {
+        // It's a file
+        const ext = extname(item.name);
         const isImage = this.isImageFile(ext);
-
-        // Build URL for the file
-        // URL pattern: /api/upload/{folder}/{filename} or /api/upload/{filename}
-        let url: string;
-        if (folder) {
-          url = `${this.API_BASE_URL}/api/upload/${folder}/${entry.name}`;
-        } else {
-          url = `${this.API_BASE_URL}/api/upload/${entry.name}`;
-        }
+        const size = item.metadata?.size || 0;
 
         files.push({
-          name: entry.name,
-          path: relativePath,
-          url,
-          size: stats.size,
-          sizeFormatted: this.formatBytes(stats.size),
+          name: item.name,
+          path: itemPath,
+          url: this.getPublicUrl(itemPath),
+          size: size,
+          sizeFormatted: this.formatBytes(size),
           extension: ext,
           type: this.getMimeType(ext),
-          createdAt: stats.birthtime,
-          modifiedAt: stats.mtime,
+          createdAt: new Date(item.created_at),
+          modifiedAt: new Date(item.updated_at || item.created_at),
           isImage,
         });
 
-        totalSize += stats.size;
+        totalSize += size;
       }
     }
 
     // Sort files by modified date (newest first)
     files.sort((a, b) => b.modifiedAt.getTime() - a.modifiedAt.getTime());
 
-    // Convert folders map to array
-    const folderList: FolderInfo[] = Array.from(folders.entries()).map(([name, data]) => ({
-      name,
-      path: folder ? `${folder}/${name}` : name,
-      fileCount: data.fileCount,
-      totalSize: data.totalSize,
-      totalSizeFormatted: this.formatBytes(data.totalSize),
-    }));
-
     return {
       files,
-      folders: folderList,
+      folders,
       totalFiles: files.length,
       totalSize,
       totalSizeFormatted: this.formatBytes(totalSize),
-      apiBaseUrl: `${this.API_BASE_URL}/api/upload`,
+      apiBaseUrl: `${this.SUPABASE_URL}/storage/v1/object/public/${this.BUCKET_NAME}`,
     };
   }
 
   /**
-   * Upload a file to a specific folder
-   * NOTE: Sharp/WebP conversion disabled for Vercel (native deps issue)
+   * Upload a file to a specific folder in Supabase Storage
    */
   async uploadFile(file: Express.Multer.File, folder?: string): Promise<{
     success: boolean
@@ -206,37 +197,39 @@ export class FileManagerService {
       isImage: boolean
     }
   }> {
+    const supabase = this.supabaseService.getClient();
+    if (!supabase) {
+      return { success: false, message: 'Supabase not configured' };
+    }
+
     try {
-      const targetDir = folder ? join(this.UPLOAD_DIR, folder) : this.UPLOAD_DIR;
       const ext = extname(file.originalname).toLowerCase();
       const baseName = basename(file.originalname, ext);
-      // Keep original extension (no WebP conversion)
       const fileName = `${baseName.replace(/[^a-zA-Z0-9]/g, '_')}_${Date.now()}${ext || '.bin'}`;
-      const filePath = join(targetDir, fileName);
-      const originalPath = file.path;
+      const filePath = folder ? `${folder}/${fileName}` : fileName;
 
-      // Ensure target directory exists
-      if (!existsSync(targetDir)) {
-        await fs.mkdir(targetDir, { recursive: true });
+      const { data, error } = await supabase.storage
+        .from(this.BUCKET_NAME)
+        .upload(filePath, file.buffer, {
+          contentType: this.getMimeType(ext),
+          upsert: false,
+        });
+
+      if (error) {
+        throw new Error(error.message);
       }
 
-      // Copy file without conversion (sharp disabled for Vercel)
-      await fs.copyFile(originalPath, filePath);
-      await fs.unlink(originalPath);
-
-      const finalSize = file.size;
-      const relativePath = folder ? `${folder}/${fileName}` : fileName;
-      const url = `${this.API_BASE_URL}/api/upload/${relativePath.replace(/\\/g, '/')}`;
+      const publicUrl = this.getPublicUrl(filePath);
 
       return {
         success: true,
         message: 'File uploaded successfully',
         data: {
           name: fileName,
-          path: relativePath,
-          url,
-          size: finalSize,
-          sizeFormatted: this.formatBytes(finalSize),
+          path: filePath,
+          url: publicUrl,
+          size: file.size,
+          sizeFormatted: this.formatBytes(file.size),
           extension: ext || '.bin',
           isImage: this.isImageFile(ext),
         },
@@ -247,17 +240,23 @@ export class FileManagerService {
   }
 
   /**
-   * Delete a file
+   * Delete a file from Supabase Storage
    */
   async deleteFile(filePath: string): Promise<{ success: boolean; message: string }> {
-    try {
-      const fullPath = this.validatePath(filePath);
+    const supabase = this.supabaseService.getClient();
+    if (!supabase) {
+      return { success: false, message: 'Supabase not configured' };
+    }
 
-      if (!existsSync(fullPath)) {
-        return { success: false, message: 'File not found' };
+    try {
+      const { error } = await supabase.storage
+        .from(this.BUCKET_NAME)
+        .remove([filePath]);
+
+      if (error) {
+        throw new Error(error.message);
       }
 
-      await fs.unlink(fullPath);
       return { success: true, message: 'File deleted successfully' };
     } catch (error: any) {
       return { success: false, message: error.message || 'Failed to delete file' };
@@ -265,47 +264,51 @@ export class FileManagerService {
   }
 
   /**
-   * Delete a folder recursively
+   * Delete a folder (all files with prefix) from Supabase Storage
    */
   async deleteFolder(folderPath: string): Promise<{ success: boolean; message: string }> {
-    try {
-      const fullPath = this.validatePath(folderPath);
+    const supabase = this.supabaseService.getClient();
+    if (!supabase) {
+      return { success: false, message: 'Supabase not configured' };
+    }
 
-      if (!existsSync(fullPath)) {
-        return { success: false, message: 'Folder not found' };
+    try {
+      // List all files in the folder
+      const { data: listData, error: listError } = await supabase.storage
+        .from(this.BUCKET_NAME)
+        .list(folderPath, { limit: 1000 });
+
+      if (listError) {
+        throw new Error(listError.message);
       }
 
-      await fs.rm(fullPath, { recursive: true, force: true });
+      // Collect all file paths to delete
+      const filesToDelete: string[] = [];
+      for (const item of listData || []) {
+        if (item.id) {
+          // It's a file
+          filesToDelete.push(`${folderPath}/${item.name}`);
+        } else {
+          // It's a subfolder - recursively delete
+          await this.deleteFolder(`${folderPath}/${item.name}`);
+        }
+      }
+
+      // Delete all files in this folder
+      if (filesToDelete.length > 0) {
+        const { error } = await supabase.storage
+          .from(this.BUCKET_NAME)
+          .remove(filesToDelete);
+
+        if (error) {
+          throw new Error(error.message);
+        }
+      }
+
       return { success: true, message: 'Folder deleted successfully' };
     } catch (error: any) {
       return { success: false, message: error.message || 'Failed to delete folder' };
     }
-  }
-
-  /**
-   * Delete multiple files
-   */
-  async deleteFiles(filePaths: string[]): Promise<{ success: boolean; deleted: number; failed: number; errors: string[] }> {
-    const errors: string[] = [];
-    let deleted = 0;
-    let failed = 0;
-
-    for (const filePath of filePaths) {
-      const result = await this.deleteFile(filePath);
-      if (result.success) {
-        deleted++;
-      } else {
-        failed++;
-        errors.push(`${filePath}: ${result.message}`);
-      }
-    }
-
-    return {
-      success: failed === 0,
-      deleted,
-      failed,
-      errors,
-    };
   }
 
   /**
@@ -338,260 +341,356 @@ export class FileManagerService {
   }
 
   /**
-   * Rename a file or folder - uses copy + delete to handle rename on Windows
+   * Delete multiple files
+   */
+  async deleteFiles(filePaths: string[]): Promise<{ success: boolean; deleted: number; failed: number; errors: string[] }> {
+    const items = filePaths.map(path => ({ path, type: 'file' as const }));
+    return this.deleteItems(items);
+  }
+
+  /**
+   * Rename/move a file or folder in Supabase Storage
    */
   async renameItem(sourcePath: string, newName: string): Promise<{ success: boolean; message: string; newPath?: string }> {
+    const supabase = this.supabaseService.getClient();
+    if (!supabase) {
+      return { success: false, message: 'Supabase not configured' };
+    }
+
     try {
-      const fullSourcePath = this.validatePath(sourcePath);
-      const dirPath = dirname(fullSourcePath);
-      const newPath = join(dirPath, newName);
+      const parentPath = sourcePath.includes('/') 
+        ? sourcePath.substring(0, sourcePath.lastIndexOf('/')) 
+        : '';
+      const newPath = parentPath ? `${parentPath}/${newName}` : newName;
 
-      // Validate new path is within uploads
-      if (!newPath.startsWith(this.UPLOAD_DIR)) {
-        return { success: false, message: 'Invalid target path' };
-      }
+      // Supabase doesn't have a native rename - we need to copy and delete
+      // First, download the file
+      const { data: fileData, error: downloadError } = await supabase.storage
+        .from(this.BUCKET_NAME)
+        .download(sourcePath);
 
-      if (!existsSync(fullSourcePath)) {
-        return { success: false, message: 'Source not found' };
-      }
+      if (downloadError) {
+        // Maybe it's a folder - try to list
+        const { data: listData, error: listError } = await supabase.storage
+          .from(this.BUCKET_NAME)
+          .list(sourcePath);
 
-      if (existsSync(newPath)) {
-        return { success: false, message: 'A file or folder with this name already exists' };
-      }
+        if (listError || !listData) {
+          throw new Error('Source not found');
+        }
 
-      // Use copy + delete for reliable rename on Windows
-      const isDirectory = existsSync(fullSourcePath) && (await fs.stat(fullSourcePath)).isDirectory();
-      if (isDirectory) {
-        await this.copyDirectoryRecursive(fullSourcePath, newPath);
-        await fs.rm(fullSourcePath, { recursive: true, force: true });
+        // It's a folder - copy all contents
+        for (const item of listData) {
+          if (item.id) {
+            // It's a file
+            const { data: subFileData } = await supabase.storage
+              .from(this.BUCKET_NAME)
+              .download(`${sourcePath}/${item.name}`);
+            
+            if (subFileData) {
+              await supabase.storage
+                .from(this.BUCKET_NAME)
+                .upload(`${newPath}/${item.name}`, subFileData, {
+                  contentType: item.metadata?.mimetype || 'application/octet-stream',
+                  upsert: false,
+                });
+            }
+          }
+        }
+
+        // Delete old folder
+        await this.deleteFolder(sourcePath);
       } else {
-        await fs.copyFile(fullSourcePath, newPath);
-        await fs.unlink(fullSourcePath);
+        // It's a file - upload with new name
+        await supabase.storage
+          .from(this.BUCKET_NAME)
+          .upload(newPath, fileData, {
+            contentType: fileData.type || 'application/octet-stream',
+            upsert: false,
+          });
+
+        // Delete old file
+        await supabase.storage
+          .from(this.BUCKET_NAME)
+          .remove([sourcePath]);
       }
 
-      // Return relative path
-      const relativeNewPath = join(dirname(sourcePath), newName).replace(/\\/g, '/');
-      return { success: true, message: 'Renamed successfully', newPath: relativeNewPath };
+      return { success: true, message: 'Renamed successfully', newPath };
     } catch (error: any) {
       return { success: false, message: error.message || 'Failed to rename' };
     }
   }
 
   /**
-   * Copy a file
+   * Copy a file in Supabase Storage
    */
   async copyFile(sourcePath: string, targetDir: string): Promise<{ success: boolean; message: string; newPath?: string }> {
+    const supabase = this.supabaseService.getClient();
+    if (!supabase) {
+      return { success: false, message: 'Supabase not configured' };
+    }
+
     try {
-      const fullSourcePath = this.validatePath(sourcePath);
-      const fullTargetDir = this.validatePath(targetDir);
-      const fileName = basename(fullSourcePath);
-      const newPath = join(fullTargetDir, fileName);
+      const fileName = basename(sourcePath);
+      const ext = extname(fileName);
+      const baseName = basename(fileName, ext);
+      
+      // Download the file
+      const { data: fileData, error: downloadError } = await supabase.storage
+        .from(this.BUCKET_NAME)
+        .download(sourcePath);
 
-      if (!existsSync(fullSourcePath)) {
-        return { success: false, message: 'Source file not found' };
+      if (downloadError) {
+        throw new Error(downloadError.message);
       }
 
-      if (existsSync(newPath)) {
-        // Generate unique name
-        const ext = extname(fileName);
-        const baseName = basename(fileName, ext);
-        const uniqueName = `${baseName}_copy_${Date.now()}${ext}`;
-        const uniquePath = join(fullTargetDir, uniqueName);
-        await fs.copyFile(fullSourcePath, uniquePath);
-        return {
-          success: true,
-          message: 'File copied successfully',
-          newPath: join(targetDir, uniqueName).replace(/\\/g, '/')
-        };
+      // Generate unique name if exists
+      let newFileName = fileName;
+      let newPath = targetDir ? `${targetDir}/${newFileName}` : newFileName;
+      
+      const { data: existingFile } = await supabase.storage
+        .from(this.BUCKET_NAME)
+        .list(targetDir || '', { search: fileName });
+      
+      if (existingFile && existingFile.length > 0) {
+        newFileName = `${baseName}_copy_${Date.now()}${ext}`;
+        newPath = targetDir ? `${targetDir}/${newFileName}` : newFileName;
       }
 
-      await fs.copyFile(fullSourcePath, newPath);
-      return {
-        success: true,
-        message: 'File copied successfully',
-        newPath: join(targetDir, fileName).replace(/\\/g, '/')
-      };
+      // Upload to new location
+      await supabase.storage
+        .from(this.BUCKET_NAME)
+        .upload(newPath, fileData, {
+          contentType: fileData.type || 'application/octet-stream',
+          upsert: false,
+        });
+
+      return { success: true, message: 'File copied successfully', newPath };
     } catch (error: any) {
       return { success: false, message: error.message || 'Failed to copy file' };
     }
   }
 
   /**
-   * Move (cut) a file - uses copy + delete to handle cross-folder moves on Windows
+   * Move (cut) a file in Supabase Storage
    */
   async moveFile(sourcePath: string, targetDir: string): Promise<{ success: boolean; message: string; newPath?: string }> {
-    try {
-      const fullSourcePath = this.validatePath(sourcePath);
-      const fullTargetDir = this.validatePath(targetDir);
-      const fileName = basename(fullSourcePath);
-      const newPath = join(fullTargetDir, fileName);
+    const supabase = this.supabaseService.getClient();
+    if (!supabase) {
+      return { success: false, message: 'Supabase not configured' };
+    }
 
-      if (!existsSync(fullSourcePath)) {
-        return { success: false, message: 'Source file not found' };
+    try {
+      const fileName = basename(sourcePath);
+      const newPath = targetDir ? `${targetDir}/${fileName}` : fileName;
+
+      // Download the file
+      const { data: fileData, error: downloadError } = await supabase.storage
+        .from(this.BUCKET_NAME)
+        .download(sourcePath);
+
+      if (downloadError) {
+        throw new Error(downloadError.message);
       }
 
-      if (existsSync(newPath)) {
+      // Check if target exists
+      const { data: existing } = await supabase.storage
+        .from(this.BUCKET_NAME)
+        .list(targetDir || '', { search: fileName });
+      
+      if (existing && existing.length > 0) {
         return { success: false, message: 'A file with this name already exists in target directory' };
       }
 
-      // Use copy + delete for reliable cross-folder moves on Windows
-      await fs.copyFile(fullSourcePath, newPath);
-      await fs.unlink(fullSourcePath);
+      // Upload to new location
+      await supabase.storage
+        .from(this.BUCKET_NAME)
+        .upload(newPath, fileData, {
+          contentType: fileData.type || 'application/octet-stream',
+          upsert: false,
+        });
 
-      return {
-        success: true,
-        message: 'File moved successfully',
-        newPath: join(targetDir, fileName).replace(/\\/g, '/')
-      };
+      // Delete from old location
+      await supabase.storage
+        .from(this.BUCKET_NAME)
+        .remove([sourcePath]);
+
+      return { success: true, message: 'File moved successfully', newPath };
     } catch (error: any) {
       return { success: false, message: error.message || 'Failed to move file' };
     }
   }
 
   /**
-   * Copy a folder recursively
+   * Copy a folder in Supabase Storage
    */
   async copyFolder(sourcePath: string, targetDir: string): Promise<{ success: boolean; message: string; newPath?: string }> {
+    const supabase = this.supabaseService.getClient();
+    if (!supabase) {
+      return { success: false, message: 'Supabase not configured' };
+    }
+
     try {
-      const fullSourcePath = this.validatePath(sourcePath);
-      const fullTargetDir = this.validatePath(targetDir);
-      const folderName = basename(fullSourcePath);
-      const newPath = join(fullTargetDir, folderName);
-
-      if (!existsSync(fullSourcePath)) {
-        return { success: false, message: 'Source folder not found' };
+      const folderName = basename(sourcePath);
+      const ext = extname(folderName);
+      const baseName = basename(folderName, ext);
+      
+      // Check if target exists and generate unique name
+      let newFolderName = folderName;
+      let newPath = targetDir ? `${targetDir}/${newFolderName}` : newFolderName;
+      
+      const { data: existingFolder } = await supabase.storage
+        .from(this.BUCKET_NAME)
+        .list(targetDir || '', { search: folderName });
+      
+      if (existingFolder && existingFolder.some(f => f.name === folderName && !f.id)) {
+        newFolderName = `${baseName}_copy_${Date.now()}`;
+        newPath = targetDir ? `${targetDir}/${newFolderName}` : newFolderName;
       }
 
-      if (existsSync(newPath)) {
-        // Generate unique name
-        const uniqueName = `${folderName}_copy_${Date.now()}`;
-        const uniquePath = join(fullTargetDir, uniqueName);
-        await this.copyDirectoryRecursive(fullSourcePath, uniquePath);
-        return {
-          success: true,
-          message: 'Folder copied successfully',
-          newPath: join(targetDir, uniqueName).replace(/\\/g, '/')
-        };
+      // List all files in source folder
+      const { data: listData, error: listError } = await supabase.storage
+        .from(this.BUCKET_NAME)
+        .list(sourcePath, { limit: 1000 });
+
+      if (listError) {
+        throw new Error(listError.message);
       }
 
-      await this.copyDirectoryRecursive(fullSourcePath, newPath);
-      return {
-        success: true,
-        message: 'Folder copied successfully',
-        newPath: join(targetDir, folderName).replace(/\\/g, '/')
-      };
+      // Copy each file
+      for (const item of listData || []) {
+        if (item.id) {
+          // It's a file
+          const { data: fileData } = await supabase.storage
+            .from(this.BUCKET_NAME)
+            .download(`${sourcePath}/${item.name}`);
+          
+          if (fileData) {
+            await supabase.storage
+              .from(this.BUCKET_NAME)
+              .upload(`${newPath}/${item.name}`, fileData, {
+                contentType: item.metadata?.mimetype || 'application/octet-stream',
+                upsert: false,
+              });
+          }
+        } else {
+          // It's a subfolder - recursive copy
+          await this.copyFolder(`${sourcePath}/${item.name}`, newPath);
+        }
+      }
+
+      return { success: true, message: 'Folder copied successfully', newPath };
     } catch (error: any) {
       return { success: false, message: error.message || 'Failed to copy folder' };
     }
   }
 
   /**
-   * Move (cut) a folder - uses copy + delete to handle cross-folder moves on Windows
+   * Move (cut) a folder in Supabase Storage
    */
   async moveFolder(sourcePath: string, targetDir: string): Promise<{ success: boolean; message: string; newPath?: string }> {
+    const supabase = this.supabaseService.getClient();
+    if (!supabase) {
+      return { success: false, message: 'Supabase not configured' };
+    }
+
     try {
-      const fullSourcePath = this.validatePath(sourcePath);
-      const fullTargetDir = this.validatePath(targetDir);
-      const folderName = basename(fullSourcePath);
-      const newPath = join(fullTargetDir, folderName);
+      const folderName = basename(sourcePath);
+      const newPath = targetDir ? `${targetDir}/${folderName}` : folderName;
 
-      if (!existsSync(fullSourcePath)) {
-        return { success: false, message: 'Source folder not found' };
-      }
-
-      if (existsSync(newPath)) {
+      // Check if target exists
+      const { data: existing } = await supabase.storage
+        .from(this.BUCKET_NAME)
+        .list(targetDir || '', { search: folderName });
+      
+      if (existing && existing.some(f => f.name === folderName && !f.id)) {
         return { success: false, message: 'A folder with this name already exists in target directory' };
       }
 
-      // Use copy + delete for reliable cross-folder moves on Windows
-      await this.copyDirectoryRecursive(fullSourcePath, newPath);
-      await fs.rm(fullSourcePath, { recursive: true, force: true });
+      // Copy folder
+      const copyResult = await this.copyFolder(sourcePath, targetDir);
+      if (!copyResult.success) {
+        return copyResult;
+      }
 
-      return {
-        success: true,
-        message: 'Folder moved successfully',
-        newPath: join(targetDir, folderName).replace(/\\/g, '/')
-      };
+      // Delete old folder
+      await this.deleteFolder(sourcePath);
+
+      return { success: true, message: 'Folder moved successfully', newPath: copyResult.newPath };
     } catch (error: any) {
       return { success: false, message: error.message || 'Failed to move folder' };
     }
   }
 
   /**
-   * Create a new folder
+   * Create a new folder in Supabase Storage
    */
   async createFolder(folderPath: string, folderName: string): Promise<{ success: boolean; message: string; newPath?: string }> {
+    const supabase = this.supabaseService.getClient();
+    if (!supabase) {
+      return { success: false, message: 'Supabase not configured' };
+    }
+
     try {
-      const fullTargetDir = this.validatePath(folderPath);
-      const newFolderPath = join(fullTargetDir, folderName);
+      const newPath = folderPath ? `${folderPath}/${folderName}` : folderName;
 
-      if (!newFolderPath.startsWith(this.UPLOAD_DIR)) {
-        return { success: false, message: 'Invalid target path' };
+      // In Supabase, we create a folder by uploading an empty placeholder file
+      const placeholderPath = `${newPath}/.emptyFolderPlaceholder`;
+      
+      const { error } = await supabase.storage
+        .from(this.BUCKET_NAME)
+        .upload(placeholderPath, new Blob(['']), {
+          contentType: 'text/plain',
+          upsert: false,
+        });
+
+      if (error) {
+        if (error.message.includes('already exists')) {
+          return { success: false, message: 'A folder with this name already exists' };
+        }
+        throw new Error(error.message);
       }
 
-      if (existsSync(newFolderPath)) {
-        return { success: false, message: 'A folder with this name already exists' };
-      }
-
-      await fs.mkdir(newFolderPath, { recursive: true });
-      return {
-        success: true,
-        message: 'Folder created successfully',
-        newPath: join(folderPath, folderName).replace(/\\/g, '/')
-      };
+      return { success: true, message: 'Folder created successfully', newPath };
     } catch (error: any) {
       return { success: false, message: error.message || 'Failed to create folder' };
     }
   }
 
   /**
-   * Helper: Copy directory recursively
-   */
-  private async copyDirectoryRecursive(src: string, dest: string): Promise<void> {
-    await fs.mkdir(dest, { recursive: true });
-    const entries = await fs.readdir(src, { withFileTypes: true });
-
-    for (const entry of entries) {
-      const srcPath = join(src, entry.name);
-      const destPath = join(dest, entry.name);
-
-      if (entry.isDirectory()) {
-        await this.copyDirectoryRecursive(srcPath, destPath);
-      } else {
-        await fs.copyFile(srcPath, destPath);
-      }
-    }
-  }
-
-  /**
    * Helper: Recursively count files and folders
    */
-  private async countAllFiles(dir: string): Promise<{ fileCount: number; folderCount: number; totalSize: number }> {
-    let fileCount = 0
-    let folderCount = 0
-    let totalSize = 0
-
-    if (!existsSync(dir)) {
-      return { fileCount, folderCount, totalSize }
+  private async countAllFiles(prefix: string): Promise<{ fileCount: number; folderCount: number; totalSize: number }> {
+    const supabase = this.supabaseService.getClient();
+    if (!supabase) {
+      return { fileCount: 0, folderCount: 0, totalSize: 0 };
     }
 
-    const entries = await fs.readdir(dir, { withFileTypes: true })
-    for (const entry of entries) {
-      const fullPath = join(dir, entry.name)
-      if (entry.isDirectory()) {
-        folderCount++
-        const subResult = await this.countAllFiles(fullPath)
-        fileCount += subResult.fileCount
-        folderCount += subResult.folderCount
-        totalSize += subResult.totalSize
-      } else if (entry.isFile()) {
-        fileCount++
-        const stats = await fs.stat(fullPath)
-        totalSize += stats.size
+    let fileCount = 0;
+    let folderCount = 0;
+    let totalSize = 0;
+
+    const { data: listData } = await supabase.storage
+      .from(this.BUCKET_NAME)
+      .list(prefix, { limit: 1000 });
+
+    for (const item of listData || []) {
+      if (item.id) {
+        // It's a file
+        fileCount++;
+        totalSize += item.metadata?.size || 0;
+      } else {
+        // It's a folder
+        folderCount++;
+        const itemPath = prefix ? `${prefix}/${item.name}` : item.name;
+        const subResult = await this.countAllFiles(itemPath);
+        fileCount += subResult.fileCount;
+        folderCount += subResult.folderCount;
+        totalSize += subResult.totalSize;
       }
     }
 
-    return { fileCount, folderCount, totalSize }
+    return { fileCount, folderCount, totalSize };
   }
 
   /**
@@ -604,37 +703,49 @@ export class FileManagerService {
     folderCount: number;
     byFolder: { name: string; count: number; size: string }[];
   }> {
-    const folderStats: { name: string; count: number; size: string }[] = []
-    let totalFileCount = 0
-    let totalFolderCount = 0
-    let totalUsedSize = 0
+    const supabase = this.supabaseService.getClient();
+    if (!supabase) {
+      return {
+        totalSpace: '0 B',
+        usedSpace: '0 B',
+        fileCount: 0,
+        folderCount: 0,
+        byFolder: [],
+      };
+    }
 
-    // Get stats for each top-level folder
-    const entries = await fs.readdir(this.UPLOAD_DIR, { withFileTypes: true })
-    for (const entry of entries) {
-      if (entry.isDirectory()) {
-        const folderPath = join(this.UPLOAD_DIR, entry.name)
-        const result = await this.countAllFiles(folderPath)
+    const folderStats: { name: string; count: number; size: string }[] = [];
+    let totalFileCount = 0;
+    let totalFolderCount = 0;
+    let totalUsedSize = 0;
+
+    // List root level
+    const { data: rootData } = await supabase.storage
+      .from(this.BUCKET_NAME)
+      .list('', { limit: 1000 });
+
+    for (const item of rootData || []) {
+      if (!item.id) {
+        // It's a folder
+        const result = await this.countAllFiles(item.name);
         folderStats.push({
-          name: entry.name,
+          name: item.name,
           count: result.fileCount,
           size: this.formatBytes(result.totalSize),
-        })
-        totalFileCount += result.fileCount
-        totalFolderCount += result.folderCount
-        totalUsedSize += result.totalSize
-      } else if (entry.isFile()) {
-        // Root-level files
-        totalFileCount++
-        const stats = await fs.stat(join(this.UPLOAD_DIR, entry.name))
-        totalUsedSize += stats.size
+        });
+        totalFileCount += result.fileCount;
+        totalFolderCount += result.folderCount + 1; // +1 for the folder itself
+        totalUsedSize += result.totalSize;
+      } else {
+        // Root level file
+        totalFileCount++;
+        totalUsedSize += item.metadata?.size || 0;
       }
     }
 
-    // Calculate total space (used + free)
-    // For simplicity, we'll show a reasonable total (e.g., 100GB for typical hosting)
-    const totalSpaceGB = 100
-    const totalSpaceBytes = totalSpaceGB * 1024 * 1024 * 1024
+    // Calculate total space (used + free estimate)
+    const totalSpaceGB = 100;
+    const totalSpaceBytes = totalSpaceGB * 1024 * 1024 * 1024;
 
     return {
       totalSpace: this.formatBytes(totalSpaceBytes),
