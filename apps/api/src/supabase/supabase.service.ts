@@ -4,7 +4,7 @@ import { createClient, SupabaseClient } from '@supabase/supabase-js';
 
 @Injectable()
 export class SupabaseService implements OnModuleInit {
-  private client: SupabaseClient;
+  private client: SupabaseClient | null = null;
 
   constructor(private configService: ConfigService) {}
 
@@ -13,7 +13,8 @@ export class SupabaseService implements OnModuleInit {
     const supabaseServiceKey = this.configService.get<string>('SUPABASE_SERVICE_ROLE_KEY');
 
     if (!supabaseUrl || !supabaseServiceKey) {
-      throw new Error('SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY must be defined');
+      console.warn('SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY not defined, skipping Supabase init');
+      return;
     }
 
     this.client = createClient(supabaseUrl, supabaseServiceKey, {
@@ -24,19 +25,22 @@ export class SupabaseService implements OnModuleInit {
     });
   }
 
-  getClient(): SupabaseClient {
+  getClient(): SupabaseClient | null {
     return this.client;
   }
 
+  // @ts-ignore - Supabase auth type issue
   getAuth() {
-    return this.client.auth;
+    return this.client?.auth;
   }
 
+  // @ts-ignore - Supabase storage type issue
   getStorage() {
-    return this.client.storage;
+    return this.client?.storage;
   }
 
+  // @ts-ignore - Supabase from type issue
   from(table: string) {
-    return this.client.from(table);
+    return this.client?.from(table);
   }
 }

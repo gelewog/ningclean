@@ -1,10 +1,14 @@
-# Dockerfile for Railway
-FROM node:20-alpine
+# Dockerfile for Railway - NestJS API
+FROM node:20-slim
 
 WORKDIR /app
 
-# Install dependencies for native modules
-RUN apk add --no-cache python3 make g++
+# Install build dependencies
+RUN apt-get update && apt-get install -y \
+    python3 \
+    make \
+    g++ \
+    && rm -rf /var/lib/apt/lists/*
 
 # Copy package files
 COPY package*.json ./
@@ -13,13 +17,11 @@ COPY prisma ./prisma/
 # Install dependencies
 RUN npm ci
 
-# Generate Prisma client
-RUN npx prisma generate
-
 # Copy source code
 COPY . .
 
-# Build application
+# Generate Prisma client and build
+RUN npx prisma generate
 RUN npm run build
 
 # Expose port
