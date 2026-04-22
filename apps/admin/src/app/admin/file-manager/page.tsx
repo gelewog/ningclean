@@ -68,8 +68,28 @@ export default function FileManagerPage() {
     setLoading(true)
     try {
       const [filesData, statsData] = await Promise.all([getFiles(folder), getStorageStats()])
-      setFiles(filesData.files)
-      setFolders(filesData.folders)
+      
+      // Filter files and folders by current path to ensure we only show direct children
+      const normalizedFolder = folder?.replace(/^\/+|\/+$/g, '') || ''
+      const filteredFiles = filesData.files.filter(f => {
+        // File should be direct child of current folder
+        if (!normalizedFolder) {
+          return !f.path.includes('/')
+        }
+        return f.path.startsWith(normalizedFolder + '/') && f.path.split('/').length === normalizedFolder.split('/').length + 1
+      })
+      const filteredFolders = filesData.folders.filter(f => {
+        // Folder should be direct child of current folder
+        if (!normalizedFolder) {
+          return !f.path.includes('/')
+        }
+        return f.path.startsWith(normalizedFolder + '/') && f.path.split('/').length === normalizedFolder.split('/').length + 1
+      })
+      
+      console.log('[FileManager] fetchFiles:', { folder, normalizedFolder, filesCount: filteredFiles.length, foldersCount: filteredFolders.length })
+      
+      setFiles(filteredFiles)
+      setFolders(filteredFolders)
       setStats(statsData)
     } catch (error) {
       console.error('Failed to fetch files:', error)
