@@ -27,7 +27,7 @@ export class SupabaseService implements OnModuleInit {
       });
 
       // Verify connection and ensure bucket exists
-      await this.ensureNingCleanBucket();
+      await this.ensureUploadsBucket();
 
       console.log('[Supabase] ✅ Connected successfully');
     } catch (error) {
@@ -36,10 +36,10 @@ export class SupabaseService implements OnModuleInit {
     }
   }
 
-  private async ensureNingCleanBucket() {
+  private async ensureUploadsBucket() {
     if (!this.client) return;
 
-    const bucketName = 'NingClean';
+    const bucketName = 'uploads';
     
     // Check if bucket exists
     const { data: buckets, error: listError } = await this.client.storage.listBuckets();

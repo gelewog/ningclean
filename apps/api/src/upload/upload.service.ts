@@ -53,7 +53,7 @@ export class UploadService {
 
     // Build path
     const path = subfolder ? `${folder}/${subfolder}/${filename}` : `${folder}/${filename}`;
-    const bucketName = 'NingClean';
+    const bucketName = 'uploads';
 
     // Upload to Supabase Storage
     const { data: uploadData, error: uploadError } = await supabase.storage
@@ -92,7 +92,7 @@ export class UploadService {
       throw new BadRequestException('Supabase not configured');
     }
 
-    const { error } = await supabase.storage.from('NingClean').remove([path]);
+    const { error } = await supabase.storage.from('uploads').remove([path]);
 
     if (error) {
       throw new BadRequestException(`Delete failed: ${error.message}`);

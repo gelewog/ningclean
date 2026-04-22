@@ -90,7 +90,7 @@ export class UploadController {
   ) {
     const path = `${folder}/${subfolder}/${filename}`;
     const supabaseUrl = process.env.SUPABASE_URL;
-    const publicUrl = `${supabaseUrl}/storage/v1/object/public/NingClean/${path}`;
+    const publicUrl = `${supabaseUrl}/storage/v1/object/public/uploads/${path}`;
     
     res.redirect(publicUrl);
   }
@@ -104,7 +104,7 @@ export class UploadController {
   ) {
     const path = `${folder}/${filename}`;
     const supabaseUrl = process.env.SUPABASE_URL;
-    const publicUrl = `${supabaseUrl}/storage/v1/object/public/NingClean/${path}`;
+    const publicUrl = `${supabaseUrl}/storage/v1/object/public/uploads/${path}`;
     
     res.redirect(publicUrl);
   }
