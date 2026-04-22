@@ -38,7 +38,6 @@ async function bootstrap() {
   );
 
   app.setGlobalPrefix('api');
-  app.useStaticAssets(join(process.cwd(), 'uploads'), { prefix: '/api/upload' });
 
   // Swagger
   const config = new DocumentBuilder()

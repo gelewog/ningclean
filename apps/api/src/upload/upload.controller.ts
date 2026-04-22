@@ -8,104 +8,79 @@ import {
   Res,
   Param,
   Query,
+  Delete,
+  UseGuards,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { diskStorage } from 'multer';
 import { Response } from 'express';
-import { existsSync, mkdirSync, promises as fs } from 'fs';
-import { extname, join } from 'path';
+import { UploadService } from './upload.service';
+import { AuthGuard } from '@nestjs/passport';
+import { RolesGuard, Roles } from '../common';
+import { Role } from '@prisma/client';
+import { ApiTags, ApiOperation, ApiBearerAuth, ApiConsumes, ApiBody } from '@nestjs/swagger';
 
-const UPLOAD_DIR = join(process.cwd(), 'uploads');
-
-// Ensure upload directory exists
-if (!existsSync(UPLOAD_DIR)) {
-  mkdirSync(UPLOAD_DIR, { recursive: true });
-}
-
-// Create subdirectories
-const folders = ['gallery', 'services', 'team', 'testimonials', 'settings'];
-folders.forEach((folder) => {
-  const folderPath = join(UPLOAD_DIR, folder);
-  if (!existsSync(folderPath)) {
-    mkdirSync(folderPath, { recursive: true });
-  }
-});
-
+@ApiTags('Upload')
 @Controller('upload')
 export class UploadController {
+  constructor(private readonly uploadService: UploadService) {}
+
   @Post(':folder')
+  @ApiOperation({ summary: 'Upload file to Supabase Storage' })
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        file: {
+          type: 'string',
+          format: 'binary',
+        },
+      },
+    },
+  })
   @UseInterceptors(
     FileInterceptor('file', {
-      storage: diskStorage({
-        destination: (req, file, cb) => {
-          const folder = req.params.folder;
-          const subfolder = req.query.subfolder as string;
-          const allowedFolders = ['gallery', 'services', 'team', 'testimonials', 'settings'];
-
-          if (!allowedFolders.includes(folder)) {
-            return cb(new BadRequestException('Invalid upload folder'), '');
-          }
-
-          // If subfolder is specified
-          if (subfolder) {
-            const folderPath = join(UPLOAD_DIR, folder, subfolder);
-            if (!existsSync(folderPath)) {
-              mkdirSync(folderPath, { recursive: true });
-            }
-            cb(null, folderPath);
-          } else {
-            const folderPath = join(UPLOAD_DIR, folder);
-            cb(null, folderPath);
-          }
-        },
-        filename: (req, file, cb) => {
-          const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
-          const ext = extname(file.originalname);
-          cb(null, `${uniqueSuffix}${ext}`);
-        },
-      }),
       limits: {
         fileSize: 5 * 1024 * 1024, // 5MB limit
-      },
-      fileFilter: (req, file, cb) => {
-        const allowedMimes = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
-        if (allowedMimes.includes(file.mimetype)) {
-          cb(null, true);
-        } else {
-          cb(new BadRequestException('Only image files (JPEG, PNG, WebP, GIF) are allowed'), false);
-        }
       },
     }),
   )
   async uploadFile(
     @UploadedFile() file: Express.Multer.File,
     @Param('folder') folder: string,
-    @Query('subfolder') subfolder: string,
+    @Query('subfolder') subfolder?: string,
   ) {
     if (!file) {
       throw new BadRequestException('No file uploaded');
     }
 
-    // Build URLs
-    const fileUrl = subfolder
-      ? `/api/upload/${folder}/${subfolder}/${file.filename}`
-      : `/api/upload/${folder}/${file.filename}`;
-
-    return {
-      success: true,
-      message: 'File uploaded successfully',
-      data: {
-        filename: file.filename,
-        originalName: file.originalname,
-        size: file.size,
-        mimetype: file.mimetype,
-        url: fileUrl,
-        thumbnailUrl: fileUrl, // Same as original (no thumbnail processing)
-        folder: subfolder ? `${folder}/${subfolder}` : folder,
-      },
-    };
+    return this.uploadService.uploadFile(file, folder, subfolder);
   }
 
+  @Delete(':path(*)')
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Roles(Role.ADMIN)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Delete file from Supabase Storage (admin only)' })
+  async deleteFile(@Param('path') path: string) {
+    await this.uploadService.deleteFile(path);
+    return { success: true, message: 'File deleted successfully' };
+  }
+
+  @Get('signed-url/:path(*)')
+  @ApiOperation({ summary: 'Get signed URL for private files' })
+  async getSignedUrl(
+    @Param('path') path: string,
+    @Query('expiresIn') expiresIn?: string,
+  ) {
+    const url = await this.uploadService.getSignedUrl(
+      path,
+      expiresIn ? parseInt(expiresIn, 10) : 60,
+    );
+    return { success: true, data: { signedUrl: url } };
+  }
+
+  // Legacy endpoint for backward compatibility - redirect to public URL
   @Get(':folder/:subfolder/:filename')
   async serveFileWithSubfolder(
     @Param('folder') folder: string,
@@ -113,27 +88,24 @@ export class UploadController {
     @Param('filename') filename: string,
     @Res() res: Response,
   ) {
-    const filePath = join(UPLOAD_DIR, folder, subfolder, filename);
-
-    if (!existsSync(filePath)) {
-      throw new BadRequestException('File not found');
-    }
-
-    res.sendFile(filePath);
+    const path = `${folder}/${subfolder}/${filename}`;
+    const supabaseUrl = process.env.SUPABASE_URL;
+    const publicUrl = `${supabaseUrl}/storage/v1/object/public/NingClean/${path}`;
+    
+    res.redirect(publicUrl);
   }
 
+  // Legacy endpoint for backward compatibility - redirect to public URL
   @Get(':folder/:filename')
   async serveFile(
     @Param('folder') folder: string,
     @Param('filename') filename: string,
     @Res() res: Response,
   ) {
-    const filePath = join(UPLOAD_DIR, folder, filename);
-
-    if (!existsSync(filePath)) {
-      throw new BadRequestException('File not found');
-    }
-
-    res.sendFile(filePath);
+    const path = `${folder}/${filename}`;
+    const supabaseUrl = process.env.SUPABASE_URL;
+    const publicUrl = `${supabaseUrl}/storage/v1/object/public/NingClean/${path}`;
+    
+    res.redirect(publicUrl);
   }
 }

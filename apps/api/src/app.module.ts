@@ -3,6 +3,7 @@ import { ConfigModule } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { PrismaModule } from './prisma/prisma.module';
+import { SupabaseModule } from './supabase/supabase.module';
 import { AuthModule } from './auth/auth.module';
 import { ServicesModule } from './services/services.module';
 import { BookingsModule } from './bookings/bookings.module';
@@ -37,6 +38,7 @@ import { DraftPreviewModule } from './draft-preview/draft-preview.module';
       isGlobal: true,
     }),
     PrismaModule,
+    SupabaseModule,
     AuthModule,
     ServicesModule,
     BookingsModule,
