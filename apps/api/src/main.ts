@@ -3,15 +3,15 @@ import { ValidationPipe } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { AppModule } from './app.module';
-import { join } from 'path';
 
 let app: NestExpressApplication | null = null;
 
 async function bootstrap() {
   if (app) return app;
   
-  console.log('🔧 Starting NestJS app...');
-  console.log('📊 DATABASE_URL exists:', !!process.env.DATABASE_URL);
+  console.log('[API] Starting NestJS app...');
+  console.log('[API] DATABASE_URL exists:', !!process.env.DATABASE_URL);
+  console.log('[API] SUPABASE_URL exists:', !!process.env.SUPABASE_URL);
   
   app = await NestFactory.create<NestExpressApplication>(AppModule);
 
@@ -49,7 +49,7 @@ async function bootstrap() {
   SwaggerModule.setup('api/docs', app, document);
 
   await app.init();
-  console.log('✅ NestJS app initialized');
+  console.log('[API] NestJS app initialized');
   return app;
 }
 
@@ -62,18 +62,20 @@ if (!process.env.VERCEL) {
   });
 }
 
-// Vercel handler
+// Vercel handler - export for serverless
 export default async function handler(req: any, res: any) {
   try {
     const app = await bootstrap();
     const server = app.getHttpAdapter().getInstance();
     return server(req, res);
   } catch (error: any) {
-    console.error('❌ Handler error:', error);
+    console.error('[API] Handler error:', error);
     res.status(500).json({ 
       error: 'Server Error', 
       message: error.message,
-      stack: error.stack
     });
   }
 }
+
+// Also export for potential direct usage
+export { bootstrap };
