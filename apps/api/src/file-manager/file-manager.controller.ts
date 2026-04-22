@@ -17,9 +17,15 @@ export class FileManagerController {
 
   @Get()
   @ApiOperation({ summary: 'List all files in uploads directory' })
-  listFiles(@Query('folder') folder?: string) {
+  async listFiles(@Query('folder') folder?: string) {
     console.log('[FileManager] API called with folder:', folder);
-    return this.fileManagerService.listFiles(folder);
+    try {
+      const result = await this.fileManagerService.listFiles(folder);
+      return result;
+    } catch (error: any) {
+      console.error('[FileManager] Error:', error);
+      throw new BadRequestException(error.message || 'Failed to list files');
+    }
   }
 
   @Post('upload')

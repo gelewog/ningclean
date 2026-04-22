@@ -98,36 +98,45 @@ export class FileManagerService {
    * List all files and folders in a directory (prefix)
    */
   async listFiles(folder?: string): Promise<FileManagerResult> {
-    const supabase = this.supabaseService.getClient();
-    if (!supabase) {
-      throw new BadRequestException('Supabase not configured');
-    }
+    try {
+      const supabase = this.supabaseService.getClient();
+      if (!supabase) {
+        console.error('[FileManager] Supabase not configured');
+        return {
+          files: [],
+          folders: [],
+          totalFiles: 0,
+          totalSize: 0,
+          totalSizeFormatted: '0 B',
+          apiBaseUrl: '',
+        };
+      }
 
-    // Normalize folder path - remove leading/trailing slashes
-    const normalizedFolder = folder?.replace(/^\/+|\/+$/g, '') || '';
-    const prefix = normalizedFolder ? `${normalizedFolder}/` : '';
-    
-    console.log('[FileManager] Listing folder:', folder, 'Prefix:', prefix);
-    
-    const { data: listData, error } = await supabase.storage
-      .from(this.BUCKET_NAME)
-      .list(prefix, {
-        limit: 1000,
-        offset: 0,
-        sortBy: { column: 'name', order: 'asc' },
-      });
+      // Normalize folder path - remove leading/trailing slashes
+      const normalizedFolder = folder?.replace(/^\/+|\/+$/g, '') || '';
+      const prefix = normalizedFolder ? `${normalizedFolder}/` : '';
+      
+      console.log('[FileManager] Listing folder:', folder, 'Prefix:', prefix);
+      
+      const { data: listData, error } = await supabase.storage
+        .from(this.BUCKET_NAME)
+        .list(prefix, {
+          limit: 1000,
+          offset: 0,
+          sortBy: { column: 'name', order: 'asc' },
+        });
 
-    if (error) {
-      console.error('[FileManager] List error:', error);
-      return {
-        files: [],
-        folders: [],
-        totalFiles: 0,
-        totalSize: 0,
-        totalSizeFormatted: '0 B',
-        apiBaseUrl: `${this.SUPABASE_URL}/storage/v1/object/public/${this.BUCKET_NAME}`,
-      };
-    }
+      if (error) {
+        console.error('[FileManager] List error:', error);
+        return {
+          files: [],
+          folders: [],
+          totalFiles: 0,
+          totalSize: 0,
+          totalSizeFormatted: '0 B',
+          apiBaseUrl: `${this.SUPABASE_URL}/storage/v1/object/public/${this.BUCKET_NAME}`,
+        };
+      }
 
     console.log('[FileManager] Raw list data:', listData?.map(i => ({ name: i.name, id: i.id ? 'file' : 'folder' })));
 
@@ -188,6 +197,17 @@ export class FileManagerService {
       totalSizeFormatted: this.formatBytes(totalSize),
       apiBaseUrl: `${this.SUPABASE_URL}/storage/v1/object/public/${this.BUCKET_NAME}`,
     };
+    } catch (err: any) {
+      console.error('[FileManager] Unexpected error:', err);
+      return {
+        files: [],
+        folders: [],
+        totalFiles: 0,
+        totalSize: 0,
+        totalSizeFormatted: '0 B',
+        apiBaseUrl: `${this.SUPABASE_URL}/storage/v1/object/public/${this.BUCKET_NAME}`,
+      };
+    }
   }
 
   /**
