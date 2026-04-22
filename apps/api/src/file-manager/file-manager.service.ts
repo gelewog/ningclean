@@ -103,7 +103,11 @@ export class FileManagerService {
       throw new BadRequestException('Supabase not configured');
     }
 
-    const prefix = folder ? `${folder}/` : '';
+    // Normalize folder path - remove leading/trailing slashes
+    const normalizedFolder = folder?.replace(/^\/+|\/+$/g, '') || '';
+    const prefix = normalizedFolder ? `${normalizedFolder}/` : '';
+    
+    console.log('[FileManager] Listing folder:', folder, 'Prefix:', prefix);
     
     const { data: listData, error } = await supabase.storage
       .from(this.BUCKET_NAME)
@@ -125,6 +129,8 @@ export class FileManagerService {
       };
     }
 
+    console.log('[FileManager] Raw list data:', listData?.map(i => ({ name: i.name, id: i.id ? 'file' : 'folder' })));
+
     const files: FileInfo[] = [];
     const folders: FolderInfo[] = [];
     let totalSize = 0;
@@ -133,7 +139,8 @@ export class FileManagerService {
       // Skip placeholder files
       if (item.name === '.emptyFolderPlaceholder') continue;
 
-      const itemPath = folder ? `${folder}/${item.name}` : item.name;
+      // Build item path relative to root
+      const itemPath = normalizedFolder ? `${normalizedFolder}/${item.name}` : item.name;
 
       if (item.id === null) {
         // It's a folder (folder entries don't have an id)
@@ -170,6 +177,8 @@ export class FileManagerService {
 
     // Sort files by modified date (newest first)
     files.sort((a, b) => b.modifiedAt.getTime() - a.modifiedAt.getTime());
+
+    console.log('[FileManager] Result:', { files: files.length, folders: folders.length });
 
     return {
       files,

@@ -18,6 +18,7 @@ export class FileManagerController {
   @Get()
   @ApiOperation({ summary: 'List all files in uploads directory' })
   listFiles(@Query('folder') folder?: string) {
+    console.log('[FileManager] API called with folder:', folder);
     return this.fileManagerService.listFiles(folder);
   }
 
