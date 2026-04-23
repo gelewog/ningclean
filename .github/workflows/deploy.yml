@@ -20,6 +20,16 @@ jobs:
           node-version: '20'
           cache: 'npm'
 
+      - name: Setup Prisma Schema
+        run: |
+          echo "📁 Setting up Prisma schema..."
+          rm -rf apps/api/prisma
+          mkdir -p apps/api/prisma
+          cp prisma/schema.prisma apps/api/prisma/
+          cp -r prisma/migrations apps/api/prisma/ 2>/dev/null || true
+          echo "✅ Prisma schema copied to apps/api/prisma/"
+          ls -la apps/api/prisma/
+
       - name: Install Dependencies
         run: npm ci
         working-directory: ./apps/api
