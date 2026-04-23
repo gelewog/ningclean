@@ -11,7 +11,6 @@
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate deploy",
-    "postinstall": "prisma generate",
     "vercel-build": "prisma generate && nest build"
   },
   "dependencies": {
