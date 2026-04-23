@@ -22,7 +22,9 @@ jobs:
           cache: 'npm'
 
       - name: Install Dependencies (root)
-        run: npm ci
+        run: |
+          # Skip postinstall scripts to avoid prisma errors in root
+          npm ci --ignore-scripts
 
       - name: Install Dependencies (admin)
         run: npm ci
@@ -53,7 +55,9 @@ jobs:
           cache: 'npm'
 
       - name: Install Dependencies (root)
-        run: npm ci
+        run: |
+          # Skip postinstall scripts to avoid prisma errors in root
+          npm ci --ignore-scripts
 
       - name: Install Dependencies (web)
         run: npm ci
