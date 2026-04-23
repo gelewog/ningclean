@@ -1,9 +1,29 @@
 {
   "version": 2,
   "name": "ningclean-admin",
-  "buildCommand": "next build",
+  "buildCommand": "cd ../.. && npm install && cd apps/admin && npm install && npm run build",
+  "outputDirectory": ".next",
   "framework": "nextjs",
   "env": {
-    "NEXT_PUBLIC_API_URL": "https://ningclean-api.vercel.app/api"
-  }
+    "NEXT_PUBLIC_API_URL": "@next_public_api_url"
+  },
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "X-Frame-Options",
+          "value": "SAMEORIGIN"
+        },
+        {
+          "key": "X-XSS-Protection",
+          "value": "1; mode=block"
+        }
+      ]
+    }
+  ]
 }
