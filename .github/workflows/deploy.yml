@@ -40,11 +40,10 @@ jobs:
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_ADMIN_PROJECT_ID }}
         run: |
           echo "🚀 Deploying Admin to Vercel..."
-          # Remove conflicting env var if exists
-          vercel env rm NEXT_PUBLIC_API_URL production --token=${{ secrets.VERCEL_TOKEN }} --yes 2>/dev/null || true
-          # Add env var
-          echo "${{ secrets.NEXT_PUBLIC_API_URL }}" | vercel env add NEXT_PUBLIC_API_URL production --token=${{ secrets.VERCEL_TOKEN }} || true
-          vercel deploy --yes --prod --token=${{ secrets.VERCEL_TOKEN }}
+          # Clear any existing env vars to avoid secret reference issues
+          vercel env ls --token=${{ secrets.VERCEL_TOKEN }} 2>/dev/null | grep NEXT_PUBLIC_API_URL && vercel env rm NEXT_PUBLIC_API_URL production --token=${{ secrets.VERCEL_TOKEN }} --yes 2>/dev/null || true
+          # Deploy with build env (no project env storage)
+          vercel deploy --yes --prod --token=${{ secrets.VERCEL_TOKEN }} --build-env NEXT_PUBLIC_API_URL=${{ secrets.NEXT_PUBLIC_API_URL }}
 
   deploy-web:
     name: Deploy Web to Vercel  
