@@ -81,3 +81,4 @@ jobs:
           # Create env file for deployment
           echo "NEXT_PUBLIC_API_URL=${{ secrets.NEXT_PUBLIC_API_URL }}" > .env.local
           vercel deploy --yes --prod --token=${{ secrets.VERCEL_TOKEN }}
+
