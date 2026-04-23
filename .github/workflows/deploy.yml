@@ -40,6 +40,8 @@ jobs:
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_ADMIN_PROJECT_ID }}
         run: |
           echo "🚀 Deploying Admin to Vercel..."
+          # Create env file for deployment
+          echo "NEXT_PUBLIC_API_URL=${{ secrets.NEXT_PUBLIC_API_URL }}" > .env.local
           vercel deploy --yes --prod --token=${{ secrets.VERCEL_TOKEN }}
 
   deploy-web:
@@ -71,7 +73,8 @@ jobs:
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_WEB_PROJECT_ID }}
-          NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL }}
         run: |
           echo "🚀 Deploying Web to Vercel..."
+          # Create env file for deployment
+          echo "NEXT_PUBLIC_API_URL=${{ secrets.NEXT_PUBLIC_API_URL }}" > .env.local
           vercel deploy --yes --prod --token=${{ secrets.VERCEL_TOKEN }}
