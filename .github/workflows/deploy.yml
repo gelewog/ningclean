@@ -12,100 +12,56 @@ jobs:
   deploy-api:
     name: Deploy API
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-          cache: 'npm'
-
-      - name: Setup Prisma Schema
-        run: |
-          echo "📁 Setting up Prisma schema..."
-          rm -rf apps/api/prisma
-          mkdir -p apps/api/prisma
-          cp prisma/schema.prisma apps/api/prisma/
-          cp -r prisma/migrations apps/api/prisma/ 2>/dev/null || true
-          echo "✅ Prisma schema copied to apps/api/prisma/"
-          ls -la apps/api/prisma/
-
-      - name: Install Dependencies
-        run: npm ci
-        working-directory: ./apps/api
 
       - name: Install Vercel CLI
         run: npm install --global vercel@latest
 
-      - name: Deploy API
-        working-directory: ./apps/api
+      - name: Deploy API (Vercel handles build)
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_API_PROJECT_ID }}
         run: |
-          echo "🚀 Deploying API to Vercel (cloud build)..."
-          vercel deploy --yes --prod --token=${{ secrets.VERCEL_TOKEN }} --build-env NEXT_PUBLIC_API_URL=${{ secrets.NEXT_PUBLIC_API_URL }}
+          echo "🚀 Triggering Vercel deployment for API..."
+          vercel deploy --yes --prod --token=${{ secrets.VERCEL_TOKEN }} --cwd ./apps/api
 
   deploy-admin:
     name: Deploy Admin
     runs-on: ubuntu-latest
     needs: deploy-api
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-          cache: 'npm'
-
-      - name: Install Dependencies (root)
-        run: npm ci
-
-      - name: Install Dependencies (admin)
-        run: npm ci
-        working-directory: ./apps/admin
 
       - name: Install Vercel CLI
         run: npm install --global vercel@latest
 
       - name: Deploy Admin
-        working-directory: ./apps/admin
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_ADMIN_PROJECT_ID }}
         run: |
-          echo "🚀 Deploying Admin..."
-          vercel deploy --yes --prod --token=${{ secrets.VERCEL_TOKEN }}
+          echo "🚀 Triggering Vercel deployment for Admin..."
+          vercel deploy --yes --prod --token=${{ secrets.VERCEL_TOKEN }} --cwd ./apps/admin
 
   deploy-web:
     name: Deploy Web
     runs-on: ubuntu-latest
     needs: deploy-api
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-          cache: 'npm'
-
-      - name: Install Dependencies (root)
-        run: npm ci
-
-      - name: Install Dependencies (web)
-        run: npm ci
-        working-directory: ./apps/web
 
       - name: Install Vercel CLI
         run: npm install --global vercel@latest
 
       - name: Deploy Web
-        working-directory: ./apps/web
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_WEB_PROJECT_ID }}
           NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL }}
         run: |
-          echo "🚀 Deploying Web..."
-          vercel deploy --yes --prod --token=${{ secrets.VERCEL_TOKEN }}
+          echo "🚀 Triggering Vercel deployment for Web..."
+          vercel deploy --yes --prod --token=${{ secrets.VERCEL_TOKEN }} --cwd ./apps/web
