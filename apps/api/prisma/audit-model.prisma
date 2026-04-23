@@ -1,0 +1,15 @@
+// Audit Log Model for Prisma
+model AuditLog {
+  id          String   @id @default(uuid())
+  action      String   // e.g., "CREATE", "UPDATE", "DELETE"
+  entityType  String   // e.g., "Booking", "Customer", "Service"
+  entityId   String   // ID of the affected entity
+  userId     String?  // Admin user who performed the action
+  userEmail  String?  // Email of admin user
+  changes    Json?    // Before/after values
+  ipAddress  String?
+  userAgent  String?
+  createdAt  DateTime @default(now())
+
+  @@map("audit_logs")
+}
