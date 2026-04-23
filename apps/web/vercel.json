@@ -1,18 +1,8 @@
 {
+  "$schema": "https://openapi.vercel.sh/vercel.json",
   "version": 2,
-  "name": "ningclean-web",
-  "buildCommand": "cd ../.. && npm install && cd apps/web && npx next build",
-  "outputDirectory": ".next",
+  "buildCommand": "cd apps/web && npm run build",
+  "outputDirectory": "apps/web/.next",
   "framework": "nextjs",
-  "installCommand": "cd ../.. && npm install",
-  "headers": [
-    {
-      "source": "/(.*)",
-      "headers": [
-        { "key": "X-Content-Type-Options", "value": "nosniff" },
-        { "key": "X-Frame-Options", "value": "SAMEORIGIN" },
-        { "key": "X-XSS-Protection", "value": "1; mode=block" }
-      ]
-    }
-  ]
+  "installCommand": "npm install"
 }
