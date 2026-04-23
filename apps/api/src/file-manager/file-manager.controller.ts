@@ -4,13 +4,10 @@ import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { memoryStorage } from 'multer';
 import { FileManagerService } from './file-manager.service';
-import { RolesGuard, Roles } from '../common';
-import { Role } from '@prisma/client';
 
 @ApiTags('File Manager')
 @Controller('file-manager')
-@UseGuards(AuthGuard('jwt'), RolesGuard)
-@Roles(Role.ADMIN)
+@UseGuards(AuthGuard('jwt'))
 @ApiBearerAuth()
 export class FileManagerController {
   constructor(private readonly fileManagerService: FileManagerService) {}

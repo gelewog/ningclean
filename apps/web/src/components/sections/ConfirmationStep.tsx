@@ -176,7 +176,40 @@ export default function ConfirmationStep({
   const features: string[] = (selectedService as any)?.features ?? []
   const duration: string = (selectedService as any)?.duration ?? ''
   const durationHours: number = (selectedService as any)?.durationHours ?? 6
-  const canSubmit = agreed && !isSubmitting
+  
+  // Guest email/phone/name validation - BLOCK if empty or invalid
+  const missingFields: string[] = []
+  
+  // Validate customerName
+  if (!customerName || customerName.trim().length === 0) {
+    missingFields.push('Nama Lengkap')
+  }
+  
+  // Validate customerEmail
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+  if (!customerEmail || customerEmail.trim().length === 0) {
+    missingFields.push('Email')
+  } else if (!emailRegex.test(customerEmail)) {
+    missingFields.push('Email (format tidak valid)')
+  }
+  
+  // Validate customerPhone
+  if (!customerPhone || customerPhone.trim().length === 0) {
+    missingFields.push('Nomor WhatsApp')
+  }
+  
+  // Validate address
+  if (!address || address.trim().length === 0) {
+    missingFields.push('Alamat Lengkap')
+  }
+  
+  // Validate area
+  if (!area || area.trim().length === 0) {
+    missingFields.push('Luas Area')
+  }
+  
+  const allRequiredFieldsFilled = missingFields.length === 0
+  const canSubmit = agreed && allRequiredFieldsFilled && !isSubmitting
 
   return (
     <motion.div
@@ -261,6 +294,20 @@ export default function ConfirmationStep({
               </p>
             </div>
           </div>
+
+          {/* Error Message for missing fields */}
+          {!allRequiredFieldsFilled && (
+            <div className="bg-red-50 dark:bg-red-500/10 border border-red-200 dark:border-red-500/20 rounded-xl p-4">
+              <p className="text-[12px] font-medium text-red-700 dark:text-red-400 mb-1">
+                Silakan lengkapi data berikut:
+              </p>
+              <ul className="text-[12px] text-red-600 dark:text-red-400 list-disc list-inside">
+                {missingFields.map((field, i) => (
+                  <li key={i}>{field}</li>
+                ))}
+              </ul>
+            </div>
+          )}
 
           {/* T&C */}
           <TncCheckbox checked={agreed} onChange={setAgreed} />

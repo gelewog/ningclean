@@ -57,21 +57,21 @@ export class CreateBookingDto {
   @Type(() => BookingItemDto)
   items: BookingItemDto[];
 
-  // Guest booking support
-  @ApiPropertyOptional({ example: 'John Doe' })
-  @IsOptional()
+  // Guest booking support - REQUIRED fields
+  @ApiProperty({ example: 'John Doe' })
+  @IsNotEmpty()
   @IsString()
-  customerName?: string;
+  customerName: string;
 
-  @ApiPropertyOptional({ example: 'john@example.com' })
-  @IsOptional()
+  @ApiProperty({ example: 'john@example.com' })
+  @IsNotEmpty()
   @IsEmail()
-  customerEmail?: string;
+  customerEmail: string;
 
-  @ApiPropertyOptional({ example: '081234567890' })
-  @IsOptional()
+  @ApiProperty({ example: '081234567890' })
+  @IsNotEmpty()
   @IsString()
-  customerPhone?: string;
+  customerPhone: string;
 }
 
 export class UpdateBookingStatusDto {

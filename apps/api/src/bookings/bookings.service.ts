@@ -266,97 +266,119 @@ export class BookingsService {
     const phone = dto.customerPhone?.trim();
     const name = dto.customerName?.trim() || 'Guest';
 
-    // Build address object for customer
+    // Helper: Parse city from address (format: "Jl. XXX, City" or "Jl. XXX")
+    const parseAddress = (fullAddress: string) => {
+      if (!fullAddress) return { address: '', city: '' };
+      const parts = fullAddress.split(',').map(p => p.trim());
+      if (parts.length >= 2) {
+        return {
+          address: parts[0],
+          city: parts.slice(1).join(', ')
+        };
+      }
+      return { address: fullAddress.trim(), city: '' };
+    };
+
+    const parsed = parseAddress(dto.address);
+
+    // Build address object for customer (now includes name)
     const newAddress = {
       label: 'Alamat Booking',
-      address: dto.address || '',
-      city: '',
+      name: name,
+      address: parsed.address,
+      city: parsed.city,
       phone: phone || '',
     };
 
-    if (email) {
-      // Check if customer already exists
-      let customer = await this.prisma.customer.findFirst({
-        where: { email: email },
+    if (!email || !email.trim()) {
+      throw new Error('Email is required for booking');
+    }
+
+    const normalizedEmail = email.toLowerCase().trim();
+
+    // Check if customer already exists
+    let customer = await this.prisma.customer.findFirst({
+      where: { email: normalizedEmail },
+    });
+
+    if (!customer) {
+      // Check if there's a registered user with this email
+      const existingUser = await this.prisma.user.findUnique({
+        where: { email: normalizedEmail },
       });
 
-      if (!customer) {
-        // Check if there's a registered user with this email
-        const existingUser = await this.prisma.user.findUnique({
-          where: { email: email },
+      if (existingUser) {
+        // Create customer linked to user with address
+        customer = await this.prisma.customer.create({
+          data: {
+            name: name,
+            email: normalizedEmail,
+            phone: phone || existingUser.phone,
+            source: 'registered',
+            userId: existingUser.id,
+            addresses: [newAddress], // Prisma handles Json type automatically
+          },
         });
-
-        if (existingUser) {
-          // Create customer linked to user with address
-          customer = await this.prisma.customer.create({
-            data: {
-              name: name,
-              email: email,
-              phone: phone || existingUser.phone,
-              source: 'registered',
-              userId: existingUser.id,
-              addresses: [newAddress], // Prisma handles Json type automatically
-            },
-          });
-        } else {
-          // Create guest customer with address
-          customer = await this.prisma.customer.create({
-            data: {
-              name: name,
-              email: email,
-              phone: phone,
-              source: 'guest',
-              addresses: [newAddress], // Prisma handles Json type automatically
-            },
-          });
-        }
       } else {
-        // Customer exists - add new address if not duplicate
-        let existingAddresses: any[] = [];
-        if (typeof customer.addresses === 'string') {
-          try {
-            existingAddresses = JSON.parse(customer.addresses) || [];
-          } catch {
-            existingAddresses = [];
-          }
-        } else if (Array.isArray(customer.addresses)) {
-          existingAddresses = customer.addresses;
+        // Create guest customer with address
+        customer = await this.prisma.customer.create({
+          data: {
+            name: name,
+            email: normalizedEmail,
+            phone: phone,
+            source: 'guest',
+            addresses: [newAddress], // Prisma handles Json type automatically
+          },
+        });
+      }
+    } else {
+      // Customer exists - update name with latest, add new address if not duplicate
+      let existingAddresses: any[] = [];
+      if (typeof customer.addresses === 'string') {
+        try {
+          existingAddresses = JSON.parse(customer.addresses) || [];
+        } catch {
+          existingAddresses = [];
         }
-
-        // Check if address already exists (prevent duplicates)
-        const addressExists = existingAddresses.some(
-          (addr: any) => addr.address === newAddress.address
-        );
-
-        if (!addressExists && newAddress.address) {
-          existingAddresses.push(newAddress);
-          await this.prisma.customer.update({
-            where: { id: customer.id },
-            data: { addresses: existingAddresses }, // Prisma handles Json type
-          });
-        }
+      } else if (Array.isArray(customer.addresses)) {
+        existingAddresses = customer.addresses;
       }
 
-      customerId = customer.id;
-    } else {
-      // Create anonymous customer for bookings without email with address
-      const anonymousCustomer = await this.prisma.customer.create({
-        data: {
-          name: name,
-          email: `guest-${Date.now()}@temp.local`,
-          phone: phone,
-          source: 'guest',
-          addresses: [newAddress], // Prisma handles Json type automatically
-        },
-      });
-      customerId = anonymousCustomer.id;
+      // Check if address already exists (prevent duplicates)
+      const addressExists = existingAddresses.some(
+        (addr: any) => addr.address === newAddress.address
+      );
+
+      if (!addressExists && newAddress.address) {
+        existingAddresses.push(newAddress);
+        await this.prisma.customer.update({
+          where: { id: customer.id },
+          data: { 
+            name: name, // Update with latest name
+            phone: phone || customer.phone, // Update with latest phone
+            addresses: existingAddresses 
+          }, // Prisma handles Json type
+        });
+      } else {
+        // Just update name and phone even if address is duplicate
+        await this.prisma.customer.update({
+          where: { id: customer.id },
+          data: { 
+            name: name,
+            phone: phone || customer.phone,
+          },
+        });
+      }
     }
+
+    customerId = customer.id;
 
     // Create booking with customer
     const booking = await this.prisma.booking.create({
       data: {
         orderNumber,
         customerId: customerId,
+        guestName: name,
         serviceDate: new Date(dto.serviceDate),
         serviceTime: dto.serviceTime,
         address: dto.address,
@@ -370,7 +392,7 @@ export class BookingsService {
       },
       include: {
         customer: {
-          select: { id: true, name: true, email: true, phone: true },
+          select: { id: true, name: true, email: true, phone: true, addresses: true },
         },
         items: {
           include: {

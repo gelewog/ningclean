@@ -64,6 +64,7 @@ model Booking {
   id            String        @id @default(uuid())
   orderNumber   String        @unique
   customerId    String
+  guestName     String?
   status        BookingStatus @default(PENDING)
   serviceDate   DateTime
   serviceTime   String

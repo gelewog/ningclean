@@ -138,7 +138,7 @@ export default function BookingPage() {
         serviceDate: formData.scheduledDate,
         serviceTime: formData.scheduledTime,
         address: `${formData.address}, ${formData.city}`,
-        area: '50 m²',
+        area: formData.area || '50 m²',  // FIX: Use formData.area instead of hardcoded
         notes: formData.notes,
         customerName: formData.customerName,
         customerEmail: formData.customerEmail,

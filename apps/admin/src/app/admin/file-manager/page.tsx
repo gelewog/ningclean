@@ -69,28 +69,17 @@ export default function FileManagerPage() {
     try {
       const [filesData, statsData] = await Promise.all([getFiles(folder), getStorageStats()])
       
-      // Filter files and folders by current path to ensure we only show direct children
-      const normalizedFolder = folder?.replace(/^\/+|\/+$/g, '') || ''
-      const filteredFiles = filesData.files.filter(f => {
-        // File should be direct child of current folder
-        if (!normalizedFolder) {
-          return !f.path.includes('/')
-        }
-        return f.path.startsWith(normalizedFolder + '/') && f.path.split('/').length === normalizedFolder.split('/').length + 1
-      })
-      const filteredFolders = filesData.folders.filter(f => {
-        // Folder should be direct child of current folder
-        if (!normalizedFolder) {
-          return !f.path.includes('/')
-        }
-        return f.path.startsWith(normalizedFolder + '/') && f.path.split('/').length === normalizedFolder.split('/').length + 1
-      })
+      // FIX Bug #1: Remove duplicate filtering - API already returns correct data
+      console.log('[FileManager] fetchFiles:', { folder, filesCount: filesData.files.length, foldersCount: filesData.folders.length })
       
-      console.log('[FileManager] fetchFiles:', { folder, normalizedFolder, filesCount: filteredFiles.length, foldersCount: filteredFolders.length })
-      
-      setFiles(filteredFiles)
-      setFolders(filteredFolders)
+      setFiles(filesData.files)
+      setFolders(filesData.folders)
       setStats(statsData)
+      
+      // Store apiBaseUrl for image URL construction
+      if (filesData.apiBaseUrl) {
+        ;(window as any).__fileManagerApiBaseUrl = filesData.apiBaseUrl
+      }
     } catch (error) {
       console.error('Failed to fetch files:', error)
       toast.error('Gagal memuat file')
@@ -122,14 +111,16 @@ export default function FileManagerPage() {
     setSelectedItems(new Set())
   }
 
+  // FIX Bug #2: Use current visible items (files/folders) based on current view
   const toggleSelectAll = () => {
-    if (selectedItems.size === filteredFiles.length + filteredFolders.length) {
+    // Use original files/folders for select all, not filtered (which is for search)
+    const currentVisibleItems = [...files, ...folders].map(f => f.path)
+    const allSelected = currentVisibleItems.length > 0 && currentVisibleItems.every(path => selectedItems.has(path))
+    
+    if (allSelected) {
       setSelectedItems(new Set())
     } else {
-      setSelectedItems(new Set([
-        ...filteredFiles.map(f => f.path),
-        ...folders.map(f => f.path)
-      ]))
+      setSelectedItems(new Set(currentVisibleItems))
     }
   }
 
@@ -384,15 +375,33 @@ export default function FileManagerPage() {
               <button onClick={navigateBack} disabled={pathHistory.length === 0} className="p-2 rounded-xl bg-gray-100 dark:bg-slate-800 hover:bg-gray-200 dark:hover:bg-slate-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
                 <ChevronRight className="w-4 h-4 rotate-180" />
               </button>
-              <div className="flex items-center gap-1 px-3 py-1.5 bg-gray-100 dark:bg-slate-800 rounded-lg text-sm">
-                <Folder className="w-4 h-4 text-amber-500" />
-                <span className="text-gray-700 dark:text-slate-300">uploads</span>
-                {currentPath && (
-                  <>
-                    <span className="text-gray-400">/</span>
-                    <span className="text-gray-900 dark:text-white font-medium">{currentPath}</span>
-                  </>
-                )}
+              {/* Breadcrumb - Fixed: Make each segment clickable */}
+              <div className="flex items-center gap-1 flex-wrap">
+                <button
+                  onClick={navigateHome}
+                  className="flex items-center gap-1 px-3 py-1.5 bg-gray-100 dark:bg-slate-800 rounded-lg text-sm hover:bg-gray-200 dark:hover:bg-slate-700 transition-colors"
+                >
+                  <Folder className="w-4 h-4 text-amber-500" />
+                  <span className="text-gray-700 dark:text-slate-300">uploads</span>
+                </button>
+                {currentPath && currentPath.split('/').map((segment, index, arr) => {
+                  const pathSoFar = arr.slice(0, index + 1).join('/')
+                  return (
+                    <React.Fragment key={pathSoFar}>
+                      <span className="text-gray-400">/</span>
+                      <button
+                        onClick={() => navigateToFolder(pathSoFar)}
+                        className={`px-3 py-1.5 rounded-lg text-sm transition-colors ${
+                          index === arr.length - 1
+                            ? 'bg-gray-200 dark:bg-slate-700 font-medium text-gray-900 dark:text-white'
+                            : 'bg-gray-100 dark:bg-slate-800 hover:bg-gray-200 dark:hover:bg-slate-700 text-gray-700 dark:text-slate-300'
+                        }`}
+                      >
+                        {segment}
+                      </button>
+                    </React.Fragment>
+                  )
+                })}
               </div>
             </div>
 
@@ -596,7 +605,17 @@ function GridView({
                 >
                   {file.isImage ? (
                     <div className="aspect-square rounded-xl overflow-hidden mb-2 bg-gray-100 dark:bg-slate-800">
-                      <img src={file.url} alt={file.name} className="w-full h-full object-cover" />
+                      <img 
+                        src={file.url} 
+                        alt={file.name} 
+                        className="w-full h-full object-cover"
+                        // FIX Bug #3: Add error handling for broken image URLs
+                        onError={(e) => {
+                          const target = e.target as HTMLImageElement
+                          target.style.display = 'none'
+                          target.parentElement!.innerHTML = `<div class="w-full h-full flex items-center justify-center text-gray-400"><ImageIcon className="w-8 h-8"/></div>`
+                        }}
+                      />
                     </div>
                   ) : (
                     <div className="w-12 h-12 mx-auto rounded-xl bg-gray-100 dark:bg-slate-800 flex items-center justify-center mb-2">

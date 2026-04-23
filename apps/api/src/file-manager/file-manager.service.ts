@@ -772,8 +772,8 @@ export class FileManagerService {
       }
     }
 
-    // Calculate total space (used + free estimate)
-    const totalSpaceGB = 100;
+    // Calculate total space based on Supabase Free Tier (1 GB)
+    const totalSpaceGB = 1;
     const totalSpaceBytes = totalSpaceGB * 1024 * 1024 * 1024;
 
     return {

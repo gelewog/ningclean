@@ -10,7 +10,7 @@ export default function Home() {
   React.useEffect(() => {
     const token = getToken()
     if (token) {
-      router.replace('/dashboard')
+      router.replace('/admin')  // FIX: Change from '/dashboard' to '/admin'
     } else {
       router.replace('/login')
     }
