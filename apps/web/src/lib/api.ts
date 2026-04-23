@@ -54,8 +54,15 @@ async function fetchApi<T>(endpoint: string, options: RequestInit = {}): Promise
   })
 
   if (!response.ok) {
-    const error = await response.json().catch(() => ({ message: 'An error occurred' }))
-    throw new Error(error.message || `HTTP error! status: ${response.status}`)
+    const contentType = response.headers.get('content-type') || ''
+    let error: { message?: string; error?: string; detail?: string }
+    if (contentType.includes('application/json')) {
+      error = await response.json().catch(() => ({ message: 'An error occurred' }))
+    } else {
+      const text = await response.text().catch(() => '')
+      error = { message: text || `HTTP error! status: ${response.status}` }
+    }
+    throw new Error(error.message || error.error || error.detail || `HTTP error! status: ${response.status}`)
   }
 
   return response.json()

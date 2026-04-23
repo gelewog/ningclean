@@ -32,6 +32,7 @@
     "seed": "npx tsx prisma/seed.ts"
   },
   "dependencies": {
+    "@prisma/client": "^5.22.0",
     "@supabase/supabase-js": "^2.104.0",
     "@tiptap/extension-character-count": "^3.22.3",
     "@tiptap/extension-color": "^3.22.3",

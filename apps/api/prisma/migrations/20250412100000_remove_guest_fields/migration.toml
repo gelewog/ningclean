@@ -1,6 +1,0 @@
-# Migration: Remove guest fields from Booking table
-# This migration migrates guest data to Customer table and removes redundant columns
-
-[migration]
-name = "remove_guest_fields"
-created_at = "2025-04-12T10:00:00Z"

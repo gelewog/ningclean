@@ -146,7 +146,13 @@ export class NotificationsService implements OnModuleInit {
    * Format booking notification message for WhatsApp
    */
   formatWhatsAppMessage(data: BookingNotificationData): string {
-    let message = this.settings?.whatsappMessage || `🎉 *Booking Baru!*
+    console.log('🔍 DEBUG formatWhatsAppMessage INPUT:');
+    console.log('   data.notes:', data.notes);
+    console.log('   data.notes type:', typeof data.notes);
+    console.log('   this.settings?.whatsappMessage exists:', !!this.settings?.whatsappMessage);
+    
+    // Use custom message from settings if available, otherwise use default
+    const defaultMessage = `🎉 *Booking Baru!*
 
 📋 *Order:* {orderNumber}
 👤 *Nama:* {customerName}
@@ -155,13 +161,20 @@ export class NotificationsService implements OnModuleInit {
 ⏰ *Jam:* {serviceTime}
 🏠 *Alamat:* {address}
 🧹 *Layanan:* {serviceName}
-💰 *Total:* {totalAmount}
 📝 *Catatan:* {notes}
+💰 *Total:* {totalAmount}
 
 ---
 Dikirim otomatis dari NingClean`;
 
-    return message
+    const message = this.settings?.whatsappMessage || defaultMessage;
+    
+    console.log('🔍 Using message template:', this.settings?.whatsappMessage ? 'FROM SETTINGS' : 'DEFAULT');
+
+    // BEFORE replace - check if {notes} exists in template
+    console.log('🔍 Template includes {notes}:', message.includes('{notes}'));
+
+    const formattedMessage = message
       .replace(/{orderNumber}/g, data.orderNumber)
       .replace(/{customerName}/g, data.customerName)
       .replace(/{customerEmail}/g, data.customerEmail || '-')
@@ -172,6 +185,12 @@ Dikirim otomatis dari NingClean`;
       .replace(/{address}/g, data.address)
       .replace(/{totalAmount}/g, data.totalAmount)
       .replace(/{notes}/g, data.notes || 'Tidak ada catatan');
+    
+    // AFTER replace
+    console.log('🔍 AFTER replace:');
+    console.log('   Formatted includes original notes:', data.notes ? formattedMessage.includes(data.notes) : 'N/A');
+    
+    return formattedMessage;
   }
 
   /**

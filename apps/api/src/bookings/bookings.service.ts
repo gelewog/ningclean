@@ -225,10 +225,15 @@ export class BookingsService {
   }
 
   async createPublic(dto: CreateBookingDto) {
+    console.log('createPublic called with dto:', JSON.stringify(dto, null, 2));
+    
+    try {
     const serviceIds = dto.items.map((item) => item.serviceId);
+    console.log('Fetching services with IDs:', serviceIds);
     const services = await this.prisma.service.findMany({
       where: { id: { in: serviceIds } },
     });
+    console.log('Found services:', services.length);
 
     if (services.length !== serviceIds.length) {
       throw new NotFoundException('One or more services not found');
@@ -259,6 +264,7 @@ export class BookingsService {
       nextNumber = lastNum + 1;
     }
     const orderNumber = `NC-${new Date().getFullYear()}-${nextNumber.toString().padStart(4, '0')}`;
+    console.log('Generated orderNumber:', orderNumber);
 
     // Auto-create or find customer
     let customerId: string;
@@ -379,6 +385,8 @@ export class BookingsService {
         orderNumber,
         customerId: customerId,
         guestName: name,
+        guestEmail: email,
+        guestPhone: phone,
         serviceDate: new Date(dto.serviceDate),
         serviceTime: dto.serviceTime,
         address: dto.address,
@@ -407,8 +415,13 @@ export class BookingsService {
       console.error('Failed to send booking notifications:', err);
     });
 
+    console.log('Booking created successfully:', booking.id);
     return booking;
+  } catch (error) {
+    console.error('Error in createPublic:', error);
+    throw error;
   }
+  } // end createPublic
 
   private async sendBookingNotifications(
     booking: any,
@@ -451,7 +464,15 @@ export class BookingsService {
         serviceTime: serviceTime,
         address: address,
         totalAmount: totalAmount,
+        notes: booking.notes || '', // FIXED: ensure notes is passed
       };
+
+      // DEBUG: Log notification data
+      console.log('DEBUG notificationData:', {
+        orderNumber: notificationData.orderNumber,
+        notes: notificationData.notes,
+        notesLength: notificationData.notes?.length,
+      });
 
       // Create database notification (NEW!)
       await this.notificationsService.createNotification({
