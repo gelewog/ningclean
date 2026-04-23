@@ -1,8 +1,8 @@
 {
   "version": 2,
   "name": "ningclean-admin",
-  "buildCommand": "npm install && npm run build",
-  "outputDirectory": ".next",
+  "buildCommand": "cd ../.. && npm install && cd apps/admin && npm install && npm run build",
+  "outputDirectory": "apps/admin/.next",
   "framework": "nextjs",
   "headers": [
     {
