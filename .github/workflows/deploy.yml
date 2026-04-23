@@ -1,11 +1,7 @@
-name: Deploy to Vercel
+name: Deploy All Apps to Vercel
 
 on:
   push:
-    branches:
-      - master
-      - main
-  pull_request:
     branches:
       - master
       - main
@@ -15,10 +11,58 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  # ============ Detect Changes ============
+  changes:
+    name: Detect Changed Files
+    runs-on: ubuntu-latest
+    outputs:
+      api: ${{ steps.changes.outputs.api }}
+      admin: ${{ steps.changes.outputs.admin }}
+      web: ${{ steps.changes.outputs.web }}
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Detect Changes
+        id: changes
+        run: |
+          git fetch origin master --depth=1
+          CHANGED_FILES=$(git diff --name-only HEAD origin/master || git diff --name-only HEAD^ HEAD || echo "all")
+
+          if echo "$CHANGED_FILES" | grep -q "^apps/api/\|^prisma/\|^package.json\|^turbo.json\|^package-lock.json\|^vercel.json\|all"; then
+            echo "api=true" >> $GITHUB_OUTPUT
+            echo "API changed: true"
+          else
+            echo "api=false" >> $GITHUB_OUTPUT
+            echo "API changed: false"
+          fi
+
+          if echo "$CHANGED_FILES" | grep -q "^apps/admin/\|^package.json\|^turbo.json\|^package-lock.json\|all"; then
+            echo "admin=true" >> $GITHUB_OUTPUT
+            echo "Admin changed: true"
+          else
+            echo "admin=false" >> $GITHUB_OUTPUT
+            echo "Admin changed: false"
+          fi
+
+          if echo "$CHANGED_FILES" | grep -q "^apps/web/\|^package.json\|^turbo.json\|^package-lock.json\|all"; then
+            echo "web=true" >> $GITHUB_OUTPUT
+            echo "Web changed: true"
+          else
+            echo "web=false" >> $GITHUB_OUTPUT
+            echo "Web changed: false"
+          fi
+
   # ============ API Deployment ============
   deploy-api:
-    name: Deploy API to Vercel
+    name: Deploy API
     runs-on: ubuntu-latest
+    needs: changes
+    if: ${{ needs.changes.outputs.api == 'true' || github.event_name == 'push' }}
+    env:
+      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_API_PROJECT_ID }}
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -35,27 +79,33 @@ jobs:
       - name: Install Vercel CLI
         run: npm install -g vercel@latest
 
-      - name: Deploy API to Vercel (Production)
-        if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main'
+      - name: Pull Vercel Environment Info
         working-directory: apps/api
-        run: vercel --prod --token=${{ secrets.VERCEL_TOKEN }} --yes
-        env:
-          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_API_PROJECT_ID }}
+        run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
+        continue-on-error: true
 
-      - name: Deploy API to Vercel (Preview)
-        if: github.event_name == 'pull_request'
+      - name: Deploy to Vercel (Production)
         working-directory: apps/api
-        run: vercel --token=${{ secrets.VERCEL_TOKEN }} --yes
-        env:
-          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_API_PROJECT_ID }}
+        run: |
+          echo "🚀 Deploying API to Vercel..."
+          DEPLOY_OUTPUT=$(vercel --prod --yes --token=${{ secrets.VERCEL_TOKEN }} 2>&1)
+          echo "$DEPLOY_OUTPUT"
+          if echo "$DEPLOY_OUTPUT" | grep -q "Error\|ERR_"; then
+            echo "❌ API deployment failed!"
+            exit 1
+          fi
+          echo "✅ API deployed successfully"
 
-  # ============ Admin Panel Deployment ============
+  # ============ Admin Deployment ============
   deploy-admin:
-    name: Deploy Admin to Vercel
+    name: Deploy Admin
     runs-on: ubuntu-latest
-    needs: deploy-api
+    needs: changes
+    if: ${{ needs.changes.outputs.admin == 'true' || github.event_name == 'push' }}
+    env:
+      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_ADMIN_PROJECT_ID }}
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -66,37 +116,44 @@ jobs:
           node-version: '20'
           cache: 'npm'
 
-      - name: Install Dependencies
+      - name: Install Root Dependencies
         run: npm ci
 
-      - name: Install Dependencies (Admin)
+      - name: Install Admin Dependencies
         working-directory: apps/admin
         run: npm ci
 
       - name: Install Vercel CLI
         run: npm install -g vercel@latest
 
-      - name: Deploy Admin to Vercel (Production)
-        if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main'
+      - name: Pull Vercel Environment Info
         working-directory: apps/admin
-        run: vercel --prod --token=${{ secrets.VERCEL_TOKEN }} --yes
-        env:
-          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_ADMIN_PROJECT_ID }}
+        run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
+        continue-on-error: true
 
-      - name: Deploy Admin to Vercel (Preview)
-        if: github.event_name == 'pull_request'
+      - name: Deploy to Vercel (Production)
         working-directory: apps/admin
-        run: vercel --token=${{ secrets.VERCEL_TOKEN }} --yes
-        env:
-          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_ADMIN_PROJECT_ID }}
+        run: |
+          echo "🚀 Deploying Admin to Vercel..."
+          DEPLOY_OUTPUT=$(vercel --prod --yes --token=${{ secrets.VERCEL_TOKEN }} 2>&1)
+          echo "$DEPLOY_OUTPUT"
+          if echo "$DEPLOY_OUTPUT" | grep -q "Error\|ERR_"; then
+            echo "❌ Admin deployment failed!"
+            exit 1
+          fi
+          echo "✅ Admin deployed successfully"
 
-  # ============ Website deployment ============
+  # ============ Web Deployment ============
   deploy-web:
-    name: Deploy Web to Vercel
+    name: Deploy Web
     runs-on: ubuntu-latest
-    needs: deploy-api
+    needs: changes
+    if: ${{ needs.changes.outputs.web == 'true' || github.event_name == 'push' }}
+    env:
+      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_WEB_PROJECT_ID }}
+      NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL }}
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -110,12 +167,17 @@ jobs:
       - name: Install Dependencies
         run: npm ci
 
-      - name: Install Dependencies (Web)
+      - name: Install Web Dependencies
         working-directory: apps/web
         run: npm ci
 
       - name: Install Vercel CLI
         run: npm install -g vercel@latest
+
+      - name: Pull Vercel Environment Info
+        working-directory: apps/web
+        run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
+        continue-on-error: true
 
       - name: Build Web
         working-directory: apps/web
@@ -123,38 +185,65 @@ jobs:
         env:
           NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL }}
 
-      - name: Deploy Web to Vercel (Production)
-        if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main'
+      - name: Deploy to Vercel (Production)
         working-directory: apps/web
-        run: vercel --prod --token=${{ secrets.VERCEL_TOKEN }} --yes
-        env:
-          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_WEB_PROJECT_ID }}
+        run: |
+          echo "🚀 Deploying Web to Vercel..."
+          DEPLOY_OUTPUT=$(vercel --prod --yes --token=${{ secrets.VERCEL_TOKEN }} 2>&1)
+          echo "$DEPLOY_OUTPUT"
+          if echo "$DEPLOY_OUTPUT" | grep -q "Error\|ERR_"; then
+            echo "❌ Web deployment failed!"
+            exit 1
+          fi
+          echo "✅ Web deployed successfully"
 
-      - name: Deploy Web to Vercel (Preview)
-        if: github.event_name == 'pull_request'
-        working-directory: apps/web
-        run: vercel --token=${{ secrets.VERCEL_TOKEN }} --yes
-        env:
-          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_WEB_PROJECT_ID }}
-
-  # ============ Notification ============
-  notify:
-    name: Notify Deployment Status
+  # ============ Summary ============
+  summary:
+    name: Deployment Summary
     runs-on: ubuntu-latest
     needs: [deploy-api, deploy-admin, deploy-web]
     if: always()
     steps:
-      - name: Deployment Summary
+      - name: Print Summary
         run: |
-          echo "========================================"
-          echo "        DEPLOYMENT SUMMARY             "
-          echo "========================================"
-          echo "API Deployment:     ${{ needs.deploy-api.result }}"
-          echo "Admin Deployment:   ${{ needs.deploy-admin.result }}"
-          echo "Web Deployment:     ${{ needs.deploy-web.result }}"
-          echo "========================================"
+          echo "=========================================="
+          echo "           DEPLOYMENT SUMMARY             "
+          echo "=========================================="
+          echo ""
+          API_STATUS="${{ needs.deploy-api.result }}"
+          ADMIN_STATUS="${{ needs.deploy-admin.result }}"
+          WEB_STATUS="${{ needs.deploy-web.result }}"
+          
+          # API Status
+          if [ "$API_STATUS" = "success" ]; then
+            echo "✅ API:           SUCCESS"
+          elif [ "$API_STATUS" = "skipped" ]; then
+            echo "⏭️  API:          SKIPPED"
+          else
+            echo "❌ API:           FAILED"
+          fi
+          
+          # Admin Status
+          if [ "$ADMIN_STATUS" = "success" ]; then
+            echo "✅ Admin:         SUCCESS"
+          elif [ "$ADMIN_STATUS" = "skipped" ]; then
+            echo "⏭️  Admin:        SKIPPED"
+          else
+            echo "❌ Admin:         FAILED"
+          fi
+          
+          # Web Status
+          if [ "$WEB_STATUS" = "success" ]; then
+            echo "✅ Web:           SUCCESS"
+          elif [ "$WEB_STATUS" = "skipped" ]; then
+            echo "⏭️  Web:          SKIPPED"
+          else
+            echo "❌ Web:           FAILED"
+          fi
+          
+          echo ""
+          echo "=========================================="
           echo "Commit: ${{ github.sha }}"
           echo "Branch: ${{ github.ref_name }}"
-          echo "========================================"
+          echo "Time:   $(date -u '+%Y-%m-%d %H:%M:%S UTC')"
+          echo "=========================================="
