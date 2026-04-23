@@ -3,5 +3,5 @@
   "buildCommand": "npm run build",
   "outputDirectory": ".next",
   "framework": "nextjs",
-  "installCommand": "cd ../../ && npm install && cd apps/admin"
+  "installCommand": "cd ../../ && npm install && cd apps/api"
 }
