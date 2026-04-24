@@ -1,8 +1,5 @@
-// Vercel Serverless Handler - NOT bundled with webpack
-// This must remain as plain JavaScript
-
-const { createServer } = require('http');
-const { parse } = require('url');
+// Vercel Serverless Handler
+const path = require('path');
 
 // Lazy load NestJS to avoid issues
 let nestServer = null;
@@ -11,8 +8,38 @@ async function loadNest() {
   if (nestServer) return nestServer;
 
   console.log('[Vercel] Loading NestJS...');
+  console.log('[Vercel] CWD:', process.cwd());
+  console.log('[Vercel] __dirname:', __dirname);
 
-  const { AppModule } = require('./dist/app.module');
+  // Try multiple possible paths
+  const possiblePaths = [
+    path.join(process.cwd(), 'dist', 'app.module'),
+    path.join(__dirname, '..', 'dist', 'app.module'),
+    path.join(__dirname, 'dist', 'app.module'),
+    '/var/task/dist/app.module',
+    '/var/task/apps/api/dist/app.module'
+  ];
+
+  let appModule = null;
+  let loadedPath = null;
+
+  for (const p of possiblePaths) {
+    console.log('[Vercel] Trying:', p);
+    try {
+      appModule = require(p);
+      loadedPath = p;
+      console.log('[Vercel] Found at:', p);
+      break;
+    } catch (e) {
+      console.log('[Vercel] Not found at:', p);
+    }
+  }
+
+  if (!appModule) {
+    throw new Error('Could not find app.module at any path');
+  }
+
+  const { AppModule } = appModule;
   const { NestFactory } = require('@nestjs/core');
   const { NestExpressApplication } = require('@nestjs/platform-express');
 
@@ -33,7 +60,7 @@ async function loadNest() {
   await app.init();
 
   nestServer = app.getHttpAdapter().getInstance();
-  console.log('[Vercel] NestJS ready');
+  console.log('[Vercel] NestJS ready at:', loadedPath);
 
   return nestServer;
 }

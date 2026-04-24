@@ -1,6 +1,14 @@
 {
   "version": 2,
+  "outputDirectory": "dist",
   "builds": [
+    {
+      "src": "dist/main.js",
+      "use": "@vercel/node",
+      "config": {
+        "outputDirectory": "dist"
+      }
+    },
     {
       "src": "vercel-server.js",
       "use": "@vercel/node"
