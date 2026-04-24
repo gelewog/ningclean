@@ -1,7 +1,18 @@
 {
   "version": 2,
-  "buildCommand": "npm run build",
-  "outputDirectory": ".next",
-  "framework": "nextjs",
-  "installCommand": "cd ../../ && npm install && cd apps/api"
+  "builds": [
+    {
+      "src": "vercel-entry.ts",
+      "use": "@vercel/node",
+      "config": {
+        "includeFiles": ["dist/**"]
+      }
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "vercel-entry.ts"
+    }
+  ]
 }
