@@ -81,23 +81,23 @@ export function BeforeAfterSlider({ item, index, large }: BeforeAfterSliderProps
         onTouchMove={handleTouchMove}
         onTouchEnd={handleMouseUp}
       >
-        {/* Before Image (full width, fixed) */}
+        {/* Before Image (full width, fixed) - NO FILTER */}
         <div className="absolute inset-0 z-0">
           <img
             src={item.beforeImage}
             alt="Before"
-            className="w-full h-full object-cover grayscale sepia-[0.3]"
+            className="w-full h-full object-cover"
             draggable={false}
           />
         </div>
 
-        {/* After Image (uses clip-path to reveal portion) */}
+        {/* After Image (uses clip-path to reveal right portion) */}
         <div className="absolute inset-0 z-10">
           <img
             src={item.afterImage}
             alt="After"
             className="w-full h-full object-cover"
-            style={{ clipPath: `inset(0 ${100 - sliderPosition}% 0 0)` }}
+            style={{ clipPath: `inset(0 0 0 ${sliderPosition}%)` }}
             draggable={false}
           />
         </div>
