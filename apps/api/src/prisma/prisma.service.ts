@@ -1,15 +1,21 @@
-import { Injectable, OnModuleInit } from '@nestjs/common';
+import { Injectable, OnModuleInit, OnModuleDestroy } from '@nestjs/common';
 import { PrismaClient } from '@prisma/client';
 
 @Injectable()
-export class PrismaService extends PrismaClient implements OnModuleInit {
+export class PrismaService extends PrismaClient implements OnModuleInit, OnModuleDestroy {
   async onModuleInit() {
     try {
       await this.$connect();
       console.log('✅ Database connected');
-    } catch (error) {
-      console.error('❌ Database connection failed:', error);
-      // Don't throw - let the app start even if DB fails
+    } catch (error: any) {
+      console.error('❌ Database connection failed:', error.message);
+      // Re-throw untuk Vercel agar build tahu kalau ada masalah
+      throw error;
     }
+  }
+
+  async onModuleDestroy() {
+    await this.$disconnect();
+    console.log('✅ Database disconnected');
   }
 }
