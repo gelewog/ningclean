@@ -2,30 +2,22 @@ FROM node:20-slim
 
 WORKDIR /app
 
-# Install OpenSSL untuk Prisma
-RUN apt-get update && apt-get install -y openssl && rm -rf /var/lib/apt/lists/*
+# Install dependencies at root level
+COPY package*.json ./
+COPY apps/api/package*.json ./apps/api/
+RUN npm ci --prefix .
 
-# Copy root package files
-COPY package.json package-lock.json ./
-COPY apps/api/package.json ./apps/api/
-
-# Install dependencies
-RUN npm ci
-
-# Copy prisma schema dari root
+# Copy prisma schema
 COPY prisma ./prisma/
 
-# Copy source code API
+# Copy source
 COPY apps/api ./apps/api/
 
-# Generate Prisma Client
+# Build
+WORKDIR /app/apps/api
 RUN npx prisma generate
+RUN npm run build
 
-# Build the API
-RUN cd apps/api && npm run build
-
-# Expose port
-EXPOSE 4000
-
-# Start app
+# Start
+WORKDIR /app
 CMD ["node", "apps/api/dist/main.js"]
