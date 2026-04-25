@@ -84,3 +84,4 @@ export { bootstrap, handler };
 if (typeof (globalThis as any).module !== 'undefined') {
   (globalThis as any).module.exports = { default: handler, handler, bootstrap };
 }
+// force redeploy
