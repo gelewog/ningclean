@@ -1,5 +1,7 @@
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "windows", "debian-openssl-3.0.x", "rhel-openssl-3.0.x"]
+  output        = "../apps/api/node_modules/.prisma/client"
 }
 
 datasource db {
@@ -64,6 +66,9 @@ model Booking {
   id            String        @id @default(uuid())
   orderNumber   String        @unique
   customerId    String
+  guestName     String?
+  guestEmail    String?
+  guestPhone    String?
   status        BookingStatus @default(PENDING)
   serviceDate   DateTime
   serviceTime   String
@@ -74,15 +79,11 @@ model Booking {
   createdAt     DateTime      @default(now())
   updatedAt     DateTime      @updatedAt
   internalNotes String?
-  guestName     String?
-  guestEmail    String?       @db.VarChar(255)
-  guestPhone    String?       @db.VarChar(50)
   items         BookingItem[]
   customer      Customer      @relation(fields: [customerId], references: [id])
   invoice       Invoice?
 
-  @@index([guestEmail], map: "idx_bookings_guestEmail")
-  @@index([guestName], map: "idx_bookings_guestName")
+  @@map("bookings")
 }
 
 model BookingItem {
