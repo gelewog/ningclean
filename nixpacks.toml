@@ -1,0 +1,8 @@
+[phases.build]
+cmds = ["npx prisma generate", "cd apps/api && npm run build"]
+
+[phases.setup]
+nixPkgs = ["nodejs_20", "openssl"]
+
+[start]
+cmd = "node apps/api/dist/main.js"
