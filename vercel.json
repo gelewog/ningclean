@@ -1,0 +1,8 @@
+{
+  "version": 2,
+  "buildCommand": "cd apps/api && npm install && npx prisma generate && npm run build",
+  "outputDirectory": "apps/api/dist",
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/main.js" }
+  ]
+}
