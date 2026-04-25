@@ -3,14 +3,14 @@ FROM node:20-slim
 WORKDIR /app
 
 # Copy package.json dan install production deps
-COPY package.json ./
+COPY apps/api/package.json ./
 RUN npm install --omit=dev
 
 # Copy prisma schema
-COPY prisma ./prisma/
+COPY apps/api/prisma ./prisma/
 
 # Copy pre-built dist
-COPY dist ./dist/
+COPY apps/api/dist ./dist/
 
 # Expose port
 EXPOSE 4000
