@@ -1,0 +1,17 @@
+[phases.build]
+cmds = [
+  "npm install",
+  "cd apps/api && npm install",
+  "cd apps/api && npx prisma generate --schema=../../prisma/schema.prisma",
+  "cd apps/api && npm run build"
+]
+
+[phases.setup]
+nixPkgs = ['nodejs', 'npm']
+
+[start]
+cmd = "cd apps/api && npm run start:prod"
+
+[variables]
+NODE_ENV = "production"
+NIXPACKS_NODE_VERSION = "20"
