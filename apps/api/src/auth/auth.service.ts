@@ -3,7 +3,7 @@ import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from '../prisma/prisma.service';
 import { AuditService } from '../audit/audit.service';
 import * as bcrypt from 'bcryptjs';
-import { Role } from '@prisma/client';
+import { Role } from '../common';
 
 export interface JwtPayload {
   sub: string;

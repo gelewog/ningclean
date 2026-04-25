@@ -2,7 +2,7 @@ import { Controller, Get, Post, Put, Body, Param, Query, UseGuards } from '@nest
 import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
 import { InvoicesService } from './invoices.service';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
-import { InvoiceStatus } from '@prisma/client';
+import { InvoiceStatus } from '../common/enums';
 
 @ApiTags('Invoices')
 @Controller('invoices')
