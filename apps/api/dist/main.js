@@ -101685,32 +101685,32 @@ const app_service_1 = __webpack_require__(1288);
 const prisma_module_1 = __webpack_require__(1289);
 const supabase_module_1 = __webpack_require__(1293);
 const auth_module_1 = __webpack_require__(1334);
-const services_module_1 = __webpack_require__(1454);
-const bookings_module_1 = __webpack_require__(1462);
-const customers_module_1 = __webpack_require__(2300);
-const blog_module_1 = __webpack_require__(2301);
-const testimonials_module_1 = __webpack_require__(2321);
-const team_members_module_1 = __webpack_require__(2325);
-const gallery_module_1 = __webpack_require__(2329);
-const faq_module_1 = __webpack_require__(2333);
-const service_areas_module_1 = __webpack_require__(2337);
-const job_listings_module_1 = __webpack_require__(2341);
-const pricing_plans_module_1 = __webpack_require__(2345);
-const site_settings_module_1 = __webpack_require__(2349);
-const navigation_settings_module_1 = __webpack_require__(2352);
-const homepage_settings_module_1 = __webpack_require__(2355);
-const footer_settings_module_1 = __webpack_require__(2358);
-const blog_categories_module_1 = __webpack_require__(2361);
-const upload_module_1 = __webpack_require__(2364);
-const notifications_module_1 = __webpack_require__(2297);
-const invoices_module_1 = __webpack_require__(2367);
-const email_templates_module_1 = __webpack_require__(2370);
-const audit_module_1 = __webpack_require__(2373);
-const admin_module_1 = __webpack_require__(2374);
-const company_stats_module_1 = __webpack_require__(2377);
-const newsletter_module_1 = __webpack_require__(2381);
-const file_manager_module_1 = __webpack_require__(2410);
-const draft_preview_module_1 = __webpack_require__(2421);
+const services_module_1 = __webpack_require__(1459);
+const bookings_module_1 = __webpack_require__(1463);
+const customers_module_1 = __webpack_require__(2301);
+const blog_module_1 = __webpack_require__(2302);
+const testimonials_module_1 = __webpack_require__(2322);
+const team_members_module_1 = __webpack_require__(2326);
+const gallery_module_1 = __webpack_require__(2330);
+const faq_module_1 = __webpack_require__(2334);
+const service_areas_module_1 = __webpack_require__(2338);
+const job_listings_module_1 = __webpack_require__(2342);
+const pricing_plans_module_1 = __webpack_require__(2346);
+const site_settings_module_1 = __webpack_require__(2350);
+const navigation_settings_module_1 = __webpack_require__(2353);
+const homepage_settings_module_1 = __webpack_require__(2356);
+const footer_settings_module_1 = __webpack_require__(2359);
+const blog_categories_module_1 = __webpack_require__(2362);
+const upload_module_1 = __webpack_require__(2365);
+const notifications_module_1 = __webpack_require__(2298);
+const invoices_module_1 = __webpack_require__(2368);
+const email_templates_module_1 = __webpack_require__(2371);
+const audit_module_1 = __webpack_require__(2374);
+const admin_module_1 = __webpack_require__(2375);
+const company_stats_module_1 = __webpack_require__(2378);
+const newsletter_module_1 = __webpack_require__(2382);
+const file_manager_module_1 = __webpack_require__(2411);
+const draft_preview_module_1 = __webpack_require__(2422);
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -128009,7 +128009,7 @@ const jwt_1 = __webpack_require__(1335);
 const passport_1 = __webpack_require__(1418);
 const auth_controller_1 = __webpack_require__(1442);
 const auth_service_1 = __webpack_require__(1443);
-const jwt_strategy_1 = __webpack_require__(1447);
+const jwt_strategy_1 = __webpack_require__(1452);
 let AuthModule = class AuthModule {
 };
 exports.AuthModule = AuthModule;
@@ -136448,7 +136448,7 @@ const common_1 = __webpack_require__(10);
 const passport_1 = __webpack_require__(1418);
 const swagger_1 = __webpack_require__(1077);
 const auth_service_1 = __webpack_require__(1443);
-const auth_dto_1 = __webpack_require__(1446);
+const auth_dto_1 = __webpack_require__(1451);
 let AuthController = class AuthController {
     constructor(authService) {
         this.authService = authService;
@@ -136610,7 +136610,7 @@ const jwt_1 = __webpack_require__(1335);
 const prisma_service_1 = __webpack_require__(1290);
 const audit_service_1 = __webpack_require__(1444);
 const bcrypt = __importStar(__webpack_require__(1445));
-const client_1 = __webpack_require__(1291);
+const common_2 = __webpack_require__(1446);
 let AuthService = class AuthService {
     constructor(prisma, jwtService, auditService) {
         this.prisma = prisma;
@@ -136625,7 +136625,7 @@ let AuthService = class AuthService {
                 name: data.name,
                 phone: data.phone,
                 password: hashedPassword,
-                role: client_1.Role.CUSTOMER,
+                role: common_2.Role.CUSTOMER,
             },
         });
         const payload = { sub: user.id, email: user.email, role: user.role };
@@ -136834,6 +136834,158 @@ module.exports = require("bcryptjs");
 
 "use strict";
 
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __exportStar = (this && this.__exportStar) || function(m, exports) {
+    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.TemplateType = exports.NotificationType = exports.InvoiceStatus = exports.BookingStatus = exports.Role = void 0;
+__exportStar(__webpack_require__(1447), exports);
+__exportStar(__webpack_require__(1448), exports);
+__exportStar(__webpack_require__(1449), exports);
+var enums_1 = __webpack_require__(1450);
+Object.defineProperty(exports, "Role", ({ enumerable: true, get: function () { return enums_1.Role; } }));
+Object.defineProperty(exports, "BookingStatus", ({ enumerable: true, get: function () { return enums_1.BookingStatus; } }));
+Object.defineProperty(exports, "InvoiceStatus", ({ enumerable: true, get: function () { return enums_1.InvoiceStatus; } }));
+Object.defineProperty(exports, "NotificationType", ({ enumerable: true, get: function () { return enums_1.NotificationType; } }));
+Object.defineProperty(exports, "TemplateType", ({ enumerable: true, get: function () { return enums_1.TemplateType; } }));
+
+
+/***/ }),
+/* 1447 */
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.CurrentUser = void 0;
+const common_1 = __webpack_require__(10);
+exports.CurrentUser = (0, common_1.createParamDecorator)((data, ctx) => {
+    const request = ctx.switchToHttp().getRequest();
+    const user = request.user;
+    return data ? user?.[data] : user;
+});
+
+
+/***/ }),
+/* 1448 */
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.Roles = exports.ROLES_KEY = void 0;
+const common_1 = __webpack_require__(10);
+exports.ROLES_KEY = 'roles';
+const Roles = (...roles) => (0, common_1.SetMetadata)(exports.ROLES_KEY, roles);
+exports.Roles = Roles;
+
+
+/***/ }),
+/* 1449 */
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+"use strict";
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var _a;
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.RolesGuard = void 0;
+const common_1 = __webpack_require__(10);
+const core_1 = __webpack_require__(1);
+const roles_decorator_1 = __webpack_require__(1448);
+let RolesGuard = class RolesGuard {
+    constructor(reflector) {
+        this.reflector = reflector;
+    }
+    canActivate(context) {
+        const requiredRoles = this.reflector.getAllAndOverride(roles_decorator_1.ROLES_KEY, [
+            context.getHandler(),
+            context.getClass(),
+        ]);
+        if (!requiredRoles) {
+            return true;
+        }
+        const { user } = context.switchToHttp().getRequest();
+        return requiredRoles.includes(user.role);
+    }
+};
+exports.RolesGuard = RolesGuard;
+exports.RolesGuard = RolesGuard = __decorate([
+    (0, common_1.Injectable)(),
+    __metadata("design:paramtypes", [typeof (_a = typeof core_1.Reflector !== "undefined" && core_1.Reflector) === "function" ? _a : Object])
+], RolesGuard);
+
+
+/***/ }),
+/* 1450 */
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.TemplateType = exports.NotificationType = exports.InvoiceStatus = exports.BookingStatus = exports.Role = void 0;
+var Role;
+(function (Role) {
+    Role["CUSTOMER"] = "CUSTOMER";
+    Role["ADMIN"] = "ADMIN";
+    Role["STAFF"] = "STAFF";
+})(Role || (exports.Role = Role = {}));
+var BookingStatus;
+(function (BookingStatus) {
+    BookingStatus["PENDING"] = "PENDING";
+    BookingStatus["CONFIRMED"] = "CONFIRMED";
+    BookingStatus["IN_PROGRESS"] = "IN_PROGRESS";
+    BookingStatus["COMPLETED"] = "COMPLETED";
+    BookingStatus["CANCELLED"] = "CANCELLED";
+})(BookingStatus || (exports.BookingStatus = BookingStatus = {}));
+var InvoiceStatus;
+(function (InvoiceStatus) {
+    InvoiceStatus["DRAFT"] = "DRAFT";
+    InvoiceStatus["ISSUED"] = "ISSUED";
+    InvoiceStatus["PAID"] = "PAID";
+    InvoiceStatus["CANCELLED"] = "CANCELLED";
+})(InvoiceStatus || (exports.InvoiceStatus = InvoiceStatus = {}));
+var NotificationType;
+(function (NotificationType) {
+    NotificationType["BOOKING_NEW"] = "BOOKING_NEW";
+    NotificationType["BOOKING_STATUS"] = "BOOKING_STATUS";
+    NotificationType["SYSTEM"] = "SYSTEM";
+})(NotificationType || (exports.NotificationType = NotificationType = {}));
+var TemplateType;
+(function (TemplateType) {
+    TemplateType["BOOKING_CONFIRMED"] = "BOOKING_CONFIRMED";
+    TemplateType["BOOKING_STATUS_UPDATED"] = "BOOKING_STATUS_UPDATED";
+    TemplateType["BOOKING_REMINDER"] = "BOOKING_REMINDER";
+    TemplateType["BOOKING_CANCELLED"] = "BOOKING_CANCELLED";
+    TemplateType["CUSTOMER_WELCOME"] = "CUSTOMER_WELCOME";
+})(TemplateType || (exports.TemplateType = TemplateType = {}));
+
+
+/***/ }),
+/* 1451 */
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+"use strict";
+
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -136893,7 +137045,7 @@ __decorate([
 
 
 /***/ }),
-/* 1447 */
+/* 1452 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -136912,7 +137064,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.JwtStrategy = void 0;
 const common_1 = __webpack_require__(10);
 const passport_1 = __webpack_require__(1418);
-const passport_jwt_1 = __webpack_require__(1448);
+const passport_jwt_1 = __webpack_require__(1453);
 const auth_service_1 = __webpack_require__(1443);
 let JwtStrategy = class JwtStrategy extends (0, passport_1.PassportStrategy)(passport_jwt_1.Strategy) {
     constructor(authService) {
@@ -136943,14 +137095,14 @@ exports.JwtStrategy = JwtStrategy = __decorate([
 
 
 /***/ }),
-/* 1448 */
+/* 1453 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 
 
-var Strategy = __webpack_require__(1449),
-    ExtractJwt = __webpack_require__(1453);
+var Strategy = __webpack_require__(1454),
+    ExtractJwt = __webpack_require__(1458);
 
 
 module.exports = {
@@ -136960,14 +137112,14 @@ module.exports = {
 
 
 /***/ }),
-/* 1449 */
+/* 1454 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var passport = __webpack_require__(1426)
-    , auth_hdr = __webpack_require__(1450)
+    , auth_hdr = __webpack_require__(1455)
     , util = __webpack_require__(78)
     , url = __webpack_require__(963)
-    , assign = __webpack_require__(1451);
+    , assign = __webpack_require__(1456);
 
 
 
@@ -137045,7 +137197,7 @@ util.inherits(JwtStrategy, passport.Strategy);
  *
  * Note that this should only be replaced in tests.
  */
-JwtStrategy.JwtVerifier = __webpack_require__(1452);
+JwtStrategy.JwtVerifier = __webpack_require__(1457);
 
 
 
@@ -137105,7 +137257,7 @@ JwtStrategy.prototype.authenticate = function(req, options) {
 
 
 /***/ }),
-/* 1450 */
+/* 1455 */
 /***/ ((module) => {
 
 "use strict";
@@ -137131,7 +137283,7 @@ module.exports = {
 
 
 /***/ }),
-/* 1451 */
+/* 1456 */
 /***/ ((module) => {
 
 // note: This is a polyfill to Object.assign to support old nodejs versions (0.10 / 0.12) where
@@ -137161,7 +137313,7 @@ module.exports = function(target, varArgs) {
 
 
 /***/ }),
-/* 1452 */
+/* 1457 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var jwt = __webpack_require__(1344);
@@ -137172,14 +137324,14 @@ module.exports  = function(token, secretOrKey, options, callback) {
 
 
 /***/ }),
-/* 1453 */
+/* 1458 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 
 
 var url = __webpack_require__(963),
-    auth_hdr = __webpack_require__(1450);
+    auth_hdr = __webpack_require__(1455);
 
 // Note: express http converts all headers
 // to lower case.
@@ -137313,7 +137465,7 @@ module.exports = extractors;
 
 
 /***/ }),
-/* 1454 */
+/* 1459 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -137327,8 +137479,8 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ServicesModule = void 0;
 const common_1 = __webpack_require__(10);
-const services_controller_1 = __webpack_require__(1455);
-const services_service_1 = __webpack_require__(1456);
+const services_controller_1 = __webpack_require__(1460);
+const services_service_1 = __webpack_require__(1461);
 let ServicesModule = class ServicesModule {
 };
 exports.ServicesModule = ServicesModule;
@@ -137341,7 +137493,7 @@ exports.ServicesModule = ServicesModule = __decorate([
 
 
 /***/ }),
-/* 1455 */
+/* 1460 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -137364,9 +137516,9 @@ exports.ServicesController = void 0;
 const common_1 = __webpack_require__(10);
 const passport_1 = __webpack_require__(1418);
 const swagger_1 = __webpack_require__(1077);
-const services_service_1 = __webpack_require__(1456);
-const service_dto_1 = __webpack_require__(1457);
-const common_2 = __webpack_require__(1458);
+const services_service_1 = __webpack_require__(1461);
+const service_dto_1 = __webpack_require__(1462);
+const common_2 = __webpack_require__(1446);
 const client_1 = __webpack_require__(1291);
 let ServicesController = class ServicesController {
     constructor(servicesService) {
@@ -137448,7 +137600,7 @@ exports.ServicesController = ServicesController = __decorate([
 
 
 /***/ }),
-/* 1456 */
+/* 1461 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -137540,7 +137692,7 @@ exports.ServicesService = ServicesService = __decorate([
 
 
 /***/ }),
-/* 1457 */
+/* 1462 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -137722,107 +137874,7 @@ __decorate([
 
 
 /***/ }),
-/* 1458 */
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
-
-"use strict";
-
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __exportStar = (this && this.__exportStar) || function(m, exports) {
-    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
-};
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-__exportStar(__webpack_require__(1459), exports);
-__exportStar(__webpack_require__(1460), exports);
-__exportStar(__webpack_require__(1461), exports);
-
-
-/***/ }),
-/* 1459 */
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.CurrentUser = void 0;
-const common_1 = __webpack_require__(10);
-exports.CurrentUser = (0, common_1.createParamDecorator)((data, ctx) => {
-    const request = ctx.switchToHttp().getRequest();
-    const user = request.user;
-    return data ? user?.[data] : user;
-});
-
-
-/***/ }),
-/* 1460 */
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.Roles = exports.ROLES_KEY = void 0;
-const common_1 = __webpack_require__(10);
-exports.ROLES_KEY = 'roles';
-const Roles = (...roles) => (0, common_1.SetMetadata)(exports.ROLES_KEY, roles);
-exports.Roles = Roles;
-
-
-/***/ }),
-/* 1461 */
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
-
-"use strict";
-
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-var _a;
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.RolesGuard = void 0;
-const common_1 = __webpack_require__(10);
-const core_1 = __webpack_require__(1);
-const roles_decorator_1 = __webpack_require__(1460);
-let RolesGuard = class RolesGuard {
-    constructor(reflector) {
-        this.reflector = reflector;
-    }
-    canActivate(context) {
-        const requiredRoles = this.reflector.getAllAndOverride(roles_decorator_1.ROLES_KEY, [
-            context.getHandler(),
-            context.getClass(),
-        ]);
-        if (!requiredRoles) {
-            return true;
-        }
-        const { user } = context.switchToHttp().getRequest();
-        return requiredRoles.includes(user.role);
-    }
-};
-exports.RolesGuard = RolesGuard;
-exports.RolesGuard = RolesGuard = __decorate([
-    (0, common_1.Injectable)(),
-    __metadata("design:paramtypes", [typeof (_a = typeof core_1.Reflector !== "undefined" && core_1.Reflector) === "function" ? _a : Object])
-], RolesGuard);
-
-
-/***/ }),
-/* 1462 */
+/* 1463 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -137836,9 +137888,9 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.BookingsModule = void 0;
 const common_1 = __webpack_require__(10);
-const bookings_controller_1 = __webpack_require__(1463);
-const bookings_service_1 = __webpack_require__(1464);
-const notifications_module_1 = __webpack_require__(2297);
+const bookings_controller_1 = __webpack_require__(1464);
+const bookings_service_1 = __webpack_require__(1465);
+const notifications_module_1 = __webpack_require__(2298);
 let BookingsModule = class BookingsModule {
 };
 exports.BookingsModule = BookingsModule;
@@ -137852,7 +137904,7 @@ exports.BookingsModule = BookingsModule = __decorate([
 
 
 /***/ }),
-/* 1463 */
+/* 1464 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -137875,10 +137927,11 @@ exports.BookingsController = void 0;
 const common_1 = __webpack_require__(10);
 const passport_1 = __webpack_require__(1418);
 const swagger_1 = __webpack_require__(1077);
-const bookings_service_1 = __webpack_require__(1464);
-const booking_dto_1 = __webpack_require__(2296);
-const common_2 = __webpack_require__(1458);
+const bookings_service_1 = __webpack_require__(1465);
+const booking_dto_1 = __webpack_require__(2297);
+const common_2 = __webpack_require__(1446);
 const client_1 = __webpack_require__(1291);
+const enums_1 = __webpack_require__(1450);
 let BookingsController = class BookingsController {
     constructor(bookingsService) {
         this.bookingsService = bookingsService;
@@ -137939,7 +137992,7 @@ __decorate([
 __decorate([
     (0, common_1.Put)(':id/status'),
     (0, common_1.UseGuards)((0, passport_1.AuthGuard)('jwt'), common_2.RolesGuard),
-    (0, common_2.Roles)(client_1.Role.ADMIN),
+    (0, common_2.Roles)(enums_1.Role.ADMIN),
     (0, swagger_1.ApiBearerAuth)(),
     (0, swagger_1.ApiOperation)({ summary: 'Update booking status (admin only)' }),
     __param(0, (0, common_1.Param)('id')),
@@ -137956,7 +138009,7 @@ exports.BookingsController = BookingsController = __decorate([
 
 
 /***/ }),
-/* 1464 */
+/* 1465 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -137976,7 +138029,7 @@ exports.BookingsService = void 0;
 const common_1 = __webpack_require__(10);
 const prisma_service_1 = __webpack_require__(1290);
 const client_1 = __webpack_require__(1291);
-const notifications_service_1 = __webpack_require__(1465);
+const notifications_service_1 = __webpack_require__(1466);
 let BookingsService = class BookingsService {
     constructor(prisma, notificationsService) {
         this.prisma = prisma;
@@ -138403,7 +138456,7 @@ exports.BookingsService = BookingsService = __decorate([
 
 
 /***/ }),
-/* 1465 */
+/* 1466 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -138455,9 +138508,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.NotificationsService = void 0;
 const common_1 = __webpack_require__(10);
 const prisma_service_1 = __webpack_require__(1290);
-const whatsapp_service_1 = __webpack_require__(1466);
-const twilio_service_1 = __webpack_require__(1467);
-const nodemailer = __importStar(__webpack_require__(2258));
+const whatsapp_service_1 = __webpack_require__(1467);
+const twilio_service_1 = __webpack_require__(1468);
+const nodemailer = __importStar(__webpack_require__(2259));
 let NotificationsService = class NotificationsService {
     constructor(prisma, whatsAppService, twilioService) {
         this.prisma = prisma;
@@ -138859,7 +138912,7 @@ exports.NotificationsService = NotificationsService = __decorate([
 
 
 /***/ }),
-/* 1466 */
+/* 1467 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -138878,7 +138931,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.WhatsAppService = void 0;
 const common_1 = __webpack_require__(10);
 const prisma_service_1 = __webpack_require__(1290);
-const twilio_service_1 = __webpack_require__(1467);
+const twilio_service_1 = __webpack_require__(1468);
 let WhatsAppService = class WhatsAppService {
     constructor(prisma, twilioService) {
         this.prisma = prisma;
@@ -138948,7 +139001,7 @@ exports.WhatsAppService = WhatsAppService = __decorate([
 
 
 /***/ }),
-/* 1467 */
+/* 1468 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -139058,7 +139111,7 @@ let TwilioService = class TwilioService {
     async getTwilioModule() {
         if (!this.twilioModule) {
             try {
-                this.twilioModule = await Promise.resolve().then(() => __importStar(__webpack_require__(1468)));
+                this.twilioModule = await Promise.resolve().then(() => __importStar(__webpack_require__(1469)));
             }
             catch (error) {
                 console.error('Failed to load twilio module:', error);
@@ -139142,7 +139195,7 @@ exports.TwilioService = TwilioService = __decorate([
 
 
 /***/ }),
-/* 1468 */
+/* 1469 */
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 "use strict";
@@ -139183,21 +139236,21 @@ var __importStar = (this && this.__importStar) || (function () {
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-const Twilio_1 = __importDefault(__webpack_require__(1469));
-const webhooks = __importStar(__webpack_require__(2205));
-const RequestClient_1 = __importDefault(__webpack_require__(1471));
-const RestException_1 = __importDefault(__webpack_require__(1535));
-const AccessToken_1 = __importDefault(__webpack_require__(2208));
-const ValidationToken_1 = __importDefault(__webpack_require__(1513));
-const ClientCapability_1 = __importDefault(__webpack_require__(2209));
-const TaskRouterCapability_1 = __importDefault(__webpack_require__(2210));
-const taskRouterUtil = __importStar(__webpack_require__(2211));
-const VoiceResponse_1 = __importDefault(__webpack_require__(2212));
-const MessagingResponse_1 = __importDefault(__webpack_require__(2247));
-const FaxResponse_1 = __importDefault(__webpack_require__(2248));
-const ClientCredentialProvider_1 = __importDefault(__webpack_require__(2249));
-const NoAuthCredentialProvider_1 = __importDefault(__webpack_require__(2252));
-const OrgsCredentialProvider_1 = __importDefault(__webpack_require__(2256));
+const Twilio_1 = __importDefault(__webpack_require__(1470));
+const webhooks = __importStar(__webpack_require__(2206));
+const RequestClient_1 = __importDefault(__webpack_require__(1472));
+const RestException_1 = __importDefault(__webpack_require__(1536));
+const AccessToken_1 = __importDefault(__webpack_require__(2209));
+const ValidationToken_1 = __importDefault(__webpack_require__(1514));
+const ClientCapability_1 = __importDefault(__webpack_require__(2210));
+const TaskRouterCapability_1 = __importDefault(__webpack_require__(2211));
+const taskRouterUtil = __importStar(__webpack_require__(2212));
+const VoiceResponse_1 = __importDefault(__webpack_require__(2213));
+const MessagingResponse_1 = __importDefault(__webpack_require__(2248));
+const FaxResponse_1 = __importDefault(__webpack_require__(2249));
+const ClientCredentialProvider_1 = __importDefault(__webpack_require__(2250));
+const NoAuthCredentialProvider_1 = __importDefault(__webpack_require__(2253));
+const OrgsCredentialProvider_1 = __importDefault(__webpack_require__(2257));
 // Shorthand to automatically create a RestClient
 function TwilioSDK(accountSid, authToken, opts) {
     return new TwilioSDK.Twilio(accountSid, authToken, opts);
@@ -139239,7 +139292,7 @@ module.exports = TwilioSDK;
 
 
 /***/ }),
-/* 1469 */
+/* 1470 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
@@ -139254,7 +139307,7 @@ module.exports = TwilioSDK;
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-const BaseTwilio_1 = __webpack_require__(1470);
+const BaseTwilio_1 = __webpack_require__(1471);
 /* jshint ignore:start */
 /**
  * Twilio Client to interact with the Rest API
@@ -139320,165 +139373,165 @@ class Twilio extends BaseTwilio_1.Client {
     //Domains
     /** Getter for (Twilio.Accounts) domain */
     get accounts() {
-        return (this._accounts ?? (this._accounts = new (__webpack_require__(1536))(this)));
+        return (this._accounts ?? (this._accounts = new (__webpack_require__(1537))(this)));
     }
     /** Getter for (Twilio.Api) domain */
     get api() {
-        return this._api ?? (this._api = new (__webpack_require__(1557))(this));
+        return this._api ?? (this._api = new (__webpack_require__(1558))(this));
     }
     /** Getter for (Twilio.Assistants) domain */
     get assistants() {
         return (this._assistants ??
-            (this._assistants = new (__webpack_require__(1639))(this)));
+            (this._assistants = new (__webpack_require__(1640))(this)));
     }
     /** Getter for (Twilio.Bulkexports) domain */
     get bulkexports() {
         return (this._bulkexports ??
-            (this._bulkexports = new (__webpack_require__(1654))(this)));
+            (this._bulkexports = new (__webpack_require__(1655))(this)));
     }
     /** Getter for (Twilio.Chat) domain */
     get chat() {
-        return this._chat ?? (this._chat = new (__webpack_require__(1662))(this));
+        return this._chat ?? (this._chat = new (__webpack_require__(1663))(this));
     }
     /** Getter for (Twilio.Content) domain */
     get content() {
-        return this._content ?? (this._content = new (__webpack_require__(1689))(this));
+        return this._content ?? (this._content = new (__webpack_require__(1690))(this));
     }
     /** Getter for (Twilio.Conversations) domain */
     get conversations() {
         return (this._conversations ??
-            (this._conversations = new (__webpack_require__(1700))(this)));
+            (this._conversations = new (__webpack_require__(1701))(this)));
     }
     /** Getter for (Twilio.Events) domain */
     get events() {
-        return this._events ?? (this._events = new (__webpack_require__(1732))(this));
+        return this._events ?? (this._events = new (__webpack_require__(1733))(this));
     }
     /** Getter for (Twilio.FlexApi) domain */
     get flexApi() {
-        return this._flexApi ?? (this._flexApi = new (__webpack_require__(1743))(this));
+        return this._flexApi ?? (this._flexApi = new (__webpack_require__(1744))(this));
     }
     /** Getter for (Twilio.FrontlineApi) domain */
     get frontlineApi() {
         return (this._frontlineApi ??
-            (this._frontlineApi = new (__webpack_require__(1779))(this)));
+            (this._frontlineApi = new (__webpack_require__(1780))(this)));
     }
     /** Getter for (Twilio.PreviewIam) domain */
     get previewIam() {
         return (this._previewIam ??
-            (this._previewIam = new (__webpack_require__(1783))(this)));
+            (this._previewIam = new (__webpack_require__(1784))(this)));
     }
     /** Getter for (Twilio.Iam) domain */
     get iam() {
-        return this._iam ?? (this._iam = new (__webpack_require__(1793))(this));
+        return this._iam ?? (this._iam = new (__webpack_require__(1794))(this));
     }
     /** Getter for (Twilio.Insights) domain */
     get insights() {
-        return (this._insights ?? (this._insights = new (__webpack_require__(1801))(this)));
+        return (this._insights ?? (this._insights = new (__webpack_require__(1802))(this)));
     }
     /** Getter for (Twilio.Intelligence) domain */
     get intelligence() {
         return (this._intelligence ??
-            (this._intelligence = new (__webpack_require__(1819))(this)));
+            (this._intelligence = new (__webpack_require__(1820))(this)));
     }
     /** Getter for (Twilio.IpMessaging) domain */
     get ipMessaging() {
         return (this._ipMessaging ??
-            (this._ipMessaging = new (__webpack_require__(1835))(this)));
+            (this._ipMessaging = new (__webpack_require__(1836))(this)));
     }
     /** Getter for (Twilio.Knowledge) domain */
     get knowledge() {
-        return (this._knowledge ?? (this._knowledge = new (__webpack_require__(1860))(this)));
+        return (this._knowledge ?? (this._knowledge = new (__webpack_require__(1861))(this)));
     }
     /** Getter for (Twilio.Lookups) domain */
     get lookups() {
-        return this._lookups ?? (this._lookups = new (__webpack_require__(1866))(this));
+        return this._lookups ?? (this._lookups = new (__webpack_require__(1867))(this));
     }
     /** Getter for (Twilio.Marketplace) domain */
     get marketplace() {
         return (this._marketplace ??
-            (this._marketplace = new (__webpack_require__(1876))(this)));
+            (this._marketplace = new (__webpack_require__(1877))(this)));
     }
     /** Getter for (Twilio.Messaging) domain */
     get messaging() {
-        return (this._messaging ?? (this._messaging = new (__webpack_require__(1887))(this)));
+        return (this._messaging ?? (this._messaging = new (__webpack_require__(1888))(this)));
     }
     /** Getter for (Twilio.Monitor) domain */
     get monitor() {
-        return this._monitor ?? (this._monitor = new (__webpack_require__(1916))(this));
+        return this._monitor ?? (this._monitor = new (__webpack_require__(1917))(this));
     }
     /** Getter for (Twilio.Notify) domain */
     get notify() {
-        return this._notify ?? (this._notify = new (__webpack_require__(1921))(this));
+        return this._notify ?? (this._notify = new (__webpack_require__(1922))(this));
     }
     /** Getter for (Twilio.Numbers) domain */
     get numbers() {
-        return this._numbers ?? (this._numbers = new (__webpack_require__(1928))(this));
+        return this._numbers ?? (this._numbers = new (__webpack_require__(1929))(this));
     }
     /** Getter for (Twilio.Oauth) domain */
     get oauth() {
-        return this._oauth ?? (this._oauth = new (__webpack_require__(1963))(this));
+        return this._oauth ?? (this._oauth = new (__webpack_require__(1964))(this));
     }
     /** Getter for (Twilio.Preview) domain */
     get preview() {
-        return this._preview ?? (this._preview = new (__webpack_require__(1971))(this));
+        return this._preview ?? (this._preview = new (__webpack_require__(1972))(this));
     }
     /** Getter for (Twilio.Pricing) domain */
     get pricing() {
-        return this._pricing ?? (this._pricing = new (__webpack_require__(1987))(this));
+        return this._pricing ?? (this._pricing = new (__webpack_require__(1988))(this));
     }
     /** Getter for (Twilio.Proxy) domain */
     get proxy() {
-        return this._proxy ?? (this._proxy = new (__webpack_require__(2003))(this));
+        return this._proxy ?? (this._proxy = new (__webpack_require__(2004))(this));
     }
     /** Getter for (Twilio.Routes) domain */
     get routes() {
-        return this._routes ?? (this._routes = new (__webpack_require__(2012))(this));
+        return this._routes ?? (this._routes = new (__webpack_require__(2013))(this));
     }
     /** Getter for (Twilio.Serverless) domain */
     get serverless() {
         return (this._serverless ??
-            (this._serverless = new (__webpack_require__(2018))(this)));
+            (this._serverless = new (__webpack_require__(2019))(this)));
     }
     /** Getter for (Twilio.Studio) domain */
     get studio() {
-        return this._studio ?? (this._studio = new (__webpack_require__(2033))(this));
+        return this._studio ?? (this._studio = new (__webpack_require__(2034))(this));
     }
     /** Getter for (Twilio.Supersim) domain */
     get supersim() {
-        return (this._supersim ?? (this._supersim = new (__webpack_require__(2054))(this)));
+        return (this._supersim ?? (this._supersim = new (__webpack_require__(2055))(this)));
     }
     /** Getter for (Twilio.Sync) domain */
     get sync() {
-        return this._sync ?? (this._sync = new (__webpack_require__(2069))(this));
+        return this._sync ?? (this._sync = new (__webpack_require__(2070))(this));
     }
     /** Getter for (Twilio.Taskrouter) domain */
     get taskrouter() {
         return (this._taskrouter ??
-            (this._taskrouter = new (__webpack_require__(2083))(this)));
+            (this._taskrouter = new (__webpack_require__(2084))(this)));
     }
     /** Getter for (Twilio.Trunking) domain */
     get trunking() {
-        return (this._trunking ?? (this._trunking = new (__webpack_require__(2112))(this)));
+        return (this._trunking ?? (this._trunking = new (__webpack_require__(2113))(this)));
     }
     /** Getter for (Twilio.Trusthub) domain */
     get trusthub() {
-        return (this._trusthub ?? (this._trusthub = new (__webpack_require__(2121))(this)));
+        return (this._trusthub ?? (this._trusthub = new (__webpack_require__(2122))(this)));
     }
     /** Getter for (Twilio.Verify) domain */
     get verify() {
-        return this._verify ?? (this._verify = new (__webpack_require__(2140))(this));
+        return this._verify ?? (this._verify = new (__webpack_require__(2141))(this));
     }
     /** Getter for (Twilio.Video) domain */
     get video() {
-        return this._video ?? (this._video = new (__webpack_require__(2165))(this));
+        return this._video ?? (this._video = new (__webpack_require__(2166))(this));
     }
     /** Getter for (Twilio.Voice) domain */
     get voice() {
-        return this._voice ?? (this._voice = new (__webpack_require__(2182))(this));
+        return this._voice ?? (this._voice = new (__webpack_require__(2183))(this));
     }
     /** Getter for (Twilio.Wireless) domain */
     get wireless() {
-        return (this._wireless ?? (this._wireless = new (__webpack_require__(2196))(this)));
+        return (this._wireless ?? (this._wireless = new (__webpack_require__(2197))(this)));
     }
     /** Getter for (Twilio.Api.V2010.AccountContext.AddressListInstance) addresses resource */
     get addresses() {
@@ -139581,7 +139634,7 @@ module.exports = Twilio;
 
 
 /***/ }),
-/* 1470 */
+/* 1471 */
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 "use strict";
@@ -139589,12 +139642,12 @@ module.exports = Twilio;
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-const RequestClient_1 = __importDefault(__webpack_require__(1471)); /* jshint ignore:line */
+const RequestClient_1 = __importDefault(__webpack_require__(1472)); /* jshint ignore:line */
 const os = __webpack_require__(797); /* jshint ignore:line */
 const url = __webpack_require__(963); /* jshint ignore:line */
-const moduleInfo = __webpack_require__(1534); /* jshint ignore:line */
+const moduleInfo = __webpack_require__(1535); /* jshint ignore:line */
 const util = __webpack_require__(78); /* jshint ignore:line */
-const RestException = __webpack_require__(1535); /* jshint ignore:line */
+const RestException = __webpack_require__(1536); /* jshint ignore:line */
 var Twilio;
 (function (Twilio) {
     /* jshint ignore:start */
@@ -139820,7 +139873,7 @@ module.exports = Twilio;
 
 
 /***/ }),
-/* 1471 */
+/* 1472 */
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 "use strict";
@@ -139861,14 +139914,14 @@ var __importStar = (this && this.__importStar) || (function () {
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-const axios_1 = __importStar(__webpack_require__(1472));
+const axios_1 = __importStar(__webpack_require__(1473));
 const fs = __importStar(__webpack_require__(863));
-const https_proxy_agent_1 = __importDefault(__webpack_require__(1493));
+const https_proxy_agent_1 = __importDefault(__webpack_require__(1494));
 const qs_1 = __importDefault(__webpack_require__(905));
 const https = __importStar(__webpack_require__(1000));
-const response_1 = __importDefault(__webpack_require__(1511));
-const request_1 = __importDefault(__webpack_require__(1512));
-const ValidationToken_1 = __importDefault(__webpack_require__(1513));
+const response_1 = __importDefault(__webpack_require__(1512));
+const request_1 = __importDefault(__webpack_require__(1513));
+const ValidationToken_1 = __importDefault(__webpack_require__(1514));
 const DEFAULT_CONTENT_TYPE = "application/x-www-form-urlencoded";
 const DEFAULT_TIMEOUT = 30000;
 const DEFAULT_INITIAL_RETRY_INTERVAL_MILLIS = 100;
@@ -140108,21 +140161,21 @@ module.exports = RequestClient;
 
 
 /***/ }),
-/* 1472 */
+/* 1473 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 /*! Axios v1.14.0 Copyright (c) 2026 Matt Zabriskie and contributors */
 
 
-var FormData$1 = __webpack_require__(1473);
+var FormData$1 = __webpack_require__(1474);
 var crypto = __webpack_require__(778);
 var url = __webpack_require__(963);
 var http = __webpack_require__(970);
 var https = __webpack_require__(1000);
-var http2 = __webpack_require__(1489);
+var http2 = __webpack_require__(1490);
 var util = __webpack_require__(78);
-var followRedirects = __webpack_require__(1490);
+var followRedirects = __webpack_require__(1491);
 var zlib = __webpack_require__(868);
 var stream = __webpack_require__(77);
 var events = __webpack_require__(867);
@@ -144812,13 +144865,13 @@ module.exports = axios;
 
 
 /***/ }),
-/* 1473 */
+/* 1474 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 
 
-var CombinedStream = __webpack_require__(1474);
+var CombinedStream = __webpack_require__(1475);
 var util = __webpack_require__(78);
 var path = __webpack_require__(846);
 var http = __webpack_require__(970);
@@ -144828,10 +144881,10 @@ var fs = __webpack_require__(863);
 var Stream = (__webpack_require__(77).Stream);
 var crypto = __webpack_require__(778);
 var mime = __webpack_require__(899);
-var asynckit = __webpack_require__(1476);
-var setToStringTag = __webpack_require__(1486);
+var asynckit = __webpack_require__(1477);
+var setToStringTag = __webpack_require__(1487);
 var hasOwn = __webpack_require__(945);
-var populate = __webpack_require__(1488);
+var populate = __webpack_require__(1489);
 
 /**
  * Create readable "multipart/form-data" streams.
@@ -145313,12 +145366,12 @@ module.exports = FormData;
 
 
 /***/ }),
-/* 1474 */
+/* 1475 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var util = __webpack_require__(78);
 var Stream = (__webpack_require__(77).Stream);
-var DelayedStream = __webpack_require__(1475);
+var DelayedStream = __webpack_require__(1476);
 
 module.exports = CombinedStream;
 function CombinedStream() {
@@ -145527,7 +145580,7 @@ CombinedStream.prototype._emitError = function(err) {
 
 
 /***/ }),
-/* 1475 */
+/* 1476 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var Stream = (__webpack_require__(77).Stream);
@@ -145640,24 +145693,24 @@ DelayedStream.prototype._checkIfMaxDataSizeExceeded = function() {
 
 
 /***/ }),
-/* 1476 */
+/* 1477 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 module.exports =
 {
-  parallel      : __webpack_require__(1477),
-  serial        : __webpack_require__(1484),
-  serialOrdered : __webpack_require__(1485)
+  parallel      : __webpack_require__(1478),
+  serial        : __webpack_require__(1485),
+  serialOrdered : __webpack_require__(1486)
 };
 
 
 /***/ }),
-/* 1477 */
+/* 1478 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-var iterate    = __webpack_require__(1478)
-  , initState  = __webpack_require__(1482)
-  , terminator = __webpack_require__(1483)
+var iterate    = __webpack_require__(1479)
+  , initState  = __webpack_require__(1483)
+  , terminator = __webpack_require__(1484)
   ;
 
 // Public API
@@ -145701,11 +145754,11 @@ function parallel(list, iterator, callback)
 
 
 /***/ }),
-/* 1478 */
+/* 1479 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-var async = __webpack_require__(1479)
-  , abort = __webpack_require__(1481)
+var async = __webpack_require__(1480)
+  , abort = __webpack_require__(1482)
   ;
 
 // API
@@ -145782,10 +145835,10 @@ function runJob(iterator, key, item, callback)
 
 
 /***/ }),
-/* 1479 */
+/* 1480 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-var defer = __webpack_require__(1480);
+var defer = __webpack_require__(1481);
 
 // API
 module.exports = async;
@@ -145822,7 +145875,7 @@ function async(callback)
 
 
 /***/ }),
-/* 1480 */
+/* 1481 */
 /***/ ((module) => {
 
 module.exports = defer;
@@ -145854,7 +145907,7 @@ function defer(fn)
 
 
 /***/ }),
-/* 1481 */
+/* 1482 */
 /***/ ((module) => {
 
 // API
@@ -145889,7 +145942,7 @@ function clean(key)
 
 
 /***/ }),
-/* 1482 */
+/* 1483 */
 /***/ ((module) => {
 
 // API
@@ -145932,11 +145985,11 @@ function state(list, sortMethod)
 
 
 /***/ }),
-/* 1483 */
+/* 1484 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-var abort = __webpack_require__(1481)
-  , async = __webpack_require__(1479)
+var abort = __webpack_require__(1482)
+  , async = __webpack_require__(1480)
   ;
 
 // API
@@ -145967,10 +146020,10 @@ function terminator(callback)
 
 
 /***/ }),
-/* 1484 */
+/* 1485 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-var serialOrdered = __webpack_require__(1485);
+var serialOrdered = __webpack_require__(1486);
 
 // Public API
 module.exports = serial;
@@ -145990,12 +146043,12 @@ function serial(list, iterator, callback)
 
 
 /***/ }),
-/* 1485 */
+/* 1486 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-var iterate    = __webpack_require__(1478)
-  , initState  = __webpack_require__(1482)
-  , terminator = __webpack_require__(1483)
+var iterate    = __webpack_require__(1479)
+  , initState  = __webpack_require__(1483)
+  , terminator = __webpack_require__(1484)
   ;
 
 // Public API
@@ -146071,7 +146124,7 @@ function descending(a, b)
 
 
 /***/ }),
-/* 1486 */
+/* 1487 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
@@ -146081,7 +146134,7 @@ var GetIntrinsic = __webpack_require__(913);
 
 var $defineProperty = GetIntrinsic('%Object.defineProperty%', true);
 
-var hasToStringTag = __webpack_require__(1487)();
+var hasToStringTag = __webpack_require__(1488)();
 var hasOwn = __webpack_require__(945);
 var $TypeError = __webpack_require__(908);
 
@@ -146113,7 +146166,7 @@ module.exports = function setToStringTag(object, value) {
 
 
 /***/ }),
-/* 1487 */
+/* 1488 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
@@ -146128,7 +146181,7 @@ module.exports = function hasToStringTagShams() {
 
 
 /***/ }),
-/* 1488 */
+/* 1489 */
 /***/ ((module) => {
 
 "use strict";
@@ -146145,14 +146198,14 @@ module.exports = function (dst, src) {
 
 
 /***/ }),
-/* 1489 */
+/* 1490 */
 /***/ ((module) => {
 
 "use strict";
 module.exports = require("http2");
 
 /***/ }),
-/* 1490 */
+/* 1491 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var url = __webpack_require__(963);
@@ -146160,8 +146213,8 @@ var URL = url.URL;
 var http = __webpack_require__(970);
 var https = __webpack_require__(1000);
 var Writable = (__webpack_require__(77).Writable);
-var assert = __webpack_require__(1491);
-var debug = __webpack_require__(1492);
+var assert = __webpack_require__(1492);
+var debug = __webpack_require__(1493);
 
 // Preventive platform detection
 // istanbul ignore next
@@ -146844,14 +146897,14 @@ module.exports.wrap = wrap;
 
 
 /***/ }),
-/* 1491 */
+/* 1492 */
 /***/ ((module) => {
 
 "use strict";
 module.exports = require("assert");
 
 /***/ }),
-/* 1492 */
+/* 1493 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var debug;
@@ -146872,7 +146925,7 @@ module.exports = function () {
 
 
 /***/ }),
-/* 1493 */
+/* 1494 */
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 "use strict";
@@ -146880,7 +146933,7 @@ module.exports = function () {
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-const agent_1 = __importDefault(__webpack_require__(1494));
+const agent_1 = __importDefault(__webpack_require__(1495));
 function createHttpsProxyAgent(opts) {
     return new agent_1.default(opts);
 }
@@ -146892,7 +146945,7 @@ module.exports = createHttpsProxyAgent;
 //# sourceMappingURL=index.js.map
 
 /***/ }),
-/* 1494 */
+/* 1495 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -146911,12 +146964,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const net_1 = __importDefault(__webpack_require__(864));
-const tls_1 = __importDefault(__webpack_require__(1495));
+const tls_1 = __importDefault(__webpack_require__(1496));
 const url_1 = __importDefault(__webpack_require__(963));
-const assert_1 = __importDefault(__webpack_require__(1491));
-const debug_1 = __importDefault(__webpack_require__(1496));
-const agent_base_1 = __webpack_require__(1503);
-const parse_proxy_response_1 = __importDefault(__webpack_require__(1510));
+const assert_1 = __importDefault(__webpack_require__(1492));
+const debug_1 = __importDefault(__webpack_require__(1497));
+const agent_base_1 = __webpack_require__(1504);
+const parse_proxy_response_1 = __importDefault(__webpack_require__(1511));
 const debug = debug_1.default('https-proxy-agent:agent');
 /**
  * The `HttpsProxyAgent` implements an HTTP Agent subclass that connects to
@@ -147075,14 +147128,14 @@ function omit(obj, ...keys) {
 //# sourceMappingURL=agent.js.map
 
 /***/ }),
-/* 1495 */
+/* 1496 */
 /***/ ((module) => {
 
 "use strict";
 module.exports = require("tls");
 
 /***/ }),
-/* 1496 */
+/* 1497 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 /**
@@ -147091,14 +147144,14 @@ module.exports = require("tls");
  */
 
 if (typeof process === 'undefined' || process.type === 'renderer' || process.browser === true || process.__nwjs) {
-	module.exports = __webpack_require__(1497);
+	module.exports = __webpack_require__(1498);
 } else {
-	module.exports = __webpack_require__(1500);
+	module.exports = __webpack_require__(1501);
 }
 
 
 /***/ }),
-/* 1497 */
+/* 1498 */
 /***/ ((module, exports, __webpack_require__) => {
 
 /* eslint-env browser */
@@ -147358,7 +147411,7 @@ function localstorage() {
 	}
 }
 
-module.exports = __webpack_require__(1498)(exports);
+module.exports = __webpack_require__(1499)(exports);
 
 const {formatters} = module.exports;
 
@@ -147376,7 +147429,7 @@ formatters.j = function (v) {
 
 
 /***/ }),
-/* 1498 */
+/* 1499 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 
@@ -147392,7 +147445,7 @@ function setup(env) {
 	createDebug.disable = disable;
 	createDebug.enable = enable;
 	createDebug.enabled = enabled;
-	createDebug.humanize = __webpack_require__(1499);
+	createDebug.humanize = __webpack_require__(1500);
 	createDebug.destroy = destroy;
 
 	Object.keys(env).forEach(key => {
@@ -147674,7 +147727,7 @@ module.exports = setup;
 
 
 /***/ }),
-/* 1499 */
+/* 1500 */
 /***/ ((module) => {
 
 /**
@@ -147842,7 +147895,7 @@ function plural(ms, msAbs, n, name) {
 
 
 /***/ }),
-/* 1500 */
+/* 1501 */
 /***/ ((module, exports, __webpack_require__) => {
 
 /**
@@ -147876,7 +147929,7 @@ exports.colors = [6, 2, 3, 4, 5, 1];
 try {
 	// Optional dependency (as in, doesn't need to be installed, NOT like optionalDependencies in package.json)
 	// eslint-disable-next-line import/no-extraneous-dependencies
-	const supportsColor = __webpack_require__(1501);
+	const supportsColor = __webpack_require__(1502);
 
 	if (supportsColor && (supportsColor.stderr || supportsColor).level >= 2) {
 		exports.colors = [
@@ -148084,7 +148137,7 @@ function init(debug) {
 	}
 }
 
-module.exports = __webpack_require__(1498)(exports);
+module.exports = __webpack_require__(1499)(exports);
 
 const {formatters} = module.exports;
 
@@ -148111,14 +148164,14 @@ formatters.O = function (v) {
 
 
 /***/ }),
-/* 1501 */
+/* 1502 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 
 const os = __webpack_require__(797);
 const tty = __webpack_require__(862);
-const hasFlag = __webpack_require__(1502);
+const hasFlag = __webpack_require__(1503);
 
 const {env} = process;
 
@@ -148253,7 +148306,7 @@ module.exports = {
 
 
 /***/ }),
-/* 1502 */
+/* 1503 */
 /***/ ((module) => {
 
 "use strict";
@@ -148268,7 +148321,7 @@ module.exports = (flag, argv = process.argv) => {
 
 
 /***/ }),
-/* 1503 */
+/* 1504 */
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 "use strict";
@@ -148277,8 +148330,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 const events_1 = __webpack_require__(867);
-const debug_1 = __importDefault(__webpack_require__(1504));
-const promisify_1 = __importDefault(__webpack_require__(1509));
+const debug_1 = __importDefault(__webpack_require__(1505));
+const promisify_1 = __importDefault(__webpack_require__(1510));
 const debug = debug_1.default('agent-base');
 function isAgent(v) {
     return Boolean(v) && typeof v.addRequest === 'function';
@@ -148477,7 +148530,7 @@ module.exports = createAgent;
 //# sourceMappingURL=index.js.map
 
 /***/ }),
-/* 1504 */
+/* 1505 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 /**
@@ -148486,14 +148539,14 @@ module.exports = createAgent;
  */
 
 if (typeof process === 'undefined' || process.type === 'renderer' || process.browser === true || process.__nwjs) {
-	module.exports = __webpack_require__(1505);
+	module.exports = __webpack_require__(1506);
 } else {
-	module.exports = __webpack_require__(1508);
+	module.exports = __webpack_require__(1509);
 }
 
 
 /***/ }),
-/* 1505 */
+/* 1506 */
 /***/ ((module, exports, __webpack_require__) => {
 
 /* eslint-env browser */
@@ -148753,7 +148806,7 @@ function localstorage() {
 	}
 }
 
-module.exports = __webpack_require__(1506)(exports);
+module.exports = __webpack_require__(1507)(exports);
 
 const {formatters} = module.exports;
 
@@ -148771,7 +148824,7 @@ formatters.j = function (v) {
 
 
 /***/ }),
-/* 1506 */
+/* 1507 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 
@@ -148787,7 +148840,7 @@ function setup(env) {
 	createDebug.disable = disable;
 	createDebug.enable = enable;
 	createDebug.enabled = enabled;
-	createDebug.humanize = __webpack_require__(1507);
+	createDebug.humanize = __webpack_require__(1508);
 	createDebug.destroy = destroy;
 
 	Object.keys(env).forEach(key => {
@@ -149069,7 +149122,7 @@ module.exports = setup;
 
 
 /***/ }),
-/* 1507 */
+/* 1508 */
 /***/ ((module) => {
 
 /**
@@ -149237,7 +149290,7 @@ function plural(ms, msAbs, n, name) {
 
 
 /***/ }),
-/* 1508 */
+/* 1509 */
 /***/ ((module, exports, __webpack_require__) => {
 
 /**
@@ -149271,7 +149324,7 @@ exports.colors = [6, 2, 3, 4, 5, 1];
 try {
 	// Optional dependency (as in, doesn't need to be installed, NOT like optionalDependencies in package.json)
 	// eslint-disable-next-line import/no-extraneous-dependencies
-	const supportsColor = __webpack_require__(1501);
+	const supportsColor = __webpack_require__(1502);
 
 	if (supportsColor && (supportsColor.stderr || supportsColor).level >= 2) {
 		exports.colors = [
@@ -149479,7 +149532,7 @@ function init(debug) {
 	}
 }
 
-module.exports = __webpack_require__(1506)(exports);
+module.exports = __webpack_require__(1507)(exports);
 
 const {formatters} = module.exports;
 
@@ -149506,7 +149559,7 @@ formatters.O = function (v) {
 
 
 /***/ }),
-/* 1509 */
+/* 1510 */
 /***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
@@ -149530,7 +149583,7 @@ exports["default"] = promisify;
 //# sourceMappingURL=promisify.js.map
 
 /***/ }),
-/* 1510 */
+/* 1511 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -149539,7 +149592,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const debug_1 = __importDefault(__webpack_require__(1496));
+const debug_1 = __importDefault(__webpack_require__(1497));
 const debug = debug_1.default('https-proxy-agent:parse-proxy-response');
 function parseProxyResponse(socket) {
     return new Promise((resolve, reject) => {
@@ -149602,7 +149655,7 @@ exports["default"] = parseProxyResponse;
 //# sourceMappingURL=parse-proxy-response.js.map
 
 /***/ }),
-/* 1511 */
+/* 1512 */
 /***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
@@ -149622,7 +149675,7 @@ exports["default"] = Response;
 
 
 /***/ }),
-/* 1512 */
+/* 1513 */
 /***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
@@ -149714,7 +149767,7 @@ exports["default"] = Request;
 
 
 /***/ }),
-/* 1513 */
+/* 1514 */
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 "use strict";
@@ -149722,8 +149775,8 @@ exports["default"] = Request;
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-const RequestCanonicalizer_1 = __importDefault(__webpack_require__(1514));
-const jsonwebtoken_1 = __importDefault(__webpack_require__(1515));
+const RequestCanonicalizer_1 = __importDefault(__webpack_require__(1515));
+const jsonwebtoken_1 = __importDefault(__webpack_require__(1516));
 class ValidationToken {
     get accountSid() {
         return this._accountSid;
@@ -149842,7 +149895,7 @@ module.exports = ValidationToken;
 
 
 /***/ }),
-/* 1514 */
+/* 1515 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -149946,24 +149999,24 @@ exports["default"] = RequestCanonicalizer;
 
 
 /***/ }),
-/* 1515 */
+/* 1516 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 module.exports = {
-  decode: __webpack_require__(1516),
-  verify: __webpack_require__(1523),
-  sign: __webpack_require__(1533),
-  JsonWebTokenError: __webpack_require__(1524),
-  NotBeforeError: __webpack_require__(1525),
-  TokenExpiredError: __webpack_require__(1526),
+  decode: __webpack_require__(1517),
+  verify: __webpack_require__(1524),
+  sign: __webpack_require__(1534),
+  JsonWebTokenError: __webpack_require__(1525),
+  NotBeforeError: __webpack_require__(1526),
+  TokenExpiredError: __webpack_require__(1527),
 };
 
 
 /***/ }),
-/* 1516 */
+/* 1517 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-var jws = __webpack_require__(1517);
+var jws = __webpack_require__(1518);
 
 module.exports = function (jwt, options) {
   options = options || {};
@@ -149996,12 +150049,12 @@ module.exports = function (jwt, options) {
 
 
 /***/ }),
-/* 1517 */
+/* 1518 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 /*global exports*/
-var SignStream = __webpack_require__(1518);
-var VerifyStream = __webpack_require__(1522);
+var SignStream = __webpack_require__(1519);
+var VerifyStream = __webpack_require__(1523);
 
 var ALGORITHMS = [
   'HS256', 'HS384', 'HS512',
@@ -150024,15 +150077,15 @@ exports.createVerify = function createVerify(opts) {
 
 
 /***/ }),
-/* 1518 */
+/* 1519 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 /*global module*/
 var Buffer = (__webpack_require__(977).Buffer);
-var DataStream = __webpack_require__(1519);
-var jwa = __webpack_require__(1520);
+var DataStream = __webpack_require__(1520);
+var jwa = __webpack_require__(1521);
 var Stream = __webpack_require__(77);
-var toString = __webpack_require__(1521);
+var toString = __webpack_require__(1522);
 var util = __webpack_require__(78);
 
 function base64url(string, encoding) {
@@ -150113,7 +150166,7 @@ module.exports = SignStream;
 
 
 /***/ }),
-/* 1519 */
+/* 1520 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 /*global module, process*/
@@ -150174,7 +150227,7 @@ module.exports = DataStream;
 
 
 /***/ }),
-/* 1520 */
+/* 1521 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var Buffer = (__webpack_require__(977).Buffer);
@@ -150446,7 +150499,7 @@ module.exports = function jwa(algorithm) {
 
 
 /***/ }),
-/* 1521 */
+/* 1522 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 /*global module*/
@@ -150462,15 +150515,15 @@ module.exports = function toString(obj) {
 
 
 /***/ }),
-/* 1522 */
+/* 1523 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 /*global module*/
 var Buffer = (__webpack_require__(977).Buffer);
-var DataStream = __webpack_require__(1519);
-var jwa = __webpack_require__(1520);
+var DataStream = __webpack_require__(1520);
+var jwa = __webpack_require__(1521);
 var Stream = __webpack_require__(77);
-var toString = __webpack_require__(1521);
+var toString = __webpack_require__(1522);
 var util = __webpack_require__(78);
 var JWS_REGEX = /^[a-zA-Z0-9\-_]+?\.[a-zA-Z0-9\-_]+?\.([a-zA-Z0-9\-_]+)?$/;
 
@@ -150593,17 +150646,17 @@ module.exports = VerifyStream;
 
 
 /***/ }),
-/* 1523 */
+/* 1524 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-const JsonWebTokenError = __webpack_require__(1524);
-const NotBeforeError = __webpack_require__(1525);
-const TokenExpiredError = __webpack_require__(1526);
-const decode = __webpack_require__(1516);
-const timespan = __webpack_require__(1527);
-const validateAsymmetricKey = __webpack_require__(1529);
-const PS_SUPPORTED = __webpack_require__(1532);
-const jws = __webpack_require__(1517);
+const JsonWebTokenError = __webpack_require__(1525);
+const NotBeforeError = __webpack_require__(1526);
+const TokenExpiredError = __webpack_require__(1527);
+const decode = __webpack_require__(1517);
+const timespan = __webpack_require__(1528);
+const validateAsymmetricKey = __webpack_require__(1530);
+const PS_SUPPORTED = __webpack_require__(1533);
+const jws = __webpack_require__(1518);
 const {KeyObject, createSecretKey, createPublicKey} = __webpack_require__(778);
 
 const PUB_KEY_ALGS = ['RS256', 'RS384', 'RS512'];
@@ -150862,7 +150915,7 @@ module.exports = function (jwtString, secretOrPublicKey, options, callback) {
 
 
 /***/ }),
-/* 1524 */
+/* 1525 */
 /***/ ((module) => {
 
 var JsonWebTokenError = function (message, error) {
@@ -150882,10 +150935,10 @@ module.exports = JsonWebTokenError;
 
 
 /***/ }),
-/* 1525 */
+/* 1526 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-var JsonWebTokenError = __webpack_require__(1524);
+var JsonWebTokenError = __webpack_require__(1525);
 
 var NotBeforeError = function (message, date) {
   JsonWebTokenError.call(this, message);
@@ -150900,10 +150953,10 @@ NotBeforeError.prototype.constructor = NotBeforeError;
 module.exports = NotBeforeError;
 
 /***/ }),
-/* 1526 */
+/* 1527 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-var JsonWebTokenError = __webpack_require__(1524);
+var JsonWebTokenError = __webpack_require__(1525);
 
 var TokenExpiredError = function (message, expiredAt) {
   JsonWebTokenError.call(this, message);
@@ -150918,10 +150971,10 @@ TokenExpiredError.prototype.constructor = TokenExpiredError;
 module.exports = TokenExpiredError;
 
 /***/ }),
-/* 1527 */
+/* 1528 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-var ms = __webpack_require__(1528);
+var ms = __webpack_require__(1529);
 
 module.exports = function (time, iat) {
   var timestamp = iat || Math.floor(Date.now() / 1000);
@@ -150941,7 +150994,7 @@ module.exports = function (time, iat) {
 };
 
 /***/ }),
-/* 1528 */
+/* 1529 */
 /***/ ((module) => {
 
 /**
@@ -151109,11 +151162,11 @@ function plural(ms, msAbs, n, name) {
 
 
 /***/ }),
-/* 1529 */
+/* 1530 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-const ASYMMETRIC_KEY_DETAILS_SUPPORTED = __webpack_require__(1530);
-const RSA_PSS_KEY_DETAILS_SUPPORTED = __webpack_require__(1531);
+const ASYMMETRIC_KEY_DETAILS_SUPPORTED = __webpack_require__(1531);
+const RSA_PSS_KEY_DETAILS_SUPPORTED = __webpack_require__(1532);
 
 const allowedAlgorithmsForKeys = {
   'ec': ['ES256', 'ES384', 'ES512'],
@@ -151181,7 +151234,7 @@ module.exports = function(algorithm, key) {
 
 
 /***/ }),
-/* 1530 */
+/* 1531 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 const semver = __webpack_require__(1363);
@@ -151190,7 +151243,7 @@ module.exports = semver.satisfies(process.version, '>=15.7.0');
 
 
 /***/ }),
-/* 1531 */
+/* 1532 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 const semver = __webpack_require__(1363);
@@ -151199,7 +151252,7 @@ module.exports = semver.satisfies(process.version, '>=16.9.0');
 
 
 /***/ }),
-/* 1532 */
+/* 1533 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var semver = __webpack_require__(1363);
@@ -151208,13 +151261,13 @@ module.exports = semver.satisfies(process.version, '^6.12.0 || >=8.0.0');
 
 
 /***/ }),
-/* 1533 */
+/* 1534 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-const timespan = __webpack_require__(1527);
-const PS_SUPPORTED = __webpack_require__(1532);
-const validateAsymmetricKey = __webpack_require__(1529);
-const jws = __webpack_require__(1517);
+const timespan = __webpack_require__(1528);
+const PS_SUPPORTED = __webpack_require__(1533);
+const validateAsymmetricKey = __webpack_require__(1530);
+const jws = __webpack_require__(1518);
 const includes = __webpack_require__(1411);
 const isBoolean = __webpack_require__(1412);
 const isInteger = __webpack_require__(1413);
@@ -151467,14 +151520,14 @@ module.exports = function (payload, secretOrPrivateKey, options, callback) {
 
 
 /***/ }),
-/* 1534 */
+/* 1535 */
 /***/ ((module) => {
 
 "use strict";
 module.exports = /*#__PURE__*/JSON.parse('{"name":"twilio","description":"A Twilio helper library","version":"5.13.1","author":"API Team <api@twilio.com>","contributors":[{"name":"twilio-node contributors","url":"https://github.com/twilio/twilio-node/graphs/contributors"}],"keywords":["twilio","sms","rest","api"],"repository":{"type":"git","url":"https://github.com/twilio/twilio-node.git"},"dependencies":{"axios":"^1.13.5","dayjs":"^1.11.9","https-proxy-agent":"^5.0.0","jsonwebtoken":"^9.0.3","qs":"^6.14.1","scmp":"^2.1.0","xmlbuilder":"^13.0.2"},"devDependencies":{"@babel/preset-env":"^7.23.0","@babel/preset-typescript":"^7.18.6","@types/jest":"^29.5.5","@types/jsonwebtoken":"^9.0.2","@types/node":"22.9.0","@types/qs":"^6.9.7","babel-plugin-replace-ts-export-assignment":"^0.0.2","eslint":"^10.0.0","express":"^4.17.1","jest":"^29.5.5","jshint":"^2.11.0","mock-fs":"^5.2.0","nock":"^13.2.9","node-mocks-http":"^1.8.1","prettier":"^2.7.1","ts-jest":"^29.1.1","typescript":"^5.9.2","typedoc":"^0.28.11"},"scripts":{"test":"npm run test:javascript && npm run test:typescript","test:javascript":"jest spec --coverage --detectOpenHandles --testPathIgnorePatterns=spec/cluster","test:typescript":"tsc --noEmit","jshint":"jshint src/rest/** src/base/** src/http/**","jscs":"eslint src/base/**/**.js src/http/**/**.js --fix","prepublish":"npm run build","build":"tsc","check":"npm run jshint && npm run jscs","ci":"npm run test && npm run nsp && npm run prettier-check","nsp":"npm audit --production","prettier":"prettier --write .","prettier-check":"prettier --check .","typedoc":"typedoc --entryPointStrategy expand src --out docs --logLevel Error"},"files":["lib","index.js","index.d.ts"],"main":"./lib","types":"./index.d.ts","engines":{"node":">=14.0"},"license":"MIT"}');
 
 /***/ }),
-/* 1535 */
+/* 1536 */
 /***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
@@ -151514,7 +151567,7 @@ function parseResponseBody(response_body) {
 
 
 /***/ }),
-/* 1536 */
+/* 1537 */
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 "use strict";
@@ -151522,7 +151575,7 @@ function parseResponseBody(response_body) {
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-const AccountsBase_1 = __importDefault(__webpack_require__(1537));
+const AccountsBase_1 = __importDefault(__webpack_require__(1538));
 class Accounts extends AccountsBase_1.default {
     /**
      * @deprecated - Use v1.authTokenPromotion; instead
@@ -151550,7 +151603,7 @@ module.exports = Accounts;
 
 
 /***/ }),
-/* 1537 */
+/* 1538 */
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 "use strict";
@@ -151568,8 +151621,8 @@ module.exports = Accounts;
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-const Domain_1 = __importDefault(__webpack_require__(1538));
-const V1_1 = __importDefault(__webpack_require__(1540));
+const Domain_1 = __importDefault(__webpack_require__(1539));
+const V1_1 = __importDefault(__webpack_require__(1541));
 class AccountsBase extends Domain_1.default {
     /**
      * Initialize accounts domain
@@ -151588,13 +151641,13 @@ module.exports = AccountsBase;
 
 
 /***/ }),
-/* 1538 */
+/* 1539 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const utility_1 = __webpack_require__(1539);
+const utility_1 = __webpack_require__(1540);
 /**
  * Base domain object
  */
@@ -151648,7 +151701,7 @@ exports["default"] = Domain;
 
 
 /***/ }),
-/* 1539 */
+/* 1540 */
 /***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
@@ -151668,7 +151721,7 @@ function isValidPathParam(param) {
 
 
 /***/ }),
-/* 1540 */
+/* 1541 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -151690,14 +151743,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const Version_1 = __importDefault(__webpack_require__(1541));
-const authTokenPromotion_1 = __webpack_require__(1543);
-const bulkConsents_1 = __webpack_require__(1548);
-const bulkContacts_1 = __webpack_require__(1549);
-const credential_1 = __webpack_require__(1550);
-const messagingGeopermissions_1 = __webpack_require__(1554);
-const safelist_1 = __webpack_require__(1555);
-const secondaryAuthToken_1 = __webpack_require__(1556);
+const Version_1 = __importDefault(__webpack_require__(1542));
+const authTokenPromotion_1 = __webpack_require__(1544);
+const bulkConsents_1 = __webpack_require__(1549);
+const bulkContacts_1 = __webpack_require__(1550);
+const credential_1 = __webpack_require__(1551);
+const messagingGeopermissions_1 = __webpack_require__(1555);
+const safelist_1 = __webpack_require__(1556);
+const secondaryAuthToken_1 = __webpack_require__(1557);
 class V1 extends Version_1.default {
     /**
      * Initialize the V1 version of Accounts
@@ -151751,7 +151804,7 @@ exports["default"] = V1;
 
 
 /***/ }),
-/* 1541 */
+/* 1542 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -151760,9 +151813,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const RestException_1 = __importDefault(__webpack_require__(1535));
-const TwilioServiceException_1 = __importDefault(__webpack_require__(1542));
-const utility_1 = __webpack_require__(1539);
+const RestException_1 = __importDefault(__webpack_require__(1536));
+const TwilioServiceException_1 = __importDefault(__webpack_require__(1543));
+const utility_1 = __webpack_require__(1540);
 class Version {
     /**
      *
@@ -152505,7 +152558,7 @@ exports["default"] = Version;
 
 
 /***/ }),
-/* 1542 */
+/* 1543 */
 /***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
@@ -152566,7 +152619,7 @@ function parseResponseBody(response_body) {
 
 
 /***/ }),
-/* 1543 */
+/* 1544 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -152588,8 +152641,8 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.AuthTokenPromotionInstance = exports.AuthTokenPromotionContextImpl = void 0;
 exports.AuthTokenPromotionListInstance = AuthTokenPromotionListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
 class AuthTokenPromotionContextImpl {
     constructor(_version) {
         this._version = _version;
@@ -152714,7 +152767,7 @@ function AuthTokenPromotionListInstance(version) {
 
 
 /***/ }),
-/* 1544 */
+/* 1545 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -152728,8 +152781,8 @@ exports.iso8601DateTime = iso8601DateTime;
 exports.rfc2822DateTime = rfc2822DateTime;
 exports.decimal = decimal;
 exports.integer = integer;
-const dayjs_1 = __importDefault(__webpack_require__(1545));
-const utc_1 = __importDefault(__webpack_require__(1546));
+const dayjs_1 = __importDefault(__webpack_require__(1546));
+const utc_1 = __importDefault(__webpack_require__(1547));
 dayjs_1.default.extend(utc_1.default);
 /**
  * @namespace deserialize
@@ -152796,19 +152849,19 @@ function parseNumber(n, parser) {
 
 
 /***/ }),
-/* 1545 */
+/* 1546 */
 /***/ (function(module) {
 
 !function(t,e){ true?module.exports=e():0}(this,(function(){"use strict";var t=1e3,e=6e4,n=36e5,r="millisecond",i="second",s="minute",u="hour",a="day",o="week",c="month",f="quarter",h="year",d="date",l="Invalid Date",$=/^(\d{4})[-/]?(\d{1,2})?[-/]?(\d{0,2})[Tt\s]*(\d{1,2})?:?(\d{1,2})?:?(\d{1,2})?[.:]?(\d+)?$/,y=/\[([^\]]+)]|Y{1,4}|M{1,4}|D{1,2}|d{1,4}|H{1,2}|h{1,2}|a|A|m{1,2}|s{1,2}|Z{1,2}|SSS/g,M={name:"en",weekdays:"Sunday_Monday_Tuesday_Wednesday_Thursday_Friday_Saturday".split("_"),months:"January_February_March_April_May_June_July_August_September_October_November_December".split("_"),ordinal:function(t){var e=["th","st","nd","rd"],n=t%100;return"["+t+(e[(n-20)%10]||e[n]||e[0])+"]"}},m=function(t,e,n){var r=String(t);return!r||r.length>=e?t:""+Array(e+1-r.length).join(n)+t},v={s:m,z:function(t){var e=-t.utcOffset(),n=Math.abs(e),r=Math.floor(n/60),i=n%60;return(e<=0?"+":"-")+m(r,2,"0")+":"+m(i,2,"0")},m:function t(e,n){if(e.date()<n.date())return-t(n,e);var r=12*(n.year()-e.year())+(n.month()-e.month()),i=e.clone().add(r,c),s=n-i<0,u=e.clone().add(r+(s?-1:1),c);return+(-(r+(n-i)/(s?i-u:u-i))||0)},a:function(t){return t<0?Math.ceil(t)||0:Math.floor(t)},p:function(t){return{M:c,y:h,w:o,d:a,D:d,h:u,m:s,s:i,ms:r,Q:f}[t]||String(t||"").toLowerCase().replace(/s$/,"")},u:function(t){return void 0===t}},g="en",D={};D[g]=M;var p="$isDayjsObject",S=function(t){return t instanceof _||!(!t||!t[p])},w=function t(e,n,r){var i;if(!e)return g;if("string"==typeof e){var s=e.toLowerCase();D[s]&&(i=s),n&&(D[s]=n,i=s);var u=e.split("-");if(!i&&u.length>1)return t(u[0])}else{var a=e.name;D[a]=e,i=a}return!r&&i&&(g=i),i||!r&&g},O=function(t,e){if(S(t))return t.clone();var n="object"==typeof e?e:{};return n.date=t,n.args=arguments,new _(n)},b=v;b.l=w,b.i=S,b.w=function(t,e){return O(t,{locale:e.$L,utc:e.$u,x:e.$x,$offset:e.$offset})};var _=function(){function M(t){this.$L=w(t.locale,null,!0),this.parse(t),this.$x=this.$x||t.x||{},this[p]=!0}var m=M.prototype;return m.parse=function(t){this.$d=function(t){var e=t.date,n=t.utc;if(null===e)return new Date(NaN);if(b.u(e))return new Date;if(e instanceof Date)return new Date(e);if("string"==typeof e&&!/Z$/i.test(e)){var r=e.match($);if(r){var i=r[2]-1||0,s=(r[7]||"0").substring(0,3);return n?new Date(Date.UTC(r[1],i,r[3]||1,r[4]||0,r[5]||0,r[6]||0,s)):new Date(r[1],i,r[3]||1,r[4]||0,r[5]||0,r[6]||0,s)}}return new Date(e)}(t),this.init()},m.init=function(){var t=this.$d;this.$y=t.getFullYear(),this.$M=t.getMonth(),this.$D=t.getDate(),this.$W=t.getDay(),this.$H=t.getHours(),this.$m=t.getMinutes(),this.$s=t.getSeconds(),this.$ms=t.getMilliseconds()},m.$utils=function(){return b},m.isValid=function(){return!(this.$d.toString()===l)},m.isSame=function(t,e){var n=O(t);return this.startOf(e)<=n&&n<=this.endOf(e)},m.isAfter=function(t,e){return O(t)<this.startOf(e)},m.isBefore=function(t,e){return this.endOf(e)<O(t)},m.$g=function(t,e,n){return b.u(t)?this[e]:this.set(n,t)},m.unix=function(){return Math.floor(this.valueOf()/1e3)},m.valueOf=function(){return this.$d.getTime()},m.startOf=function(t,e){var n=this,r=!!b.u(e)||e,f=b.p(t),l=function(t,e){var i=b.w(n.$u?Date.UTC(n.$y,e,t):new Date(n.$y,e,t),n);return r?i:i.endOf(a)},$=function(t,e){return b.w(n.toDate()[t].apply(n.toDate("s"),(r?[0,0,0,0]:[23,59,59,999]).slice(e)),n)},y=this.$W,M=this.$M,m=this.$D,v="set"+(this.$u?"UTC":"");switch(f){case h:return r?l(1,0):l(31,11);case c:return r?l(1,M):l(0,M+1);case o:var g=this.$locale().weekStart||0,D=(y<g?y+7:y)-g;return l(r?m-D:m+(6-D),M);case a:case d:return $(v+"Hours",0);case u:return $(v+"Minutes",1);case s:return $(v+"Seconds",2);case i:return $(v+"Milliseconds",3);default:return this.clone()}},m.endOf=function(t){return this.startOf(t,!1)},m.$set=function(t,e){var n,o=b.p(t),f="set"+(this.$u?"UTC":""),l=(n={},n[a]=f+"Date",n[d]=f+"Date",n[c]=f+"Month",n[h]=f+"FullYear",n[u]=f+"Hours",n[s]=f+"Minutes",n[i]=f+"Seconds",n[r]=f+"Milliseconds",n)[o],$=o===a?this.$D+(e-this.$W):e;if(o===c||o===h){var y=this.clone().set(d,1);y.$d[l]($),y.init(),this.$d=y.set(d,Math.min(this.$D,y.daysInMonth())).$d}else l&&this.$d[l]($);return this.init(),this},m.set=function(t,e){return this.clone().$set(t,e)},m.get=function(t){return this[b.p(t)]()},m.add=function(r,f){var d,l=this;r=Number(r);var $=b.p(f),y=function(t){var e=O(l);return b.w(e.date(e.date()+Math.round(t*r)),l)};if($===c)return this.set(c,this.$M+r);if($===h)return this.set(h,this.$y+r);if($===a)return y(1);if($===o)return y(7);var M=(d={},d[s]=e,d[u]=n,d[i]=t,d)[$]||1,m=this.$d.getTime()+r*M;return b.w(m,this)},m.subtract=function(t,e){return this.add(-1*t,e)},m.format=function(t){var e=this,n=this.$locale();if(!this.isValid())return n.invalidDate||l;var r=t||"YYYY-MM-DDTHH:mm:ssZ",i=b.z(this),s=this.$H,u=this.$m,a=this.$M,o=n.weekdays,c=n.months,f=n.meridiem,h=function(t,n,i,s){return t&&(t[n]||t(e,r))||i[n].slice(0,s)},d=function(t){return b.s(s%12||12,t,"0")},$=f||function(t,e,n){var r=t<12?"AM":"PM";return n?r.toLowerCase():r};return r.replace(y,(function(t,r){return r||function(t){switch(t){case"YY":return String(e.$y).slice(-2);case"YYYY":return b.s(e.$y,4,"0");case"M":return a+1;case"MM":return b.s(a+1,2,"0");case"MMM":return h(n.monthsShort,a,c,3);case"MMMM":return h(c,a);case"D":return e.$D;case"DD":return b.s(e.$D,2,"0");case"d":return String(e.$W);case"dd":return h(n.weekdaysMin,e.$W,o,2);case"ddd":return h(n.weekdaysShort,e.$W,o,3);case"dddd":return o[e.$W];case"H":return String(s);case"HH":return b.s(s,2,"0");case"h":return d(1);case"hh":return d(2);case"a":return $(s,u,!0);case"A":return $(s,u,!1);case"m":return String(u);case"mm":return b.s(u,2,"0");case"s":return String(e.$s);case"ss":return b.s(e.$s,2,"0");case"SSS":return b.s(e.$ms,3,"0");case"Z":return i}return null}(t)||i.replace(":","")}))},m.utcOffset=function(){return 15*-Math.round(this.$d.getTimezoneOffset()/15)},m.diff=function(r,d,l){var $,y=this,M=b.p(d),m=O(r),v=(m.utcOffset()-this.utcOffset())*e,g=this-m,D=function(){return b.m(y,m)};switch(M){case h:$=D()/12;break;case c:$=D();break;case f:$=D()/3;break;case o:$=(g-v)/6048e5;break;case a:$=(g-v)/864e5;break;case u:$=g/n;break;case s:$=g/e;break;case i:$=g/t;break;default:$=g}return l?$:b.a($)},m.daysInMonth=function(){return this.endOf(c).$D},m.$locale=function(){return D[this.$L]},m.locale=function(t,e){if(!t)return this.$L;var n=this.clone(),r=w(t,e,!0);return r&&(n.$L=r),n},m.clone=function(){return b.w(this.$d,this)},m.toDate=function(){return new Date(this.valueOf())},m.toJSON=function(){return this.isValid()?this.toISOString():null},m.toISOString=function(){return this.$d.toISOString()},m.toString=function(){return this.$d.toUTCString()},M}(),k=_.prototype;return O.prototype=k,[["$ms",r],["$s",i],["$m",s],["$H",u],["$W",a],["$M",c],["$y",h],["$D",d]].forEach((function(t){k[t[1]]=function(e){return this.$g(e,t[0],t[1])}})),O.extend=function(t,e){return t.$i||(t(e,_,O),t.$i=!0),O},O.locale=w,O.isDayjs=S,O.unix=function(t){return O(1e3*t)},O.en=D[g],O.Ls=D,O.p={},O}));
 
 /***/ }),
-/* 1546 */
+/* 1547 */
 /***/ (function(module) {
 
 !function(t,i){ true?module.exports=i():0}(this,(function(){"use strict";var t="minute",i=/[+-]\d\d(?::?\d\d)?/g,e=/([+-]|\d\d)/g;return function(s,f,n){var u=f.prototype;n.utc=function(t){var i={date:t,utc:!0,args:arguments};return new f(i)},u.utc=function(i){var e=n(this.toDate(),{locale:this.$L,utc:!0});return i?e.add(this.utcOffset(),t):e},u.local=function(){return n(this.toDate(),{locale:this.$L,utc:!1})};var r=u.parse;u.parse=function(t){t.utc&&(this.$u=!0),this.$utils().u(t.$offset)||(this.$offset=t.$offset),r.call(this,t)};var o=u.init;u.init=function(){if(this.$u){var t=this.$d;this.$y=t.getUTCFullYear(),this.$M=t.getUTCMonth(),this.$D=t.getUTCDate(),this.$W=t.getUTCDay(),this.$H=t.getUTCHours(),this.$m=t.getUTCMinutes(),this.$s=t.getUTCSeconds(),this.$ms=t.getUTCMilliseconds()}else o.call(this)};var a=u.utcOffset;u.utcOffset=function(s,f){var n=this.$utils().u;if(n(s))return this.$u?0:n(this.$offset)?a.call(this):this.$offset;if("string"==typeof s&&(s=function(t){void 0===t&&(t="");var s=t.match(i);if(!s)return null;var f=(""+s[0]).match(e)||["-",0,0],n=f[0],u=60*+f[1]+ +f[2];return 0===u?0:"+"===n?u:-u}(s),null===s))return this;var u=Math.abs(s)<=16?60*s:s;if(0===u)return this.utc(f);var r=this.clone();if(f)return r.$offset=u,r.$u=!1,r;var o=this.$u?this.toDate().getTimezoneOffset():-1*this.utcOffset();return(r=this.local().add(u+o,t)).$offset=u,r.$x.$localOffset=o,r};var h=u.format;u.format=function(t){var i=t||(this.$u?"YYYY-MM-DDTHH:mm:ss[Z]":"");return h.call(this,i)},u.valueOf=function(){var t=this.$utils().u(this.$offset)?0:this.$offset+(this.$x.$localOffset||this.$d.getTimezoneOffset());return this.$d.valueOf()-6e4*t},u.isUTC=function(){return!!this.$u},u.toISOString=function(){return this.toDate().toISOString()},u.toString=function(){return this.toDate().toUTCString()};var l=u.toDate;u.toDate=function(t){return"s"===t&&this.$offset?n(this.format("YYYY-MM-DD HH:mm:ss:SSS")).toDate():l.call(this)};var c=u.diff;u.diff=function(t,i,e){if(t&&this.$u===t.$u)return c.call(this,t,i,e);var s=this.local(),f=n(t).local();return c.call(s,f,i,e)}}}));
 
 /***/ }),
-/* 1547 */
+/* 1548 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -152824,8 +152877,8 @@ exports.object = object;
 exports.bool = bool;
 exports.twiml = twiml;
 exports.map = map;
-const dayjs_1 = __importDefault(__webpack_require__(1545));
-const utc_1 = __importDefault(__webpack_require__(1546));
+const dayjs_1 = __importDefault(__webpack_require__(1546));
+const utc_1 = __importDefault(__webpack_require__(1547));
 dayjs_1.default.extend(utc_1.default);
 /**
  * @namespace serialize
@@ -152936,7 +152989,7 @@ function map(input, transform) {
 
 
 /***/ }),
-/* 1548 */
+/* 1549 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -152958,8 +153011,8 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.BulkConsentsInstance = void 0;
 exports.BulkConsentsListInstance = BulkConsentsListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
 function BulkConsentsListInstance(version) {
     const instance = {};
     instance._version = version;
@@ -153046,7 +153099,7 @@ exports.BulkConsentsInstance = BulkConsentsInstance;
 
 
 /***/ }),
-/* 1549 */
+/* 1550 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -153068,8 +153121,8 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.BulkContactsInstance = void 0;
 exports.BulkContactsListInstance = BulkContactsListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
 function BulkContactsListInstance(version) {
     const instance = {};
     instance._version = version;
@@ -153156,7 +153209,7 @@ exports.BulkContactsInstance = BulkContactsInstance;
 
 
 /***/ }),
-/* 1550 */
+/* 1551 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -153177,10 +153230,10 @@ exports.BulkContactsInstance = BulkContactsInstance;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.CredentialListInstance = CredentialListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const aws_1 = __webpack_require__(1551);
-const publicKey_1 = __webpack_require__(1553);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const aws_1 = __webpack_require__(1552);
+const publicKey_1 = __webpack_require__(1554);
 function CredentialListInstance(version) {
     const instance = {};
     instance._version = version;
@@ -153213,7 +153266,7 @@ function CredentialListInstance(version) {
 
 
 /***/ }),
-/* 1551 */
+/* 1552 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -153238,10 +153291,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.AwsPage = exports.AwsInstance = exports.AwsContextImpl = void 0;
 exports.AwsListInstance = AwsListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class AwsContextImpl {
     constructor(_version, sid) {
         this._version = _version;
@@ -153646,7 +153699,7 @@ exports.AwsPage = AwsPage;
 
 
 /***/ }),
-/* 1552 */
+/* 1553 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -153655,7 +153708,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const RestException_1 = __importDefault(__webpack_require__(1535));
+const RestException_1 = __importDefault(__webpack_require__(1536));
 class Page {
     /**
      *
@@ -153848,7 +153901,7 @@ exports["default"] = Page;
 
 
 /***/ }),
-/* 1553 */
+/* 1554 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -153873,10 +153926,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.PublicKeyPage = exports.PublicKeyInstance = exports.PublicKeyContextImpl = void 0;
 exports.PublicKeyListInstance = PublicKeyListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class PublicKeyContextImpl {
     constructor(_version, sid) {
         this._version = _version;
@@ -154282,7 +154335,7 @@ exports.PublicKeyPage = PublicKeyPage;
 
 
 /***/ }),
-/* 1554 */
+/* 1555 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -154304,8 +154357,8 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.MessagingGeopermissionsInstance = void 0;
 exports.MessagingGeopermissionsListInstance = MessagingGeopermissionsListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
 function MessagingGeopermissionsListInstance(version) {
     const instance = {};
     instance._version = version;
@@ -154444,7 +154497,7 @@ exports.MessagingGeopermissionsInstance = MessagingGeopermissionsInstance;
 
 
 /***/ }),
-/* 1555 */
+/* 1556 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -154466,8 +154519,8 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.SafelistInstance = void 0;
 exports.SafelistListInstance = SafelistListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
 function SafelistListInstance(version) {
     const instance = {};
     instance._version = version;
@@ -154657,7 +154710,7 @@ exports.SafelistInstance = SafelistInstance;
 
 
 /***/ }),
-/* 1556 */
+/* 1557 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -154679,8 +154732,8 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.SecondaryAuthTokenInstance = exports.SecondaryAuthTokenContextImpl = void 0;
 exports.SecondaryAuthTokenListInstance = SecondaryAuthTokenListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
 class SecondaryAuthTokenContextImpl {
     constructor(_version) {
         this._version = _version;
@@ -154850,7 +154903,7 @@ function SecondaryAuthTokenListInstance(version) {
 
 
 /***/ }),
-/* 1557 */
+/* 1558 */
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 "use strict";
@@ -154858,7 +154911,7 @@ function SecondaryAuthTokenListInstance(version) {
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-const ApiBase_1 = __importDefault(__webpack_require__(1558));
+const ApiBase_1 = __importDefault(__webpack_require__(1559));
 class Api extends ApiBase_1.default {
     get account() {
         return this.v2010.account;
@@ -155039,7 +155092,7 @@ module.exports = Api;
 
 
 /***/ }),
-/* 1558 */
+/* 1559 */
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 "use strict";
@@ -155057,8 +155110,8 @@ module.exports = Api;
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-const Domain_1 = __importDefault(__webpack_require__(1538));
-const V2010_1 = __importDefault(__webpack_require__(1559));
+const Domain_1 = __importDefault(__webpack_require__(1539));
+const V2010_1 = __importDefault(__webpack_require__(1560));
 class ApiBase extends Domain_1.default {
     /**
      * Initialize api domain
@@ -155074,55 +155127,6 @@ class ApiBase extends Domain_1.default {
     }
 }
 module.exports = ApiBase;
-
-
-/***/ }),
-/* 1559 */
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
-
-"use strict";
-
-/*
- * This code was generated by
- * ___ _ _ _ _ _    _ ____    ____ ____ _    ____ ____ _  _ ____ ____ ____ ___ __   __
- *  |  | | | | |    | |  | __ |  | |__| | __ | __ |___ |\ | |___ |__/ |__|  | |  | |__/
- *  |  |_|_| | |___ | |__|    |__| |  | |    |__] |___ | \| |___ |  \ |  |  | |__| |  \
- *
- * Twilio - Api
- * This is the public Twilio REST API.
- *
- * NOTE: This class is auto generated by OpenAPI Generator.
- * https://openapi-generator.tech
- * Do not edit the class manually.
- */
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-const Version_1 = __importDefault(__webpack_require__(1541));
-const account_1 = __webpack_require__(1560);
-class V2010 extends Version_1.default {
-    /**
-     * Initialize the V2010 version of Api
-     *
-     * @param domain - The Twilio (Twilio.Api) domain
-     */
-    constructor(domain) {
-        super(domain, "2010-04-01");
-    }
-    /** Getter for accounts resource */
-    get accounts() {
-        this._accounts = this._accounts || (0, account_1.AccountListInstance)(this);
-        return this._accounts;
-    }
-    /** Getter for account resource */
-    get account() {
-        this._account =
-            this._account || (0, account_1.AccountListInstance)(this)(this.domain.twilio.accountSid);
-        return this._account;
-    }
-}
-exports["default"] = V2010;
 
 
 /***/ }),
@@ -155148,37 +155152,86 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
+const Version_1 = __importDefault(__webpack_require__(1542));
+const account_1 = __webpack_require__(1561);
+class V2010 extends Version_1.default {
+    /**
+     * Initialize the V2010 version of Api
+     *
+     * @param domain - The Twilio (Twilio.Api) domain
+     */
+    constructor(domain) {
+        super(domain, "2010-04-01");
+    }
+    /** Getter for accounts resource */
+    get accounts() {
+        this._accounts = this._accounts || (0, account_1.AccountListInstance)(this);
+        return this._accounts;
+    }
+    /** Getter for account resource */
+    get account() {
+        this._account =
+            this._account || (0, account_1.AccountListInstance)(this)(this.domain.twilio.accountSid);
+        return this._account;
+    }
+}
+exports["default"] = V2010;
+
+
+/***/ }),
+/* 1561 */
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+"use strict";
+
+/*
+ * This code was generated by
+ * ___ _ _ _ _ _    _ ____    ____ ____ _    ____ ____ _  _ ____ ____ ____ ___ __   __
+ *  |  | | | | |    | |  | __ |  | |__| | __ | __ |___ |\ | |___ |__/ |__|  | |  | |__/
+ *  |  |_|_| | |___ | |__|    |__| |  | |    |__] |___ | \| |___ |  \ |  |  | |__| |  \
+ *
+ * Twilio - Api
+ * This is the public Twilio REST API.
+ *
+ * NOTE: This class is auto generated by OpenAPI Generator.
+ * https://openapi-generator.tech
+ * Do not edit the class manually.
+ */
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.AccountPage = exports.AccountInstance = exports.AccountContextImpl = void 0;
 exports.AccountListInstance = AccountListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
-const address_1 = __webpack_require__(1561);
-const application_1 = __webpack_require__(1563);
-const authorizedConnectApp_1 = __webpack_require__(1564);
-const availablePhoneNumberCountry_1 = __webpack_require__(1565);
-const balance_1 = __webpack_require__(1573);
-const call_1 = __webpack_require__(1574);
-const conference_1 = __webpack_require__(1584);
-const connectApp_1 = __webpack_require__(1587);
-const incomingPhoneNumber_1 = __webpack_require__(1588);
-const key_1 = __webpack_require__(1594);
-const message_1 = __webpack_require__(1595);
-const newKey_1 = __webpack_require__(1598);
-const newSigningKey_1 = __webpack_require__(1599);
-const notification_1 = __webpack_require__(1600);
-const outgoingCallerId_1 = __webpack_require__(1601);
-const queue_1 = __webpack_require__(1602);
-const recording_1 = __webpack_require__(1604);
-const shortCode_1 = __webpack_require__(1609);
-const signingKey_1 = __webpack_require__(1610);
-const sip_1 = __webpack_require__(1611);
-const token_1 = __webpack_require__(1625);
-const transcription_1 = __webpack_require__(1626);
-const usage_1 = __webpack_require__(1627);
-const validationRequest_1 = __webpack_require__(1638);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
+const address_1 = __webpack_require__(1562);
+const application_1 = __webpack_require__(1564);
+const authorizedConnectApp_1 = __webpack_require__(1565);
+const availablePhoneNumberCountry_1 = __webpack_require__(1566);
+const balance_1 = __webpack_require__(1574);
+const call_1 = __webpack_require__(1575);
+const conference_1 = __webpack_require__(1585);
+const connectApp_1 = __webpack_require__(1588);
+const incomingPhoneNumber_1 = __webpack_require__(1589);
+const key_1 = __webpack_require__(1595);
+const message_1 = __webpack_require__(1596);
+const newKey_1 = __webpack_require__(1599);
+const newSigningKey_1 = __webpack_require__(1600);
+const notification_1 = __webpack_require__(1601);
+const outgoingCallerId_1 = __webpack_require__(1602);
+const queue_1 = __webpack_require__(1603);
+const recording_1 = __webpack_require__(1605);
+const shortCode_1 = __webpack_require__(1610);
+const signingKey_1 = __webpack_require__(1611);
+const sip_1 = __webpack_require__(1612);
+const token_1 = __webpack_require__(1626);
+const transcription_1 = __webpack_require__(1627);
+const usage_1 = __webpack_require__(1628);
+const validationRequest_1 = __webpack_require__(1639);
 class AccountContextImpl {
     constructor(_version, sid) {
         this._version = _version;
@@ -155832,7 +155885,7 @@ exports.AccountPage = AccountPage;
 
 
 /***/ }),
-/* 1561 */
+/* 1562 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -155857,11 +155910,11 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.AddressPage = exports.AddressInstance = exports.AddressContextImpl = void 0;
 exports.AddressListInstance = AddressListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
-const dependentPhoneNumber_1 = __webpack_require__(1562);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
+const dependentPhoneNumber_1 = __webpack_require__(1563);
 class AddressContextImpl {
     constructor(_version, accountSid, sid) {
         this._version = _version;
@@ -156403,7 +156456,7 @@ exports.AddressPage = AddressPage;
 
 
 /***/ }),
-/* 1562 */
+/* 1563 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -156428,10 +156481,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.DependentPhoneNumberPage = exports.DependentPhoneNumberInstance = void 0;
 exports.DependentPhoneNumberListInstance = DependentPhoneNumberListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 function DependentPhoneNumberListInstance(version, accountSid, addressSid) {
     if (!(0, utility_1.isValidPathParam)(accountSid)) {
         throw new Error("Parameter 'accountSid' is not valid.");
@@ -156634,7 +156687,7 @@ exports.DependentPhoneNumberPage = DependentPhoneNumberPage;
 
 
 /***/ }),
-/* 1563 */
+/* 1564 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -156659,10 +156712,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ApplicationPage = exports.ApplicationInstance = exports.ApplicationContextImpl = void 0;
 exports.ApplicationListInstance = ApplicationListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class ApplicationContextImpl {
     constructor(_version, accountSid, sid) {
         this._version = _version;
@@ -157225,7 +157278,7 @@ exports.ApplicationPage = ApplicationPage;
 
 
 /***/ }),
-/* 1564 */
+/* 1565 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -157250,10 +157303,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.AuthorizedConnectAppPage = exports.AuthorizedConnectAppInstance = exports.AuthorizedConnectAppContextImpl = void 0;
 exports.AuthorizedConnectAppListInstance = AuthorizedConnectAppListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class AuthorizedConnectAppContextImpl {
     constructor(_version, accountSid, connectAppSid) {
         this._version = _version;
@@ -157507,7 +157560,7 @@ exports.AuthorizedConnectAppPage = AuthorizedConnectAppPage;
 
 
 /***/ }),
-/* 1565 */
+/* 1566 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -157532,17 +157585,17 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.AvailablePhoneNumberCountryPage = exports.AvailablePhoneNumberCountryInstance = exports.AvailablePhoneNumberCountryContextImpl = void 0;
 exports.AvailablePhoneNumberCountryListInstance = AvailablePhoneNumberCountryListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
-const local_1 = __webpack_require__(1566);
-const machineToMachine_1 = __webpack_require__(1567);
-const mobile_1 = __webpack_require__(1568);
-const national_1 = __webpack_require__(1569);
-const sharedCost_1 = __webpack_require__(1570);
-const tollFree_1 = __webpack_require__(1571);
-const voip_1 = __webpack_require__(1572);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
+const local_1 = __webpack_require__(1567);
+const machineToMachine_1 = __webpack_require__(1568);
+const mobile_1 = __webpack_require__(1569);
+const national_1 = __webpack_require__(1570);
+const sharedCost_1 = __webpack_require__(1571);
+const tollFree_1 = __webpack_require__(1572);
+const voip_1 = __webpack_require__(1573);
 class AvailablePhoneNumberCountryContextImpl {
     constructor(_version, accountSid, countryCode) {
         this._version = _version;
@@ -157874,7 +157927,7 @@ exports.AvailablePhoneNumberCountryPage = AvailablePhoneNumberCountryPage;
 
 
 /***/ }),
-/* 1566 */
+/* 1567 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -157899,10 +157952,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.LocalPage = exports.LocalInstance = void 0;
 exports.LocalListInstance = LocalListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 function LocalListInstance(version, accountSid, countryCode) {
     if (!(0, utility_1.isValidPathParam)(accountSid)) {
         throw new Error("Parameter 'accountSid' is not valid.");
@@ -158151,7 +158204,7 @@ exports.LocalPage = LocalPage;
 
 
 /***/ }),
-/* 1567 */
+/* 1568 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -158176,10 +158229,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.MachineToMachinePage = exports.MachineToMachineInstance = void 0;
 exports.MachineToMachineListInstance = MachineToMachineListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 function MachineToMachineListInstance(version, accountSid, countryCode) {
     if (!(0, utility_1.isValidPathParam)(accountSid)) {
         throw new Error("Parameter 'accountSid' is not valid.");
@@ -158428,7 +158481,7 @@ exports.MachineToMachinePage = MachineToMachinePage;
 
 
 /***/ }),
-/* 1568 */
+/* 1569 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -158453,10 +158506,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.MobilePage = exports.MobileInstance = void 0;
 exports.MobileListInstance = MobileListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 function MobileListInstance(version, accountSid, countryCode) {
     if (!(0, utility_1.isValidPathParam)(accountSid)) {
         throw new Error("Parameter 'accountSid' is not valid.");
@@ -158705,7 +158758,7 @@ exports.MobilePage = MobilePage;
 
 
 /***/ }),
-/* 1569 */
+/* 1570 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -158730,10 +158783,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.NationalPage = exports.NationalInstance = void 0;
 exports.NationalListInstance = NationalListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 function NationalListInstance(version, accountSid, countryCode) {
     if (!(0, utility_1.isValidPathParam)(accountSid)) {
         throw new Error("Parameter 'accountSid' is not valid.");
@@ -158982,7 +159035,7 @@ exports.NationalPage = NationalPage;
 
 
 /***/ }),
-/* 1570 */
+/* 1571 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -159007,10 +159060,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.SharedCostPage = exports.SharedCostInstance = void 0;
 exports.SharedCostListInstance = SharedCostListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 function SharedCostListInstance(version, accountSid, countryCode) {
     if (!(0, utility_1.isValidPathParam)(accountSid)) {
         throw new Error("Parameter 'accountSid' is not valid.");
@@ -159259,7 +159312,7 @@ exports.SharedCostPage = SharedCostPage;
 
 
 /***/ }),
-/* 1571 */
+/* 1572 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -159284,10 +159337,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.TollFreePage = exports.TollFreeInstance = void 0;
 exports.TollFreeListInstance = TollFreeListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 function TollFreeListInstance(version, accountSid, countryCode) {
     if (!(0, utility_1.isValidPathParam)(accountSid)) {
         throw new Error("Parameter 'accountSid' is not valid.");
@@ -159536,7 +159589,7 @@ exports.TollFreePage = TollFreePage;
 
 
 /***/ }),
-/* 1572 */
+/* 1573 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -159561,10 +159614,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.VoipPage = exports.VoipInstance = void 0;
 exports.VoipListInstance = VoipListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 function VoipListInstance(version, accountSid, countryCode) {
     if (!(0, utility_1.isValidPathParam)(accountSid)) {
         throw new Error("Parameter 'accountSid' is not valid.");
@@ -159813,7 +159866,7 @@ exports.VoipPage = VoipPage;
 
 
 /***/ }),
-/* 1573 */
+/* 1574 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -159835,9 +159888,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.BalanceInstance = void 0;
 exports.BalanceListInstance = BalanceListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 function BalanceListInstance(version, accountSid) {
     if (!(0, utility_1.isValidPathParam)(accountSid)) {
         throw new Error("Parameter 'accountSid' is not valid.");
@@ -159911,7 +159964,7 @@ exports.BalanceInstance = BalanceInstance;
 
 
 /***/ }),
-/* 1574 */
+/* 1575 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -159936,19 +159989,19 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.CallPage = exports.CallInstance = exports.CallContextImpl = void 0;
 exports.CallListInstance = CallListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
-const event_1 = __webpack_require__(1575);
-const notification_1 = __webpack_require__(1576);
-const payment_1 = __webpack_require__(1577);
-const recording_1 = __webpack_require__(1578);
-const siprec_1 = __webpack_require__(1579);
-const stream_1 = __webpack_require__(1580);
-const transcription_1 = __webpack_require__(1581);
-const userDefinedMessage_1 = __webpack_require__(1582);
-const userDefinedMessageSubscription_1 = __webpack_require__(1583);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
+const event_1 = __webpack_require__(1576);
+const notification_1 = __webpack_require__(1577);
+const payment_1 = __webpack_require__(1578);
+const recording_1 = __webpack_require__(1579);
+const siprec_1 = __webpack_require__(1580);
+const stream_1 = __webpack_require__(1581);
+const transcription_1 = __webpack_require__(1582);
+const userDefinedMessage_1 = __webpack_require__(1583);
+const userDefinedMessageSubscription_1 = __webpack_require__(1584);
 class CallContextImpl {
     constructor(_version, accountSid, sid) {
         this._version = _version;
@@ -160726,7 +160779,7 @@ exports.CallPage = CallPage;
 
 
 /***/ }),
-/* 1575 */
+/* 1576 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -160751,10 +160804,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.EventPage = exports.EventInstance = void 0;
 exports.EventListInstance = EventListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 function EventListInstance(version, accountSid, callSid) {
     if (!(0, utility_1.isValidPathParam)(accountSid)) {
         throw new Error("Parameter 'accountSid' is not valid.");
@@ -160909,7 +160962,7 @@ exports.EventPage = EventPage;
 
 
 /***/ }),
-/* 1576 */
+/* 1577 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -160934,10 +160987,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.NotificationPage = exports.NotificationInstance = exports.NotificationContextImpl = void 0;
 exports.NotificationListInstance = NotificationListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class NotificationContextImpl {
     constructor(_version, accountSid, callSid, sid) {
         this._version = _version;
@@ -161228,7 +161281,7 @@ exports.NotificationPage = NotificationPage;
 
 
 /***/ }),
-/* 1577 */
+/* 1578 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -161250,9 +161303,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.PaymentInstance = exports.PaymentContextImpl = void 0;
 exports.PaymentListInstance = PaymentListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class PaymentContextImpl {
     constructor(_version, accountSid, callSid, sid) {
         this._version = _version;
@@ -161547,7 +161600,7 @@ function PaymentListInstance(version, accountSid, callSid) {
 
 
 /***/ }),
-/* 1578 */
+/* 1579 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -161572,10 +161625,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.RecordingPage = exports.RecordingInstance = exports.RecordingContextImpl = void 0;
 exports.RecordingListInstance = RecordingListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class RecordingContextImpl {
     constructor(_version, accountSid, callSid, sid) {
         this._version = _version;
@@ -162047,7 +162100,7 @@ exports.RecordingPage = RecordingPage;
 
 
 /***/ }),
-/* 1579 */
+/* 1580 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -162069,9 +162122,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.SiprecInstance = exports.SiprecContextImpl = void 0;
 exports.SiprecListInstance = SiprecListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class SiprecContextImpl {
     constructor(_version, accountSid, callSid, sid) {
         this._version = _version;
@@ -163084,7 +163137,7 @@ function SiprecListInstance(version, accountSid, callSid) {
 
 
 /***/ }),
-/* 1580 */
+/* 1581 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -163106,9 +163159,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.StreamInstance = exports.StreamContextImpl = void 0;
 exports.StreamListInstance = StreamListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class StreamContextImpl {
     constructor(_version, accountSid, callSid, sid) {
         this._version = _version;
@@ -164117,7 +164170,7 @@ function StreamListInstance(version, accountSid, callSid) {
 
 
 /***/ }),
-/* 1581 */
+/* 1582 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -164139,9 +164192,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.TranscriptionInstance = exports.TranscriptionContextImpl = void 0;
 exports.TranscriptionListInstance = TranscriptionListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class TranscriptionContextImpl {
     constructor(_version, accountSid, callSid, sid) {
         this._version = _version;
@@ -164410,7 +164463,7 @@ function TranscriptionListInstance(version, accountSid, callSid) {
 
 
 /***/ }),
-/* 1582 */
+/* 1583 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -164432,9 +164485,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.UserDefinedMessageInstance = void 0;
 exports.UserDefinedMessageListInstance = UserDefinedMessageListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 function UserDefinedMessageListInstance(version, accountSid, callSid) {
     if (!(0, utility_1.isValidPathParam)(accountSid)) {
         throw new Error("Parameter 'accountSid' is not valid.");
@@ -164537,7 +164590,7 @@ exports.UserDefinedMessageInstance = UserDefinedMessageInstance;
 
 
 /***/ }),
-/* 1583 */
+/* 1584 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -164559,9 +164612,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.UserDefinedMessageSubscriptionInstance = exports.UserDefinedMessageSubscriptionContextImpl = void 0;
 exports.UserDefinedMessageSubscriptionListInstance = UserDefinedMessageSubscriptionListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class UserDefinedMessageSubscriptionContextImpl {
     constructor(_version, accountSid, callSid, sid) {
         this._version = _version;
@@ -164753,7 +164806,7 @@ function UserDefinedMessageSubscriptionListInstance(version, accountSid, callSid
 
 
 /***/ }),
-/* 1584 */
+/* 1585 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -164778,12 +164831,12 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ConferencePage = exports.ConferenceInstance = exports.ConferenceContextImpl = void 0;
 exports.ConferenceListInstance = ConferenceListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
-const participant_1 = __webpack_require__(1585);
-const recording_1 = __webpack_require__(1586);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
+const participant_1 = __webpack_require__(1586);
+const recording_1 = __webpack_require__(1587);
 class ConferenceContextImpl {
     constructor(_version, accountSid, sid) {
         this._version = _version;
@@ -165168,7 +165221,7 @@ exports.ConferencePage = ConferencePage;
 
 
 /***/ }),
-/* 1585 */
+/* 1586 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -165193,10 +165246,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ParticipantPage = exports.ParticipantInstance = exports.ParticipantContextImpl = void 0;
 exports.ParticipantListInstance = ParticipantListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class ParticipantContextImpl {
     constructor(_version, accountSid, conferenceSid, callSid) {
         this._version = _version;
@@ -165898,7 +165951,7 @@ exports.ParticipantPage = ParticipantPage;
 
 
 /***/ }),
-/* 1586 */
+/* 1587 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -165923,10 +165976,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.RecordingPage = exports.RecordingInstance = exports.RecordingContextImpl = void 0;
 exports.RecordingListInstance = RecordingListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class RecordingContextImpl {
     constructor(_version, accountSid, conferenceSid, sid) {
         this._version = _version;
@@ -166320,7 +166373,7 @@ exports.RecordingPage = RecordingPage;
 
 
 /***/ }),
-/* 1587 */
+/* 1588 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -166345,10 +166398,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ConnectAppPage = exports.ConnectAppInstance = exports.ConnectAppContextImpl = void 0;
 exports.ConnectAppListInstance = ConnectAppListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class ConnectAppContextImpl {
     constructor(_version, accountSid, sid) {
         this._version = _version;
@@ -166740,7 +166793,7 @@ exports.ConnectAppPage = ConnectAppPage;
 
 
 /***/ }),
-/* 1588 */
+/* 1589 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -166765,14 +166818,14 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.IncomingPhoneNumberPage = exports.IncomingPhoneNumberInstance = exports.IncomingPhoneNumberContextImpl = void 0;
 exports.IncomingPhoneNumberListInstance = IncomingPhoneNumberListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
-const assignedAddOn_1 = __webpack_require__(1589);
-const local_1 = __webpack_require__(1591);
-const mobile_1 = __webpack_require__(1592);
-const tollFree_1 = __webpack_require__(1593);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
+const assignedAddOn_1 = __webpack_require__(1590);
+const local_1 = __webpack_require__(1592);
+const mobile_1 = __webpack_require__(1593);
+const tollFree_1 = __webpack_require__(1594);
 class IncomingPhoneNumberContextImpl {
     constructor(_version, accountSid, sid) {
         this._version = _version;
@@ -167470,7 +167523,7 @@ exports.IncomingPhoneNumberPage = IncomingPhoneNumberPage;
 
 
 /***/ }),
-/* 1589 */
+/* 1590 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -167495,11 +167548,11 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.AssignedAddOnPage = exports.AssignedAddOnInstance = exports.AssignedAddOnContextImpl = void 0;
 exports.AssignedAddOnListInstance = AssignedAddOnListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
-const assignedAddOnExtension_1 = __webpack_require__(1590);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
+const assignedAddOnExtension_1 = __webpack_require__(1591);
 class AssignedAddOnContextImpl {
     constructor(_version, accountSid, resourceSid, sid) {
         this._version = _version;
@@ -167871,7 +167924,7 @@ exports.AssignedAddOnPage = AssignedAddOnPage;
 
 
 /***/ }),
-/* 1590 */
+/* 1591 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -167896,10 +167949,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.AssignedAddOnExtensionPage = exports.AssignedAddOnExtensionInstance = exports.AssignedAddOnExtensionContextImpl = void 0;
 exports.AssignedAddOnExtensionListInstance = AssignedAddOnExtensionListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class AssignedAddOnExtensionContextImpl {
     constructor(_version, accountSid, resourceSid, assignedAddOnSid, sid) {
         this._version = _version;
@@ -168169,7 +168222,7 @@ exports.AssignedAddOnExtensionPage = AssignedAddOnExtensionPage;
 
 
 /***/ }),
-/* 1591 */
+/* 1592 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -168194,10 +168247,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.LocalPage = exports.LocalInstance = void 0;
 exports.LocalListInstance = LocalListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 function LocalListInstance(version, accountSid) {
     if (!(0, utility_1.isValidPathParam)(accountSid)) {
         throw new Error("Parameter 'accountSid' is not valid.");
@@ -168567,7 +168620,7 @@ exports.LocalPage = LocalPage;
 
 
 /***/ }),
-/* 1592 */
+/* 1593 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -168592,10 +168645,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.MobilePage = exports.MobileInstance = void 0;
 exports.MobileListInstance = MobileListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 function MobileListInstance(version, accountSid) {
     if (!(0, utility_1.isValidPathParam)(accountSid)) {
         throw new Error("Parameter 'accountSid' is not valid.");
@@ -168965,7 +169018,7 @@ exports.MobilePage = MobilePage;
 
 
 /***/ }),
-/* 1593 */
+/* 1594 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -168990,10 +169043,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.TollFreePage = exports.TollFreeInstance = void 0;
 exports.TollFreeListInstance = TollFreeListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 function TollFreeListInstance(version, accountSid) {
     if (!(0, utility_1.isValidPathParam)(accountSid)) {
         throw new Error("Parameter 'accountSid' is not valid.");
@@ -169363,7 +169416,7 @@ exports.TollFreePage = TollFreePage;
 
 
 /***/ }),
-/* 1594 */
+/* 1595 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -169388,10 +169441,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.KeyPage = exports.KeyInstance = exports.KeyContextImpl = void 0;
 exports.KeyListInstance = KeyListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class KeyContextImpl {
     constructor(_version, accountSid, sid) {
         this._version = _version;
@@ -169741,7 +169794,7 @@ exports.KeyPage = KeyPage;
 
 
 /***/ }),
-/* 1595 */
+/* 1596 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -169766,12 +169819,12 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.MessagePage = exports.MessageInstance = exports.MessageContextImpl = void 0;
 exports.MessageListInstance = MessageListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
-const feedback_1 = __webpack_require__(1596);
-const media_1 = __webpack_require__(1597);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
+const feedback_1 = __webpack_require__(1597);
+const media_1 = __webpack_require__(1598);
 class MessageContextImpl {
     constructor(_version, accountSid, sid) {
         this._version = _version;
@@ -170343,7 +170396,7 @@ exports.MessagePage = MessagePage;
 
 
 /***/ }),
-/* 1596 */
+/* 1597 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -170365,9 +170418,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.FeedbackInstance = void 0;
 exports.FeedbackListInstance = FeedbackListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 function FeedbackListInstance(version, accountSid, messageSid) {
     if (!(0, utility_1.isValidPathParam)(accountSid)) {
         throw new Error("Parameter 'accountSid' is not valid.");
@@ -170474,7 +170527,7 @@ exports.FeedbackInstance = FeedbackInstance;
 
 
 /***/ }),
-/* 1597 */
+/* 1598 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -170499,10 +170552,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.MediaPage = exports.MediaInstance = exports.MediaContextImpl = void 0;
 exports.MediaListInstance = MediaListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class MediaContextImpl {
     constructor(_version, accountSid, messageSid, sid) {
         this._version = _version;
@@ -170814,7 +170867,7 @@ exports.MediaPage = MediaPage;
 
 
 /***/ }),
-/* 1598 */
+/* 1599 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -170836,9 +170889,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.NewKeyInstance = void 0;
 exports.NewKeyListInstance = NewKeyListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 function NewKeyListInstance(version, accountSid) {
     if (!(0, utility_1.isValidPathParam)(accountSid)) {
         throw new Error("Parameter 'accountSid' is not valid.");
@@ -170940,7 +170993,7 @@ exports.NewKeyInstance = NewKeyInstance;
 
 
 /***/ }),
-/* 1599 */
+/* 1600 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -170962,9 +171015,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.NewSigningKeyInstance = void 0;
 exports.NewSigningKeyListInstance = NewSigningKeyListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 function NewSigningKeyListInstance(version, accountSid) {
     if (!(0, utility_1.isValidPathParam)(accountSid)) {
         throw new Error("Parameter 'accountSid' is not valid.");
@@ -171066,7 +171119,7 @@ exports.NewSigningKeyInstance = NewSigningKeyInstance;
 
 
 /***/ }),
-/* 1600 */
+/* 1601 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -171091,10 +171144,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.NotificationPage = exports.NotificationInstance = exports.NotificationContextImpl = void 0;
 exports.NotificationListInstance = NotificationListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class NotificationContextImpl {
     constructor(_version, accountSid, sid) {
         this._version = _version;
@@ -171379,7 +171432,7 @@ exports.NotificationPage = NotificationPage;
 
 
 /***/ }),
-/* 1601 */
+/* 1602 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -171404,10 +171457,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.OutgoingCallerIdPage = exports.OutgoingCallerIdInstance = exports.OutgoingCallerIdContextImpl = void 0;
 exports.OutgoingCallerIdListInstance = OutgoingCallerIdListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class OutgoingCallerIdContextImpl {
     constructor(_version, accountSid, sid) {
         this._version = _version;
@@ -171771,7 +171824,7 @@ exports.OutgoingCallerIdPage = OutgoingCallerIdPage;
 
 
 /***/ }),
-/* 1602 */
+/* 1603 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -171796,11 +171849,11 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.QueuePage = exports.QueueInstance = exports.QueueContextImpl = void 0;
 exports.QueueListInstance = QueueListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
-const member_1 = __webpack_require__(1603);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
+const member_1 = __webpack_require__(1604);
 class QueueContextImpl {
     constructor(_version, accountSid, sid) {
         this._version = _version;
@@ -172232,7 +172285,7 @@ exports.QueuePage = QueuePage;
 
 
 /***/ }),
-/* 1603 */
+/* 1604 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -172257,10 +172310,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.MemberPage = exports.MemberInstance = exports.MemberContextImpl = void 0;
 exports.MemberListInstance = MemberListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class MemberContextImpl {
     constructor(_version, accountSid, queueSid, callSid) {
         this._version = _version;
@@ -172575,7 +172628,7 @@ exports.MemberPage = MemberPage;
 
 
 /***/ }),
-/* 1604 */
+/* 1605 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -172600,12 +172653,12 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.RecordingPage = exports.RecordingInstance = exports.RecordingContextImpl = void 0;
 exports.RecordingListInstance = RecordingListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
-const addOnResult_1 = __webpack_require__(1605);
-const transcription_1 = __webpack_require__(1608);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
+const addOnResult_1 = __webpack_require__(1606);
+const transcription_1 = __webpack_require__(1609);
 class RecordingContextImpl {
     constructor(_version, accountSid, sid) {
         this._version = _version;
@@ -172979,7 +173032,7 @@ exports.RecordingPage = RecordingPage;
 
 
 /***/ }),
-/* 1605 */
+/* 1606 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -173004,11 +173057,11 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.AddOnResultPage = exports.AddOnResultInstance = exports.AddOnResultContextImpl = void 0;
 exports.AddOnResultListInstance = AddOnResultListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
-const payload_1 = __webpack_require__(1606);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
+const payload_1 = __webpack_require__(1607);
 class AddOnResultContextImpl {
     constructor(_version, accountSid, referenceSid, sid) {
         this._version = _version;
@@ -173326,7 +173379,7 @@ exports.AddOnResultPage = AddOnResultPage;
 
 
 /***/ }),
-/* 1606 */
+/* 1607 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -173351,11 +173404,11 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.PayloadPage = exports.PayloadInstance = exports.PayloadContextImpl = void 0;
 exports.PayloadListInstance = PayloadListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
-const data_1 = __webpack_require__(1607);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
+const data_1 = __webpack_require__(1608);
 class PayloadContextImpl {
     constructor(_version, accountSid, referenceSid, addOnResultSid, sid) {
         this._version = _version;
@@ -173686,7 +173739,7 @@ exports.PayloadPage = PayloadPage;
 
 
 /***/ }),
-/* 1607 */
+/* 1608 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -173708,9 +173761,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.DataInstance = exports.DataContextImpl = void 0;
 exports.DataListInstance = DataListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class DataContextImpl {
     constructor(_version, accountSid, referenceSid, addOnResultSid, payloadSid) {
         this._version = _version;
@@ -173852,7 +173905,7 @@ function DataListInstance(version, accountSid, referenceSid, addOnResultSid, pay
 
 
 /***/ }),
-/* 1608 */
+/* 1609 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -173877,10 +173930,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.TranscriptionPage = exports.TranscriptionInstance = exports.TranscriptionContextImpl = void 0;
 exports.TranscriptionListInstance = TranscriptionListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class TranscriptionContextImpl {
     constructor(_version, accountSid, recordingSid, sid) {
         this._version = _version;
@@ -174192,7 +174245,7 @@ exports.TranscriptionPage = TranscriptionPage;
 
 
 /***/ }),
-/* 1609 */
+/* 1610 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -174217,10 +174270,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ShortCodePage = exports.ShortCodeInstance = exports.ShortCodeContextImpl = void 0;
 exports.ShortCodeListInstance = ShortCodeListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class ShortCodeContextImpl {
     constructor(_version, accountSid, sid) {
         this._version = _version;
@@ -174569,7 +174622,7 @@ exports.ShortCodePage = ShortCodePage;
 
 
 /***/ }),
-/* 1610 */
+/* 1611 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -174594,10 +174647,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.SigningKeyPage = exports.SigningKeyInstance = exports.SigningKeyContextImpl = void 0;
 exports.SigningKeyListInstance = SigningKeyListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class SigningKeyContextImpl {
     constructor(_version, accountSid, sid) {
         this._version = _version;
@@ -174947,7 +175000,7 @@ exports.SigningKeyPage = SigningKeyPage;
 
 
 /***/ }),
-/* 1611 */
+/* 1612 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -174968,12 +175021,12 @@ exports.SigningKeyPage = SigningKeyPage;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.SipListInstance = SipListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
-const credentialList_1 = __webpack_require__(1612);
-const domain_1 = __webpack_require__(1614);
-const ipAccessControlList_1 = __webpack_require__(1623);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
+const credentialList_1 = __webpack_require__(1613);
+const domain_1 = __webpack_require__(1615);
+const ipAccessControlList_1 = __webpack_require__(1624);
 function SipListInstance(version, accountSid) {
     if (!(0, utility_1.isValidPathParam)(accountSid)) {
         throw new Error("Parameter 'accountSid' is not valid.");
@@ -175017,7 +175070,7 @@ function SipListInstance(version, accountSid) {
 
 
 /***/ }),
-/* 1612 */
+/* 1613 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -175042,11 +175095,11 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.CredentialListPage = exports.CredentialListInstance = exports.CredentialListContextImpl = void 0;
 exports.CredentialListListInstance = CredentialListListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
-const credential_1 = __webpack_require__(1613);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
+const credential_1 = __webpack_require__(1614);
 class CredentialListContextImpl {
     constructor(_version, accountSid, sid) {
         this._version = _version;
@@ -175464,7 +175517,7 @@ exports.CredentialListPage = CredentialListPage;
 
 
 /***/ }),
-/* 1613 */
+/* 1614 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -175489,10 +175542,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.CredentialPage = exports.CredentialInstance = exports.CredentialContextImpl = void 0;
 exports.CredentialListInstance = CredentialListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class CredentialContextImpl {
     constructor(_version, accountSid, credentialListSid, sid) {
         this._version = _version;
@@ -175912,7 +175965,7 @@ exports.CredentialPage = CredentialPage;
 
 
 /***/ }),
-/* 1614 */
+/* 1615 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -175937,13 +175990,13 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.DomainPage = exports.DomainInstance = exports.DomainContextImpl = void 0;
 exports.DomainListInstance = DomainListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
-const authTypes_1 = __webpack_require__(1615);
-const credentialListMapping_1 = __webpack_require__(1621);
-const ipAccessControlListMapping_1 = __webpack_require__(1622);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
+const authTypes_1 = __webpack_require__(1616);
+const credentialListMapping_1 = __webpack_require__(1622);
+const ipAccessControlListMapping_1 = __webpack_require__(1623);
 class DomainContextImpl {
     constructor(_version, accountSid, sid) {
         this._version = _version;
@@ -176509,7 +176562,7 @@ exports.DomainPage = DomainPage;
 
 
 /***/ }),
-/* 1615 */
+/* 1616 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -176530,11 +176583,11 @@ exports.DomainPage = DomainPage;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.AuthTypesListInstance = AuthTypesListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
-const authTypeCalls_1 = __webpack_require__(1616);
-const authTypeRegistrations_1 = __webpack_require__(1619);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
+const authTypeCalls_1 = __webpack_require__(1617);
+const authTypeRegistrations_1 = __webpack_require__(1620);
 function AuthTypesListInstance(version, accountSid, domainSid) {
     if (!(0, utility_1.isValidPathParam)(accountSid)) {
         throw new Error("Parameter 'accountSid' is not valid.");
@@ -176573,7 +176626,7 @@ function AuthTypesListInstance(version, accountSid, domainSid) {
 
 
 /***/ }),
-/* 1616 */
+/* 1617 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -176594,11 +176647,11 @@ function AuthTypesListInstance(version, accountSid, domainSid) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.AuthTypeCallsListInstance = AuthTypeCallsListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
-const authCallsCredentialListMapping_1 = __webpack_require__(1617);
-const authCallsIpAccessControlListMapping_1 = __webpack_require__(1618);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
+const authCallsCredentialListMapping_1 = __webpack_require__(1618);
+const authCallsIpAccessControlListMapping_1 = __webpack_require__(1619);
 function AuthTypeCallsListInstance(version, accountSid, domainSid) {
     if (!(0, utility_1.isValidPathParam)(accountSid)) {
         throw new Error("Parameter 'accountSid' is not valid.");
@@ -176639,7 +176692,7 @@ function AuthTypeCallsListInstance(version, accountSid, domainSid) {
 
 
 /***/ }),
-/* 1617 */
+/* 1618 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -176664,10 +176717,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.AuthCallsCredentialListMappingPage = exports.AuthCallsCredentialListMappingInstance = exports.AuthCallsCredentialListMappingContextImpl = void 0;
 exports.AuthCallsCredentialListMappingListInstance = AuthCallsCredentialListMappingListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class AuthCallsCredentialListMappingContextImpl {
     constructor(_version, accountSid, domainSid, sid) {
         this._version = _version;
@@ -177015,7 +177068,7 @@ exports.AuthCallsCredentialListMappingPage = AuthCallsCredentialListMappingPage;
 
 
 /***/ }),
-/* 1618 */
+/* 1619 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -177040,10 +177093,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.AuthCallsIpAccessControlListMappingPage = exports.AuthCallsIpAccessControlListMappingInstance = exports.AuthCallsIpAccessControlListMappingContextImpl = void 0;
 exports.AuthCallsIpAccessControlListMappingListInstance = AuthCallsIpAccessControlListMappingListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class AuthCallsIpAccessControlListMappingContextImpl {
     constructor(_version, accountSid, domainSid, sid) {
         this._version = _version;
@@ -177391,7 +177444,7 @@ exports.AuthCallsIpAccessControlListMappingPage = AuthCallsIpAccessControlListMa
 
 
 /***/ }),
-/* 1619 */
+/* 1620 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -177412,10 +177465,10 @@ exports.AuthCallsIpAccessControlListMappingPage = AuthCallsIpAccessControlListMa
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.AuthTypeRegistrationsListInstance = AuthTypeRegistrationsListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
-const authRegistrationsCredentialListMapping_1 = __webpack_require__(1620);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
+const authRegistrationsCredentialListMapping_1 = __webpack_require__(1621);
 function AuthTypeRegistrationsListInstance(version, accountSid, domainSid) {
     if (!(0, utility_1.isValidPathParam)(accountSid)) {
         throw new Error("Parameter 'accountSid' is not valid.");
@@ -177447,7 +177500,7 @@ function AuthTypeRegistrationsListInstance(version, accountSid, domainSid) {
 
 
 /***/ }),
-/* 1620 */
+/* 1621 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -177472,10 +177525,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.AuthRegistrationsCredentialListMappingPage = exports.AuthRegistrationsCredentialListMappingInstance = exports.AuthRegistrationsCredentialListMappingContextImpl = void 0;
 exports.AuthRegistrationsCredentialListMappingListInstance = AuthRegistrationsCredentialListMappingListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class AuthRegistrationsCredentialListMappingContextImpl {
     constructor(_version, accountSid, domainSid, sid) {
         this._version = _version;
@@ -177823,7 +177876,7 @@ exports.AuthRegistrationsCredentialListMappingPage = AuthRegistrationsCredential
 
 
 /***/ }),
-/* 1621 */
+/* 1622 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -177848,10 +177901,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.CredentialListMappingPage = exports.CredentialListMappingInstance = exports.CredentialListMappingContextImpl = void 0;
 exports.CredentialListMappingListInstance = CredentialListMappingListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class CredentialListMappingContextImpl {
     constructor(_version, accountSid, domainSid, sid) {
         this._version = _version;
@@ -178203,7 +178256,7 @@ exports.CredentialListMappingPage = CredentialListMappingPage;
 
 
 /***/ }),
-/* 1622 */
+/* 1623 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -178228,10 +178281,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.IpAccessControlListMappingPage = exports.IpAccessControlListMappingInstance = exports.IpAccessControlListMappingContextImpl = void 0;
 exports.IpAccessControlListMappingListInstance = IpAccessControlListMappingListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class IpAccessControlListMappingContextImpl {
     constructor(_version, accountSid, domainSid, sid) {
         this._version = _version;
@@ -178583,7 +178636,7 @@ exports.IpAccessControlListMappingPage = IpAccessControlListMappingPage;
 
 
 /***/ }),
-/* 1623 */
+/* 1624 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -178608,11 +178661,11 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.IpAccessControlListPage = exports.IpAccessControlListInstance = exports.IpAccessControlListContextImpl = void 0;
 exports.IpAccessControlListListInstance = IpAccessControlListListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
-const ipAddress_1 = __webpack_require__(1624);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
+const ipAddress_1 = __webpack_require__(1625);
 class IpAccessControlListContextImpl {
     constructor(_version, accountSid, sid) {
         this._version = _version;
@@ -179030,7 +179083,7 @@ exports.IpAccessControlListPage = IpAccessControlListPage;
 
 
 /***/ }),
-/* 1624 */
+/* 1625 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -179055,10 +179108,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.IpAddressPage = exports.IpAddressInstance = exports.IpAddressContextImpl = void 0;
 exports.IpAddressListInstance = IpAddressListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class IpAddressContextImpl {
     constructor(_version, accountSid, ipAccessControlListSid, sid) {
         this._version = _version;
@@ -179500,7 +179553,7 @@ exports.IpAddressPage = IpAddressPage;
 
 
 /***/ }),
-/* 1625 */
+/* 1626 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -179522,9 +179575,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.TokenInstance = exports.ApiV2010AccountTokenIceServers = void 0;
 exports.TokenListInstance = TokenListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class ApiV2010AccountTokenIceServers {
     constructor(payload) {
         this.credential = payload["credential"];
@@ -179642,7 +179695,7 @@ exports.TokenInstance = TokenInstance;
 
 
 /***/ }),
-/* 1626 */
+/* 1627 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -179667,10 +179720,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.TranscriptionPage = exports.TranscriptionInstance = exports.TranscriptionContextImpl = void 0;
 exports.TranscriptionListInstance = TranscriptionListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class TranscriptionContextImpl {
     constructor(_version, accountSid, sid) {
         this._version = _version;
@@ -179976,7 +180029,7 @@ exports.TranscriptionPage = TranscriptionPage;
 
 
 /***/ }),
-/* 1627 */
+/* 1628 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -179997,11 +180050,11 @@ exports.TranscriptionPage = TranscriptionPage;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.UsageListInstance = UsageListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
-const record_1 = __webpack_require__(1628);
-const trigger_1 = __webpack_require__(1637);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
+const record_1 = __webpack_require__(1629);
+const trigger_1 = __webpack_require__(1638);
 function UsageListInstance(version, accountSid) {
     if (!(0, utility_1.isValidPathParam)(accountSid)) {
         throw new Error("Parameter 'accountSid' is not valid.");
@@ -180037,7 +180090,7 @@ function UsageListInstance(version, accountSid) {
 
 
 /***/ }),
-/* 1628 */
+/* 1629 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -180062,18 +180115,18 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.RecordPage = exports.RecordInstance = void 0;
 exports.RecordListInstance = RecordListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
-const allTime_1 = __webpack_require__(1629);
-const daily_1 = __webpack_require__(1630);
-const lastMonth_1 = __webpack_require__(1631);
-const monthly_1 = __webpack_require__(1632);
-const thisMonth_1 = __webpack_require__(1633);
-const today_1 = __webpack_require__(1634);
-const yearly_1 = __webpack_require__(1635);
-const yesterday_1 = __webpack_require__(1636);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
+const allTime_1 = __webpack_require__(1630);
+const daily_1 = __webpack_require__(1631);
+const lastMonth_1 = __webpack_require__(1632);
+const monthly_1 = __webpack_require__(1633);
+const thisMonth_1 = __webpack_require__(1634);
+const today_1 = __webpack_require__(1635);
+const yearly_1 = __webpack_require__(1636);
+const yesterday_1 = __webpack_require__(1637);
 function RecordListInstance(version, accountSid) {
     if (!(0, utility_1.isValidPathParam)(accountSid)) {
         throw new Error("Parameter 'accountSid' is not valid.");
@@ -180331,7 +180384,7 @@ exports.RecordPage = RecordPage;
 
 
 /***/ }),
-/* 1629 */
+/* 1630 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -180356,10 +180409,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.AllTimePage = exports.AllTimeInstance = void 0;
 exports.AllTimeListInstance = AllTimeListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 function AllTimeListInstance(version, accountSid) {
     if (!(0, utility_1.isValidPathParam)(accountSid)) {
         throw new Error("Parameter 'accountSid' is not valid.");
@@ -180553,7 +180606,7 @@ exports.AllTimePage = AllTimePage;
 
 
 /***/ }),
-/* 1630 */
+/* 1631 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -180578,10 +180631,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.DailyPage = exports.DailyInstance = void 0;
 exports.DailyListInstance = DailyListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 function DailyListInstance(version, accountSid) {
     if (!(0, utility_1.isValidPathParam)(accountSid)) {
         throw new Error("Parameter 'accountSid' is not valid.");
@@ -180775,7 +180828,7 @@ exports.DailyPage = DailyPage;
 
 
 /***/ }),
-/* 1631 */
+/* 1632 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -180800,10 +180853,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.LastMonthPage = exports.LastMonthInstance = void 0;
 exports.LastMonthListInstance = LastMonthListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 function LastMonthListInstance(version, accountSid) {
     if (!(0, utility_1.isValidPathParam)(accountSid)) {
         throw new Error("Parameter 'accountSid' is not valid.");
@@ -180997,7 +181050,7 @@ exports.LastMonthPage = LastMonthPage;
 
 
 /***/ }),
-/* 1632 */
+/* 1633 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -181022,10 +181075,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.MonthlyPage = exports.MonthlyInstance = void 0;
 exports.MonthlyListInstance = MonthlyListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 function MonthlyListInstance(version, accountSid) {
     if (!(0, utility_1.isValidPathParam)(accountSid)) {
         throw new Error("Parameter 'accountSid' is not valid.");
@@ -181219,7 +181272,7 @@ exports.MonthlyPage = MonthlyPage;
 
 
 /***/ }),
-/* 1633 */
+/* 1634 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -181244,10 +181297,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ThisMonthPage = exports.ThisMonthInstance = void 0;
 exports.ThisMonthListInstance = ThisMonthListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 function ThisMonthListInstance(version, accountSid) {
     if (!(0, utility_1.isValidPathParam)(accountSid)) {
         throw new Error("Parameter 'accountSid' is not valid.");
@@ -181441,7 +181494,7 @@ exports.ThisMonthPage = ThisMonthPage;
 
 
 /***/ }),
-/* 1634 */
+/* 1635 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -181466,10 +181519,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.TodayPage = exports.TodayInstance = void 0;
 exports.TodayListInstance = TodayListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 function TodayListInstance(version, accountSid) {
     if (!(0, utility_1.isValidPathParam)(accountSid)) {
         throw new Error("Parameter 'accountSid' is not valid.");
@@ -181663,7 +181716,7 @@ exports.TodayPage = TodayPage;
 
 
 /***/ }),
-/* 1635 */
+/* 1636 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -181688,10 +181741,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.YearlyPage = exports.YearlyInstance = void 0;
 exports.YearlyListInstance = YearlyListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 function YearlyListInstance(version, accountSid) {
     if (!(0, utility_1.isValidPathParam)(accountSid)) {
         throw new Error("Parameter 'accountSid' is not valid.");
@@ -181885,7 +181938,7 @@ exports.YearlyPage = YearlyPage;
 
 
 /***/ }),
-/* 1636 */
+/* 1637 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -181910,10 +181963,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.YesterdayPage = exports.YesterdayInstance = void 0;
 exports.YesterdayListInstance = YesterdayListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 function YesterdayListInstance(version, accountSid) {
     if (!(0, utility_1.isValidPathParam)(accountSid)) {
         throw new Error("Parameter 'accountSid' is not valid.");
@@ -182107,7 +182160,7 @@ exports.YesterdayPage = YesterdayPage;
 
 
 /***/ }),
-/* 1637 */
+/* 1638 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -182132,10 +182185,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.TriggerPage = exports.TriggerInstance = exports.TriggerContextImpl = void 0;
 exports.TriggerListInstance = TriggerListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class TriggerContextImpl {
     constructor(_version, accountSid, sid) {
         this._version = _version;
@@ -182615,7 +182668,7 @@ exports.TriggerPage = TriggerPage;
 
 
 /***/ }),
-/* 1638 */
+/* 1639 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -182637,9 +182690,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ValidationRequestInstance = void 0;
 exports.ValidationRequestListInstance = ValidationRequestListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 function ValidationRequestListInstance(version, accountSid) {
     if (!(0, utility_1.isValidPathParam)(accountSid)) {
         throw new Error("Parameter 'accountSid' is not valid.");
@@ -182757,7 +182810,7 @@ exports.ValidationRequestInstance = ValidationRequestInstance;
 
 
 /***/ }),
-/* 1639 */
+/* 1640 */
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 "use strict";
@@ -182765,14 +182818,14 @@ exports.ValidationRequestInstance = ValidationRequestInstance;
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-const AssistantsBase_1 = __importDefault(__webpack_require__(1640));
+const AssistantsBase_1 = __importDefault(__webpack_require__(1641));
 class Assistants extends AssistantsBase_1.default {
 }
 module.exports = Assistants;
 
 
 /***/ }),
-/* 1640 */
+/* 1641 */
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 "use strict";
@@ -182790,8 +182843,8 @@ module.exports = Assistants;
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-const Domain_1 = __importDefault(__webpack_require__(1538));
-const V1_1 = __importDefault(__webpack_require__(1641));
+const Domain_1 = __importDefault(__webpack_require__(1539));
+const V1_1 = __importDefault(__webpack_require__(1642));
 class AssistantsBase extends Domain_1.default {
     /**
      * Initialize assistants domain
@@ -182810,7 +182863,7 @@ module.exports = AssistantsBase;
 
 
 /***/ }),
-/* 1641 */
+/* 1642 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -182832,12 +182885,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const Version_1 = __importDefault(__webpack_require__(1541));
-const assistant_1 = __webpack_require__(1642);
-const knowledge_1 = __webpack_require__(1647);
-const policy_1 = __webpack_require__(1650);
-const session_1 = __webpack_require__(1651);
-const tool_1 = __webpack_require__(1653);
+const Version_1 = __importDefault(__webpack_require__(1542));
+const assistant_1 = __webpack_require__(1643);
+const knowledge_1 = __webpack_require__(1648);
+const policy_1 = __webpack_require__(1651);
+const session_1 = __webpack_require__(1652);
+const tool_1 = __webpack_require__(1654);
 class V1 extends Version_1.default {
     /**
      * Initialize the V1 version of Assistants
@@ -182877,7 +182930,7 @@ exports["default"] = V1;
 
 
 /***/ }),
-/* 1642 */
+/* 1643 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -182902,14 +182955,14 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.AssistantPage = exports.AssistantInstance = exports.AssistantContextImpl = exports.AssistantsV1ServiceUpdateAssistantRequest = exports.AssistantsV1ServiceTool = exports.AssistantsV1ServiceSegmentCredential = exports.AssistantsV1ServiceKnowledge = exports.AssistantsV1ServiceCustomerAi = exports.AssistantsV1ServiceCreateAssistantRequest = void 0;
 exports.AssistantListInstance = AssistantListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
-const assistantsKnowledge_1 = __webpack_require__(1643);
-const assistantsTool_1 = __webpack_require__(1644);
-const feedback_1 = __webpack_require__(1645);
-const message_1 = __webpack_require__(1646);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
+const assistantsKnowledge_1 = __webpack_require__(1644);
+const assistantsTool_1 = __webpack_require__(1645);
+const feedback_1 = __webpack_require__(1646);
+const message_1 = __webpack_require__(1647);
 class AssistantsV1ServiceCreateAssistantRequest {
     constructor(payload) {
         this.customerAi = payload["customer_ai"];
@@ -183439,7 +183492,7 @@ exports.AssistantPage = AssistantPage;
 
 
 /***/ }),
-/* 1643 */
+/* 1644 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -183464,10 +183517,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.AssistantsKnowledgePage = exports.AssistantsKnowledgeInstance = exports.AssistantsKnowledgeContextImpl = void 0;
 exports.AssistantsKnowledgeListInstance = AssistantsKnowledgeListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class AssistantsKnowledgeContextImpl {
     constructor(_version, assistantId, id) {
         this._version = _version;
@@ -183767,7 +183820,7 @@ exports.AssistantsKnowledgePage = AssistantsKnowledgePage;
 
 
 /***/ }),
-/* 1644 */
+/* 1645 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -183792,10 +183845,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.AssistantsToolPage = exports.AssistantsToolInstance = exports.AssistantsToolContextImpl = void 0;
 exports.AssistantsToolListInstance = AssistantsToolListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class AssistantsToolContextImpl {
     constructor(_version, assistantId, id) {
         this._version = _version;
@@ -184095,7 +184148,7 @@ exports.AssistantsToolPage = AssistantsToolPage;
 
 
 /***/ }),
-/* 1645 */
+/* 1646 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -184120,10 +184173,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.FeedbackPage = exports.FeedbackInstance = exports.AssistantsV1ServiceCreateFeedbackRequest = void 0;
 exports.FeedbackListInstance = FeedbackListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class AssistantsV1ServiceCreateFeedbackRequest {
     constructor(payload) {
         this.messageId = payload["message_id"];
@@ -184348,7 +184401,7 @@ exports.FeedbackPage = FeedbackPage;
 
 
 /***/ }),
-/* 1646 */
+/* 1647 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -184370,9 +184423,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.MessageInstance = exports.AssistantsV1ServiceAssistantSendMessageRequest = void 0;
 exports.MessageListInstance = MessageListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class AssistantsV1ServiceAssistantSendMessageRequest {
     constructor(payload) {
         this.identity = payload["identity"];
@@ -184482,7 +184535,7 @@ exports.MessageInstance = MessageInstance;
 
 
 /***/ }),
-/* 1647 */
+/* 1648 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -184507,12 +184560,12 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.KnowledgePage = exports.KnowledgeInstance = exports.KnowledgeContextImpl = exports.AssistantsV1ServiceUpdateKnowledgeRequest = exports.AssistantsV1ServiceCreatePolicyRequest = exports.AssistantsV1ServiceCreateKnowledgeRequest = void 0;
 exports.KnowledgeListInstance = KnowledgeListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
-const chunk_1 = __webpack_require__(1648);
-const knowledgeStatus_1 = __webpack_require__(1649);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
+const chunk_1 = __webpack_require__(1649);
+const knowledgeStatus_1 = __webpack_require__(1650);
 class AssistantsV1ServiceCreateKnowledgeRequest {
     constructor(payload) {
         this.assistantId = payload["assistant_id"];
@@ -184980,7 +185033,7 @@ exports.KnowledgePage = KnowledgePage;
 
 
 /***/ }),
-/* 1648 */
+/* 1649 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -185005,10 +185058,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ChunkPage = exports.ChunkInstance = void 0;
 exports.ChunkListInstance = ChunkListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 function ChunkListInstance(version, id) {
     if (!(0, utility_1.isValidPathParam)(id)) {
         throw new Error("Parameter 'id' is not valid.");
@@ -185166,7 +185219,7 @@ exports.ChunkPage = ChunkPage;
 
 
 /***/ }),
-/* 1649 */
+/* 1650 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -185188,9 +185241,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.KnowledgeStatusInstance = exports.KnowledgeStatusContextImpl = void 0;
 exports.KnowledgeStatusListInstance = KnowledgeStatusListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class KnowledgeStatusContextImpl {
     constructor(_version, id) {
         this._version = _version;
@@ -185320,7 +185373,7 @@ function KnowledgeStatusListInstance(version, id) {
 
 
 /***/ }),
-/* 1650 */
+/* 1651 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -185345,9 +185398,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.PolicyPage = exports.PolicyInstance = void 0;
 exports.PolicyListInstance = PolicyListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
 function PolicyListInstance(version) {
     const instance = {};
     instance._version = version;
@@ -185518,7 +185571,7 @@ exports.PolicyPage = PolicyPage;
 
 
 /***/ }),
-/* 1651 */
+/* 1652 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -185543,11 +185596,11 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.SessionPage = exports.SessionInstance = exports.SessionContextImpl = void 0;
 exports.SessionListInstance = SessionListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
-const message_1 = __webpack_require__(1652);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
+const message_1 = __webpack_require__(1653);
 class SessionContextImpl {
     constructor(_version, id) {
         this._version = _version;
@@ -185800,7 +185853,7 @@ exports.SessionPage = SessionPage;
 
 
 /***/ }),
-/* 1652 */
+/* 1653 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -185825,10 +185878,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.MessagePage = exports.MessageInstance = void 0;
 exports.MessageListInstance = MessageListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 function MessageListInstance(version, sessionId) {
     if (!(0, utility_1.isValidPathParam)(sessionId)) {
         throw new Error("Parameter 'sessionId' is not valid.");
@@ -185996,7 +186049,7 @@ exports.MessagePage = MessagePage;
 
 
 /***/ }),
-/* 1653 */
+/* 1654 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -186021,10 +186074,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ToolPage = exports.ToolInstance = exports.ToolContextImpl = exports.AssistantsV1ServiceUpdateToolRequest = exports.AssistantsV1ServicePolicy = exports.AssistantsV1ServiceCreateToolRequest = exports.AssistantsV1ServiceCreatePolicyRequest = void 0;
 exports.ToolListInstance = ToolListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class AssistantsV1ServiceCreatePolicyRequest {
     constructor(payload) {
         this.description = payload["description"];
@@ -186488,7 +186541,7 @@ exports.ToolPage = ToolPage;
 
 
 /***/ }),
-/* 1654 */
+/* 1655 */
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 "use strict";
@@ -186496,7 +186549,7 @@ exports.ToolPage = ToolPage;
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-const BulkexportsBase_1 = __importDefault(__webpack_require__(1655));
+const BulkexportsBase_1 = __importDefault(__webpack_require__(1656));
 class Bulkexports extends BulkexportsBase_1.default {
     /**
      * @deprecated - Use v1.exports instead
@@ -186517,7 +186570,7 @@ module.exports = Bulkexports;
 
 
 /***/ }),
-/* 1655 */
+/* 1656 */
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 "use strict";
@@ -186535,8 +186588,8 @@ module.exports = Bulkexports;
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-const Domain_1 = __importDefault(__webpack_require__(1538));
-const V1_1 = __importDefault(__webpack_require__(1656));
+const Domain_1 = __importDefault(__webpack_require__(1539));
+const V1_1 = __importDefault(__webpack_require__(1657));
 class BulkexportsBase extends Domain_1.default {
     /**
      * Initialize bulkexports domain
@@ -186555,7 +186608,7 @@ module.exports = BulkexportsBase;
 
 
 /***/ }),
-/* 1656 */
+/* 1657 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -186577,9 +186630,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const Version_1 = __importDefault(__webpack_require__(1541));
-const export_1 = __webpack_require__(1657);
-const exportConfiguration_1 = __webpack_require__(1661);
+const Version_1 = __importDefault(__webpack_require__(1542));
+const export_1 = __webpack_require__(1658);
+const exportConfiguration_1 = __webpack_require__(1662);
 class V1 extends Version_1.default {
     /**
      * Initialize the V1 version of Bulkexports
@@ -186605,7 +186658,7 @@ exports["default"] = V1;
 
 
 /***/ }),
-/* 1657 */
+/* 1658 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -186627,12 +186680,12 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ExportInstance = exports.ExportContextImpl = void 0;
 exports.ExportListInstance = ExportListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
-const day_1 = __webpack_require__(1658);
-const exportCustomJob_1 = __webpack_require__(1659);
-const job_1 = __webpack_require__(1660);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
+const day_1 = __webpack_require__(1659);
+const exportCustomJob_1 = __webpack_require__(1660);
+const job_1 = __webpack_require__(1661);
 class ExportContextImpl {
     constructor(_version, resourceType) {
         this._version = _version;
@@ -186788,7 +186841,7 @@ function ExportListInstance(version) {
 
 
 /***/ }),
-/* 1658 */
+/* 1659 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -186813,10 +186866,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.DayPage = exports.DayInstance = exports.DayContextImpl = void 0;
 exports.DayListInstance = DayListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class DayContextImpl {
     constructor(_version, resourceType, day) {
         this._version = _version;
@@ -187063,7 +187116,7 @@ exports.DayPage = DayPage;
 
 
 /***/ }),
-/* 1659 */
+/* 1660 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -187088,10 +187141,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ExportCustomJobPage = exports.ExportCustomJobInstance = void 0;
 exports.ExportCustomJobListInstance = ExportCustomJobListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 function ExportCustomJobListInstance(version, resourceType) {
     if (!(0, utility_1.isValidPathParam)(resourceType)) {
         throw new Error("Parameter 'resourceType' is not valid.");
@@ -187341,7 +187394,7 @@ exports.ExportCustomJobPage = ExportCustomJobPage;
 
 
 /***/ }),
-/* 1660 */
+/* 1661 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -187363,9 +187416,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.JobInstance = exports.JobContextImpl = void 0;
 exports.JobListInstance = JobListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class JobContextImpl {
     constructor(_version, jobSid) {
         this._version = _version;
@@ -187552,7 +187605,7 @@ function JobListInstance(version) {
 
 
 /***/ }),
-/* 1661 */
+/* 1662 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -187574,9 +187627,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ExportConfigurationInstance = exports.ExportConfigurationContextImpl = void 0;
 exports.ExportConfigurationListInstance = ExportConfigurationListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class ExportConfigurationContextImpl {
     constructor(_version, resourceType) {
         this._version = _version;
@@ -187775,7 +187828,7 @@ function ExportConfigurationListInstance(version) {
 
 
 /***/ }),
-/* 1662 */
+/* 1663 */
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 "use strict";
@@ -187783,7 +187836,7 @@ function ExportConfigurationListInstance(version) {
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-const ChatBase_1 = __importDefault(__webpack_require__(1663));
+const ChatBase_1 = __importDefault(__webpack_require__(1664));
 class Chat extends ChatBase_1.default {
     /**
      * @deprecated - Use v2.credentials instead
@@ -187811,7 +187864,7 @@ module.exports = Chat;
 
 
 /***/ }),
-/* 1663 */
+/* 1664 */
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 "use strict";
@@ -187829,10 +187882,10 @@ module.exports = Chat;
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-const Domain_1 = __importDefault(__webpack_require__(1538));
-const V1_1 = __importDefault(__webpack_require__(1664));
-const V2_1 = __importDefault(__webpack_require__(1674));
-const V3_1 = __importDefault(__webpack_require__(1687));
+const Domain_1 = __importDefault(__webpack_require__(1539));
+const V1_1 = __importDefault(__webpack_require__(1665));
+const V2_1 = __importDefault(__webpack_require__(1675));
+const V3_1 = __importDefault(__webpack_require__(1688));
 class ChatBase extends Domain_1.default {
     /**
      * Initialize chat domain
@@ -187859,7 +187912,7 @@ module.exports = ChatBase;
 
 
 /***/ }),
-/* 1664 */
+/* 1665 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -187881,9 +187934,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const Version_1 = __importDefault(__webpack_require__(1541));
-const credential_1 = __webpack_require__(1665);
-const service_1 = __webpack_require__(1666);
+const Version_1 = __importDefault(__webpack_require__(1542));
+const credential_1 = __webpack_require__(1666);
+const service_1 = __webpack_require__(1667);
 class V1 extends Version_1.default {
     /**
      * Initialize the V1 version of Chat
@@ -187908,7 +187961,7 @@ exports["default"] = V1;
 
 
 /***/ }),
-/* 1665 */
+/* 1666 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -187933,10 +187986,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.CredentialPage = exports.CredentialInstance = exports.CredentialContextImpl = void 0;
 exports.CredentialListInstance = CredentialListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class CredentialContextImpl {
     constructor(_version, sid) {
         this._version = _version;
@@ -188382,7 +188435,7 @@ exports.CredentialPage = CredentialPage;
 
 
 /***/ }),
-/* 1666 */
+/* 1667 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -188407,13 +188460,13 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ServicePage = exports.ServiceInstance = exports.ServiceContextImpl = void 0;
 exports.ServiceListInstance = ServiceListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
-const channel_1 = __webpack_require__(1667);
-const role_1 = __webpack_require__(1671);
-const user_1 = __webpack_require__(1672);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
+const channel_1 = __webpack_require__(1668);
+const role_1 = __webpack_require__(1672);
+const user_1 = __webpack_require__(1673);
 class ServiceContextImpl {
     constructor(_version, sid) {
         this._version = _version;
@@ -189153,7 +189206,7 @@ exports.ServicePage = ServicePage;
 
 
 /***/ }),
-/* 1667 */
+/* 1668 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -189178,13 +189231,13 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ChannelPage = exports.ChannelInstance = exports.ChannelContextImpl = void 0;
 exports.ChannelListInstance = ChannelListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
-const invite_1 = __webpack_require__(1668);
-const member_1 = __webpack_require__(1669);
-const message_1 = __webpack_require__(1670);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
+const invite_1 = __webpack_require__(1669);
+const member_1 = __webpack_require__(1670);
+const message_1 = __webpack_require__(1671);
 class ChannelContextImpl {
     constructor(_version, serviceSid, sid) {
         this._version = _version;
@@ -189668,7 +189721,7 @@ exports.ChannelPage = ChannelPage;
 
 
 /***/ }),
-/* 1668 */
+/* 1669 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -189693,10 +189746,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.InvitePage = exports.InviteInstance = exports.InviteContextImpl = void 0;
 exports.InviteListInstance = InviteListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class InviteContextImpl {
     constructor(_version, serviceSid, channelSid, sid) {
         this._version = _version;
@@ -190060,7 +190113,7 @@ exports.InvitePage = InvitePage;
 
 
 /***/ }),
-/* 1669 */
+/* 1670 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -190085,10 +190138,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.MemberPage = exports.MemberInstance = exports.MemberContextImpl = void 0;
 exports.MemberListInstance = MemberListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class MemberContextImpl {
     constructor(_version, serviceSid, channelSid, sid) {
         this._version = _version;
@@ -190520,7 +190573,7 @@ exports.MemberPage = MemberPage;
 
 
 /***/ }),
-/* 1670 */
+/* 1671 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -190545,10 +190598,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.MessagePage = exports.MessageInstance = exports.MessageContextImpl = void 0;
 exports.MessageListInstance = MessageListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class MessageContextImpl {
     constructor(_version, serviceSid, channelSid, sid) {
         this._version = _version;
@@ -190988,7 +191041,7 @@ exports.MessagePage = MessagePage;
 
 
 /***/ }),
-/* 1671 */
+/* 1672 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -191013,10 +191066,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.RolePage = exports.RoleInstance = exports.RoleContextImpl = void 0;
 exports.RoleListInstance = RoleListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class RoleContextImpl {
     constructor(_version, serviceSid, sid) {
         this._version = _version;
@@ -191440,7 +191493,7 @@ exports.RolePage = RolePage;
 
 
 /***/ }),
-/* 1672 */
+/* 1673 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -191465,11 +191518,11 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.UserPage = exports.UserInstance = exports.UserContextImpl = void 0;
 exports.UserListInstance = UserListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
-const userChannel_1 = __webpack_require__(1673);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
+const userChannel_1 = __webpack_require__(1674);
 class UserContextImpl {
     constructor(_version, serviceSid, sid) {
         this._version = _version;
@@ -191921,7 +191974,7 @@ exports.UserPage = UserPage;
 
 
 /***/ }),
-/* 1673 */
+/* 1674 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -191946,10 +191999,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.UserChannelPage = exports.UserChannelInstance = void 0;
 exports.UserChannelListInstance = UserChannelListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 function UserChannelListInstance(version, serviceSid, userSid) {
     if (!(0, utility_1.isValidPathParam)(serviceSid)) {
         throw new Error("Parameter 'serviceSid' is not valid.");
@@ -192116,7 +192169,7 @@ exports.UserChannelPage = UserChannelPage;
 
 
 /***/ }),
-/* 1674 */
+/* 1675 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -192138,9 +192191,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const Version_1 = __importDefault(__webpack_require__(1541));
-const credential_1 = __webpack_require__(1675);
-const service_1 = __webpack_require__(1676);
+const Version_1 = __importDefault(__webpack_require__(1542));
+const credential_1 = __webpack_require__(1676);
+const service_1 = __webpack_require__(1677);
 class V2 extends Version_1.default {
     /**
      * Initialize the V2 version of Chat
@@ -192165,7 +192218,7 @@ exports["default"] = V2;
 
 
 /***/ }),
-/* 1675 */
+/* 1676 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -192190,10 +192243,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.CredentialPage = exports.CredentialInstance = exports.CredentialContextImpl = void 0;
 exports.CredentialListInstance = CredentialListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class CredentialContextImpl {
     constructor(_version, sid) {
         this._version = _version;
@@ -192639,7 +192692,7 @@ exports.CredentialPage = CredentialPage;
 
 
 /***/ }),
-/* 1676 */
+/* 1677 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -192664,14 +192717,14 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ServicePage = exports.ServiceInstance = exports.ServiceContextImpl = void 0;
 exports.ServiceListInstance = ServiceListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
-const binding_1 = __webpack_require__(1677);
-const channel_1 = __webpack_require__(1678);
-const role_1 = __webpack_require__(1683);
-const user_1 = __webpack_require__(1684);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
+const binding_1 = __webpack_require__(1678);
+const channel_1 = __webpack_require__(1679);
+const role_1 = __webpack_require__(1684);
+const user_1 = __webpack_require__(1685);
 class ServiceContextImpl {
     constructor(_version, sid) {
         this._version = _version;
@@ -193288,7 +193341,7 @@ exports.ServicePage = ServicePage;
 
 
 /***/ }),
-/* 1677 */
+/* 1678 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -193313,10 +193366,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.BindingPage = exports.BindingInstance = exports.BindingContextImpl = void 0;
 exports.BindingListInstance = BindingListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class BindingContextImpl {
     constructor(_version, serviceSid, sid) {
         this._version = _version;
@@ -193628,7 +193681,7 @@ exports.BindingPage = BindingPage;
 
 
 /***/ }),
-/* 1678 */
+/* 1679 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -193653,14 +193706,14 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ChannelPage = exports.ChannelInstance = exports.ChannelContextImpl = void 0;
 exports.ChannelListInstance = ChannelListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
-const invite_1 = __webpack_require__(1679);
-const member_1 = __webpack_require__(1680);
-const message_1 = __webpack_require__(1681);
-const webhook_1 = __webpack_require__(1682);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
+const invite_1 = __webpack_require__(1680);
+const member_1 = __webpack_require__(1681);
+const message_1 = __webpack_require__(1682);
+const webhook_1 = __webpack_require__(1683);
 class ChannelContextImpl {
     constructor(_version, serviceSid, sid) {
         this._version = _version;
@@ -194200,7 +194253,7 @@ exports.ChannelPage = ChannelPage;
 
 
 /***/ }),
-/* 1679 */
+/* 1680 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -194225,10 +194278,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.InvitePage = exports.InviteInstance = exports.InviteContextImpl = void 0;
 exports.InviteListInstance = InviteListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class InviteContextImpl {
     constructor(_version, serviceSid, channelSid, sid) {
         this._version = _version;
@@ -194592,7 +194645,7 @@ exports.InvitePage = InvitePage;
 
 
 /***/ }),
-/* 1680 */
+/* 1681 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -194617,10 +194670,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.MemberPage = exports.MemberInstance = exports.MemberContextImpl = void 0;
 exports.MemberListInstance = MemberListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class MemberContextImpl {
     constructor(_version, serviceSid, channelSid, sid) {
         this._version = _version;
@@ -195110,7 +195163,7 @@ exports.MemberPage = MemberPage;
 
 
 /***/ }),
-/* 1681 */
+/* 1682 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -195135,10 +195188,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.MessagePage = exports.MessageInstance = exports.MessageContextImpl = void 0;
 exports.MessageListInstance = MessageListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class MessageContextImpl {
     constructor(_version, serviceSid, channelSid, sid) {
         this._version = _version;
@@ -195640,7 +195693,7 @@ exports.MessagePage = MessagePage;
 
 
 /***/ }),
-/* 1682 */
+/* 1683 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -195665,10 +195718,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.WebhookPage = exports.WebhookInstance = exports.WebhookContextImpl = void 0;
 exports.WebhookListInstance = WebhookListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class WebhookContextImpl {
     constructor(_version, serviceSid, channelSid, sid) {
         this._version = _version;
@@ -196128,7 +196181,7 @@ exports.WebhookPage = WebhookPage;
 
 
 /***/ }),
-/* 1683 */
+/* 1684 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -196153,10 +196206,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.RolePage = exports.RoleInstance = exports.RoleContextImpl = void 0;
 exports.RoleListInstance = RoleListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class RoleContextImpl {
     constructor(_version, serviceSid, sid) {
         this._version = _version;
@@ -196580,7 +196633,7 @@ exports.RolePage = RolePage;
 
 
 /***/ }),
-/* 1684 */
+/* 1685 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -196605,12 +196658,12 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.UserPage = exports.UserInstance = exports.UserContextImpl = void 0;
 exports.UserListInstance = UserListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
-const userBinding_1 = __webpack_require__(1685);
-const userChannel_1 = __webpack_require__(1686);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
+const userBinding_1 = __webpack_require__(1686);
+const userChannel_1 = __webpack_require__(1687);
 class UserContextImpl {
     constructor(_version, serviceSid, sid) {
         this._version = _version;
@@ -197082,7 +197135,7 @@ exports.UserPage = UserPage;
 
 
 /***/ }),
-/* 1685 */
+/* 1686 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -197107,10 +197160,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.UserBindingPage = exports.UserBindingInstance = exports.UserBindingContextImpl = void 0;
 exports.UserBindingListInstance = UserBindingListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class UserBindingContextImpl {
     constructor(_version, serviceSid, userSid, sid) {
         this._version = _version;
@@ -197424,7 +197477,7 @@ exports.UserBindingPage = UserBindingPage;
 
 
 /***/ }),
-/* 1686 */
+/* 1687 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -197449,10 +197502,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.UserChannelPage = exports.UserChannelInstance = exports.UserChannelContextImpl = void 0;
 exports.UserChannelListInstance = UserChannelListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class UserChannelContextImpl {
     constructor(_version, serviceSid, userSid, channelSid) {
         this._version = _version;
@@ -197846,7 +197899,7 @@ exports.UserChannelPage = UserChannelPage;
 
 
 /***/ }),
-/* 1687 */
+/* 1688 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -197868,8 +197921,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const Version_1 = __importDefault(__webpack_require__(1541));
-const channel_1 = __webpack_require__(1688);
+const Version_1 = __importDefault(__webpack_require__(1542));
+const channel_1 = __webpack_require__(1689);
 class V3 extends Version_1.default {
     /**
      * Initialize the V3 version of Chat
@@ -197889,7 +197942,7 @@ exports["default"] = V3;
 
 
 /***/ }),
-/* 1688 */
+/* 1689 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -197911,9 +197964,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ChannelInstance = exports.ChannelContextImpl = void 0;
 exports.ChannelListInstance = ChannelListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class ChannelContextImpl {
     constructor(_version, serviceSid, sid) {
         this._version = _version;
@@ -198084,7 +198137,7 @@ function ChannelListInstance(version) {
 
 
 /***/ }),
-/* 1689 */
+/* 1690 */
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 "use strict";
@@ -198092,7 +198145,7 @@ function ChannelListInstance(version) {
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-const ContentBase_1 = __importDefault(__webpack_require__(1690));
+const ContentBase_1 = __importDefault(__webpack_require__(1691));
 class Content extends ContentBase_1.default {
     /**
      * @deprecated - Use v1.contents instead
@@ -198106,7 +198159,7 @@ module.exports = Content;
 
 
 /***/ }),
-/* 1690 */
+/* 1691 */
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 "use strict";
@@ -198124,9 +198177,9 @@ module.exports = Content;
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-const Domain_1 = __importDefault(__webpack_require__(1538));
-const V1_1 = __importDefault(__webpack_require__(1691));
-const V2_1 = __importDefault(__webpack_require__(1697));
+const Domain_1 = __importDefault(__webpack_require__(1539));
+const V1_1 = __importDefault(__webpack_require__(1692));
+const V2_1 = __importDefault(__webpack_require__(1698));
 class ContentBase extends Domain_1.default {
     /**
      * Initialize content domain
@@ -198149,7 +198202,7 @@ module.exports = ContentBase;
 
 
 /***/ }),
-/* 1691 */
+/* 1692 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -198171,10 +198224,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const Version_1 = __importDefault(__webpack_require__(1541));
-const content_1 = __webpack_require__(1692);
-const contentAndApprovals_1 = __webpack_require__(1695);
-const legacyContent_1 = __webpack_require__(1696);
+const Version_1 = __importDefault(__webpack_require__(1542));
+const content_1 = __webpack_require__(1693);
+const contentAndApprovals_1 = __webpack_require__(1696);
+const legacyContent_1 = __webpack_require__(1697);
 class V1 extends Version_1.default {
     /**
      * Initialize the V1 version of Content
@@ -198206,7 +198259,7 @@ exports["default"] = V1;
 
 
 /***/ }),
-/* 1692 */
+/* 1693 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -198231,12 +198284,12 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ContentPage = exports.ContentInstance = exports.ContentContextImpl = exports.WhatsappFlows = exports.WhatsappCard = exports.WhatsappAuthentication = exports.Types = exports.TwilioText = exports.TwilioSchedule = exports.TwilioQuickReply = exports.TwilioMedia = exports.TwilioLocation = exports.TwilioListPicker = exports.TwilioFlows = exports.TwilioCatalog = exports.TwilioCarousel = exports.TwilioCard = exports.TwilioCallToAction = exports.QuickReplyAction = exports.ListItem = exports.FlowsPageComponent = exports.FlowsPage = exports.ContentUpdateRequest = exports.ContentCreateRequest = exports.CatalogItem = exports.CarouselCard = exports.CarouselAction = exports.CardAction = exports.CallToActionAction = exports.AuthenticationAction = void 0;
 exports.ContentListInstance = ContentListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
-const approvalCreate_1 = __webpack_require__(1693);
-const approvalFetch_1 = __webpack_require__(1694);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
+const approvalCreate_1 = __webpack_require__(1694);
+const approvalFetch_1 = __webpack_require__(1695);
 class AuthenticationAction {
     constructor(payload) {
         this.type = payload["type"];
@@ -198961,7 +199014,7 @@ exports.ContentPage = ContentPage;
 
 
 /***/ }),
-/* 1693 */
+/* 1694 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -198983,9 +199036,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ApprovalCreateInstance = exports.ContentApprovalRequest = void 0;
 exports.ApprovalCreateListInstance = ApprovalCreateListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 /**
  * Content approval request body
  */
@@ -199093,7 +199146,7 @@ exports.ApprovalCreateInstance = ApprovalCreateInstance;
 
 
 /***/ }),
-/* 1694 */
+/* 1695 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -199115,9 +199168,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ApprovalFetchInstance = exports.ApprovalFetchContextImpl = void 0;
 exports.ApprovalFetchListInstance = ApprovalFetchListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class ApprovalFetchContextImpl {
     constructor(_version, sid) {
         this._version = _version;
@@ -199247,7 +199300,7 @@ function ApprovalFetchListInstance(version, sid) {
 
 
 /***/ }),
-/* 1695 */
+/* 1696 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -199272,9 +199325,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ContentAndApprovalsPage = exports.ContentAndApprovalsInstance = void 0;
 exports.ContentAndApprovalsListInstance = ContentAndApprovalsListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
 function ContentAndApprovalsListInstance(version) {
     const instance = {};
     instance._version = version;
@@ -199437,7 +199490,7 @@ exports.ContentAndApprovalsPage = ContentAndApprovalsPage;
 
 
 /***/ }),
-/* 1696 */
+/* 1697 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -199462,9 +199515,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.LegacyContentPage = exports.LegacyContentInstance = void 0;
 exports.LegacyContentListInstance = LegacyContentListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
 function LegacyContentListInstance(version) {
     const instance = {};
     instance._version = version;
@@ -199631,7 +199684,7 @@ exports.LegacyContentPage = LegacyContentPage;
 
 
 /***/ }),
-/* 1697 */
+/* 1698 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -199653,9 +199706,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const Version_1 = __importDefault(__webpack_require__(1541));
-const content_1 = __webpack_require__(1698);
-const contentAndApprovals_1 = __webpack_require__(1699);
+const Version_1 = __importDefault(__webpack_require__(1542));
+const content_1 = __webpack_require__(1699);
+const contentAndApprovals_1 = __webpack_require__(1700);
 class V2 extends Version_1.default {
     /**
      * Initialize the V2 version of Content
@@ -199681,7 +199734,7 @@ exports["default"] = V2;
 
 
 /***/ }),
-/* 1698 */
+/* 1699 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -199706,9 +199759,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ContentPage = exports.ContentInstance = void 0;
 exports.ContentListInstance = ContentListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
 function ContentListInstance(version) {
     const instance = {};
     instance._version = version;
@@ -199909,7 +199962,7 @@ exports.ContentPage = ContentPage;
 
 
 /***/ }),
-/* 1699 */
+/* 1700 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -199934,9 +199987,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ContentAndApprovalsPage = exports.ContentAndApprovalsInstance = void 0;
 exports.ContentAndApprovalsListInstance = ContentAndApprovalsListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
 function ContentAndApprovalsListInstance(version) {
     const instance = {};
     instance._version = version;
@@ -200135,7 +200188,7 @@ exports.ContentAndApprovalsPage = ContentAndApprovalsPage;
 
 
 /***/ }),
-/* 1700 */
+/* 1701 */
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 "use strict";
@@ -200143,7 +200196,7 @@ exports.ContentAndApprovalsPage = ContentAndApprovalsPage;
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-const ConversationsBase_1 = __importDefault(__webpack_require__(1701));
+const ConversationsBase_1 = __importDefault(__webpack_require__(1702));
 class Conversations extends ConversationsBase_1.default {
     /**
      * @deprecated - Use v1.configuration instead
@@ -200206,7 +200259,7 @@ module.exports = Conversations;
 
 
 /***/ }),
-/* 1701 */
+/* 1702 */
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 "use strict";
@@ -200224,8 +200277,8 @@ module.exports = Conversations;
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-const Domain_1 = __importDefault(__webpack_require__(1538));
-const V1_1 = __importDefault(__webpack_require__(1702));
+const Domain_1 = __importDefault(__webpack_require__(1539));
+const V1_1 = __importDefault(__webpack_require__(1703));
 class ConversationsBase extends Domain_1.default {
     /**
      * Initialize conversations domain
@@ -200244,7 +200297,7 @@ module.exports = ConversationsBase;
 
 
 /***/ }),
-/* 1702 */
+/* 1703 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -200266,16 +200319,16 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const Version_1 = __importDefault(__webpack_require__(1541));
-const addressConfiguration_1 = __webpack_require__(1703);
-const configuration_1 = __webpack_require__(1704);
-const conversation_1 = __webpack_require__(1706);
-const conversationWithParticipants_1 = __webpack_require__(1711);
-const credential_1 = __webpack_require__(1712);
-const participantConversation_1 = __webpack_require__(1713);
-const role_1 = __webpack_require__(1714);
-const service_1 = __webpack_require__(1715);
-const user_1 = __webpack_require__(1730);
+const Version_1 = __importDefault(__webpack_require__(1542));
+const addressConfiguration_1 = __webpack_require__(1704);
+const configuration_1 = __webpack_require__(1705);
+const conversation_1 = __webpack_require__(1707);
+const conversationWithParticipants_1 = __webpack_require__(1712);
+const credential_1 = __webpack_require__(1713);
+const participantConversation_1 = __webpack_require__(1714);
+const role_1 = __webpack_require__(1715);
+const service_1 = __webpack_require__(1716);
+const user_1 = __webpack_require__(1731);
 class V1 extends Version_1.default {
     /**
      * Initialize the V1 version of Conversations
@@ -200341,7 +200394,7 @@ exports["default"] = V1;
 
 
 /***/ }),
-/* 1703 */
+/* 1704 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -200366,10 +200419,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.AddressConfigurationPage = exports.AddressConfigurationInstance = exports.AddressConfigurationContextImpl = void 0;
 exports.AddressConfigurationListInstance = AddressConfigurationListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class AddressConfigurationContextImpl {
     constructor(_version, sid) {
         this._version = _version;
@@ -200867,7 +200920,7 @@ exports.AddressConfigurationPage = AddressConfigurationPage;
 
 
 /***/ }),
-/* 1704 */
+/* 1705 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -200889,9 +200942,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ConfigurationInstance = exports.ConfigurationContextImpl = void 0;
 exports.ConfigurationListInstance = ConfigurationListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const webhook_1 = __webpack_require__(1705);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const webhook_1 = __webpack_require__(1706);
 class ConfigurationContextImpl {
     constructor(_version) {
         this._version = _version;
@@ -201102,7 +201155,7 @@ function ConfigurationListInstance(version) {
 
 
 /***/ }),
-/* 1705 */
+/* 1706 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -201124,8 +201177,8 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.WebhookInstance = exports.WebhookContextImpl = void 0;
 exports.WebhookListInstance = WebhookListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
 class WebhookContextImpl {
     constructor(_version) {
         this._version = _version;
@@ -201331,7 +201384,7 @@ function WebhookListInstance(version) {
 
 
 /***/ }),
-/* 1706 */
+/* 1707 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -201356,13 +201409,13 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ConversationPage = exports.ConversationInstance = exports.ConversationContextImpl = void 0;
 exports.ConversationListInstance = ConversationListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
-const message_1 = __webpack_require__(1707);
-const participant_1 = __webpack_require__(1709);
-const webhook_1 = __webpack_require__(1710);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
+const message_1 = __webpack_require__(1708);
+const participant_1 = __webpack_require__(1710);
+const webhook_1 = __webpack_require__(1711);
 class ConversationContextImpl {
     constructor(_version, sid) {
         this._version = _version;
@@ -201926,7 +201979,7 @@ exports.ConversationPage = ConversationPage;
 
 
 /***/ }),
-/* 1707 */
+/* 1708 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -201951,11 +202004,11 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.MessagePage = exports.MessageInstance = exports.MessageContextImpl = void 0;
 exports.MessageListInstance = MessageListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
-const deliveryReceipt_1 = __webpack_require__(1708);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
+const deliveryReceipt_1 = __webpack_require__(1709);
 class MessageContextImpl {
     constructor(_version, conversationSid, sid) {
         this._version = _version;
@@ -202469,7 +202522,7 @@ exports.MessagePage = MessagePage;
 
 
 /***/ }),
-/* 1708 */
+/* 1709 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -202494,10 +202547,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.DeliveryReceiptPage = exports.DeliveryReceiptInstance = exports.DeliveryReceiptContextImpl = void 0;
 exports.DeliveryReceiptListInstance = DeliveryReceiptListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class DeliveryReceiptContextImpl {
     constructor(_version, conversationSid, messageSid, sid) {
         this._version = _version;
@@ -202760,7 +202813,7 @@ exports.DeliveryReceiptPage = DeliveryReceiptPage;
 
 
 /***/ }),
-/* 1709 */
+/* 1710 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -202785,10 +202838,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ParticipantPage = exports.ParticipantInstance = exports.ParticipantContextImpl = void 0;
 exports.ParticipantListInstance = ParticipantListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class ParticipantContextImpl {
     constructor(_version, conversationSid, sid) {
         this._version = _version;
@@ -203296,7 +203349,7 @@ exports.ParticipantPage = ParticipantPage;
 
 
 /***/ }),
-/* 1710 */
+/* 1711 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -203321,10 +203374,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.WebhookPage = exports.WebhookInstance = exports.WebhookContextImpl = void 0;
 exports.WebhookListInstance = WebhookListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class WebhookContextImpl {
     constructor(_version, conversationSid, sid) {
         this._version = _version;
@@ -203772,7 +203825,7 @@ exports.WebhookPage = WebhookPage;
 
 
 /***/ }),
-/* 1711 */
+/* 1712 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -203794,8 +203847,8 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ConversationWithParticipantsInstance = void 0;
 exports.ConversationWithParticipantsListInstance = ConversationWithParticipantsListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
 function ConversationWithParticipantsListInstance(version) {
     const instance = {};
     instance._version = version;
@@ -203960,7 +204013,7 @@ exports.ConversationWithParticipantsInstance = ConversationWithParticipantsInsta
 
 
 /***/ }),
-/* 1712 */
+/* 1713 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -203985,10 +204038,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.CredentialPage = exports.CredentialInstance = exports.CredentialContextImpl = void 0;
 exports.CredentialListInstance = CredentialListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class CredentialContextImpl {
     constructor(_version, sid) {
         this._version = _version;
@@ -204438,7 +204491,7 @@ exports.CredentialPage = CredentialPage;
 
 
 /***/ }),
-/* 1713 */
+/* 1714 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -204463,9 +204516,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ParticipantConversationPage = exports.ParticipantConversationInstance = void 0;
 exports.ParticipantConversationListInstance = ParticipantConversationListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
 function ParticipantConversationListInstance(version) {
     const instance = {};
     instance._version = version;
@@ -204650,7 +204703,7 @@ exports.ParticipantConversationPage = ParticipantConversationPage;
 
 
 /***/ }),
-/* 1714 */
+/* 1715 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -204675,10 +204728,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.RolePage = exports.RoleInstance = exports.RoleContextImpl = void 0;
 exports.RoleListInstance = RoleListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class RoleContextImpl {
     constructor(_version, sid) {
         this._version = _version;
@@ -205095,7 +205148,7 @@ exports.RolePage = RolePage;
 
 
 /***/ }),
-/* 1715 */
+/* 1716 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -205120,17 +205173,17 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ServicePage = exports.ServiceInstance = exports.ServiceContextImpl = void 0;
 exports.ServiceListInstance = ServiceListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
-const binding_1 = __webpack_require__(1716);
-const configuration_1 = __webpack_require__(1717);
-const conversation_1 = __webpack_require__(1720);
-const conversationWithParticipants_1 = __webpack_require__(1725);
-const participantConversation_1 = __webpack_require__(1726);
-const role_1 = __webpack_require__(1727);
-const user_1 = __webpack_require__(1728);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
+const binding_1 = __webpack_require__(1717);
+const configuration_1 = __webpack_require__(1718);
+const conversation_1 = __webpack_require__(1721);
+const conversationWithParticipants_1 = __webpack_require__(1726);
+const participantConversation_1 = __webpack_require__(1727);
+const role_1 = __webpack_require__(1728);
+const user_1 = __webpack_require__(1729);
 class ServiceContextImpl {
     constructor(_version, sid) {
         this._version = _version;
@@ -205551,7 +205604,7 @@ exports.ServicePage = ServicePage;
 
 
 /***/ }),
-/* 1716 */
+/* 1717 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -205576,10 +205629,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.BindingPage = exports.BindingInstance = exports.BindingContextImpl = void 0;
 exports.BindingListInstance = BindingListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class BindingContextImpl {
     constructor(_version, chatServiceSid, sid) {
         this._version = _version;
@@ -205889,7 +205942,7 @@ exports.BindingPage = BindingPage;
 
 
 /***/ }),
-/* 1717 */
+/* 1718 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -205911,11 +205964,11 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ConfigurationInstance = exports.ConfigurationContextImpl = void 0;
 exports.ConfigurationListInstance = ConfigurationListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
-const notification_1 = __webpack_require__(1718);
-const webhook_1 = __webpack_require__(1719);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
+const notification_1 = __webpack_require__(1719);
+const webhook_1 = __webpack_require__(1720);
 class ConfigurationContextImpl {
     constructor(_version, chatServiceSid) {
         this._version = _version;
@@ -206144,7 +206197,7 @@ function ConfigurationListInstance(version, chatServiceSid) {
 
 
 /***/ }),
-/* 1718 */
+/* 1719 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -206166,9 +206219,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.NotificationInstance = exports.NotificationContextImpl = void 0;
 exports.NotificationListInstance = NotificationListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class NotificationContextImpl {
     constructor(_version, chatServiceSid) {
         this._version = _version;
@@ -206422,7 +206475,7 @@ function NotificationListInstance(version, chatServiceSid) {
 
 
 /***/ }),
-/* 1719 */
+/* 1720 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -206444,9 +206497,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.WebhookInstance = exports.WebhookContextImpl = void 0;
 exports.WebhookListInstance = WebhookListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class WebhookContextImpl {
     constructor(_version, chatServiceSid) {
         this._version = _version;
@@ -206656,7 +206709,7 @@ function WebhookListInstance(version, chatServiceSid) {
 
 
 /***/ }),
-/* 1720 */
+/* 1721 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -206681,13 +206734,13 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ConversationPage = exports.ConversationInstance = exports.ConversationContextImpl = void 0;
 exports.ConversationListInstance = ConversationListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
-const message_1 = __webpack_require__(1721);
-const participant_1 = __webpack_require__(1723);
-const webhook_1 = __webpack_require__(1724);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
+const message_1 = __webpack_require__(1722);
+const participant_1 = __webpack_require__(1724);
+const webhook_1 = __webpack_require__(1725);
 class ConversationContextImpl {
     constructor(_version, chatServiceSid, sid) {
         this._version = _version;
@@ -207259,7 +207312,7 @@ exports.ConversationPage = ConversationPage;
 
 
 /***/ }),
-/* 1721 */
+/* 1722 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -207284,11 +207337,11 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.MessagePage = exports.MessageInstance = exports.MessageContextImpl = void 0;
 exports.MessageListInstance = MessageListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
-const deliveryReceipt_1 = __webpack_require__(1722);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
+const deliveryReceipt_1 = __webpack_require__(1723);
 class MessageContextImpl {
     constructor(_version, chatServiceSid, conversationSid, sid) {
         this._version = _version;
@@ -207810,7 +207863,7 @@ exports.MessagePage = MessagePage;
 
 
 /***/ }),
-/* 1722 */
+/* 1723 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -207835,10 +207888,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.DeliveryReceiptPage = exports.DeliveryReceiptInstance = exports.DeliveryReceiptContextImpl = void 0;
 exports.DeliveryReceiptListInstance = DeliveryReceiptListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class DeliveryReceiptContextImpl {
     constructor(_version, chatServiceSid, conversationSid, messageSid, sid) {
         this._version = _version;
@@ -208114,7 +208167,7 @@ exports.DeliveryReceiptPage = DeliveryReceiptPage;
 
 
 /***/ }),
-/* 1723 */
+/* 1724 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -208139,10 +208192,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ParticipantPage = exports.ParticipantInstance = exports.ParticipantContextImpl = void 0;
 exports.ParticipantListInstance = ParticipantListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class ParticipantContextImpl {
     constructor(_version, chatServiceSid, conversationSid, sid) {
         this._version = _version;
@@ -208658,7 +208711,7 @@ exports.ParticipantPage = ParticipantPage;
 
 
 /***/ }),
-/* 1724 */
+/* 1725 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -208683,10 +208736,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.WebhookPage = exports.WebhookInstance = exports.WebhookContextImpl = void 0;
 exports.WebhookListInstance = WebhookListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class WebhookContextImpl {
     constructor(_version, chatServiceSid, conversationSid, sid) {
         this._version = _version;
@@ -209142,7 +209195,7 @@ exports.WebhookPage = WebhookPage;
 
 
 /***/ }),
-/* 1725 */
+/* 1726 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -209164,9 +209217,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ConversationWithParticipantsInstance = void 0;
 exports.ConversationWithParticipantsListInstance = ConversationWithParticipantsListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 function ConversationWithParticipantsListInstance(version, chatServiceSid) {
     if (!(0, utility_1.isValidPathParam)(chatServiceSid)) {
         throw new Error("Parameter 'chatServiceSid' is not valid.");
@@ -209334,7 +209387,7 @@ exports.ConversationWithParticipantsInstance = ConversationWithParticipantsInsta
 
 
 /***/ }),
-/* 1726 */
+/* 1727 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -209359,10 +209412,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ParticipantConversationPage = exports.ParticipantConversationInstance = void 0;
 exports.ParticipantConversationListInstance = ParticipantConversationListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 function ParticipantConversationListInstance(version, chatServiceSid) {
     if (!(0, utility_1.isValidPathParam)(chatServiceSid)) {
         throw new Error("Parameter 'chatServiceSid' is not valid.");
@@ -209550,7 +209603,7 @@ exports.ParticipantConversationPage = ParticipantConversationPage;
 
 
 /***/ }),
-/* 1727 */
+/* 1728 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -209575,10 +209628,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.RolePage = exports.RoleInstance = exports.RoleContextImpl = void 0;
 exports.RoleListInstance = RoleListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class RoleContextImpl {
     constructor(_version, chatServiceSid, sid) {
         this._version = _version;
@@ -210002,7 +210055,7 @@ exports.RolePage = RolePage;
 
 
 /***/ }),
-/* 1728 */
+/* 1729 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -210027,11 +210080,11 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.UserPage = exports.UserInstance = exports.UserContextImpl = void 0;
 exports.UserListInstance = UserListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
-const userConversation_1 = __webpack_require__(1729);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
+const userConversation_1 = __webpack_require__(1730);
 class UserContextImpl {
     constructor(_version, chatServiceSid, sid) {
         this._version = _version;
@@ -210501,7 +210554,7 @@ exports.UserPage = UserPage;
 
 
 /***/ }),
-/* 1729 */
+/* 1730 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -210526,10 +210579,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.UserConversationPage = exports.UserConversationInstance = exports.UserConversationContextImpl = void 0;
 exports.UserConversationListInstance = UserConversationListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class UserConversationContextImpl {
     constructor(_version, chatServiceSid, userSid, conversationSid) {
         this._version = _version;
@@ -210925,7 +210978,7 @@ exports.UserConversationPage = UserConversationPage;
 
 
 /***/ }),
-/* 1730 */
+/* 1731 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -210950,11 +211003,11 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.UserPage = exports.UserInstance = exports.UserContextImpl = void 0;
 exports.UserListInstance = UserListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
-const userConversation_1 = __webpack_require__(1731);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
+const userConversation_1 = __webpack_require__(1732);
 class UserContextImpl {
     constructor(_version, sid) {
         this._version = _version;
@@ -211417,7 +211470,7 @@ exports.UserPage = UserPage;
 
 
 /***/ }),
-/* 1731 */
+/* 1732 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -211442,10 +211495,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.UserConversationPage = exports.UserConversationInstance = exports.UserConversationContextImpl = void 0;
 exports.UserConversationListInstance = UserConversationListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class UserConversationContextImpl {
     constructor(_version, userSid, conversationSid) {
         this._version = _version;
@@ -211834,7 +211887,7 @@ exports.UserConversationPage = UserConversationPage;
 
 
 /***/ }),
-/* 1732 */
+/* 1733 */
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 "use strict";
@@ -211842,7 +211895,7 @@ exports.UserConversationPage = UserConversationPage;
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-const EventsBase_1 = __importDefault(__webpack_require__(1733));
+const EventsBase_1 = __importDefault(__webpack_require__(1734));
 class Events extends EventsBase_1.default {
     /**
      * @deprecated - Use v1.eventTypes instead
@@ -211877,7 +211930,7 @@ module.exports = Events;
 
 
 /***/ }),
-/* 1733 */
+/* 1734 */
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 "use strict";
@@ -211895,8 +211948,8 @@ module.exports = Events;
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-const Domain_1 = __importDefault(__webpack_require__(1538));
-const V1_1 = __importDefault(__webpack_require__(1734));
+const Domain_1 = __importDefault(__webpack_require__(1539));
+const V1_1 = __importDefault(__webpack_require__(1735));
 class EventsBase extends Domain_1.default {
     /**
      * Initialize events domain
@@ -211915,7 +211968,7 @@ module.exports = EventsBase;
 
 
 /***/ }),
-/* 1734 */
+/* 1735 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -211937,11 +211990,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const Version_1 = __importDefault(__webpack_require__(1541));
-const eventType_1 = __webpack_require__(1735);
-const schema_1 = __webpack_require__(1736);
-const sink_1 = __webpack_require__(1738);
-const subscription_1 = __webpack_require__(1741);
+const Version_1 = __importDefault(__webpack_require__(1542));
+const eventType_1 = __webpack_require__(1736);
+const schema_1 = __webpack_require__(1737);
+const sink_1 = __webpack_require__(1739);
+const subscription_1 = __webpack_require__(1742);
 class V1 extends Version_1.default {
     /**
      * Initialize the V1 version of Events
@@ -211976,7 +212029,7 @@ exports["default"] = V1;
 
 
 /***/ }),
-/* 1735 */
+/* 1736 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -212001,10 +212054,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.EventTypePage = exports.EventTypeInstance = exports.EventTypeContextImpl = void 0;
 exports.EventTypeListInstance = EventTypeListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class EventTypeContextImpl {
     constructor(_version, type) {
         this._version = _version;
@@ -212255,7 +212308,7 @@ exports.EventTypePage = EventTypePage;
 
 
 /***/ }),
-/* 1736 */
+/* 1737 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -212277,10 +212330,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.SchemaInstance = exports.SchemaContextImpl = void 0;
 exports.SchemaListInstance = SchemaListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
-const schemaVersion_1 = __webpack_require__(1737);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
+const schemaVersion_1 = __webpack_require__(1738);
 class SchemaContextImpl {
     constructor(_version, id) {
         this._version = _version;
@@ -212420,7 +212473,7 @@ function SchemaListInstance(version) {
 
 
 /***/ }),
-/* 1737 */
+/* 1738 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -212445,10 +212498,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.SchemaVersionPage = exports.SchemaVersionInstance = exports.SchemaVersionContextImpl = void 0;
 exports.SchemaVersionListInstance = SchemaVersionListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class SchemaVersionContextImpl {
     constructor(_version, id, schemaVersion) {
         this._version = _version;
@@ -212693,7 +212746,7 @@ exports.SchemaVersionPage = SchemaVersionPage;
 
 
 /***/ }),
-/* 1738 */
+/* 1739 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -212718,12 +212771,12 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.SinkPage = exports.SinkInstance = exports.SinkContextImpl = void 0;
 exports.SinkListInstance = SinkListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
-const sinkTest_1 = __webpack_require__(1739);
-const sinkValidate_1 = __webpack_require__(1740);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
+const sinkTest_1 = __webpack_require__(1740);
+const sinkValidate_1 = __webpack_require__(1741);
 class SinkContextImpl {
     constructor(_version, sid) {
         this._version = _version;
@@ -213171,7 +213224,7 @@ exports.SinkPage = SinkPage;
 
 
 /***/ }),
-/* 1739 */
+/* 1740 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -213193,9 +213246,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.SinkTestInstance = void 0;
 exports.SinkTestListInstance = SinkTestListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 function SinkTestListInstance(version, sid) {
     if (!(0, utility_1.isValidPathParam)(sid)) {
         throw new Error("Parameter 'sid' is not valid.");
@@ -213265,7 +213318,7 @@ exports.SinkTestInstance = SinkTestInstance;
 
 
 /***/ }),
-/* 1740 */
+/* 1741 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -213287,9 +213340,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.SinkValidateInstance = void 0;
 exports.SinkValidateListInstance = SinkValidateListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 function SinkValidateListInstance(version, sid) {
     if (!(0, utility_1.isValidPathParam)(sid)) {
         throw new Error("Parameter 'sid' is not valid.");
@@ -213379,7 +213432,7 @@ exports.SinkValidateInstance = SinkValidateInstance;
 
 
 /***/ }),
-/* 1741 */
+/* 1742 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -213404,11 +213457,11 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.SubscriptionPage = exports.SubscriptionInstance = exports.SubscriptionContextImpl = void 0;
 exports.SubscriptionListInstance = SubscriptionListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
-const subscribedEvent_1 = __webpack_require__(1742);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
+const subscribedEvent_1 = __webpack_require__(1743);
 class SubscriptionContextImpl {
     constructor(_version, sid) {
         this._version = _version;
@@ -213842,7 +213895,7 @@ exports.SubscriptionPage = SubscriptionPage;
 
 
 /***/ }),
-/* 1742 */
+/* 1743 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -213867,10 +213920,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.SubscribedEventPage = exports.SubscribedEventInstance = exports.SubscribedEventContextImpl = void 0;
 exports.SubscribedEventListInstance = SubscribedEventListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class SubscribedEventContextImpl {
     constructor(_version, subscriptionSid, type) {
         this._version = _version;
@@ -214276,7 +214329,7 @@ exports.SubscribedEventPage = SubscribedEventPage;
 
 
 /***/ }),
-/* 1743 */
+/* 1744 */
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 "use strict";
@@ -214284,7 +214337,7 @@ exports.SubscribedEventPage = SubscribedEventPage;
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-const FlexApiBase_1 = __importDefault(__webpack_require__(1744));
+const FlexApiBase_1 = __importDefault(__webpack_require__(1745));
 class FlexApi extends FlexApiBase_1.default {
     /**
      * @deprecated - Use v1.assessments instead
@@ -214340,7 +214393,7 @@ module.exports = FlexApi;
 
 
 /***/ }),
-/* 1744 */
+/* 1745 */
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 "use strict";
@@ -214358,9 +214411,9 @@ module.exports = FlexApi;
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-const Domain_1 = __importDefault(__webpack_require__(1538));
-const V1_1 = __importDefault(__webpack_require__(1745));
-const V2_1 = __importDefault(__webpack_require__(1776));
+const Domain_1 = __importDefault(__webpack_require__(1539));
+const V1_1 = __importDefault(__webpack_require__(1746));
+const V2_1 = __importDefault(__webpack_require__(1777));
 class FlexApiBase extends Domain_1.default {
     /**
      * Initialize flexApi domain
@@ -214383,7 +214436,7 @@ module.exports = FlexApiBase;
 
 
 /***/ }),
-/* 1745 */
+/* 1746 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -214405,31 +214458,31 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const Version_1 = __importDefault(__webpack_require__(1541));
-const assessments_1 = __webpack_require__(1746);
-const channel_1 = __webpack_require__(1747);
-const configuration_1 = __webpack_require__(1748);
-const createFlexInstance_1 = __webpack_require__(1749);
-const flexFlow_1 = __webpack_require__(1750);
-const insightsAssessmentsComment_1 = __webpack_require__(1751);
-const insightsConversations_1 = __webpack_require__(1752);
-const insightsQuestionnaires_1 = __webpack_require__(1753);
-const insightsQuestionnairesCategory_1 = __webpack_require__(1754);
-const insightsQuestionnairesQuestion_1 = __webpack_require__(1755);
-const insightsSegments_1 = __webpack_require__(1756);
-const insightsSession_1 = __webpack_require__(1757);
-const insightsSettingsAnswerSets_1 = __webpack_require__(1758);
-const insightsSettingsComment_1 = __webpack_require__(1759);
-const insightsUserRoles_1 = __webpack_require__(1760);
-const interaction_1 = __webpack_require__(1761);
-const plugin_1 = __webpack_require__(1766);
-const pluginArchive_1 = __webpack_require__(1768);
-const pluginConfiguration_1 = __webpack_require__(1769);
-const pluginConfigurationArchive_1 = __webpack_require__(1771);
-const pluginRelease_1 = __webpack_require__(1772);
-const pluginVersionArchive_1 = __webpack_require__(1773);
-const provisioningStatus_1 = __webpack_require__(1774);
-const webChannel_1 = __webpack_require__(1775);
+const Version_1 = __importDefault(__webpack_require__(1542));
+const assessments_1 = __webpack_require__(1747);
+const channel_1 = __webpack_require__(1748);
+const configuration_1 = __webpack_require__(1749);
+const createFlexInstance_1 = __webpack_require__(1750);
+const flexFlow_1 = __webpack_require__(1751);
+const insightsAssessmentsComment_1 = __webpack_require__(1752);
+const insightsConversations_1 = __webpack_require__(1753);
+const insightsQuestionnaires_1 = __webpack_require__(1754);
+const insightsQuestionnairesCategory_1 = __webpack_require__(1755);
+const insightsQuestionnairesQuestion_1 = __webpack_require__(1756);
+const insightsSegments_1 = __webpack_require__(1757);
+const insightsSession_1 = __webpack_require__(1758);
+const insightsSettingsAnswerSets_1 = __webpack_require__(1759);
+const insightsSettingsComment_1 = __webpack_require__(1760);
+const insightsUserRoles_1 = __webpack_require__(1761);
+const interaction_1 = __webpack_require__(1762);
+const plugin_1 = __webpack_require__(1767);
+const pluginArchive_1 = __webpack_require__(1769);
+const pluginConfiguration_1 = __webpack_require__(1770);
+const pluginConfigurationArchive_1 = __webpack_require__(1772);
+const pluginRelease_1 = __webpack_require__(1773);
+const pluginVersionArchive_1 = __webpack_require__(1774);
+const provisioningStatus_1 = __webpack_require__(1775);
+const webChannel_1 = __webpack_require__(1776);
 class V1 extends Version_1.default {
     /**
      * Initialize the V1 version of FlexApi
@@ -214588,7 +214641,7 @@ exports["default"] = V1;
 
 
 /***/ }),
-/* 1746 */
+/* 1747 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -214613,10 +214666,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.AssessmentsPage = exports.AssessmentsInstance = exports.AssessmentsContextImpl = void 0;
 exports.AssessmentsListInstance = AssessmentsListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class AssessmentsContextImpl {
     constructor(_version, assessmentSid) {
         this._version = _version;
@@ -215037,7 +215090,7 @@ exports.AssessmentsPage = AssessmentsPage;
 
 
 /***/ }),
-/* 1747 */
+/* 1748 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -215062,10 +215115,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ChannelPage = exports.ChannelInstance = exports.ChannelContextImpl = void 0;
 exports.ChannelListInstance = ChannelListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class ChannelContextImpl {
     constructor(_version, sid) {
         this._version = _version;
@@ -215457,7 +215510,7 @@ exports.ChannelPage = ChannelPage;
 
 
 /***/ }),
-/* 1748 */
+/* 1749 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -215479,8 +215532,8 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ConfigurationInstance = exports.ConfigurationContextImpl = void 0;
 exports.ConfigurationListInstance = ConfigurationListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
 class ConfigurationContextImpl {
     constructor(_version) {
         this._version = _version;
@@ -215765,7 +215818,7 @@ function ConfigurationListInstance(version) {
 
 
 /***/ }),
-/* 1749 */
+/* 1750 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -215787,8 +215840,8 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.CreateFlexInstanceInstance = exports.CreateFlexInstanceContextImpl = exports.CreateInstanceRequestBodyConversation = exports.CreateInstanceRequestBody = void 0;
 exports.CreateFlexInstanceListInstance = CreateFlexInstanceListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
 class CreateInstanceRequestBody {
     constructor(payload) {
         this.conversation = payload["Conversation"];
@@ -215937,7 +215990,7 @@ function CreateFlexInstanceListInstance(version) {
 
 
 /***/ }),
-/* 1750 */
+/* 1751 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -215962,10 +216015,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.FlexFlowPage = exports.FlexFlowInstance = exports.FlexFlowContextImpl = void 0;
 exports.FlexFlowListInstance = FlexFlowListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class FlexFlowContextImpl {
     constructor(_version, sid) {
         this._version = _version;
@@ -216523,7 +216576,7 @@ exports.FlexFlowPage = FlexFlowPage;
 
 
 /***/ }),
-/* 1751 */
+/* 1752 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -216548,9 +216601,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.InsightsAssessmentsCommentPage = exports.InsightsAssessmentsCommentInstance = void 0;
 exports.InsightsAssessmentsCommentListInstance = InsightsAssessmentsCommentListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
 function InsightsAssessmentsCommentListInstance(version) {
     const instance = {};
     instance._version = version;
@@ -216827,7 +216880,7 @@ exports.InsightsAssessmentsCommentPage = InsightsAssessmentsCommentPage;
 
 
 /***/ }),
-/* 1752 */
+/* 1753 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -216852,9 +216905,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.InsightsConversationsPage = exports.InsightsConversationsInstance = void 0;
 exports.InsightsConversationsListInstance = InsightsConversationsListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
 function InsightsConversationsListInstance(version) {
     const instance = {};
     instance._version = version;
@@ -217015,7 +217068,7 @@ exports.InsightsConversationsPage = InsightsConversationsPage;
 
 
 /***/ }),
-/* 1753 */
+/* 1754 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -217040,10 +217093,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.InsightsQuestionnairesPage = exports.InsightsQuestionnairesInstance = exports.InsightsQuestionnairesContextImpl = void 0;
 exports.InsightsQuestionnairesListInstance = InsightsQuestionnairesListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class InsightsQuestionnairesContextImpl {
     constructor(_version, questionnaireSid) {
         this._version = _version;
@@ -217501,7 +217554,7 @@ exports.InsightsQuestionnairesPage = InsightsQuestionnairesPage;
 
 
 /***/ }),
-/* 1754 */
+/* 1755 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -217526,10 +217579,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.InsightsQuestionnairesCategoryPage = exports.InsightsQuestionnairesCategoryInstance = exports.InsightsQuestionnairesCategoryContextImpl = void 0;
 exports.InsightsQuestionnairesCategoryListInstance = InsightsQuestionnairesCategoryListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class InsightsQuestionnairesCategoryContextImpl {
     constructor(_version, categorySid) {
         this._version = _version;
@@ -217891,7 +217944,7 @@ exports.InsightsQuestionnairesCategoryPage = InsightsQuestionnairesCategoryPage;
 
 
 /***/ }),
-/* 1755 */
+/* 1756 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -217916,10 +217969,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.InsightsQuestionnairesQuestionPage = exports.InsightsQuestionnairesQuestionInstance = exports.InsightsQuestionnairesQuestionContextImpl = void 0;
 exports.InsightsQuestionnairesQuestionListInstance = InsightsQuestionnairesQuestionListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class InsightsQuestionnairesQuestionContextImpl {
     constructor(_version, questionSid) {
         this._version = _version;
@@ -218341,7 +218394,7 @@ exports.InsightsQuestionnairesQuestionPage = InsightsQuestionnairesQuestionPage;
 
 
 /***/ }),
-/* 1756 */
+/* 1757 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -218366,9 +218419,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.InsightsSegmentsPage = exports.InsightsSegmentsInstance = void 0;
 exports.InsightsSegmentsListInstance = InsightsSegmentsListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
 function InsightsSegmentsListInstance(version) {
     const instance = {};
     instance._version = version;
@@ -218569,7 +218622,7 @@ exports.InsightsSegmentsPage = InsightsSegmentsPage;
 
 
 /***/ }),
-/* 1757 */
+/* 1758 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -218591,8 +218644,8 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.InsightsSessionInstance = exports.InsightsSessionContextImpl = void 0;
 exports.InsightsSessionListInstance = InsightsSessionListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
 class InsightsSessionContextImpl {
     constructor(_version) {
         this._version = _version;
@@ -218725,7 +218778,7 @@ function InsightsSessionListInstance(version) {
 
 
 /***/ }),
-/* 1758 */
+/* 1759 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -218747,8 +218800,8 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.InsightsSettingsAnswerSetsInstance = void 0;
 exports.InsightsSettingsAnswerSetsListInstance = InsightsSettingsAnswerSetsListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
 function InsightsSettingsAnswerSetsListInstance(version) {
     const instance = {};
     instance._version = version;
@@ -218845,7 +218898,7 @@ exports.InsightsSettingsAnswerSetsInstance = InsightsSettingsAnswerSetsInstance;
 
 
 /***/ }),
-/* 1759 */
+/* 1760 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -218867,8 +218920,8 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.InsightsSettingsCommentInstance = void 0;
 exports.InsightsSettingsCommentListInstance = InsightsSettingsCommentListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
 function InsightsSettingsCommentListInstance(version) {
     const instance = {};
     instance._version = version;
@@ -218961,7 +219014,7 @@ exports.InsightsSettingsCommentInstance = InsightsSettingsCommentInstance;
 
 
 /***/ }),
-/* 1760 */
+/* 1761 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -218983,8 +219036,8 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.InsightsUserRolesInstance = exports.InsightsUserRolesContextImpl = void 0;
 exports.InsightsUserRolesListInstance = InsightsUserRolesListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
 class InsightsUserRolesContextImpl {
     constructor(_version) {
         this._version = _version;
@@ -219111,7 +219164,7 @@ function InsightsUserRolesListInstance(version) {
 
 
 /***/ }),
-/* 1761 */
+/* 1762 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -219133,10 +219186,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.InteractionInstance = exports.InteractionContextImpl = void 0;
 exports.InteractionListInstance = InteractionListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
-const interactionChannel_1 = __webpack_require__(1762);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
+const interactionChannel_1 = __webpack_require__(1763);
 class InteractionContextImpl {
     constructor(_version, sid) {
         this._version = _version;
@@ -219405,7 +219458,7 @@ function InteractionListInstance(version) {
 
 
 /***/ }),
-/* 1762 */
+/* 1763 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -219430,13 +219483,13 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.InteractionChannelPage = exports.InteractionChannelInstance = exports.InteractionChannelContextImpl = void 0;
 exports.InteractionChannelListInstance = InteractionChannelListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
-const interactionChannelInvite_1 = __webpack_require__(1763);
-const interactionChannelParticipant_1 = __webpack_require__(1764);
-const interactionTransfer_1 = __webpack_require__(1765);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
+const interactionChannelInvite_1 = __webpack_require__(1764);
+const interactionChannelParticipant_1 = __webpack_require__(1765);
+const interactionTransfer_1 = __webpack_require__(1766);
 class InteractionChannelContextImpl {
     constructor(_version, interactionSid, sid) {
         this._version = _version;
@@ -219785,7 +219838,7 @@ exports.InteractionChannelPage = InteractionChannelPage;
 
 
 /***/ }),
-/* 1763 */
+/* 1764 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -219810,10 +219863,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.InteractionChannelInvitePage = exports.InteractionChannelInviteInstance = void 0;
 exports.InteractionChannelInviteListInstance = InteractionChannelInviteListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 function InteractionChannelInviteListInstance(version, interactionSid, channelSid) {
     if (!(0, utility_1.isValidPathParam)(interactionSid)) {
         throw new Error("Parameter 'interactionSid' is not valid.");
@@ -220024,7 +220077,7 @@ exports.InteractionChannelInvitePage = InteractionChannelInvitePage;
 
 
 /***/ }),
-/* 1764 */
+/* 1765 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -220049,10 +220102,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.InteractionChannelParticipantPage = exports.InteractionChannelParticipantInstance = exports.InteractionChannelParticipantContextImpl = void 0;
 exports.InteractionChannelParticipantListInstance = InteractionChannelParticipantListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class InteractionChannelParticipantContextImpl {
     constructor(_version, interactionSid, channelSid, sid) {
         this._version = _version;
@@ -220375,7 +220428,7 @@ exports.InteractionChannelParticipantPage = InteractionChannelParticipantPage;
 
 
 /***/ }),
-/* 1765 */
+/* 1766 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -220397,9 +220450,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.InteractionTransferInstance = exports.InteractionTransferContextImpl = void 0;
 exports.InteractionTransferListInstance = InteractionTransferListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class InteractionTransferContextImpl {
     constructor(_version, interactionSid, channelSid, sid) {
         this._version = _version;
@@ -220680,7 +220733,7 @@ function InteractionTransferListInstance(version, interactionSid, channelSid) {
 
 
 /***/ }),
-/* 1766 */
+/* 1767 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -220705,11 +220758,11 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.PluginPage = exports.PluginInstance = exports.PluginContextImpl = void 0;
 exports.PluginListInstance = PluginListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
-const pluginVersions_1 = __webpack_require__(1767);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
+const pluginVersions_1 = __webpack_require__(1768);
 class PluginContextImpl {
     constructor(_version, sid) {
         this._version = _version;
@@ -221113,7 +221166,7 @@ exports.PluginPage = PluginPage;
 
 
 /***/ }),
-/* 1767 */
+/* 1768 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -221138,10 +221191,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.PluginVersionsPage = exports.PluginVersionsInstance = exports.PluginVersionsContextImpl = void 0;
 exports.PluginVersionsListInstance = PluginVersionsListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class PluginVersionsContextImpl {
     constructor(_version, pluginSid, sid) {
         this._version = _version;
@@ -221488,7 +221541,7 @@ exports.PluginVersionsPage = PluginVersionsPage;
 
 
 /***/ }),
-/* 1768 */
+/* 1769 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -221510,9 +221563,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.PluginArchiveInstance = exports.PluginArchiveContextImpl = void 0;
 exports.PluginArchiveListInstance = PluginArchiveListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class PluginArchiveContextImpl {
     constructor(_version, sid) {
         this._version = _version;
@@ -221657,7 +221710,7 @@ function PluginArchiveListInstance(version) {
 
 
 /***/ }),
-/* 1769 */
+/* 1770 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -221682,11 +221735,11 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.PluginConfigurationPage = exports.PluginConfigurationInstance = exports.PluginConfigurationContextImpl = void 0;
 exports.PluginConfigurationListInstance = PluginConfigurationListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
-const configuredPlugin_1 = __webpack_require__(1770);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
+const configuredPlugin_1 = __webpack_require__(1771);
 class PluginConfigurationContextImpl {
     constructor(_version, sid) {
         this._version = _version;
@@ -222017,7 +222070,7 @@ exports.PluginConfigurationPage = PluginConfigurationPage;
 
 
 /***/ }),
-/* 1770 */
+/* 1771 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -222042,10 +222095,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ConfiguredPluginPage = exports.ConfiguredPluginInstance = exports.ConfiguredPluginContextImpl = void 0;
 exports.ConfiguredPluginListInstance = ConfiguredPluginListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class ConfiguredPluginContextImpl {
     constructor(_version, configurationSid, pluginSid) {
         this._version = _version;
@@ -222327,7 +222380,7 @@ exports.ConfiguredPluginPage = ConfiguredPluginPage;
 
 
 /***/ }),
-/* 1771 */
+/* 1772 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -222349,9 +222402,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.PluginConfigurationArchiveInstance = exports.PluginConfigurationArchiveContextImpl = void 0;
 exports.PluginConfigurationArchiveListInstance = PluginConfigurationArchiveListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class PluginConfigurationArchiveContextImpl {
     constructor(_version, sid) {
         this._version = _version;
@@ -222492,7 +222545,7 @@ function PluginConfigurationArchiveListInstance(version) {
 
 
 /***/ }),
-/* 1772 */
+/* 1773 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -222517,10 +222570,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.PluginReleasePage = exports.PluginReleaseInstance = exports.PluginReleaseContextImpl = void 0;
 exports.PluginReleaseListInstance = PluginReleaseListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class PluginReleaseContextImpl {
     constructor(_version, sid) {
         this._version = _version;
@@ -222827,7 +222880,7 @@ exports.PluginReleasePage = PluginReleasePage;
 
 
 /***/ }),
-/* 1773 */
+/* 1774 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -222849,9 +222902,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.PluginVersionArchiveInstance = exports.PluginVersionArchiveContextImpl = void 0;
 exports.PluginVersionArchiveListInstance = PluginVersionArchiveListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class PluginVersionArchiveContextImpl {
     constructor(_version, pluginSid, sid) {
         this._version = _version;
@@ -223004,7 +223057,7 @@ function PluginVersionArchiveListInstance(version) {
 
 
 /***/ }),
-/* 1774 */
+/* 1775 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -223026,8 +223079,8 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ProvisioningStatusInstance = exports.ProvisioningStatusContextImpl = void 0;
 exports.ProvisioningStatusListInstance = ProvisioningStatusListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
 class ProvisioningStatusContextImpl {
     constructor(_version) {
         this._version = _version;
@@ -223146,7 +223199,7 @@ function ProvisioningStatusListInstance(version) {
 
 
 /***/ }),
-/* 1775 */
+/* 1776 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -223171,10 +223224,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.WebChannelPage = exports.WebChannelInstance = exports.WebChannelContextImpl = void 0;
 exports.WebChannelListInstance = WebChannelListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class WebChannelContextImpl {
     constructor(_version, sid) {
         this._version = _version;
@@ -223612,7 +223665,7 @@ exports.WebChannelPage = WebChannelPage;
 
 
 /***/ }),
-/* 1776 */
+/* 1777 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -223634,9 +223687,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const Version_1 = __importDefault(__webpack_require__(1541));
-const flexUser_1 = __webpack_require__(1777);
-const webChannels_1 = __webpack_require__(1778);
+const Version_1 = __importDefault(__webpack_require__(1542));
+const flexUser_1 = __webpack_require__(1778);
+const webChannels_1 = __webpack_require__(1779);
 class V2 extends Version_1.default {
     /**
      * Initialize the V2 version of FlexApi
@@ -223661,7 +223714,7 @@ exports["default"] = V2;
 
 
 /***/ }),
-/* 1777 */
+/* 1778 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -223683,9 +223736,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.FlexUserInstance = exports.FlexUserContextImpl = void 0;
 exports.FlexUserListInstance = FlexUserListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class FlexUserContextImpl {
     constructor(_version, instanceSid, flexUserSid) {
         this._version = _version;
@@ -223910,7 +223963,7 @@ function FlexUserListInstance(version) {
 
 
 /***/ }),
-/* 1778 */
+/* 1779 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -223932,8 +223985,8 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.WebChannelsInstance = void 0;
 exports.WebChannelsListInstance = WebChannelsListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
 function WebChannelsListInstance(version) {
     const instance = {};
     instance._version = version;
@@ -224042,7 +224095,7 @@ exports.WebChannelsInstance = WebChannelsInstance;
 
 
 /***/ }),
-/* 1779 */
+/* 1780 */
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 "use strict";
@@ -224050,7 +224103,7 @@ exports.WebChannelsInstance = WebChannelsInstance;
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-const FrontlineApiBase_1 = __importDefault(__webpack_require__(1780));
+const FrontlineApiBase_1 = __importDefault(__webpack_require__(1781));
 class FrontlineApi extends FrontlineApiBase_1.default {
     /**
      * @deprecated - Use v1.users instead
@@ -224064,7 +224117,7 @@ module.exports = FrontlineApi;
 
 
 /***/ }),
-/* 1780 */
+/* 1781 */
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 "use strict";
@@ -224082,8 +224135,8 @@ module.exports = FrontlineApi;
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-const Domain_1 = __importDefault(__webpack_require__(1538));
-const V1_1 = __importDefault(__webpack_require__(1781));
+const Domain_1 = __importDefault(__webpack_require__(1539));
+const V1_1 = __importDefault(__webpack_require__(1782));
 class FrontlineApiBase extends Domain_1.default {
     /**
      * Initialize frontlineApi domain
@@ -224102,7 +224155,7 @@ module.exports = FrontlineApiBase;
 
 
 /***/ }),
-/* 1781 */
+/* 1782 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -224124,8 +224177,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const Version_1 = __importDefault(__webpack_require__(1541));
-const user_1 = __webpack_require__(1782);
+const Version_1 = __importDefault(__webpack_require__(1542));
+const user_1 = __webpack_require__(1783);
 class V1 extends Version_1.default {
     /**
      * Initialize the V1 version of FrontlineApi
@@ -224145,7 +224198,7 @@ exports["default"] = V1;
 
 
 /***/ }),
-/* 1782 */
+/* 1783 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -224167,9 +224220,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.UserInstance = exports.UserContextImpl = void 0;
 exports.UserListInstance = UserListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class UserContextImpl {
     constructor(_version, sid) {
         this._version = _version;
@@ -224375,7 +224428,7 @@ function UserListInstance(version) {
 
 
 /***/ }),
-/* 1783 */
+/* 1784 */
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 "use strict";
@@ -224383,8 +224436,8 @@ function UserListInstance(version) {
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-const PreviewIamBase_1 = __importDefault(__webpack_require__(1784));
-const Versionless_1 = __importDefault(__webpack_require__(1788));
+const PreviewIamBase_1 = __importDefault(__webpack_require__(1785));
+const Versionless_1 = __importDefault(__webpack_require__(1789));
 class PreviewIam extends PreviewIamBase_1.default {
     /**
      * @deprecated - Use v1.tokens instead
@@ -224411,7 +224464,7 @@ module.exports = PreviewIam;
 
 
 /***/ }),
-/* 1784 */
+/* 1785 */
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 "use strict";
@@ -224429,8 +224482,8 @@ module.exports = PreviewIam;
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-const Domain_1 = __importDefault(__webpack_require__(1538));
-const V1_1 = __importDefault(__webpack_require__(1785));
+const Domain_1 = __importDefault(__webpack_require__(1539));
+const V1_1 = __importDefault(__webpack_require__(1786));
 class PreviewIamBase extends Domain_1.default {
     /**
      * Initialize previewIam domain
@@ -224449,7 +224502,7 @@ module.exports = PreviewIamBase;
 
 
 /***/ }),
-/* 1785 */
+/* 1786 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -224471,9 +224524,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const Version_1 = __importDefault(__webpack_require__(1541));
-const authorize_1 = __webpack_require__(1786);
-const token_1 = __webpack_require__(1787);
+const Version_1 = __importDefault(__webpack_require__(1542));
+const authorize_1 = __webpack_require__(1787);
+const token_1 = __webpack_require__(1788);
 class V1 extends Version_1.default {
     /**
      * Initialize the V1 version of PreviewIam
@@ -224498,7 +224551,7 @@ exports["default"] = V1;
 
 
 /***/ }),
-/* 1786 */
+/* 1787 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -224520,8 +224573,8 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.AuthorizeInstance = void 0;
 exports.AuthorizeListInstance = AuthorizeListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
 function AuthorizeListInstance(version) {
     const instance = {};
     instance._version = version;
@@ -224626,7 +224679,7 @@ exports.AuthorizeInstance = AuthorizeInstance;
 
 
 /***/ }),
-/* 1787 */
+/* 1788 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -224648,8 +224701,8 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.TokenInstance = void 0;
 exports.TokenListInstance = TokenListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
 function TokenListInstance(version) {
     const instance = {};
     instance._version = version;
@@ -224776,7 +224829,7 @@ exports.TokenInstance = TokenInstance;
 
 
 /***/ }),
-/* 1788 */
+/* 1789 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -224798,8 +224851,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const Version_1 = __importDefault(__webpack_require__(1541));
-const organization_1 = __webpack_require__(1789);
+const Version_1 = __importDefault(__webpack_require__(1542));
+const organization_1 = __webpack_require__(1790);
 class Versionless extends Version_1.default {
     /**
      * Initialize the Versionless version of PreviewIam
@@ -224819,7 +224872,7 @@ exports["default"] = Versionless;
 
 
 /***/ }),
-/* 1789 */
+/* 1790 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -224841,12 +224894,12 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.OrganizationContextImpl = void 0;
 exports.OrganizationListInstance = OrganizationListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
-const account_1 = __webpack_require__(1790);
-const roleAssignment_1 = __webpack_require__(1791);
-const user_1 = __webpack_require__(1792);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
+const account_1 = __webpack_require__(1791);
+const roleAssignment_1 = __webpack_require__(1792);
+const user_1 = __webpack_require__(1793);
 class OrganizationContextImpl {
     constructor(_version, organizationSid) {
         this._version = _version;
@@ -224906,7 +224959,7 @@ function OrganizationListInstance(version) {
 
 
 /***/ }),
-/* 1790 */
+/* 1791 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -224931,10 +224984,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.AccountPage = exports.AccountInstance = exports.AccountContextImpl = void 0;
 exports.AccountListInstance = AccountListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class AccountContextImpl {
     constructor(_version, organizationSid, accountSid) {
         this._version = _version;
@@ -225185,7 +225238,7 @@ exports.AccountPage = AccountPage;
 
 
 /***/ }),
-/* 1791 */
+/* 1792 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -225210,10 +225263,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.RoleAssignmentPage = exports.RoleAssignmentInstance = exports.RoleAssignmentContextImpl = exports.PublicApiCreateRoleAssignmentRequest = void 0;
 exports.RoleAssignmentListInstance = RoleAssignmentListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class PublicApiCreateRoleAssignmentRequest {
     constructor(payload) {
         this.roleSid = payload["role_sid"];
@@ -225521,7 +225574,7 @@ exports.RoleAssignmentPage = RoleAssignmentPage;
 
 
 /***/ }),
-/* 1792 */
+/* 1793 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -225546,10 +225599,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.UserPage = exports.UserInstance = exports.UserContextImpl = exports.ScimUser = exports.ScimPatchRequest = exports.ScimPatchOperation = exports.ScimName = exports.ScimMeta = exports.ScimEmailAddress = void 0;
 exports.UserListInstance = UserListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 /**
  * Email address list of the user. Primary email must be defined if there are more than 1 email. Primary email must match the username.
  */
@@ -226099,7 +226152,7 @@ exports.UserPage = UserPage;
 
 
 /***/ }),
-/* 1793 */
+/* 1794 */
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 "use strict";
@@ -226107,14 +226160,14 @@ exports.UserPage = UserPage;
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-const IamBase_1 = __importDefault(__webpack_require__(1794));
+const IamBase_1 = __importDefault(__webpack_require__(1795));
 class Iam extends IamBase_1.default {
 }
 module.exports = Iam;
 
 
 /***/ }),
-/* 1794 */
+/* 1795 */
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 "use strict";
@@ -226132,8 +226185,8 @@ module.exports = Iam;
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-const Domain_1 = __importDefault(__webpack_require__(1538));
-const V1_1 = __importDefault(__webpack_require__(1795));
+const Domain_1 = __importDefault(__webpack_require__(1539));
+const V1_1 = __importDefault(__webpack_require__(1796));
 class IamBase extends Domain_1.default {
     /**
      * Initialize iam domain
@@ -226152,7 +226205,7 @@ module.exports = IamBase;
 
 
 /***/ }),
-/* 1795 */
+/* 1796 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -226174,12 +226227,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const Version_1 = __importDefault(__webpack_require__(1541));
-const apiKey_1 = __webpack_require__(1796);
-const getApiKeys_1 = __webpack_require__(1797);
-const newApiKey_1 = __webpack_require__(1798);
-const oAuthApp_1 = __webpack_require__(1799);
-const token_1 = __webpack_require__(1800);
+const Version_1 = __importDefault(__webpack_require__(1542));
+const apiKey_1 = __webpack_require__(1797);
+const getApiKeys_1 = __webpack_require__(1798);
+const newApiKey_1 = __webpack_require__(1799);
+const oAuthApp_1 = __webpack_require__(1800);
+const token_1 = __webpack_require__(1801);
 class V1 extends Version_1.default {
     /**
      * Initialize the V1 version of Iam
@@ -226219,7 +226272,7 @@ exports["default"] = V1;
 
 
 /***/ }),
-/* 1796 */
+/* 1797 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -226241,9 +226294,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ApiKeyInstance = exports.ApiKeyContextImpl = void 0;
 exports.ApiKeyListInstance = ApiKeyListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class ApiKeyContextImpl {
     constructor(_version, sid) {
         this._version = _version;
@@ -226482,7 +226535,7 @@ function ApiKeyListInstance(version) {
 
 
 /***/ }),
-/* 1797 */
+/* 1798 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -226507,9 +226560,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.GetApiKeysPage = exports.GetApiKeysInstance = void 0;
 exports.GetApiKeysListInstance = GetApiKeysListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
 function GetApiKeysListInstance(version) {
     const instance = {};
     instance._version = version;
@@ -226664,7 +226717,7 @@ exports.GetApiKeysPage = GetApiKeysPage;
 
 
 /***/ }),
-/* 1798 */
+/* 1799 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -226686,8 +226739,8 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.NewApiKeyInstance = void 0;
 exports.NewApiKeyListInstance = NewApiKeyListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
 function NewApiKeyListInstance(version) {
     const instance = {};
     instance._version = version;
@@ -226796,7 +226849,7 @@ exports.NewApiKeyInstance = NewApiKeyInstance;
 
 
 /***/ }),
-/* 1799 */
+/* 1800 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -226818,9 +226871,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.OAuthAppInstance = exports.OAuthAppContextImpl = exports.IamV1OrganizationVendoroauthappPolicy = exports.IamV1OrganizationVendorOauthAppUpdateRequestPolicy = exports.IamV1AccountVendorOauthAppUpdateRequest = exports.IamV1AccountVendorOauthAppCreateRequest = void 0;
 exports.OAuthAppListInstance = OAuthAppListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class IamV1AccountVendorOauthAppCreateRequest {
     constructor(payload) {
         this.type = payload["type"];
@@ -227101,7 +227154,7 @@ function OAuthAppListInstance(version) {
 
 
 /***/ }),
-/* 1800 */
+/* 1801 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -227123,8 +227176,8 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.TokenInstance = void 0;
 exports.TokenListInstance = TokenListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
 function TokenListInstance(version) {
     const instance = {};
     instance._version = version;
@@ -227251,7 +227304,7 @@ exports.TokenInstance = TokenInstance;
 
 
 /***/ }),
-/* 1801 */
+/* 1802 */
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 "use strict";
@@ -227259,7 +227312,7 @@ exports.TokenInstance = TokenInstance;
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-const InsightsBase_1 = __importDefault(__webpack_require__(1802));
+const InsightsBase_1 = __importDefault(__webpack_require__(1803));
 class Insights extends InsightsBase_1.default {
     /**
      * @deprecated - Use v1.settings instead
@@ -227301,7 +227354,7 @@ module.exports = Insights;
 
 
 /***/ }),
-/* 1802 */
+/* 1803 */
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 "use strict";
@@ -227319,9 +227372,9 @@ module.exports = Insights;
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-const Domain_1 = __importDefault(__webpack_require__(1538));
-const V1_1 = __importDefault(__webpack_require__(1803));
-const V2_1 = __importDefault(__webpack_require__(1815));
+const Domain_1 = __importDefault(__webpack_require__(1539));
+const V1_1 = __importDefault(__webpack_require__(1804));
+const V2_1 = __importDefault(__webpack_require__(1816));
 class InsightsBase extends Domain_1.default {
     /**
      * Initialize insights domain
@@ -227344,7 +227397,7 @@ module.exports = InsightsBase;
 
 
 /***/ }),
-/* 1803 */
+/* 1804 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -227366,12 +227419,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const Version_1 = __importDefault(__webpack_require__(1541));
-const call_1 = __webpack_require__(1804);
-const callSummaries_1 = __webpack_require__(1809);
-const conference_1 = __webpack_require__(1810);
-const room_1 = __webpack_require__(1812);
-const setting_1 = __webpack_require__(1814);
+const Version_1 = __importDefault(__webpack_require__(1542));
+const call_1 = __webpack_require__(1805);
+const callSummaries_1 = __webpack_require__(1810);
+const conference_1 = __webpack_require__(1811);
+const room_1 = __webpack_require__(1813);
+const setting_1 = __webpack_require__(1815);
 class V1 extends Version_1.default {
     /**
      * Initialize the V1 version of Insights
@@ -227412,7 +227465,7 @@ exports["default"] = V1;
 
 
 /***/ }),
-/* 1804 */
+/* 1805 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -227434,13 +227487,13 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.CallInstance = exports.CallContextImpl = void 0;
 exports.CallListInstance = CallListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
-const annotation_1 = __webpack_require__(1805);
-const callSummary_1 = __webpack_require__(1806);
-const event_1 = __webpack_require__(1807);
-const metric_1 = __webpack_require__(1808);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
+const annotation_1 = __webpack_require__(1806);
+const callSummary_1 = __webpack_require__(1807);
+const event_1 = __webpack_require__(1808);
+const metric_1 = __webpack_require__(1809);
 class CallContextImpl {
     constructor(_version, sid) {
         this._version = _version;
@@ -227610,7 +227663,7 @@ function CallListInstance(version) {
 
 
 /***/ }),
-/* 1805 */
+/* 1806 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -227632,9 +227685,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.AnnotationInstance = exports.AnnotationContextImpl = void 0;
 exports.AnnotationListInstance = AnnotationListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class AnnotationContextImpl {
     constructor(_version, callSid) {
         this._version = _version;
@@ -227862,7 +227915,7 @@ function AnnotationListInstance(version, callSid) {
 
 
 /***/ }),
-/* 1806 */
+/* 1807 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -227884,9 +227937,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.CallSummaryInstance = exports.CallSummaryContextImpl = void 0;
 exports.CallSummaryListInstance = CallSummaryListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class CallSummaryContextImpl {
     constructor(_version, callSid) {
         this._version = _version;
@@ -228062,7 +228115,7 @@ function CallSummaryListInstance(version, callSid) {
 
 
 /***/ }),
-/* 1807 */
+/* 1808 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -228087,10 +228140,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.EventPage = exports.EventInstance = void 0;
 exports.EventListInstance = EventListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 function EventListInstance(version, callSid) {
     if (!(0, utility_1.isValidPathParam)(callSid)) {
         throw new Error("Parameter 'callSid' is not valid.");
@@ -228264,7 +228317,7 @@ exports.EventPage = EventPage;
 
 
 /***/ }),
-/* 1808 */
+/* 1809 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -228289,10 +228342,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.MetricPage = exports.MetricInstance = void 0;
 exports.MetricListInstance = MetricListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 function MetricListInstance(version, callSid) {
     if (!(0, utility_1.isValidPathParam)(callSid)) {
         throw new Error("Parameter 'callSid' is not valid.");
@@ -228466,7 +228519,7 @@ exports.MetricPage = MetricPage;
 
 
 /***/ }),
-/* 1809 */
+/* 1810 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -228491,9 +228544,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.CallSummariesPage = exports.CallSummariesInstance = void 0;
 exports.CallSummariesListInstance = CallSummariesListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
 function CallSummariesListInstance(version) {
     const instance = {};
     instance._version = version;
@@ -228830,7 +228883,7 @@ exports.CallSummariesPage = CallSummariesPage;
 
 
 /***/ }),
-/* 1810 */
+/* 1811 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -228855,11 +228908,11 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ConferencePage = exports.ConferenceInstance = exports.ConferenceContextImpl = void 0;
 exports.ConferenceListInstance = ConferenceListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
-const conferenceParticipant_1 = __webpack_require__(1811);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
+const conferenceParticipant_1 = __webpack_require__(1812);
 class ConferenceContextImpl {
     constructor(_version, conferenceSid) {
         this._version = _version;
@@ -229186,7 +229239,7 @@ exports.ConferencePage = ConferencePage;
 
 
 /***/ }),
-/* 1811 */
+/* 1812 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -229211,10 +229264,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ConferenceParticipantPage = exports.ConferenceParticipantInstance = exports.ConferenceParticipantContextImpl = void 0;
 exports.ConferenceParticipantListInstance = ConferenceParticipantListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class ConferenceParticipantContextImpl {
     constructor(_version, conferenceSid, participantSid) {
         this._version = _version;
@@ -229530,7 +229583,7 @@ exports.ConferenceParticipantPage = ConferenceParticipantPage;
 
 
 /***/ }),
-/* 1812 */
+/* 1813 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -229555,11 +229608,11 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.RoomPage = exports.RoomInstance = exports.RoomContextImpl = void 0;
 exports.RoomListInstance = RoomListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
-const participant_1 = __webpack_require__(1813);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
+const participant_1 = __webpack_require__(1814);
 class RoomContextImpl {
     constructor(_version, roomSid) {
         this._version = _version;
@@ -229872,7 +229925,7 @@ exports.RoomPage = RoomPage;
 
 
 /***/ }),
-/* 1813 */
+/* 1814 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -229897,10 +229950,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ParticipantPage = exports.ParticipantInstance = exports.ParticipantContextImpl = void 0;
 exports.ParticipantListInstance = ParticipantListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class ParticipantContextImpl {
     constructor(_version, roomSid, participantSid) {
         this._version = _version;
@@ -230172,7 +230225,7 @@ exports.ParticipantPage = ParticipantPage;
 
 
 /***/ }),
-/* 1814 */
+/* 1815 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -230194,8 +230247,8 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.SettingInstance = exports.SettingContextImpl = void 0;
 exports.SettingListInstance = SettingListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
 class SettingContextImpl {
     constructor(_version) {
         this._version = _version;
@@ -230395,7 +230448,7 @@ function SettingListInstance(version) {
 
 
 /***/ }),
-/* 1815 */
+/* 1816 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -230417,10 +230470,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const Version_1 = __importDefault(__webpack_require__(1541));
-const inbound_1 = __webpack_require__(1816);
-const outbound_1 = __webpack_require__(1817);
-const report_1 = __webpack_require__(1818);
+const Version_1 = __importDefault(__webpack_require__(1542));
+const inbound_1 = __webpack_require__(1817);
+const outbound_1 = __webpack_require__(1818);
+const report_1 = __webpack_require__(1819);
 class V2 extends Version_1.default {
     /**
      * Initialize the V2 version of Insights
@@ -230448,7 +230501,7 @@ exports["default"] = V2;
 
 
 /***/ }),
-/* 1816 */
+/* 1817 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -230473,10 +230526,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.InboundPage = exports.InboundInstance = exports.InboundContextImpl = exports.ReportMetadata = exports.ReportFilter = exports.PhoneNumberReportFilter = exports.InsightsV2InboundPhoneNumberReportCallStatePercentage = exports.InsightsV2CreatePhoneNumbersReportRequestTimeRange = exports.InsightsV2CreatePhoneNumbersReportRequest = void 0;
 exports.InboundListInstance = InboundListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class InsightsV2CreatePhoneNumbersReportRequest {
     constructor(payload) {
         this.timeRange = payload["time_range"];
@@ -230797,7 +230850,7 @@ exports.InboundPage = InboundPage;
 
 
 /***/ }),
-/* 1817 */
+/* 1818 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -230822,10 +230875,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.OutboundPage = exports.OutboundInstance = exports.OutboundContextImpl = exports.ReportMetadata = exports.ReportFilter = exports.PhoneNumberReportFilter = exports.InsightsV2OutboundPhoneNumberReportAnsweringMachineDetection = exports.InsightsV2InboundPhoneNumberReportCallStatePercentage = exports.InsightsV2CreatePhoneNumbersReportRequestTimeRange = exports.InsightsV2CreatePhoneNumbersReportRequest = exports.CountyCarrierValueCarriers = exports.CountyCarrierValue = void 0;
 exports.OutboundListInstance = OutboundListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class CountyCarrierValue {
     constructor(payload) {
         this.country = payload["country"];
@@ -231196,7 +231249,7 @@ exports.OutboundPage = OutboundPage;
 
 
 /***/ }),
-/* 1818 */
+/* 1819 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -231218,9 +231271,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ReportInstance = exports.ReportContextImpl = exports.VoiceIntegrityCallsPerBundle = exports.VoiceIntegrity = exports.StirShakenPercentage = exports.StirShakenCallCount = exports.StirShakenAnswerRate = exports.StirShaken = exports.ReportMetadata = exports.ReportFilter = exports.InsightsV2OutboundPhoneNumberReportAnsweringMachineDetection = exports.InsightsV2InboundPhoneNumberReportCallStatePercentage = exports.InsightsV2CreateAccountReportRequestTimeRange = exports.InsightsV2CreateAccountReportRequest = exports.CountyCarrierValueCarriers = exports.CountyCarrierValue = exports.BrandedUseCaseDetail = exports.BrandedCalling = exports.AccountReportNetworkIssuesTwilioGateway = exports.AccountReportNetworkIssuesSdk = exports.AccountReportNetworkIssues = exports.AccountReportKYTOutboundCarrierCalling = exports.AccountReportKYT = exports.AccountReportCallType = exports.AccountReportCallState = exports.AccountReportCallDirection = exports.AccountReportAnsweringMachineDetection = exports.AccountReport = void 0;
 exports.ReportListInstance = ReportListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class AccountReport {
     constructor(payload) {
         this.callDeliverabilityScore = payload["call_deliverability_score"];
@@ -231753,7 +231806,7 @@ function ReportListInstance(version) {
 
 
 /***/ }),
-/* 1819 */
+/* 1820 */
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 "use strict";
@@ -231761,14 +231814,14 @@ function ReportListInstance(version) {
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-const IntelligenceBase_1 = __importDefault(__webpack_require__(1820));
+const IntelligenceBase_1 = __importDefault(__webpack_require__(1821));
 class Intelligence extends IntelligenceBase_1.default {
 }
 module.exports = Intelligence;
 
 
 /***/ }),
-/* 1820 */
+/* 1821 */
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 "use strict";
@@ -231786,8 +231839,8 @@ module.exports = Intelligence;
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-const Domain_1 = __importDefault(__webpack_require__(1538));
-const V2_1 = __importDefault(__webpack_require__(1821));
+const Domain_1 = __importDefault(__webpack_require__(1539));
+const V2_1 = __importDefault(__webpack_require__(1822));
 class IntelligenceBase extends Domain_1.default {
     /**
      * Initialize intelligence domain
@@ -231806,7 +231859,7 @@ module.exports = IntelligenceBase;
 
 
 /***/ }),
-/* 1821 */
+/* 1822 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -231828,15 +231881,15 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const Version_1 = __importDefault(__webpack_require__(1541));
-const customOperator_1 = __webpack_require__(1822);
-const operator_1 = __webpack_require__(1823);
-const operatorAttachment_1 = __webpack_require__(1824);
-const operatorAttachments_1 = __webpack_require__(1825);
-const operatorType_1 = __webpack_require__(1826);
-const prebuiltOperator_1 = __webpack_require__(1827);
-const service_1 = __webpack_require__(1828);
-const transcript_1 = __webpack_require__(1829);
+const Version_1 = __importDefault(__webpack_require__(1542));
+const customOperator_1 = __webpack_require__(1823);
+const operator_1 = __webpack_require__(1824);
+const operatorAttachment_1 = __webpack_require__(1825);
+const operatorAttachments_1 = __webpack_require__(1826);
+const operatorType_1 = __webpack_require__(1827);
+const prebuiltOperator_1 = __webpack_require__(1828);
+const service_1 = __webpack_require__(1829);
+const transcript_1 = __webpack_require__(1830);
 class V2 extends Version_1.default {
     /**
      * Initialize the V2 version of Intelligence
@@ -231895,7 +231948,7 @@ exports["default"] = V2;
 
 
 /***/ }),
-/* 1822 */
+/* 1823 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -231920,10 +231973,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.CustomOperatorPage = exports.CustomOperatorInstance = exports.CustomOperatorContextImpl = void 0;
 exports.CustomOperatorListInstance = CustomOperatorListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class CustomOperatorContextImpl {
     constructor(_version, sid) {
         this._version = _version;
@@ -232371,7 +232424,7 @@ exports.CustomOperatorPage = CustomOperatorPage;
 
 
 /***/ }),
-/* 1823 */
+/* 1824 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -232396,10 +232449,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.OperatorPage = exports.OperatorInstance = exports.OperatorContextImpl = void 0;
 exports.OperatorListInstance = OperatorListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class OperatorContextImpl {
     constructor(_version, sid) {
         this._version = _version;
@@ -232660,7 +232713,7 @@ exports.OperatorPage = OperatorPage;
 
 
 /***/ }),
-/* 1824 */
+/* 1825 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -232682,9 +232735,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.OperatorAttachmentInstance = exports.OperatorAttachmentContextImpl = void 0;
 exports.OperatorAttachmentListInstance = OperatorAttachmentListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class OperatorAttachmentContextImpl {
     constructor(_version, serviceSid, operatorSid) {
         this._version = _version;
@@ -232860,7 +232913,7 @@ function OperatorAttachmentListInstance(version) {
 
 
 /***/ }),
-/* 1825 */
+/* 1826 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -232882,9 +232935,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.OperatorAttachmentsInstance = exports.OperatorAttachmentsContextImpl = void 0;
 exports.OperatorAttachmentsListInstance = OperatorAttachmentsListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class OperatorAttachmentsContextImpl {
     constructor(_version, serviceSid) {
         this._version = _version;
@@ -233009,7 +233062,7 @@ function OperatorAttachmentsListInstance(version) {
 
 
 /***/ }),
-/* 1826 */
+/* 1827 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -233034,10 +233087,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.OperatorTypePage = exports.OperatorTypeInstance = exports.OperatorTypeContextImpl = void 0;
 exports.OperatorTypeListInstance = OperatorTypeListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class OperatorTypeContextImpl {
     constructor(_version, sid) {
         this._version = _version;
@@ -233298,7 +233351,7 @@ exports.OperatorTypePage = OperatorTypePage;
 
 
 /***/ }),
-/* 1827 */
+/* 1828 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -233323,10 +233376,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.PrebuiltOperatorPage = exports.PrebuiltOperatorInstance = exports.PrebuiltOperatorContextImpl = void 0;
 exports.PrebuiltOperatorListInstance = PrebuiltOperatorListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class PrebuiltOperatorContextImpl {
     constructor(_version, sid) {
         this._version = _version;
@@ -233587,7 +233640,7 @@ exports.PrebuiltOperatorPage = PrebuiltOperatorPage;
 
 
 /***/ }),
-/* 1828 */
+/* 1829 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -233612,10 +233665,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ServicePage = exports.ServiceInstance = exports.ServiceContextImpl = void 0;
 exports.ServiceListInstance = ServiceListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class ServiceContextImpl {
     constructor(_version, sid) {
         this._version = _version;
@@ -234108,7 +234161,7 @@ exports.ServicePage = ServicePage;
 
 
 /***/ }),
-/* 1829 */
+/* 1830 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -234133,15 +234186,15 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.TranscriptPage = exports.TranscriptInstance = exports.TranscriptContextImpl = void 0;
 exports.TranscriptListInstance = TranscriptListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
-const encryptedOperatorResults_1 = __webpack_require__(1830);
-const encryptedSentences_1 = __webpack_require__(1831);
-const media_1 = __webpack_require__(1832);
-const operatorResult_1 = __webpack_require__(1833);
-const sentence_1 = __webpack_require__(1834);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
+const encryptedOperatorResults_1 = __webpack_require__(1831);
+const encryptedSentences_1 = __webpack_require__(1832);
+const media_1 = __webpack_require__(1833);
+const operatorResult_1 = __webpack_require__(1834);
+const sentence_1 = __webpack_require__(1835);
 class TranscriptContextImpl {
     constructor(_version, sid) {
         this._version = _version;
@@ -234604,7 +234657,7 @@ exports.TranscriptPage = TranscriptPage;
 
 
 /***/ }),
-/* 1830 */
+/* 1831 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -234626,9 +234679,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.EncryptedOperatorResultsInstance = exports.EncryptedOperatorResultsContextImpl = void 0;
 exports.EncryptedOperatorResultsListInstance = EncryptedOperatorResultsListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class EncryptedOperatorResultsContextImpl {
     constructor(_version, transcriptSid) {
         this._version = _version;
@@ -234764,7 +234817,7 @@ function EncryptedOperatorResultsListInstance(version, transcriptSid) {
 
 
 /***/ }),
-/* 1831 */
+/* 1832 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -234786,9 +234839,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.EncryptedSentencesInstance = exports.EncryptedSentencesContextImpl = void 0;
 exports.EncryptedSentencesListInstance = EncryptedSentencesListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class EncryptedSentencesContextImpl {
     constructor(_version, transcriptSid) {
         this._version = _version;
@@ -234924,7 +234977,7 @@ function EncryptedSentencesListInstance(version, transcriptSid) {
 
 
 /***/ }),
-/* 1832 */
+/* 1833 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -234946,9 +234999,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.MediaInstance = exports.MediaContextImpl = void 0;
 exports.MediaListInstance = MediaListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class MediaContextImpl {
     constructor(_version, sid) {
         this._version = _version;
@@ -235087,7 +235140,7 @@ function MediaListInstance(version, sid) {
 
 
 /***/ }),
-/* 1833 */
+/* 1834 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -235112,10 +235165,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.OperatorResultPage = exports.OperatorResultInstance = exports.OperatorResultContextImpl = void 0;
 exports.OperatorResultListInstance = OperatorResultListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class OperatorResultContextImpl {
     constructor(_version, transcriptSid, operatorSid) {
         this._version = _version;
@@ -235397,7 +235450,7 @@ exports.OperatorResultPage = OperatorResultPage;
 
 
 /***/ }),
-/* 1834 */
+/* 1835 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -235422,10 +235475,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.SentencePage = exports.SentenceInstance = void 0;
 exports.SentenceListInstance = SentenceListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 function SentenceListInstance(version, transcriptSid) {
     if (!(0, utility_1.isValidPathParam)(transcriptSid)) {
         throw new Error("Parameter 'transcriptSid' is not valid.");
@@ -235597,7 +235650,7 @@ exports.SentencePage = SentencePage;
 
 
 /***/ }),
-/* 1835 */
+/* 1836 */
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 "use strict";
@@ -235605,7 +235658,7 @@ exports.SentencePage = SentencePage;
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-const IpMessagingBase_1 = __importDefault(__webpack_require__(1836));
+const IpMessagingBase_1 = __importDefault(__webpack_require__(1837));
 class IpMessaging extends IpMessagingBase_1.default {
     /**
      * @deprecated - Use v2.credentials instead
@@ -235626,7 +235679,7 @@ module.exports = IpMessaging;
 
 
 /***/ }),
-/* 1836 */
+/* 1837 */
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 "use strict";
@@ -235644,9 +235697,9 @@ module.exports = IpMessaging;
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-const Domain_1 = __importDefault(__webpack_require__(1538));
-const V1_1 = __importDefault(__webpack_require__(1837));
-const V2_1 = __importDefault(__webpack_require__(1847));
+const Domain_1 = __importDefault(__webpack_require__(1539));
+const V1_1 = __importDefault(__webpack_require__(1838));
+const V2_1 = __importDefault(__webpack_require__(1848));
 class IpMessagingBase extends Domain_1.default {
     /**
      * Initialize ipMessaging domain
@@ -235666,55 +235719,6 @@ class IpMessagingBase extends Domain_1.default {
     }
 }
 module.exports = IpMessagingBase;
-
-
-/***/ }),
-/* 1837 */
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
-
-"use strict";
-
-/*
- * This code was generated by
- * ___ _ _ _ _ _    _ ____    ____ ____ _    ____ ____ _  _ ____ ____ ____ ___ __   __
- *  |  | | | | |    | |  | __ |  | |__| | __ | __ |___ |\ | |___ |__/ |__|  | |  | |__/
- *  |  |_|_| | |___ | |__|    |__| |  | |    |__] |___ | \| |___ |  \ |  |  | |__| |  \
- *
- * Twilio - Ip_messaging
- * This is the public Twilio REST API.
- *
- * NOTE: This class is auto generated by OpenAPI Generator.
- * https://openapi-generator.tech
- * Do not edit the class manually.
- */
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-const Version_1 = __importDefault(__webpack_require__(1541));
-const credential_1 = __webpack_require__(1838);
-const service_1 = __webpack_require__(1839);
-class V1 extends Version_1.default {
-    /**
-     * Initialize the V1 version of IpMessaging
-     *
-     * @param domain - The Twilio (Twilio.IpMessaging) domain
-     */
-    constructor(domain) {
-        super(domain, "v1");
-    }
-    /** Getter for credentials resource */
-    get credentials() {
-        this._credentials = this._credentials || (0, credential_1.CredentialListInstance)(this);
-        return this._credentials;
-    }
-    /** Getter for services resource */
-    get services() {
-        this._services = this._services || (0, service_1.ServiceListInstance)(this);
-        return this._services;
-    }
-}
-exports["default"] = V1;
 
 
 /***/ }),
@@ -235740,13 +235744,62 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
+const Version_1 = __importDefault(__webpack_require__(1542));
+const credential_1 = __webpack_require__(1839);
+const service_1 = __webpack_require__(1840);
+class V1 extends Version_1.default {
+    /**
+     * Initialize the V1 version of IpMessaging
+     *
+     * @param domain - The Twilio (Twilio.IpMessaging) domain
+     */
+    constructor(domain) {
+        super(domain, "v1");
+    }
+    /** Getter for credentials resource */
+    get credentials() {
+        this._credentials = this._credentials || (0, credential_1.CredentialListInstance)(this);
+        return this._credentials;
+    }
+    /** Getter for services resource */
+    get services() {
+        this._services = this._services || (0, service_1.ServiceListInstance)(this);
+        return this._services;
+    }
+}
+exports["default"] = V1;
+
+
+/***/ }),
+/* 1839 */
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+"use strict";
+
+/*
+ * This code was generated by
+ * ___ _ _ _ _ _    _ ____    ____ ____ _    ____ ____ _  _ ____ ____ ____ ___ __   __
+ *  |  | | | | |    | |  | __ |  | |__| | __ | __ |___ |\ | |___ |__/ |__|  | |  | |__/
+ *  |  |_|_| | |___ | |__|    |__| |  | |    |__] |___ | \| |___ |  \ |  |  | |__| |  \
+ *
+ * Twilio - Ip_messaging
+ * This is the public Twilio REST API.
+ *
+ * NOTE: This class is auto generated by OpenAPI Generator.
+ * https://openapi-generator.tech
+ * Do not edit the class manually.
+ */
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.CredentialPage = exports.CredentialInstance = exports.CredentialContextImpl = void 0;
 exports.CredentialListInstance = CredentialListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class CredentialContextImpl {
     constructor(_version, sid) {
         this._version = _version;
@@ -236192,7 +236245,7 @@ exports.CredentialPage = CredentialPage;
 
 
 /***/ }),
-/* 1839 */
+/* 1840 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -236217,13 +236270,13 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ServicePage = exports.ServiceInstance = exports.ServiceContextImpl = void 0;
 exports.ServiceListInstance = ServiceListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
-const channel_1 = __webpack_require__(1840);
-const role_1 = __webpack_require__(1844);
-const user_1 = __webpack_require__(1845);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
+const channel_1 = __webpack_require__(1841);
+const role_1 = __webpack_require__(1845);
+const user_1 = __webpack_require__(1846);
 class ServiceContextImpl {
     constructor(_version, sid) {
         this._version = _version;
@@ -236963,7 +237016,7 @@ exports.ServicePage = ServicePage;
 
 
 /***/ }),
-/* 1840 */
+/* 1841 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -236988,13 +237041,13 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ChannelPage = exports.ChannelInstance = exports.ChannelContextImpl = void 0;
 exports.ChannelListInstance = ChannelListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
-const invite_1 = __webpack_require__(1841);
-const member_1 = __webpack_require__(1842);
-const message_1 = __webpack_require__(1843);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
+const invite_1 = __webpack_require__(1842);
+const member_1 = __webpack_require__(1843);
+const message_1 = __webpack_require__(1844);
 class ChannelContextImpl {
     constructor(_version, serviceSid, sid) {
         this._version = _version;
@@ -237478,7 +237531,7 @@ exports.ChannelPage = ChannelPage;
 
 
 /***/ }),
-/* 1841 */
+/* 1842 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -237503,10 +237556,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.InvitePage = exports.InviteInstance = exports.InviteContextImpl = void 0;
 exports.InviteListInstance = InviteListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class InviteContextImpl {
     constructor(_version, serviceSid, channelSid, sid) {
         this._version = _version;
@@ -237870,7 +237923,7 @@ exports.InvitePage = InvitePage;
 
 
 /***/ }),
-/* 1842 */
+/* 1843 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -237895,10 +237948,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.MemberPage = exports.MemberInstance = exports.MemberContextImpl = void 0;
 exports.MemberListInstance = MemberListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class MemberContextImpl {
     constructor(_version, serviceSid, channelSid, sid) {
         this._version = _version;
@@ -238330,7 +238383,7 @@ exports.MemberPage = MemberPage;
 
 
 /***/ }),
-/* 1843 */
+/* 1844 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -238355,10 +238408,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.MessagePage = exports.MessageInstance = exports.MessageContextImpl = void 0;
 exports.MessageListInstance = MessageListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class MessageContextImpl {
     constructor(_version, serviceSid, channelSid, sid) {
         this._version = _version;
@@ -238798,7 +238851,7 @@ exports.MessagePage = MessagePage;
 
 
 /***/ }),
-/* 1844 */
+/* 1845 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -238823,10 +238876,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.RolePage = exports.RoleInstance = exports.RoleContextImpl = void 0;
 exports.RoleListInstance = RoleListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class RoleContextImpl {
     constructor(_version, serviceSid, sid) {
         this._version = _version;
@@ -239250,7 +239303,7 @@ exports.RolePage = RolePage;
 
 
 /***/ }),
-/* 1845 */
+/* 1846 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -239275,11 +239328,11 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.UserPage = exports.UserInstance = exports.UserContextImpl = void 0;
 exports.UserListInstance = UserListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
-const userChannel_1 = __webpack_require__(1846);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
+const userChannel_1 = __webpack_require__(1847);
 class UserContextImpl {
     constructor(_version, serviceSid, sid) {
         this._version = _version;
@@ -239731,7 +239784,7 @@ exports.UserPage = UserPage;
 
 
 /***/ }),
-/* 1846 */
+/* 1847 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -239756,10 +239809,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.UserChannelPage = exports.UserChannelInstance = void 0;
 exports.UserChannelListInstance = UserChannelListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 function UserChannelListInstance(version, serviceSid, userSid) {
     if (!(0, utility_1.isValidPathParam)(serviceSid)) {
         throw new Error("Parameter 'serviceSid' is not valid.");
@@ -239926,7 +239979,7 @@ exports.UserChannelPage = UserChannelPage;
 
 
 /***/ }),
-/* 1847 */
+/* 1848 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -239948,9 +240001,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const Version_1 = __importDefault(__webpack_require__(1541));
-const credential_1 = __webpack_require__(1848);
-const service_1 = __webpack_require__(1849);
+const Version_1 = __importDefault(__webpack_require__(1542));
+const credential_1 = __webpack_require__(1849);
+const service_1 = __webpack_require__(1850);
 class V2 extends Version_1.default {
     /**
      * Initialize the V2 version of IpMessaging
@@ -239975,7 +240028,7 @@ exports["default"] = V2;
 
 
 /***/ }),
-/* 1848 */
+/* 1849 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -240000,10 +240053,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.CredentialPage = exports.CredentialInstance = exports.CredentialContextImpl = void 0;
 exports.CredentialListInstance = CredentialListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class CredentialContextImpl {
     constructor(_version, sid) {
         this._version = _version;
@@ -240449,7 +240502,7 @@ exports.CredentialPage = CredentialPage;
 
 
 /***/ }),
-/* 1849 */
+/* 1850 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -240474,14 +240527,14 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ServicePage = exports.ServiceInstance = exports.ServiceContextImpl = void 0;
 exports.ServiceListInstance = ServiceListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
-const binding_1 = __webpack_require__(1850);
-const channel_1 = __webpack_require__(1851);
-const role_1 = __webpack_require__(1856);
-const user_1 = __webpack_require__(1857);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
+const binding_1 = __webpack_require__(1851);
+const channel_1 = __webpack_require__(1852);
+const role_1 = __webpack_require__(1857);
+const user_1 = __webpack_require__(1858);
 class ServiceContextImpl {
     constructor(_version, sid) {
         this._version = _version;
@@ -241098,7 +241151,7 @@ exports.ServicePage = ServicePage;
 
 
 /***/ }),
-/* 1850 */
+/* 1851 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -241123,10 +241176,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.BindingPage = exports.BindingInstance = exports.BindingContextImpl = void 0;
 exports.BindingListInstance = BindingListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class BindingContextImpl {
     constructor(_version, serviceSid, sid) {
         this._version = _version;
@@ -241438,7 +241491,7 @@ exports.BindingPage = BindingPage;
 
 
 /***/ }),
-/* 1851 */
+/* 1852 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -241463,14 +241516,14 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ChannelPage = exports.ChannelInstance = exports.ChannelContextImpl = void 0;
 exports.ChannelListInstance = ChannelListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
-const invite_1 = __webpack_require__(1852);
-const member_1 = __webpack_require__(1853);
-const message_1 = __webpack_require__(1854);
-const webhook_1 = __webpack_require__(1855);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
+const invite_1 = __webpack_require__(1853);
+const member_1 = __webpack_require__(1854);
+const message_1 = __webpack_require__(1855);
+const webhook_1 = __webpack_require__(1856);
 class ChannelContextImpl {
     constructor(_version, serviceSid, sid) {
         this._version = _version;
@@ -242010,7 +242063,7 @@ exports.ChannelPage = ChannelPage;
 
 
 /***/ }),
-/* 1852 */
+/* 1853 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -242035,10 +242088,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.InvitePage = exports.InviteInstance = exports.InviteContextImpl = void 0;
 exports.InviteListInstance = InviteListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class InviteContextImpl {
     constructor(_version, serviceSid, channelSid, sid) {
         this._version = _version;
@@ -242402,7 +242455,7 @@ exports.InvitePage = InvitePage;
 
 
 /***/ }),
-/* 1853 */
+/* 1854 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -242427,10 +242480,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.MemberPage = exports.MemberInstance = exports.MemberContextImpl = void 0;
 exports.MemberListInstance = MemberListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class MemberContextImpl {
     constructor(_version, serviceSid, channelSid, sid) {
         this._version = _version;
@@ -242920,7 +242973,7 @@ exports.MemberPage = MemberPage;
 
 
 /***/ }),
-/* 1854 */
+/* 1855 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -242945,10 +242998,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.MessagePage = exports.MessageInstance = exports.MessageContextImpl = void 0;
 exports.MessageListInstance = MessageListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class MessageContextImpl {
     constructor(_version, serviceSid, channelSid, sid) {
         this._version = _version;
@@ -243450,7 +243503,7 @@ exports.MessagePage = MessagePage;
 
 
 /***/ }),
-/* 1855 */
+/* 1856 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -243475,10 +243528,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.WebhookPage = exports.WebhookInstance = exports.WebhookContextImpl = void 0;
 exports.WebhookListInstance = WebhookListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class WebhookContextImpl {
     constructor(_version, serviceSid, channelSid, sid) {
         this._version = _version;
@@ -243938,7 +243991,7 @@ exports.WebhookPage = WebhookPage;
 
 
 /***/ }),
-/* 1856 */
+/* 1857 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -243963,10 +244016,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.RolePage = exports.RoleInstance = exports.RoleContextImpl = void 0;
 exports.RoleListInstance = RoleListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class RoleContextImpl {
     constructor(_version, serviceSid, sid) {
         this._version = _version;
@@ -244390,7 +244443,7 @@ exports.RolePage = RolePage;
 
 
 /***/ }),
-/* 1857 */
+/* 1858 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -244415,12 +244468,12 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.UserPage = exports.UserInstance = exports.UserContextImpl = void 0;
 exports.UserListInstance = UserListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
-const userBinding_1 = __webpack_require__(1858);
-const userChannel_1 = __webpack_require__(1859);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
+const userBinding_1 = __webpack_require__(1859);
+const userChannel_1 = __webpack_require__(1860);
 class UserContextImpl {
     constructor(_version, serviceSid, sid) {
         this._version = _version;
@@ -244892,7 +244945,7 @@ exports.UserPage = UserPage;
 
 
 /***/ }),
-/* 1858 */
+/* 1859 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -244917,10 +244970,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.UserBindingPage = exports.UserBindingInstance = exports.UserBindingContextImpl = void 0;
 exports.UserBindingListInstance = UserBindingListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class UserBindingContextImpl {
     constructor(_version, serviceSid, userSid, sid) {
         this._version = _version;
@@ -245234,7 +245287,7 @@ exports.UserBindingPage = UserBindingPage;
 
 
 /***/ }),
-/* 1859 */
+/* 1860 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -245259,10 +245312,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.UserChannelPage = exports.UserChannelInstance = exports.UserChannelContextImpl = void 0;
 exports.UserChannelListInstance = UserChannelListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class UserChannelContextImpl {
     constructor(_version, serviceSid, userSid, channelSid) {
         this._version = _version;
@@ -245644,7 +245697,7 @@ exports.UserChannelPage = UserChannelPage;
 
 
 /***/ }),
-/* 1860 */
+/* 1861 */
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 "use strict";
@@ -245652,14 +245705,14 @@ exports.UserChannelPage = UserChannelPage;
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-const KnowledgeBase_1 = __importDefault(__webpack_require__(1861));
+const KnowledgeBase_1 = __importDefault(__webpack_require__(1862));
 class Knowledge extends KnowledgeBase_1.default {
 }
 module.exports = Knowledge;
 
 
 /***/ }),
-/* 1861 */
+/* 1862 */
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 "use strict";
@@ -245677,8 +245730,8 @@ module.exports = Knowledge;
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-const Domain_1 = __importDefault(__webpack_require__(1538));
-const V1_1 = __importDefault(__webpack_require__(1862));
+const Domain_1 = __importDefault(__webpack_require__(1539));
+const V1_1 = __importDefault(__webpack_require__(1863));
 class KnowledgeBase extends Domain_1.default {
     /**
      * Initialize knowledge domain
@@ -245694,49 +245747,6 @@ class KnowledgeBase extends Domain_1.default {
     }
 }
 module.exports = KnowledgeBase;
-
-
-/***/ }),
-/* 1862 */
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
-
-"use strict";
-
-/*
- * This code was generated by
- * ___ _ _ _ _ _    _ ____    ____ ____ _    ____ ____ _  _ ____ ____ ____ ___ __   __
- *  |  | | | | |    | |  | __ |  | |__| | __ | __ |___ |\ | |___ |__/ |__|  | |  | |__/
- *  |  |_|_| | |___ | |__|    |__| |  | |    |__] |___ | \| |___ |  \ |  |  | |__| |  \
- *
- * Twilio - Knowledge
- * This is the public Twilio REST API.
- *
- * NOTE: This class is auto generated by OpenAPI Generator.
- * https://openapi-generator.tech
- * Do not edit the class manually.
- */
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-const Version_1 = __importDefault(__webpack_require__(1541));
-const knowledge_1 = __webpack_require__(1863);
-class V1 extends Version_1.default {
-    /**
-     * Initialize the V1 version of Knowledge
-     *
-     * @param domain - The Twilio (Twilio.Knowledge) domain
-     */
-    constructor(domain) {
-        super(domain, "v1");
-    }
-    /** Getter for knowledge resource */
-    get knowledge() {
-        this._knowledge = this._knowledge || (0, knowledge_1.KnowledgeListInstance)(this);
-        return this._knowledge;
-    }
-}
-exports["default"] = V1;
 
 
 /***/ }),
@@ -245762,15 +245772,58 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
+const Version_1 = __importDefault(__webpack_require__(1542));
+const knowledge_1 = __webpack_require__(1864);
+class V1 extends Version_1.default {
+    /**
+     * Initialize the V1 version of Knowledge
+     *
+     * @param domain - The Twilio (Twilio.Knowledge) domain
+     */
+    constructor(domain) {
+        super(domain, "v1");
+    }
+    /** Getter for knowledge resource */
+    get knowledge() {
+        this._knowledge = this._knowledge || (0, knowledge_1.KnowledgeListInstance)(this);
+        return this._knowledge;
+    }
+}
+exports["default"] = V1;
+
+
+/***/ }),
+/* 1864 */
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+"use strict";
+
+/*
+ * This code was generated by
+ * ___ _ _ _ _ _    _ ____    ____ ____ _    ____ ____ _  _ ____ ____ ____ ___ __   __
+ *  |  | | | | |    | |  | __ |  | |__| | __ | __ |___ |\ | |___ |__/ |__|  | |  | |__/
+ *  |  |_|_| | |___ | |__|    |__| |  | |    |__] |___ | \| |___ |  \ |  |  | |__| |  \
+ *
+ * Twilio - Knowledge
+ * This is the public Twilio REST API.
+ *
+ * NOTE: This class is auto generated by OpenAPI Generator.
+ * https://openapi-generator.tech
+ * Do not edit the class manually.
+ */
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.KnowledgePage = exports.KnowledgeInstance = exports.KnowledgeContextImpl = exports.KnowledgeV1ServiceUpdateKnowledgeRequest = exports.KnowledgeV1ServiceCreatePolicyRequest = exports.KnowledgeV1ServiceCreateKnowledgeRequest = void 0;
 exports.KnowledgeListInstance = KnowledgeListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
-const chunk_1 = __webpack_require__(1864);
-const knowledgeStatus_1 = __webpack_require__(1865);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
+const chunk_1 = __webpack_require__(1865);
+const knowledgeStatus_1 = __webpack_require__(1866);
 class KnowledgeV1ServiceCreateKnowledgeRequest {
     constructor(payload) {
         this.description = payload["description"];
@@ -246237,7 +246290,7 @@ exports.KnowledgePage = KnowledgePage;
 
 
 /***/ }),
-/* 1864 */
+/* 1865 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -246262,10 +246315,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ChunkPage = exports.ChunkInstance = void 0;
 exports.ChunkListInstance = ChunkListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 function ChunkListInstance(version, id) {
     if (!(0, utility_1.isValidPathParam)(id)) {
         throw new Error("Parameter 'id' is not valid.");
@@ -246423,7 +246476,7 @@ exports.ChunkPage = ChunkPage;
 
 
 /***/ }),
-/* 1865 */
+/* 1866 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -246445,9 +246498,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.KnowledgeStatusInstance = exports.KnowledgeStatusContextImpl = void 0;
 exports.KnowledgeStatusListInstance = KnowledgeStatusListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class KnowledgeStatusContextImpl {
     constructor(_version, id) {
         this._version = _version;
@@ -246577,7 +246630,7 @@ function KnowledgeStatusListInstance(version, id) {
 
 
 /***/ }),
-/* 1866 */
+/* 1867 */
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 "use strict";
@@ -246585,7 +246638,7 @@ function KnowledgeStatusListInstance(version, id) {
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-const LookupsBase_1 = __importDefault(__webpack_require__(1867));
+const LookupsBase_1 = __importDefault(__webpack_require__(1868));
 class Lookups extends LookupsBase_1.default {
     /**
      * @deprecated - Use v1.phoneNumbers instead
@@ -246599,7 +246652,7 @@ module.exports = Lookups;
 
 
 /***/ }),
-/* 1867 */
+/* 1868 */
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 "use strict";
@@ -246617,9 +246670,9 @@ module.exports = Lookups;
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-const Domain_1 = __importDefault(__webpack_require__(1538));
-const V1_1 = __importDefault(__webpack_require__(1868));
-const V2_1 = __importDefault(__webpack_require__(1870));
+const Domain_1 = __importDefault(__webpack_require__(1539));
+const V1_1 = __importDefault(__webpack_require__(1869));
+const V2_1 = __importDefault(__webpack_require__(1871));
 class LookupsBase extends Domain_1.default {
     /**
      * Initialize lookups domain
@@ -246642,7 +246695,7 @@ module.exports = LookupsBase;
 
 
 /***/ }),
-/* 1868 */
+/* 1869 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -246664,8 +246717,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const Version_1 = __importDefault(__webpack_require__(1541));
-const phoneNumber_1 = __webpack_require__(1869);
+const Version_1 = __importDefault(__webpack_require__(1542));
+const phoneNumber_1 = __webpack_require__(1870);
 class V1 extends Version_1.default {
     /**
      * Initialize the V1 version of Lookups
@@ -246685,7 +246738,7 @@ exports["default"] = V1;
 
 
 /***/ }),
-/* 1869 */
+/* 1870 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -246707,9 +246760,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.PhoneNumberInstance = exports.PhoneNumberContextImpl = void 0;
 exports.PhoneNumberListInstance = PhoneNumberListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class PhoneNumberContextImpl {
     constructor(_version, phoneNumber) {
         this._version = _version;
@@ -246868,7 +246921,7 @@ function PhoneNumberListInstance(version) {
 
 
 /***/ }),
-/* 1870 */
+/* 1871 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -246890,12 +246943,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const Version_1 = __importDefault(__webpack_require__(1541));
-const bucket_1 = __webpack_require__(1871);
-const lookupOverride_1 = __webpack_require__(1872);
-const phoneNumber_1 = __webpack_require__(1873);
-const query_1 = __webpack_require__(1874);
-const rateLimit_1 = __webpack_require__(1875);
+const Version_1 = __importDefault(__webpack_require__(1542));
+const bucket_1 = __webpack_require__(1872);
+const lookupOverride_1 = __webpack_require__(1873);
+const phoneNumber_1 = __webpack_require__(1874);
+const query_1 = __webpack_require__(1875);
+const rateLimit_1 = __webpack_require__(1876);
 class V2 extends Version_1.default {
     /**
      * Initialize the V2 version of Lookups
@@ -246936,7 +246989,7 @@ exports["default"] = V2;
 
 
 /***/ }),
-/* 1871 */
+/* 1872 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -246958,9 +247011,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.BucketInstance = exports.BucketContextImpl = exports.RateLimitRequest = void 0;
 exports.BucketListInstance = BucketListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 /**
  * Rate limit request schema
  */
@@ -247222,7 +247275,7 @@ function BucketListInstance(version) {
 
 
 /***/ }),
-/* 1872 */
+/* 1873 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -247244,9 +247297,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.LookupOverrideInstance = exports.LookupOverrideContextImpl = exports.OverridesRequest = void 0;
 exports.LookupOverrideListInstance = LookupOverrideListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class OverridesRequest {
     constructor(payload) {
         this.lineType = payload["line_type"];
@@ -247581,7 +247634,7 @@ function LookupOverrideListInstance(version) {
 
 
 /***/ }),
-/* 1873 */
+/* 1874 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -247603,9 +247656,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.PhoneNumberInstance = exports.PhoneNumberContextImpl = exports.SmsPumpingRiskInfo = exports.SimSwapInfo = exports.ReassignedNumberInfo = exports.LineTypeIntelligenceInfo = exports.LineStatusInfo = exports.LastSimSwapInfo = exports.IdentityMatchInfo = exports.CallerNameInfo = exports.CallForwardingInfo = void 0;
 exports.PhoneNumberListInstance = PhoneNumberListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class CallForwardingInfo {
     constructor(payload) {
         this.callForwardingEnabled = payload["call_forwarding_enabled"];
@@ -247935,7 +247988,7 @@ function PhoneNumberListInstance(version) {
 
 
 /***/ }),
-/* 1874 */
+/* 1875 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -247957,8 +248010,8 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.QueryInstance = exports.SmsPumpingRiskInfo = exports.SimSwapInfo = exports.RiskParameters = exports.ReassignedNumberParameters = exports.ReassignedNumberInfo = exports.LookupRequest = exports.LookupBatchResponse = exports.LookupBatchRequest = exports.LineTypeIntelligenceInfo = exports.LineStatusInfo = exports.LastSimSwapInfo = exports.IdentityMatchParameters = exports.IdentityMatchInfo = exports.CallerNameInfo = exports.CallForwardingInfo = void 0;
 exports.QueryListInstance = QueryListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
 class CallForwardingInfo {
     constructor(payload) {
         this.callForwardingEnabled = payload["call_forwarding_enabled"];
@@ -248208,7 +248261,7 @@ exports.QueryInstance = QueryInstance;
 
 
 /***/ }),
-/* 1875 */
+/* 1876 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -248230,8 +248283,8 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.RateLimitInstance = exports.RateLimitResponse = void 0;
 exports.RateLimitListInstance = RateLimitListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
 /**
  * Rate limit response schema
  */
@@ -248336,7 +248389,7 @@ exports.RateLimitInstance = RateLimitInstance;
 
 
 /***/ }),
-/* 1876 */
+/* 1877 */
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 "use strict";
@@ -248344,14 +248397,14 @@ exports.RateLimitInstance = RateLimitInstance;
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-const MarketplaceBase_1 = __importDefault(__webpack_require__(1877));
+const MarketplaceBase_1 = __importDefault(__webpack_require__(1878));
 class Marketplace extends MarketplaceBase_1.default {
 }
 module.exports = Marketplace;
 
 
 /***/ }),
-/* 1877 */
+/* 1878 */
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 "use strict";
@@ -248369,8 +248422,8 @@ module.exports = Marketplace;
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-const Domain_1 = __importDefault(__webpack_require__(1538));
-const V1_1 = __importDefault(__webpack_require__(1878));
+const Domain_1 = __importDefault(__webpack_require__(1539));
+const V1_1 = __importDefault(__webpack_require__(1879));
 class MarketplaceBase extends Domain_1.default {
     /**
      * Initialize marketplace domain
@@ -248389,7 +248442,7 @@ module.exports = MarketplaceBase;
 
 
 /***/ }),
-/* 1878 */
+/* 1879 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -248411,12 +248464,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const Version_1 = __importDefault(__webpack_require__(1541));
-const availableAddOn_1 = __webpack_require__(1879);
-const installedAddOn_1 = __webpack_require__(1881);
-const moduleData_1 = __webpack_require__(1884);
-const moduleDataManagement_1 = __webpack_require__(1885);
-const referralConversion_1 = __webpack_require__(1886);
+const Version_1 = __importDefault(__webpack_require__(1542));
+const availableAddOn_1 = __webpack_require__(1880);
+const installedAddOn_1 = __webpack_require__(1882);
+const moduleData_1 = __webpack_require__(1885);
+const moduleDataManagement_1 = __webpack_require__(1886);
+const referralConversion_1 = __webpack_require__(1887);
 class V1 extends Version_1.default {
     /**
      * Initialize the V1 version of Marketplace
@@ -248460,7 +248513,7 @@ exports["default"] = V1;
 
 
 /***/ }),
-/* 1879 */
+/* 1880 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -248485,11 +248538,11 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.AvailableAddOnPage = exports.AvailableAddOnInstance = exports.AvailableAddOnContextImpl = void 0;
 exports.AvailableAddOnListInstance = AvailableAddOnListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
-const availableAddOnExtension_1 = __webpack_require__(1880);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
+const availableAddOnExtension_1 = __webpack_require__(1881);
 class AvailableAddOnContextImpl {
     constructor(_version, sid) {
         this._version = _version;
@@ -248744,7 +248797,7 @@ exports.AvailableAddOnPage = AvailableAddOnPage;
 
 
 /***/ }),
-/* 1880 */
+/* 1881 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -248769,10 +248822,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.AvailableAddOnExtensionPage = exports.AvailableAddOnExtensionInstance = exports.AvailableAddOnExtensionContextImpl = void 0;
 exports.AvailableAddOnExtensionListInstance = AvailableAddOnExtensionListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class AvailableAddOnExtensionContextImpl {
     constructor(_version, availableAddOnSid, sid) {
         this._version = _version;
@@ -249019,7 +249072,7 @@ exports.AvailableAddOnExtensionPage = AvailableAddOnExtensionPage;
 
 
 /***/ }),
-/* 1881 */
+/* 1882 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -249044,12 +249097,12 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.InstalledAddOnPage = exports.InstalledAddOnInstance = exports.InstalledAddOnContextImpl = void 0;
 exports.InstalledAddOnListInstance = InstalledAddOnListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
-const installedAddOnExtension_1 = __webpack_require__(1882);
-const installedAddOnUsage_1 = __webpack_require__(1883);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
+const installedAddOnExtension_1 = __webpack_require__(1883);
+const installedAddOnUsage_1 = __webpack_require__(1884);
 class InstalledAddOnContextImpl {
     constructor(_version, sid) {
         this._version = _version;
@@ -249503,7 +249556,7 @@ exports.InstalledAddOnPage = InstalledAddOnPage;
 
 
 /***/ }),
-/* 1882 */
+/* 1883 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -249528,10 +249581,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.InstalledAddOnExtensionPage = exports.InstalledAddOnExtensionInstance = exports.InstalledAddOnExtensionContextImpl = void 0;
 exports.InstalledAddOnExtensionListInstance = InstalledAddOnExtensionListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class InstalledAddOnExtensionContextImpl {
     constructor(_version, installedAddOnSid, sid) {
         this._version = _version;
@@ -249838,7 +249891,7 @@ exports.InstalledAddOnExtensionPage = InstalledAddOnExtensionPage;
 
 
 /***/ }),
-/* 1883 */
+/* 1884 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -249860,9 +249913,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.InstalledAddOnUsageInstance = exports.MarketplaceV1InstalledAddOnInstalledAddOnUsageBillableItems = exports.MarketplaceV1InstalledAddOnInstalledAddOnUsage = void 0;
 exports.InstalledAddOnUsageListInstance = InstalledAddOnUsageListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class MarketplaceV1InstalledAddOnInstalledAddOnUsage {
     constructor(payload) {
         this.totalSubmitted = payload["total_submitted"];
@@ -249970,7 +250023,7 @@ exports.InstalledAddOnUsageInstance = InstalledAddOnUsageInstance;
 
 
 /***/ }),
-/* 1884 */
+/* 1885 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -249992,8 +250045,8 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ModuleDataInstance = void 0;
 exports.ModuleDataListInstance = ModuleDataListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
 function ModuleDataListInstance(version) {
     const instance = {};
     instance._version = version;
@@ -250136,7 +250189,7 @@ exports.ModuleDataInstance = ModuleDataInstance;
 
 
 /***/ }),
-/* 1885 */
+/* 1886 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -250158,9 +250211,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ModuleDataManagementInstance = exports.ModuleDataManagementContextImpl = void 0;
 exports.ModuleDataManagementListInstance = ModuleDataManagementListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class ModuleDataManagementContextImpl {
     constructor(_version, sid) {
         this._version = _version;
@@ -250385,7 +250438,7 @@ function ModuleDataManagementListInstance(version) {
 
 
 /***/ }),
-/* 1886 */
+/* 1887 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -250407,8 +250460,8 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ReferralConversionInstance = exports.CreateReferralConversionRequest = void 0;
 exports.ReferralConversionListInstance = ReferralConversionListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
 class CreateReferralConversionRequest {
     constructor(payload) {
         this.referralAccountSid = payload["referral_account_sid"];
@@ -250499,7 +250552,7 @@ exports.ReferralConversionInstance = ReferralConversionInstance;
 
 
 /***/ }),
-/* 1887 */
+/* 1888 */
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 "use strict";
@@ -250507,7 +250560,7 @@ exports.ReferralConversionInstance = ReferralConversionInstance;
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-const MessagingBase_1 = __importDefault(__webpack_require__(1888));
+const MessagingBase_1 = __importDefault(__webpack_require__(1889));
 class Messaging extends MessagingBase_1.default {
     /**
      * @deprecated - Use v1.brandRegistrations instead
@@ -250563,7 +250616,7 @@ module.exports = Messaging;
 
 
 /***/ }),
-/* 1888 */
+/* 1889 */
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 "use strict";
@@ -250581,9 +250634,9 @@ module.exports = Messaging;
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-const Domain_1 = __importDefault(__webpack_require__(1538));
-const V1_1 = __importDefault(__webpack_require__(1889));
-const V2_1 = __importDefault(__webpack_require__(1912));
+const Domain_1 = __importDefault(__webpack_require__(1539));
+const V1_1 = __importDefault(__webpack_require__(1890));
+const V2_1 = __importDefault(__webpack_require__(1913));
 class MessagingBase extends Domain_1.default {
     /**
      * Initialize messaging domain
@@ -250606,7 +250659,7 @@ module.exports = MessagingBase;
 
 
 /***/ }),
-/* 1889 */
+/* 1890 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -250628,20 +250681,20 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const Version_1 = __importDefault(__webpack_require__(1541));
-const brandRegistration_1 = __webpack_require__(1890);
-const deactivations_1 = __webpack_require__(1893);
-const domainCerts_1 = __webpack_require__(1894);
-const domainConfig_1 = __webpack_require__(1895);
-const domainConfigMessagingService_1 = __webpack_require__(1896);
-const domainValidateDn_1 = __webpack_require__(1897);
-const externalCampaign_1 = __webpack_require__(1898);
-const linkshorteningMessagingService_1 = __webpack_require__(1899);
-const linkshorteningMessagingServiceDomainAssociation_1 = __webpack_require__(1900);
-const requestManagedCert_1 = __webpack_require__(1901);
-const service_1 = __webpack_require__(1902);
-const tollfreeVerification_1 = __webpack_require__(1910);
-const usecase_1 = __webpack_require__(1911);
+const Version_1 = __importDefault(__webpack_require__(1542));
+const brandRegistration_1 = __webpack_require__(1891);
+const deactivations_1 = __webpack_require__(1894);
+const domainCerts_1 = __webpack_require__(1895);
+const domainConfig_1 = __webpack_require__(1896);
+const domainConfigMessagingService_1 = __webpack_require__(1897);
+const domainValidateDn_1 = __webpack_require__(1898);
+const externalCampaign_1 = __webpack_require__(1899);
+const linkshorteningMessagingService_1 = __webpack_require__(1900);
+const linkshorteningMessagingServiceDomainAssociation_1 = __webpack_require__(1901);
+const requestManagedCert_1 = __webpack_require__(1902);
+const service_1 = __webpack_require__(1903);
+const tollfreeVerification_1 = __webpack_require__(1911);
+const usecase_1 = __webpack_require__(1912);
 class V1 extends Version_1.default {
     /**
      * Initialize the V1 version of Messaging
@@ -250733,7 +250786,7 @@ exports["default"] = V1;
 
 
 /***/ }),
-/* 1890 */
+/* 1891 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -250758,12 +250811,12 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.BrandRegistrationPage = exports.BrandRegistrationInstance = exports.BrandRegistrationContextImpl = void 0;
 exports.BrandRegistrationListInstance = BrandRegistrationListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
-const brandRegistrationOtp_1 = __webpack_require__(1891);
-const brandVetting_1 = __webpack_require__(1892);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
+const brandRegistrationOtp_1 = __webpack_require__(1892);
+const brandVetting_1 = __webpack_require__(1893);
 class BrandRegistrationContextImpl {
     constructor(_version, sid) {
         this._version = _version;
@@ -251184,7 +251237,7 @@ exports.BrandRegistrationPage = BrandRegistrationPage;
 
 
 /***/ }),
-/* 1891 */
+/* 1892 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -251206,9 +251259,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.BrandRegistrationOtpInstance = void 0;
 exports.BrandRegistrationOtpListInstance = BrandRegistrationOtpListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 function BrandRegistrationOtpListInstance(version, brandRegistrationSid) {
     if (!(0, utility_1.isValidPathParam)(brandRegistrationSid)) {
         throw new Error("Parameter 'brandRegistrationSid' is not valid.");
@@ -251280,7 +251333,7 @@ exports.BrandRegistrationOtpInstance = BrandRegistrationOtpInstance;
 
 
 /***/ }),
-/* 1892 */
+/* 1893 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -251305,10 +251358,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.BrandVettingPage = exports.BrandVettingInstance = exports.BrandVettingContextImpl = void 0;
 exports.BrandVettingListInstance = BrandVettingListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class BrandVettingContextImpl {
     constructor(_version, brandSid, brandVettingSid) {
         this._version = _version;
@@ -251622,7 +251675,7 @@ exports.BrandVettingPage = BrandVettingPage;
 
 
 /***/ }),
-/* 1893 */
+/* 1894 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -251644,8 +251697,8 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.DeactivationsInstance = exports.DeactivationsContextImpl = void 0;
 exports.DeactivationsListInstance = DeactivationsListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
 class DeactivationsContextImpl {
     constructor(_version) {
         this._version = _version;
@@ -251770,7 +251823,7 @@ function DeactivationsListInstance(version) {
 
 
 /***/ }),
-/* 1894 */
+/* 1895 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -251792,9 +251845,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.DomainCertsInstance = exports.DomainCertsContextImpl = void 0;
 exports.DomainCertsListInstance = DomainCertsListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class DomainCertsContextImpl {
     constructor(_version, domainSid) {
         this._version = _version;
@@ -252032,7 +252085,7 @@ function DomainCertsListInstance(version) {
 
 
 /***/ }),
-/* 1895 */
+/* 1896 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -252054,9 +252107,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.DomainConfigInstance = exports.DomainConfigContextImpl = void 0;
 exports.DomainConfigListInstance = DomainConfigListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class DomainConfigContextImpl {
     constructor(_version, domainSid) {
         this._version = _version;
@@ -252267,7 +252320,7 @@ function DomainConfigListInstance(version) {
 
 
 /***/ }),
-/* 1896 */
+/* 1897 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -252289,9 +252342,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.DomainConfigMessagingServiceInstance = exports.DomainConfigMessagingServiceContextImpl = void 0;
 exports.DomainConfigMessagingServiceListInstance = DomainConfigMessagingServiceListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class DomainConfigMessagingServiceContextImpl {
     constructor(_version, messagingServiceSid) {
         this._version = _version;
@@ -252430,7 +252483,7 @@ function DomainConfigMessagingServiceListInstance(version) {
 
 
 /***/ }),
-/* 1897 */
+/* 1898 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -252452,9 +252505,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.DomainValidateDnInstance = exports.DomainValidateDnContextImpl = void 0;
 exports.DomainValidateDnListInstance = DomainValidateDnListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class DomainValidateDnContextImpl {
     constructor(_version, domainSid) {
         this._version = _version;
@@ -252581,7 +252634,7 @@ function DomainValidateDnListInstance(version) {
 
 
 /***/ }),
-/* 1898 */
+/* 1899 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -252603,8 +252656,8 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ExternalCampaignInstance = void 0;
 exports.ExternalCampaignListInstance = ExternalCampaignListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
 function ExternalCampaignListInstance(version) {
     const instance = {};
     instance._version = version;
@@ -252713,7 +252766,7 @@ exports.ExternalCampaignInstance = ExternalCampaignInstance;
 
 
 /***/ }),
-/* 1899 */
+/* 1900 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -252735,9 +252788,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.LinkshorteningMessagingServiceInstance = exports.LinkshorteningMessagingServiceContextImpl = void 0;
 exports.LinkshorteningMessagingServiceListInstance = LinkshorteningMessagingServiceListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class LinkshorteningMessagingServiceContextImpl {
     constructor(_version, domainSid, messagingServiceSid) {
         this._version = _version;
@@ -252913,7 +252966,7 @@ function LinkshorteningMessagingServiceListInstance(version) {
 
 
 /***/ }),
-/* 1900 */
+/* 1901 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -252935,9 +252988,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.LinkshorteningMessagingServiceDomainAssociationInstance = exports.LinkshorteningMessagingServiceDomainAssociationContextImpl = void 0;
 exports.LinkshorteningMessagingServiceDomainAssociationListInstance = LinkshorteningMessagingServiceDomainAssociationListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class LinkshorteningMessagingServiceDomainAssociationContextImpl {
     constructor(_version, messagingServiceSid) {
         this._version = _version;
@@ -253060,7 +253113,7 @@ function LinkshorteningMessagingServiceDomainAssociationListInstance(version) {
 
 
 /***/ }),
-/* 1901 */
+/* 1902 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -253082,9 +253135,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.RequestManagedCertInstance = exports.RequestManagedCertContextImpl = void 0;
 exports.RequestManagedCertListInstance = RequestManagedCertListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class RequestManagedCertContextImpl {
     constructor(_version, domainSid) {
         this._version = _version;
@@ -253221,7 +253274,7 @@ function RequestManagedCertListInstance(version) {
 
 
 /***/ }),
-/* 1902 */
+/* 1903 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -253246,17 +253299,17 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ServicePage = exports.ServiceInstance = exports.ServiceContextImpl = void 0;
 exports.ServiceListInstance = ServiceListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
-const alphaSender_1 = __webpack_require__(1903);
-const channelSender_1 = __webpack_require__(1904);
-const destinationAlphaSender_1 = __webpack_require__(1905);
-const phoneNumber_1 = __webpack_require__(1906);
-const shortCode_1 = __webpack_require__(1907);
-const usAppToPerson_1 = __webpack_require__(1908);
-const usAppToPersonUsecase_1 = __webpack_require__(1909);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
+const alphaSender_1 = __webpack_require__(1904);
+const channelSender_1 = __webpack_require__(1905);
+const destinationAlphaSender_1 = __webpack_require__(1906);
+const phoneNumber_1 = __webpack_require__(1907);
+const shortCode_1 = __webpack_require__(1908);
+const usAppToPerson_1 = __webpack_require__(1909);
+const usAppToPersonUsecase_1 = __webpack_require__(1910);
 class ServiceContextImpl {
     constructor(_version, sid) {
         this._version = _version;
@@ -253894,7 +253947,7 @@ exports.ServicePage = ServicePage;
 
 
 /***/ }),
-/* 1903 */
+/* 1904 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -253919,10 +253972,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.AlphaSenderPage = exports.AlphaSenderInstance = exports.AlphaSenderContextImpl = void 0;
 exports.AlphaSenderListInstance = AlphaSenderListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class AlphaSenderContextImpl {
     constructor(_version, serviceSid, sid) {
         this._version = _version;
@@ -254268,7 +254321,7 @@ exports.AlphaSenderPage = AlphaSenderPage;
 
 
 /***/ }),
-/* 1904 */
+/* 1905 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -254293,10 +254346,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ChannelSenderPage = exports.ChannelSenderInstance = exports.ChannelSenderContextImpl = void 0;
 exports.ChannelSenderListInstance = ChannelSenderListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class ChannelSenderContextImpl {
     constructor(_version, messagingServiceSid, sid) {
         this._version = _version;
@@ -254644,7 +254697,7 @@ exports.ChannelSenderPage = ChannelSenderPage;
 
 
 /***/ }),
-/* 1905 */
+/* 1906 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -254669,10 +254722,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.DestinationAlphaSenderPage = exports.DestinationAlphaSenderInstance = exports.DestinationAlphaSenderContextImpl = void 0;
 exports.DestinationAlphaSenderListInstance = DestinationAlphaSenderListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class DestinationAlphaSenderContextImpl {
     constructor(_version, serviceSid, sid) {
         this._version = _version;
@@ -255028,7 +255081,7 @@ exports.DestinationAlphaSenderPage = DestinationAlphaSenderPage;
 
 
 /***/ }),
-/* 1906 */
+/* 1907 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -255053,10 +255106,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.PhoneNumberPage = exports.PhoneNumberInstance = exports.PhoneNumberContextImpl = void 0;
 exports.PhoneNumberListInstance = PhoneNumberListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class PhoneNumberContextImpl {
     constructor(_version, serviceSid, sid) {
         this._version = _version;
@@ -255406,7 +255459,7 @@ exports.PhoneNumberPage = PhoneNumberPage;
 
 
 /***/ }),
-/* 1907 */
+/* 1908 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -255431,10 +255484,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ShortCodePage = exports.ShortCodeInstance = exports.ShortCodeContextImpl = void 0;
 exports.ShortCodeListInstance = ShortCodeListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class ShortCodeContextImpl {
     constructor(_version, serviceSid, sid) {
         this._version = _version;
@@ -255784,7 +255837,7 @@ exports.ShortCodePage = ShortCodePage;
 
 
 /***/ }),
-/* 1908 */
+/* 1909 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -255809,10 +255862,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.UsAppToPersonPage = exports.UsAppToPersonInstance = exports.UsAppToPersonContextImpl = void 0;
 exports.UsAppToPersonListInstance = UsAppToPersonListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class UsAppToPersonContextImpl {
     constructor(_version, messagingServiceSid, sid) {
         this._version = _version;
@@ -256446,7 +256499,7 @@ exports.UsAppToPersonPage = UsAppToPersonPage;
 
 
 /***/ }),
-/* 1909 */
+/* 1910 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -256468,9 +256521,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.UsAppToPersonUsecaseInstance = void 0;
 exports.UsAppToPersonUsecaseListInstance = UsAppToPersonUsecaseListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 function UsAppToPersonUsecaseListInstance(version, messagingServiceSid) {
     if (!(0, utility_1.isValidPathParam)(messagingServiceSid)) {
         throw new Error("Parameter 'messagingServiceSid' is not valid.");
@@ -256562,7 +256615,7 @@ exports.UsAppToPersonUsecaseInstance = UsAppToPersonUsecaseInstance;
 
 
 /***/ }),
-/* 1910 */
+/* 1911 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -256587,10 +256640,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.TollfreeVerificationPage = exports.TollfreeVerificationInstance = exports.TollfreeVerificationContextImpl = void 0;
 exports.TollfreeVerificationListInstance = TollfreeVerificationListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class TollfreeVerificationContextImpl {
     constructor(_version, sid) {
         this._version = _version;
@@ -257454,7 +257507,7 @@ exports.TollfreeVerificationPage = TollfreeVerificationPage;
 
 
 /***/ }),
-/* 1911 */
+/* 1912 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -257476,8 +257529,8 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.UsecaseInstance = void 0;
 exports.UsecaseListInstance = UsecaseListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
 function UsecaseListInstance(version) {
     const instance = {};
     instance._version = version;
@@ -257544,7 +257597,7 @@ exports.UsecaseInstance = UsecaseInstance;
 
 
 /***/ }),
-/* 1912 */
+/* 1913 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -257566,10 +257619,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const Version_1 = __importDefault(__webpack_require__(1541));
-const channelsSender_1 = __webpack_require__(1913);
-const domainCerts_1 = __webpack_require__(1914);
-const typingIndicator_1 = __webpack_require__(1915);
+const Version_1 = __importDefault(__webpack_require__(1542));
+const channelsSender_1 = __webpack_require__(1914);
+const domainCerts_1 = __webpack_require__(1915);
+const typingIndicator_1 = __webpack_require__(1916);
 class V2 extends Version_1.default {
     /**
      * Initialize the V2 version of Messaging
@@ -257601,7 +257654,7 @@ exports["default"] = V2;
 
 
 /***/ }),
-/* 1913 */
+/* 1914 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -257626,10 +257679,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ChannelsSenderPage = exports.ChannelsSenderInstance = exports.ChannelsSenderContextImpl = exports.MessagingV2RcsComplianceResponse = exports.MessagingV2RcsComplianceCountryResponse = exports.MessagingV2RcsCarrier = exports.MessagingV2ChannelsSenderWebhook = exports.MessagingV2ChannelsSenderRequestsUpdate = exports.MessagingV2ChannelsSenderRequestsCreate = exports.MessagingV2ChannelsSenderProperties = exports.MessagingV2ChannelsSenderProfileGenericResponseWebsites = exports.MessagingV2ChannelsSenderProfileGenericResponsePhoneNumbers = exports.MessagingV2ChannelsSenderProfileGenericResponseEmails = exports.MessagingV2ChannelsSenderProfileGenericResponse = exports.MessagingV2ChannelsSenderProfile = exports.MessagingV2ChannelsSenderOfflineReasonsItems = exports.MessagingV2ChannelsSenderConfiguration = void 0;
 exports.ChannelsSenderListInstance = ChannelsSenderListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 /**
  * The configuration settings for creating a sender.
  */
@@ -258204,7 +258257,7 @@ exports.ChannelsSenderPage = ChannelsSenderPage;
 
 
 /***/ }),
-/* 1914 */
+/* 1915 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -258226,9 +258279,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.DomainCertsInstance = exports.DomainCertsContextImpl = void 0;
 exports.DomainCertsListInstance = DomainCertsListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class DomainCertsContextImpl {
     constructor(_version, domainSid) {
         this._version = _version;
@@ -258367,7 +258420,7 @@ function DomainCertsListInstance(version) {
 
 
 /***/ }),
-/* 1915 */
+/* 1916 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -258389,8 +258442,8 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.TypingIndicatorInstance = void 0;
 exports.TypingIndicatorListInstance = TypingIndicatorListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
 function TypingIndicatorListInstance(version) {
     const instance = {};
     instance._version = version;
@@ -258485,7 +258538,7 @@ exports.TypingIndicatorInstance = TypingIndicatorInstance;
 
 
 /***/ }),
-/* 1916 */
+/* 1917 */
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 "use strict";
@@ -258493,7 +258546,7 @@ exports.TypingIndicatorInstance = TypingIndicatorInstance;
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-const MonitorBase_1 = __importDefault(__webpack_require__(1917));
+const MonitorBase_1 = __importDefault(__webpack_require__(1918));
 class Monitor extends MonitorBase_1.default {
     /**
      * @deprecated - Use v1.alerts instead
@@ -258514,7 +258567,7 @@ module.exports = Monitor;
 
 
 /***/ }),
-/* 1917 */
+/* 1918 */
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 "use strict";
@@ -258532,8 +258585,8 @@ module.exports = Monitor;
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-const Domain_1 = __importDefault(__webpack_require__(1538));
-const V1_1 = __importDefault(__webpack_require__(1918));
+const Domain_1 = __importDefault(__webpack_require__(1539));
+const V1_1 = __importDefault(__webpack_require__(1919));
 class MonitorBase extends Domain_1.default {
     /**
      * Initialize monitor domain
@@ -258549,55 +258602,6 @@ class MonitorBase extends Domain_1.default {
     }
 }
 module.exports = MonitorBase;
-
-
-/***/ }),
-/* 1918 */
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
-
-"use strict";
-
-/*
- * This code was generated by
- * ___ _ _ _ _ _    _ ____    ____ ____ _    ____ ____ _  _ ____ ____ ____ ___ __   __
- *  |  | | | | |    | |  | __ |  | |__| | __ | __ |___ |\ | |___ |__/ |__|  | |  | |__/
- *  |  |_|_| | |___ | |__|    |__| |  | |    |__] |___ | \| |___ |  \ |  |  | |__| |  \
- *
- * Twilio - Monitor
- * This is the public Twilio REST API.
- *
- * NOTE: This class is auto generated by OpenAPI Generator.
- * https://openapi-generator.tech
- * Do not edit the class manually.
- */
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-const Version_1 = __importDefault(__webpack_require__(1541));
-const alert_1 = __webpack_require__(1919);
-const event_1 = __webpack_require__(1920);
-class V1 extends Version_1.default {
-    /**
-     * Initialize the V1 version of Monitor
-     *
-     * @param domain - The Twilio (Twilio.Monitor) domain
-     */
-    constructor(domain) {
-        super(domain, "v1");
-    }
-    /** Getter for alerts resource */
-    get alerts() {
-        this._alerts = this._alerts || (0, alert_1.AlertListInstance)(this);
-        return this._alerts;
-    }
-    /** Getter for events resource */
-    get events() {
-        this._events = this._events || (0, event_1.EventListInstance)(this);
-        return this._events;
-    }
-}
-exports["default"] = V1;
 
 
 /***/ }),
@@ -258623,13 +258627,62 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
+const Version_1 = __importDefault(__webpack_require__(1542));
+const alert_1 = __webpack_require__(1920);
+const event_1 = __webpack_require__(1921);
+class V1 extends Version_1.default {
+    /**
+     * Initialize the V1 version of Monitor
+     *
+     * @param domain - The Twilio (Twilio.Monitor) domain
+     */
+    constructor(domain) {
+        super(domain, "v1");
+    }
+    /** Getter for alerts resource */
+    get alerts() {
+        this._alerts = this._alerts || (0, alert_1.AlertListInstance)(this);
+        return this._alerts;
+    }
+    /** Getter for events resource */
+    get events() {
+        this._events = this._events || (0, event_1.EventListInstance)(this);
+        return this._events;
+    }
+}
+exports["default"] = V1;
+
+
+/***/ }),
+/* 1920 */
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+"use strict";
+
+/*
+ * This code was generated by
+ * ___ _ _ _ _ _    _ ____    ____ ____ _    ____ ____ _  _ ____ ____ ____ ___ __   __
+ *  |  | | | | |    | |  | __ |  | |__| | __ | __ |___ |\ | |___ |__/ |__|  | |  | |__/
+ *  |  |_|_| | |___ | |__|    |__| |  | |    |__] |___ | \| |___ |  \ |  |  | |__| |  \
+ *
+ * Twilio - Monitor
+ * This is the public Twilio REST API.
+ *
+ * NOTE: This class is auto generated by OpenAPI Generator.
+ * https://openapi-generator.tech
+ * Do not edit the class manually.
+ */
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.AlertPage = exports.AlertInstance = exports.AlertContextImpl = void 0;
 exports.AlertListInstance = AlertListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class AlertContextImpl {
     constructor(_version, sid) {
         this._version = _version;
@@ -258907,7 +258960,7 @@ exports.AlertPage = AlertPage;
 
 
 /***/ }),
-/* 1920 */
+/* 1921 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -258932,10 +258985,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.EventPage = exports.EventInstance = exports.EventContextImpl = void 0;
 exports.EventListInstance = EventListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class EventContextImpl {
     constructor(_version, sid) {
         this._version = _version;
@@ -259215,7 +259268,7 @@ exports.EventPage = EventPage;
 
 
 /***/ }),
-/* 1921 */
+/* 1922 */
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 "use strict";
@@ -259223,7 +259276,7 @@ exports.EventPage = EventPage;
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-const NotifyBase_1 = __importDefault(__webpack_require__(1922));
+const NotifyBase_1 = __importDefault(__webpack_require__(1923));
 class Notify extends NotifyBase_1.default {
     /**
      * @deprecated - Use v1.credentials instead
@@ -259244,7 +259297,7 @@ module.exports = Notify;
 
 
 /***/ }),
-/* 1922 */
+/* 1923 */
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 "use strict";
@@ -259262,8 +259315,8 @@ module.exports = Notify;
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-const Domain_1 = __importDefault(__webpack_require__(1538));
-const V1_1 = __importDefault(__webpack_require__(1923));
+const Domain_1 = __importDefault(__webpack_require__(1539));
+const V1_1 = __importDefault(__webpack_require__(1924));
 class NotifyBase extends Domain_1.default {
     /**
      * Initialize notify domain
@@ -259279,55 +259332,6 @@ class NotifyBase extends Domain_1.default {
     }
 }
 module.exports = NotifyBase;
-
-
-/***/ }),
-/* 1923 */
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
-
-"use strict";
-
-/*
- * This code was generated by
- * ___ _ _ _ _ _    _ ____    ____ ____ _    ____ ____ _  _ ____ ____ ____ ___ __   __
- *  |  | | | | |    | |  | __ |  | |__| | __ | __ |___ |\ | |___ |__/ |__|  | |  | |__/
- *  |  |_|_| | |___ | |__|    |__| |  | |    |__] |___ | \| |___ |  \ |  |  | |__| |  \
- *
- * Twilio - Notify
- * This is the public Twilio REST API.
- *
- * NOTE: This class is auto generated by OpenAPI Generator.
- * https://openapi-generator.tech
- * Do not edit the class manually.
- */
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-const Version_1 = __importDefault(__webpack_require__(1541));
-const credential_1 = __webpack_require__(1924);
-const service_1 = __webpack_require__(1925);
-class V1 extends Version_1.default {
-    /**
-     * Initialize the V1 version of Notify
-     *
-     * @param domain - The Twilio (Twilio.Notify) domain
-     */
-    constructor(domain) {
-        super(domain, "v1");
-    }
-    /** Getter for credentials resource */
-    get credentials() {
-        this._credentials = this._credentials || (0, credential_1.CredentialListInstance)(this);
-        return this._credentials;
-    }
-    /** Getter for services resource */
-    get services() {
-        this._services = this._services || (0, service_1.ServiceListInstance)(this);
-        return this._services;
-    }
-}
-exports["default"] = V1;
 
 
 /***/ }),
@@ -259353,13 +259357,62 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
+const Version_1 = __importDefault(__webpack_require__(1542));
+const credential_1 = __webpack_require__(1925);
+const service_1 = __webpack_require__(1926);
+class V1 extends Version_1.default {
+    /**
+     * Initialize the V1 version of Notify
+     *
+     * @param domain - The Twilio (Twilio.Notify) domain
+     */
+    constructor(domain) {
+        super(domain, "v1");
+    }
+    /** Getter for credentials resource */
+    get credentials() {
+        this._credentials = this._credentials || (0, credential_1.CredentialListInstance)(this);
+        return this._credentials;
+    }
+    /** Getter for services resource */
+    get services() {
+        this._services = this._services || (0, service_1.ServiceListInstance)(this);
+        return this._services;
+    }
+}
+exports["default"] = V1;
+
+
+/***/ }),
+/* 1925 */
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+"use strict";
+
+/*
+ * This code was generated by
+ * ___ _ _ _ _ _    _ ____    ____ ____ _    ____ ____ _  _ ____ ____ ____ ___ __   __
+ *  |  | | | | |    | |  | __ |  | |__| | __ | __ |___ |\ | |___ |__/ |__|  | |  | |__/
+ *  |  |_|_| | |___ | |__|    |__| |  | |    |__] |___ | \| |___ |  \ |  |  | |__| |  \
+ *
+ * Twilio - Notify
+ * This is the public Twilio REST API.
+ *
+ * NOTE: This class is auto generated by OpenAPI Generator.
+ * https://openapi-generator.tech
+ * Do not edit the class manually.
+ */
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.CredentialPage = exports.CredentialInstance = exports.CredentialContextImpl = void 0;
 exports.CredentialListInstance = CredentialListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class CredentialContextImpl {
     constructor(_version, sid) {
         this._version = _version;
@@ -259805,7 +259858,7 @@ exports.CredentialPage = CredentialPage;
 
 
 /***/ }),
-/* 1925 */
+/* 1926 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -259830,12 +259883,12 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ServicePage = exports.ServiceInstance = exports.ServiceContextImpl = void 0;
 exports.ServiceListInstance = ServiceListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
-const binding_1 = __webpack_require__(1926);
-const notification_1 = __webpack_require__(1927);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
+const binding_1 = __webpack_require__(1927);
+const notification_1 = __webpack_require__(1928);
 class ServiceContextImpl {
     constructor(_version, sid) {
         this._version = _version;
@@ -260416,7 +260469,7 @@ exports.ServicePage = ServicePage;
 
 
 /***/ }),
-/* 1926 */
+/* 1927 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -260441,10 +260494,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.BindingPage = exports.BindingInstance = exports.BindingContextImpl = void 0;
 exports.BindingListInstance = BindingListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class BindingContextImpl {
     constructor(_version, serviceSid, sid) {
         this._version = _version;
@@ -260852,7 +260905,7 @@ exports.BindingPage = BindingPage;
 
 
 /***/ }),
-/* 1927 */
+/* 1928 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -260874,9 +260927,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.NotificationInstance = void 0;
 exports.NotificationListInstance = NotificationListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 function NotificationListInstance(version, serviceSid) {
     if (!(0, utility_1.isValidPathParam)(serviceSid)) {
         throw new Error("Parameter 'serviceSid' is not valid.");
@@ -261076,7 +261129,7 @@ exports.NotificationInstance = NotificationInstance;
 
 
 /***/ }),
-/* 1928 */
+/* 1929 */
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 "use strict";
@@ -261084,7 +261137,7 @@ exports.NotificationInstance = NotificationInstance;
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-const NumbersBase_1 = __importDefault(__webpack_require__(1929));
+const NumbersBase_1 = __importDefault(__webpack_require__(1930));
 class Numbers extends NumbersBase_1.default {
     /**
      * @deprecated - Use v2.regulatoryCompliance instead
@@ -261098,7 +261151,7 @@ module.exports = Numbers;
 
 
 /***/ }),
-/* 1929 */
+/* 1930 */
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 "use strict";
@@ -261116,10 +261169,10 @@ module.exports = Numbers;
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-const Domain_1 = __importDefault(__webpack_require__(1538));
-const V1_1 = __importDefault(__webpack_require__(1930));
-const V2_1 = __importDefault(__webpack_require__(1943));
-const V3_1 = __importDefault(__webpack_require__(1961));
+const Domain_1 = __importDefault(__webpack_require__(1539));
+const V1_1 = __importDefault(__webpack_require__(1931));
+const V2_1 = __importDefault(__webpack_require__(1944));
+const V3_1 = __importDefault(__webpack_require__(1962));
 class NumbersBase extends Domain_1.default {
     /**
      * Initialize numbers domain
@@ -261146,7 +261199,7 @@ module.exports = NumbersBase;
 
 
 /***/ }),
-/* 1930 */
+/* 1931 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -261168,19 +261221,19 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const Version_1 = __importDefault(__webpack_require__(1541));
-const bulkEligibility_1 = __webpack_require__(1931);
-const eligibility_1 = __webpack_require__(1932);
-const embeddedSession_1 = __webpack_require__(1933);
-const portingAllPortIn_1 = __webpack_require__(1934);
-const portingPortIn_1 = __webpack_require__(1935);
-const portingPortInPhoneNumber_1 = __webpack_require__(1936);
-const portingPortability_1 = __webpack_require__(1937);
-const portingWebhookConfiguration_1 = __webpack_require__(1938);
-const portingWebhookConfigurationDelete_1 = __webpack_require__(1939);
-const senderIdRegistration_1 = __webpack_require__(1940);
-const signingRequestConfiguration_1 = __webpack_require__(1941);
-const webhook_1 = __webpack_require__(1942);
+const Version_1 = __importDefault(__webpack_require__(1542));
+const bulkEligibility_1 = __webpack_require__(1932);
+const eligibility_1 = __webpack_require__(1933);
+const embeddedSession_1 = __webpack_require__(1934);
+const portingAllPortIn_1 = __webpack_require__(1935);
+const portingPortIn_1 = __webpack_require__(1936);
+const portingPortInPhoneNumber_1 = __webpack_require__(1937);
+const portingPortability_1 = __webpack_require__(1938);
+const portingWebhookConfiguration_1 = __webpack_require__(1939);
+const portingWebhookConfigurationDelete_1 = __webpack_require__(1940);
+const senderIdRegistration_1 = __webpack_require__(1941);
+const signingRequestConfiguration_1 = __webpack_require__(1942);
+const webhook_1 = __webpack_require__(1943);
 class V1 extends Version_1.default {
     /**
      * Initialize the V1 version of Numbers
@@ -261267,7 +261320,7 @@ exports["default"] = V1;
 
 
 /***/ }),
-/* 1931 */
+/* 1932 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -261289,9 +261342,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.BulkEligibilityInstance = exports.BulkEligibilityContextImpl = void 0;
 exports.BulkEligibilityListInstance = BulkEligibilityListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class BulkEligibilityContextImpl {
     constructor(_version, requestId) {
         this._version = _version;
@@ -261480,7 +261533,7 @@ function BulkEligibilityListInstance(version) {
 
 
 /***/ }),
-/* 1932 */
+/* 1933 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -261502,8 +261555,8 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.EligibilityInstance = void 0;
 exports.EligibilityListInstance = EligibilityListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
 function EligibilityListInstance(version) {
     const instance = {};
     instance._version = version;
@@ -261596,7 +261649,7 @@ exports.EligibilityInstance = EligibilityInstance;
 
 
 /***/ }),
-/* 1933 */
+/* 1934 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -261618,9 +261671,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.EmbeddedSessionInstance = exports.NumbersV1CreateEmbeddedSessionRequest = void 0;
 exports.EmbeddedSessionListInstance = EmbeddedSessionListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class NumbersV1CreateEmbeddedSessionRequest {
     constructor(payload) {
         this.themeSetId = payload["themeSetId"];
@@ -261718,7 +261771,7 @@ exports.EmbeddedSessionInstance = EmbeddedSessionInstance;
 
 
 /***/ }),
-/* 1934 */
+/* 1935 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -261743,9 +261796,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.PortingAllPortInPage = exports.PortingAllPortInInstance = void 0;
 exports.PortingAllPortInListInstance = PortingAllPortInListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
 function PortingAllPortInListInstance(version) {
     const instance = {};
     instance._version = version;
@@ -261922,7 +261975,7 @@ exports.PortingAllPortInPage = PortingAllPortInPage;
 
 
 /***/ }),
-/* 1935 */
+/* 1936 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -261944,9 +261997,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.PortingPortInInstance = exports.PortingPortInContextImpl = exports.NumbersV1PortingPortInPhoneNumberResult = exports.NumbersV1PortingPortInCreatePhoneNumbers = exports.NumbersV1PortingPortInCreate = exports.NumbersV1PortingLosingCarrierInformation = exports.NumbersV1PortingAddress = void 0;
 exports.PortingPortInListInstance = PortingPortInListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class NumbersV1PortingAddress {
     constructor(payload) {
         this.street = payload["street"];
@@ -262276,7 +262329,7 @@ function PortingPortInListInstance(version) {
 
 
 /***/ }),
-/* 1936 */
+/* 1937 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -262298,9 +262351,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.PortingPortInPhoneNumberInstance = exports.PortingPortInPhoneNumberContextImpl = void 0;
 exports.PortingPortInPhoneNumberListInstance = PortingPortInPhoneNumberListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class PortingPortInPhoneNumberContextImpl {
     constructor(_version, portInRequestSid, phoneNumberSid) {
         this._version = _version;
@@ -262506,7 +262559,7 @@ function PortingPortInPhoneNumberListInstance(version) {
 
 
 /***/ }),
-/* 1937 */
+/* 1938 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -262528,9 +262581,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.PortingPortabilityInstance = exports.PortingPortabilityContextImpl = void 0;
 exports.PortingPortabilityListInstance = PortingPortabilityListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class PortingPortabilityContextImpl {
     constructor(_version, phoneNumber) {
         this._version = _version;
@@ -262679,7 +262732,7 @@ function PortingPortabilityListInstance(version) {
 
 
 /***/ }),
-/* 1938 */
+/* 1939 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -262701,8 +262754,8 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.PortingWebhookConfigurationInstance = void 0;
 exports.PortingWebhookConfigurationListInstance = PortingWebhookConfigurationListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
 function PortingWebhookConfigurationListInstance(version) {
     const instance = {};
     instance._version = version;
@@ -262801,7 +262854,7 @@ exports.PortingWebhookConfigurationInstance = PortingWebhookConfigurationInstanc
 
 
 /***/ }),
-/* 1939 */
+/* 1940 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -262823,9 +262876,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.PortingWebhookConfigurationDeleteContextImpl = void 0;
 exports.PortingWebhookConfigurationDeleteListInstance = PortingWebhookConfigurationDeleteListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class PortingWebhookConfigurationDeleteContextImpl {
     constructor(_version, webhookType) {
         this._version = _version;
@@ -262892,7 +262945,7 @@ function PortingWebhookConfigurationDeleteListInstance(version) {
 
 
 /***/ }),
-/* 1940 */
+/* 1941 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -262914,8 +262967,8 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.SenderIdRegistrationInstance = exports.NumbersV1EmbeddedSession = exports.NumbersV1CreateEmbeddedRegistrationRequest = void 0;
 exports.SenderIdRegistrationListInstance = SenderIdRegistrationListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
 class NumbersV1CreateEmbeddedRegistrationRequest {
     constructor(payload) {
         this.regulationId = payload["regulationId"];
@@ -263045,7 +263098,7 @@ exports.SenderIdRegistrationInstance = SenderIdRegistrationInstance;
 
 
 /***/ }),
-/* 1941 */
+/* 1942 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -263070,9 +263123,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.SigningRequestConfigurationPage = exports.SigningRequestConfigurationInstance = void 0;
 exports.SigningRequestConfigurationListInstance = SigningRequestConfigurationListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
 function SigningRequestConfigurationListInstance(version) {
     const instance = {};
     instance._version = version;
@@ -263297,7 +263350,7 @@ exports.SigningRequestConfigurationPage = SigningRequestConfigurationPage;
 
 
 /***/ }),
-/* 1942 */
+/* 1943 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -263319,8 +263372,8 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.WebhookInstance = void 0;
 exports.WebhookListInstance = WebhookListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
 function WebhookListInstance(version) {
     const instance = {};
     instance._version = version;
@@ -263397,7 +263450,7 @@ exports.WebhookInstance = WebhookInstance;
 
 
 /***/ }),
-/* 1943 */
+/* 1944 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -263419,13 +263472,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const Version_1 = __importDefault(__webpack_require__(1541));
-const application_1 = __webpack_require__(1944);
-const authorizationDocument_1 = __webpack_require__(1945);
-const bulkHostedNumberOrder_1 = __webpack_require__(1947);
-const bundleClone_1 = __webpack_require__(1948);
-const hostedNumberOrder_1 = __webpack_require__(1949);
-const regulatoryCompliance_1 = __webpack_require__(1950);
+const Version_1 = __importDefault(__webpack_require__(1542));
+const application_1 = __webpack_require__(1945);
+const authorizationDocument_1 = __webpack_require__(1946);
+const bulkHostedNumberOrder_1 = __webpack_require__(1948);
+const bundleClone_1 = __webpack_require__(1949);
+const hostedNumberOrder_1 = __webpack_require__(1950);
+const regulatoryCompliance_1 = __webpack_require__(1951);
 class V2 extends Version_1.default {
     /**
      * Initialize the V2 version of Numbers
@@ -263474,7 +263527,7 @@ exports["default"] = V2;
 
 
 /***/ }),
-/* 1944 */
+/* 1945 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -263499,10 +263552,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ApplicationPage = exports.ApplicationInstance = exports.ApplicationContextImpl = exports.CreateShortCodeApplicationResponseUserSignUp = exports.CreateShortCodeApplicationResponseSmsCampaignDetails = exports.CreateShortCodeApplicationResponseSetup = exports.CreateShortCodeApplicationResponseContentExamples = exports.CreateShortCodeApplicationResponseComplianceKeywords = exports.CreateShortCodeApplicationResponseBusinessInformation = exports.CreateShortCodeApplicationRequestSetup = exports.CreateShortCodeApplicationRequestBusinessInformation = exports.CreateShortCodeApplicationRequest = void 0;
 exports.ApplicationListInstance = ApplicationListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class CreateShortCodeApplicationRequest {
     constructor(payload) {
         this.friendlyName = payload["friendly_name"];
@@ -263988,7 +264041,7 @@ exports.ApplicationPage = ApplicationPage;
 
 
 /***/ }),
-/* 1945 */
+/* 1946 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -264013,11 +264066,11 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.AuthorizationDocumentPage = exports.AuthorizationDocumentInstance = exports.AuthorizationDocumentContextImpl = void 0;
 exports.AuthorizationDocumentListInstance = AuthorizationDocumentListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
-const dependentHostedNumberOrder_1 = __webpack_require__(1946);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
+const dependentHostedNumberOrder_1 = __webpack_require__(1947);
 class AuthorizationDocumentContextImpl {
     constructor(_version, sid) {
         this._version = _version;
@@ -264415,7 +264468,7 @@ exports.AuthorizationDocumentPage = AuthorizationDocumentPage;
 
 
 /***/ }),
-/* 1946 */
+/* 1947 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -264440,10 +264493,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.DependentHostedNumberOrderPage = exports.DependentHostedNumberOrderInstance = void 0;
 exports.DependentHostedNumberOrderListInstance = DependentHostedNumberOrderListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 function DependentHostedNumberOrderListInstance(version, signingDocumentSid) {
     if (!(0, utility_1.isValidPathParam)(signingDocumentSid)) {
         throw new Error("Parameter 'signingDocumentSid' is not valid.");
@@ -264643,7 +264696,7 @@ exports.DependentHostedNumberOrderPage = DependentHostedNumberOrderPage;
 
 
 /***/ }),
-/* 1947 */
+/* 1948 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -264665,9 +264718,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.BulkHostedNumberOrderInstance = exports.BulkHostedNumberOrderContextImpl = void 0;
 exports.BulkHostedNumberOrderListInstance = BulkHostedNumberOrderListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class BulkHostedNumberOrderContextImpl {
     constructor(_version, bulkHostingSid) {
         this._version = _version;
@@ -264868,7 +264921,7 @@ function BulkHostedNumberOrderListInstance(version) {
 
 
 /***/ }),
-/* 1948 */
+/* 1949 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -264890,9 +264943,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.BundleCloneInstance = exports.BundleCloneContextImpl = void 0;
 exports.BundleCloneListInstance = BundleCloneListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class BundleCloneContextImpl {
     constructor(_version, bundleSid) {
         this._version = _version;
@@ -265049,7 +265102,7 @@ function BundleCloneListInstance(version) {
 
 
 /***/ }),
-/* 1949 */
+/* 1950 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -265074,10 +265127,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.HostedNumberOrderPage = exports.HostedNumberOrderInstance = exports.HostedNumberOrderContextImpl = void 0;
 exports.HostedNumberOrderListInstance = HostedNumberOrderListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class HostedNumberOrderContextImpl {
     constructor(_version, sid) {
         this._version = _version;
@@ -265611,7 +265664,7 @@ exports.HostedNumberOrderPage = HostedNumberOrderPage;
 
 
 /***/ }),
-/* 1950 */
+/* 1951 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -265632,14 +265685,14 @@ exports.HostedNumberOrderPage = HostedNumberOrderPage;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.RegulatoryComplianceListInstance = RegulatoryComplianceListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const bundle_1 = __webpack_require__(1951);
-const endUser_1 = __webpack_require__(1956);
-const endUserType_1 = __webpack_require__(1957);
-const regulation_1 = __webpack_require__(1958);
-const supportingDocument_1 = __webpack_require__(1959);
-const supportingDocumentType_1 = __webpack_require__(1960);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const bundle_1 = __webpack_require__(1952);
+const endUser_1 = __webpack_require__(1957);
+const endUserType_1 = __webpack_require__(1958);
+const regulation_1 = __webpack_require__(1959);
+const supportingDocument_1 = __webpack_require__(1960);
+const supportingDocumentType_1 = __webpack_require__(1961);
 function RegulatoryComplianceListInstance(version) {
     const instance = {};
     instance._version = version;
@@ -265704,7 +265757,7 @@ function RegulatoryComplianceListInstance(version) {
 
 
 /***/ }),
-/* 1951 */
+/* 1952 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -265729,14 +265782,14 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.BundlePage = exports.BundleInstance = exports.BundleContextImpl = void 0;
 exports.BundleListInstance = BundleListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
-const bundleCopy_1 = __webpack_require__(1952);
-const evaluation_1 = __webpack_require__(1953);
-const itemAssignment_1 = __webpack_require__(1954);
-const replaceItems_1 = __webpack_require__(1955);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
+const bundleCopy_1 = __webpack_require__(1953);
+const evaluation_1 = __webpack_require__(1954);
+const itemAssignment_1 = __webpack_require__(1955);
+const replaceItems_1 = __webpack_require__(1956);
 class BundleContextImpl {
     constructor(_version, sid) {
         this._version = _version;
@@ -266291,7 +266344,7 @@ exports.BundlePage = BundlePage;
 
 
 /***/ }),
-/* 1952 */
+/* 1953 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -266316,10 +266369,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.BundleCopyPage = exports.BundleCopyInstance = void 0;
 exports.BundleCopyListInstance = BundleCopyListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 function BundleCopyListInstance(version, bundleSid) {
     if (!(0, utility_1.isValidPathParam)(bundleSid)) {
         throw new Error("Parameter 'bundleSid' is not valid.");
@@ -266541,7 +266594,7 @@ exports.BundleCopyPage = BundleCopyPage;
 
 
 /***/ }),
-/* 1953 */
+/* 1954 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -266566,10 +266619,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.EvaluationPage = exports.EvaluationInstance = exports.EvaluationContextImpl = void 0;
 exports.EvaluationListInstance = EvaluationListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class EvaluationContextImpl {
     constructor(_version, bundleSid, sid) {
         this._version = _version;
@@ -266850,7 +266903,7 @@ exports.EvaluationPage = EvaluationPage;
 
 
 /***/ }),
-/* 1954 */
+/* 1955 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -266875,10 +266928,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ItemAssignmentPage = exports.ItemAssignmentInstance = exports.ItemAssignmentContextImpl = void 0;
 exports.ItemAssignmentListInstance = ItemAssignmentListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class ItemAssignmentContextImpl {
     constructor(_version, bundleSid, sid) {
         this._version = _version;
@@ -267220,7 +267273,7 @@ exports.ItemAssignmentPage = ItemAssignmentPage;
 
 
 /***/ }),
-/* 1955 */
+/* 1956 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -267242,9 +267295,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ReplaceItemsInstance = void 0;
 exports.ReplaceItemsListInstance = ReplaceItemsListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 function ReplaceItemsListInstance(version, bundleSid) {
     if (!(0, utility_1.isValidPathParam)(bundleSid)) {
         throw new Error("Parameter 'bundleSid' is not valid.");
@@ -267354,7 +267407,7 @@ exports.ReplaceItemsInstance = ReplaceItemsInstance;
 
 
 /***/ }),
-/* 1956 */
+/* 1957 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -267379,10 +267432,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.EndUserPage = exports.EndUserInstance = exports.EndUserContextImpl = void 0;
 exports.EndUserListInstance = EndUserListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class EndUserContextImpl {
     constructor(_version, sid) {
         this._version = _version;
@@ -267802,7 +267855,7 @@ exports.EndUserPage = EndUserPage;
 
 
 /***/ }),
-/* 1957 */
+/* 1958 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -267827,10 +267880,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.EndUserTypePage = exports.EndUserTypeInstance = exports.EndUserTypeContextImpl = void 0;
 exports.EndUserTypeListInstance = EndUserTypeListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class EndUserTypeContextImpl {
     constructor(_version, sid) {
         this._version = _version;
@@ -268069,7 +268122,7 @@ exports.EndUserTypePage = EndUserTypePage;
 
 
 /***/ }),
-/* 1958 */
+/* 1959 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -268094,10 +268147,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.RegulationPage = exports.RegulationInstance = exports.RegulationContextImpl = void 0;
 exports.RegulationListInstance = RegulationListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class RegulationContextImpl {
     constructor(_version, sid) {
         this._version = _version;
@@ -268364,7 +268417,7 @@ exports.RegulationPage = RegulationPage;
 
 
 /***/ }),
-/* 1959 */
+/* 1960 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -268389,10 +268442,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.SupportingDocumentPage = exports.SupportingDocumentInstance = exports.SupportingDocumentContextImpl = void 0;
 exports.SupportingDocumentListInstance = SupportingDocumentListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class SupportingDocumentContextImpl {
     constructor(_version, sid) {
         this._version = _version;
@@ -268820,7 +268873,7 @@ exports.SupportingDocumentPage = SupportingDocumentPage;
 
 
 /***/ }),
-/* 1960 */
+/* 1961 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -268845,10 +268898,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.SupportingDocumentTypePage = exports.SupportingDocumentTypeInstance = exports.SupportingDocumentTypeContextImpl = void 0;
 exports.SupportingDocumentTypeListInstance = SupportingDocumentTypeListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class SupportingDocumentTypeContextImpl {
     constructor(_version, sid) {
         this._version = _version;
@@ -269087,7 +269140,7 @@ exports.SupportingDocumentTypePage = SupportingDocumentTypePage;
 
 
 /***/ }),
-/* 1961 */
+/* 1962 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -269109,8 +269162,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const Version_1 = __importDefault(__webpack_require__(1541));
-const hostedNumberOrder_1 = __webpack_require__(1962);
+const Version_1 = __importDefault(__webpack_require__(1542));
+const hostedNumberOrder_1 = __webpack_require__(1963);
 class V3 extends Version_1.default {
     /**
      * Initialize the V3 version of Numbers
@@ -269131,7 +269184,7 @@ exports["default"] = V3;
 
 
 /***/ }),
-/* 1962 */
+/* 1963 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -269153,8 +269206,8 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.HostedNumberOrderInstance = void 0;
 exports.HostedNumberOrderListInstance = HostedNumberOrderListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
 function HostedNumberOrderListInstance(version) {
     const instance = {};
     instance._version = version;
@@ -269355,7 +269408,7 @@ exports.HostedNumberOrderInstance = HostedNumberOrderInstance;
 
 
 /***/ }),
-/* 1963 */
+/* 1964 */
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 "use strict";
@@ -269363,14 +269416,14 @@ exports.HostedNumberOrderInstance = HostedNumberOrderInstance;
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-const OauthBase_1 = __importDefault(__webpack_require__(1964));
+const OauthBase_1 = __importDefault(__webpack_require__(1965));
 class Oauth extends OauthBase_1.default {
 }
 module.exports = Oauth;
 
 
 /***/ }),
-/* 1964 */
+/* 1965 */
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 "use strict";
@@ -269388,9 +269441,9 @@ module.exports = Oauth;
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-const Domain_1 = __importDefault(__webpack_require__(1538));
-const V1_1 = __importDefault(__webpack_require__(1965));
-const V2_1 = __importDefault(__webpack_require__(1968));
+const Domain_1 = __importDefault(__webpack_require__(1539));
+const V1_1 = __importDefault(__webpack_require__(1966));
+const V2_1 = __importDefault(__webpack_require__(1969));
 class OauthBase extends Domain_1.default {
     /**
      * Initialize oauth domain
@@ -269413,7 +269466,7 @@ module.exports = OauthBase;
 
 
 /***/ }),
-/* 1965 */
+/* 1966 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -269435,9 +269488,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const Version_1 = __importDefault(__webpack_require__(1541));
-const authorize_1 = __webpack_require__(1966);
-const token_1 = __webpack_require__(1967);
+const Version_1 = __importDefault(__webpack_require__(1542));
+const authorize_1 = __webpack_require__(1967);
+const token_1 = __webpack_require__(1968);
 class V1 extends Version_1.default {
     /**
      * Initialize the V1 version of Oauth
@@ -269462,7 +269515,7 @@ exports["default"] = V1;
 
 
 /***/ }),
-/* 1966 */
+/* 1967 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -269484,8 +269537,8 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.AuthorizeInstance = void 0;
 exports.AuthorizeListInstance = AuthorizeListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
 function AuthorizeListInstance(version) {
     const instance = {};
     instance._version = version;
@@ -269590,7 +269643,7 @@ exports.AuthorizeInstance = AuthorizeInstance;
 
 
 /***/ }),
-/* 1967 */
+/* 1968 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -269612,8 +269665,8 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.TokenInstance = void 0;
 exports.TokenListInstance = TokenListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
 function TokenListInstance(version) {
     const instance = {};
     instance._version = version;
@@ -269740,7 +269793,7 @@ exports.TokenInstance = TokenInstance;
 
 
 /***/ }),
-/* 1968 */
+/* 1969 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -269762,9 +269815,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const Version_1 = __importDefault(__webpack_require__(1541));
-const authorize_1 = __webpack_require__(1969);
-const token_1 = __webpack_require__(1970);
+const Version_1 = __importDefault(__webpack_require__(1542));
+const authorize_1 = __webpack_require__(1970);
+const token_1 = __webpack_require__(1971);
 class V2 extends Version_1.default {
     /**
      * Initialize the V2 version of Oauth
@@ -269789,7 +269842,7 @@ exports["default"] = V2;
 
 
 /***/ }),
-/* 1969 */
+/* 1970 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -269811,8 +269864,8 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.AuthorizeInstance = void 0;
 exports.AuthorizeListInstance = AuthorizeListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
 function AuthorizeListInstance(version) {
     const instance = {};
     instance._version = version;
@@ -269917,7 +269970,7 @@ exports.AuthorizeInstance = AuthorizeInstance;
 
 
 /***/ }),
-/* 1970 */
+/* 1971 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -269939,8 +269992,8 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.TokenInstance = void 0;
 exports.TokenListInstance = TokenListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
 function TokenListInstance(version) {
     const instance = {};
     instance._version = version;
@@ -270071,7 +270124,7 @@ exports.TokenInstance = TokenInstance;
 
 
 /***/ }),
-/* 1971 */
+/* 1972 */
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 "use strict";
@@ -270079,7 +270132,7 @@ exports.TokenInstance = TokenInstance;
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-const PreviewBase_1 = __importDefault(__webpack_require__(1972));
+const PreviewBase_1 = __importDefault(__webpack_require__(1973));
 class Preview extends PreviewBase_1.default {
     /**
      * @deprecated - Use hosted_numbers.authorizationDocuments instead
@@ -270135,7 +270188,7 @@ module.exports = Preview;
 
 
 /***/ }),
-/* 1972 */
+/* 1973 */
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 "use strict";
@@ -270153,10 +270206,10 @@ module.exports = Preview;
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-const Domain_1 = __importDefault(__webpack_require__(1538));
-const HostedNumbers_1 = __importDefault(__webpack_require__(1973));
-const Marketplace_1 = __importDefault(__webpack_require__(1977));
-const Wireless_1 = __importDefault(__webpack_require__(1982));
+const Domain_1 = __importDefault(__webpack_require__(1539));
+const HostedNumbers_1 = __importDefault(__webpack_require__(1974));
+const Marketplace_1 = __importDefault(__webpack_require__(1978));
+const Wireless_1 = __importDefault(__webpack_require__(1983));
 class PreviewBase extends Domain_1.default {
     /**
      * Initialize preview domain
@@ -270183,7 +270236,7 @@ module.exports = PreviewBase;
 
 
 /***/ }),
-/* 1973 */
+/* 1974 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -270205,9 +270258,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const Version_1 = __importDefault(__webpack_require__(1541));
-const authorizationDocument_1 = __webpack_require__(1974);
-const hostedNumberOrder_1 = __webpack_require__(1976);
+const Version_1 = __importDefault(__webpack_require__(1542));
+const authorizationDocument_1 = __webpack_require__(1975);
+const hostedNumberOrder_1 = __webpack_require__(1977);
 class HostedNumbers extends Version_1.default {
     /**
      * Initialize the HostedNumbers version of Preview
@@ -270234,7 +270287,7 @@ exports["default"] = HostedNumbers;
 
 
 /***/ }),
-/* 1974 */
+/* 1975 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -270259,11 +270312,11 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.AuthorizationDocumentPage = exports.AuthorizationDocumentInstance = exports.AuthorizationDocumentContextImpl = void 0;
 exports.AuthorizationDocumentListInstance = AuthorizationDocumentListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
-const dependentHostedNumberOrder_1 = __webpack_require__(1975);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
+const dependentHostedNumberOrder_1 = __webpack_require__(1976);
 class AuthorizationDocumentContextImpl {
     constructor(_version, sid) {
         this._version = _version;
@@ -270708,7 +270761,7 @@ exports.AuthorizationDocumentPage = AuthorizationDocumentPage;
 
 
 /***/ }),
-/* 1975 */
+/* 1976 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -270733,10 +270786,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.DependentHostedNumberOrderPage = exports.DependentHostedNumberOrderInstance = void 0;
 exports.DependentHostedNumberOrderListInstance = DependentHostedNumberOrderListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 function DependentHostedNumberOrderListInstance(version, signingDocumentSid) {
     if (!(0, utility_1.isValidPathParam)(signingDocumentSid)) {
         throw new Error("Parameter 'signingDocumentSid' is not valid.");
@@ -270948,7 +271001,7 @@ exports.DependentHostedNumberOrderPage = DependentHostedNumberOrderPage;
 
 
 /***/ }),
-/* 1976 */
+/* 1977 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -270973,10 +271026,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.HostedNumberOrderPage = exports.HostedNumberOrderInstance = exports.HostedNumberOrderContextImpl = void 0;
 exports.HostedNumberOrderListInstance = HostedNumberOrderListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class HostedNumberOrderContextImpl {
     constructor(_version, sid) {
         this._version = _version;
@@ -271534,7 +271587,7 @@ exports.HostedNumberOrderPage = HostedNumberOrderPage;
 
 
 /***/ }),
-/* 1977 */
+/* 1978 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -271556,9 +271609,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const Version_1 = __importDefault(__webpack_require__(1541));
-const availableAddOn_1 = __webpack_require__(1978);
-const installedAddOn_1 = __webpack_require__(1980);
+const Version_1 = __importDefault(__webpack_require__(1542));
+const availableAddOn_1 = __webpack_require__(1979);
+const installedAddOn_1 = __webpack_require__(1981);
 class Marketplace extends Version_1.default {
     /**
      * Initialize the Marketplace version of Preview
@@ -271585,7 +271638,7 @@ exports["default"] = Marketplace;
 
 
 /***/ }),
-/* 1978 */
+/* 1979 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -271610,11 +271663,11 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.AvailableAddOnPage = exports.AvailableAddOnInstance = exports.AvailableAddOnContextImpl = void 0;
 exports.AvailableAddOnListInstance = AvailableAddOnListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
-const availableAddOnExtension_1 = __webpack_require__(1979);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
+const availableAddOnExtension_1 = __webpack_require__(1980);
 class AvailableAddOnContextImpl {
     constructor(_version, sid) {
         this._version = _version;
@@ -271869,7 +271922,7 @@ exports.AvailableAddOnPage = AvailableAddOnPage;
 
 
 /***/ }),
-/* 1979 */
+/* 1980 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -271894,10 +271947,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.AvailableAddOnExtensionPage = exports.AvailableAddOnExtensionInstance = exports.AvailableAddOnExtensionContextImpl = void 0;
 exports.AvailableAddOnExtensionListInstance = AvailableAddOnExtensionListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class AvailableAddOnExtensionContextImpl {
     constructor(_version, availableAddOnSid, sid) {
         this._version = _version;
@@ -272144,7 +272197,7 @@ exports.AvailableAddOnExtensionPage = AvailableAddOnExtensionPage;
 
 
 /***/ }),
-/* 1980 */
+/* 1981 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -272169,11 +272222,11 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.InstalledAddOnPage = exports.InstalledAddOnInstance = exports.InstalledAddOnContextImpl = void 0;
 exports.InstalledAddOnListInstance = InstalledAddOnListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
-const installedAddOnExtension_1 = __webpack_require__(1981);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
+const installedAddOnExtension_1 = __webpack_require__(1982);
 class InstalledAddOnContextImpl {
     constructor(_version, sid) {
         this._version = _version;
@@ -272615,7 +272668,7 @@ exports.InstalledAddOnPage = InstalledAddOnPage;
 
 
 /***/ }),
-/* 1981 */
+/* 1982 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -272640,10 +272693,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.InstalledAddOnExtensionPage = exports.InstalledAddOnExtensionInstance = exports.InstalledAddOnExtensionContextImpl = void 0;
 exports.InstalledAddOnExtensionListInstance = InstalledAddOnExtensionListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class InstalledAddOnExtensionContextImpl {
     constructor(_version, installedAddOnSid, sid) {
         this._version = _version;
@@ -272950,7 +273003,7 @@ exports.InstalledAddOnExtensionPage = InstalledAddOnExtensionPage;
 
 
 /***/ }),
-/* 1982 */
+/* 1983 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -272972,10 +273025,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const Version_1 = __importDefault(__webpack_require__(1541));
-const command_1 = __webpack_require__(1983);
-const ratePlan_1 = __webpack_require__(1984);
-const sim_1 = __webpack_require__(1985);
+const Version_1 = __importDefault(__webpack_require__(1542));
+const command_1 = __webpack_require__(1984);
+const ratePlan_1 = __webpack_require__(1985);
+const sim_1 = __webpack_require__(1986);
 class Wireless extends Version_1.default {
     /**
      * Initialize the Wireless version of Preview
@@ -273005,7 +273058,7 @@ exports["default"] = Wireless;
 
 
 /***/ }),
-/* 1983 */
+/* 1984 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -273030,10 +273083,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.CommandPage = exports.CommandInstance = exports.CommandContextImpl = void 0;
 exports.CommandListInstance = CommandListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class CommandContextImpl {
     constructor(_version, sid) {
         this._version = _version;
@@ -273374,7 +273427,7 @@ exports.CommandPage = CommandPage;
 
 
 /***/ }),
-/* 1984 */
+/* 1985 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -273399,10 +273452,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.RatePlanPage = exports.RatePlanInstance = exports.RatePlanContextImpl = void 0;
 exports.RatePlanListInstance = RatePlanListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class RatePlanContextImpl {
     constructor(_version, sid) {
         this._version = _version;
@@ -273860,7 +273913,7 @@ exports.RatePlanPage = RatePlanPage;
 
 
 /***/ }),
-/* 1985 */
+/* 1986 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -273885,11 +273938,11 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.SimPage = exports.SimInstance = exports.SimContextImpl = void 0;
 exports.SimListInstance = SimListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
-const usage_1 = __webpack_require__(1986);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
+const usage_1 = __webpack_require__(1987);
 class SimContextImpl {
     constructor(_version, sid) {
         this._version = _version;
@@ -274314,7 +274367,7 @@ exports.SimPage = SimPage;
 
 
 /***/ }),
-/* 1986 */
+/* 1987 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -274336,9 +274389,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.UsageInstance = exports.UsageContextImpl = void 0;
 exports.UsageListInstance = UsageListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class UsageContextImpl {
     constructor(_version, simSid) {
         this._version = _version;
@@ -274490,7 +274543,7 @@ function UsageListInstance(version, simSid) {
 
 
 /***/ }),
-/* 1987 */
+/* 1988 */
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 "use strict";
@@ -274498,7 +274551,7 @@ function UsageListInstance(version, simSid) {
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-const PricingBase_1 = __importDefault(__webpack_require__(1988));
+const PricingBase_1 = __importDefault(__webpack_require__(1989));
 class Pricing extends PricingBase_1.default {
     /**
      * @deprecated - Use v1.messaging instead
@@ -274540,7 +274593,7 @@ module.exports = Pricing;
 
 
 /***/ }),
-/* 1988 */
+/* 1989 */
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 "use strict";
@@ -274558,9 +274611,9 @@ module.exports = Pricing;
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-const Domain_1 = __importDefault(__webpack_require__(1538));
-const V1_1 = __importDefault(__webpack_require__(1989));
-const V2_1 = __importDefault(__webpack_require__(1997));
+const Domain_1 = __importDefault(__webpack_require__(1539));
+const V1_1 = __importDefault(__webpack_require__(1990));
+const V2_1 = __importDefault(__webpack_require__(1998));
 class PricingBase extends Domain_1.default {
     /**
      * Initialize pricing domain
@@ -274583,7 +274636,7 @@ module.exports = PricingBase;
 
 
 /***/ }),
-/* 1989 */
+/* 1990 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -274605,10 +274658,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const Version_1 = __importDefault(__webpack_require__(1541));
-const messaging_1 = __webpack_require__(1990);
-const phoneNumber_1 = __webpack_require__(1992);
-const voice_1 = __webpack_require__(1994);
+const Version_1 = __importDefault(__webpack_require__(1542));
+const messaging_1 = __webpack_require__(1991);
+const phoneNumber_1 = __webpack_require__(1993);
+const voice_1 = __webpack_require__(1995);
 class V1 extends Version_1.default {
     /**
      * Initialize the V1 version of Pricing
@@ -274638,7 +274691,7 @@ exports["default"] = V1;
 
 
 /***/ }),
-/* 1990 */
+/* 1991 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -274659,9 +274712,9 @@ exports["default"] = V1;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.MessagingListInstance = MessagingListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const country_1 = __webpack_require__(1991);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const country_1 = __webpack_require__(1992);
 function MessagingListInstance(version) {
     const instance = {};
     instance._version = version;
@@ -274686,7 +274739,7 @@ function MessagingListInstance(version) {
 
 
 /***/ }),
-/* 1991 */
+/* 1992 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -274711,10 +274764,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.CountryPage = exports.CountryInstance = exports.CountryContextImpl = exports.PricingV1MessagingMessagingCountryInstanceOutboundSmsPricesPrices = exports.PricingV1MessagingMessagingCountryInstanceOutboundSmsPrices = exports.PricingV1MessagingMessagingCountryInstanceInboundSmsPrices = void 0;
 exports.CountryListInstance = CountryListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class PricingV1MessagingMessagingCountryInstanceInboundSmsPrices {
     constructor(payload) {
         this.basePrice = payload["base_price"];
@@ -274988,7 +275041,7 @@ exports.CountryPage = CountryPage;
 
 
 /***/ }),
-/* 1992 */
+/* 1993 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -275009,9 +275062,9 @@ exports.CountryPage = CountryPage;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.PhoneNumberListInstance = PhoneNumberListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const country_1 = __webpack_require__(1993);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const country_1 = __webpack_require__(1994);
 function PhoneNumberListInstance(version) {
     const instance = {};
     instance._version = version;
@@ -275036,7 +275089,7 @@ function PhoneNumberListInstance(version) {
 
 
 /***/ }),
-/* 1993 */
+/* 1994 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -275061,10 +275114,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.CountryPage = exports.CountryInstance = exports.CountryContextImpl = exports.PricingV1PhoneNumberPhoneNumberCountryInstancePhoneNumberPrices = void 0;
 exports.CountryListInstance = CountryListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class PricingV1PhoneNumberPhoneNumberCountryInstancePhoneNumberPrices {
     constructor(payload) {
         this.basePrice = payload["base_price"];
@@ -275315,7 +275368,7 @@ exports.CountryPage = CountryPage;
 
 
 /***/ }),
-/* 1994 */
+/* 1995 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -275336,10 +275389,10 @@ exports.CountryPage = CountryPage;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.VoiceListInstance = VoiceListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const country_1 = __webpack_require__(1995);
-const number_1 = __webpack_require__(1996);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const country_1 = __webpack_require__(1996);
+const number_1 = __webpack_require__(1997);
 function VoiceListInstance(version) {
     const instance = {};
     instance._version = version;
@@ -275372,7 +275425,7 @@ function VoiceListInstance(version) {
 
 
 /***/ }),
-/* 1995 */
+/* 1996 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -275397,10 +275450,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.CountryPage = exports.CountryInstance = exports.CountryContextImpl = exports.PricingV1VoiceVoiceCountryInstanceOutboundPrefixPrices = exports.PricingV1VoiceVoiceCountryInstanceInboundCallPrices = void 0;
 exports.CountryListInstance = CountryListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class PricingV1VoiceVoiceCountryInstanceInboundCallPrices {
     constructor(payload) {
         this.basePrice = payload["base_price"];
@@ -275666,7 +275719,7 @@ exports.CountryPage = CountryPage;
 
 
 /***/ }),
-/* 1996 */
+/* 1997 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -275688,9 +275741,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.NumberInstance = exports.NumberContextImpl = exports.PricingV1VoiceVoiceNumberOutboundCallPrice = exports.PricingV1VoiceVoiceNumberInboundCallPrice = void 0;
 exports.NumberListInstance = NumberListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 /**
  * The [InboundCallPrice](https://www.twilio.com/docs/voice/pricing#inbound-call-price) record. If `null`, the Phone Number is not a Twilio number owned by this account.
  */
@@ -275852,7 +275905,7 @@ function NumberListInstance(version) {
 
 
 /***/ }),
-/* 1997 */
+/* 1998 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -275874,10 +275927,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const Version_1 = __importDefault(__webpack_require__(1541));
-const country_1 = __webpack_require__(1998);
-const number_1 = __webpack_require__(1999);
-const voice_1 = __webpack_require__(2000);
+const Version_1 = __importDefault(__webpack_require__(1542));
+const country_1 = __webpack_require__(1999);
+const number_1 = __webpack_require__(2000);
+const voice_1 = __webpack_require__(2001);
 class V2 extends Version_1.default {
     /**
      * Initialize the V2 version of Pricing
@@ -275907,7 +275960,7 @@ exports["default"] = V2;
 
 
 /***/ }),
-/* 1998 */
+/* 1999 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -275932,10 +275985,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.CountryPage = exports.CountryInstance = exports.CountryContextImpl = exports.PricingV2TrunkingCountryInstanceTerminatingPrefixPrices = exports.PricingV2TrunkingCountryInstanceOriginatingCallPrices = void 0;
 exports.CountryListInstance = CountryListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class PricingV2TrunkingCountryInstanceOriginatingCallPrices {
     constructor(payload) {
         this.basePrice = payload["base_price"];
@@ -276202,7 +276255,7 @@ exports.CountryPage = CountryPage;
 
 
 /***/ }),
-/* 1999 */
+/* 2000 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -276224,9 +276277,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.NumberInstance = exports.NumberContextImpl = exports.PricingV2TrunkingNumberOriginatingCallPrice = exports.PricingV2TrunkingCountryInstanceTerminatingPrefixPrices = void 0;
 exports.NumberListInstance = NumberListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class PricingV2TrunkingCountryInstanceTerminatingPrefixPrices {
     constructor(payload) {
         this.originationPrefixes = payload["origination_prefixes"];
@@ -276400,7 +276453,7 @@ function NumberListInstance(version) {
 
 
 /***/ }),
-/* 2000 */
+/* 2001 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -276421,10 +276474,10 @@ function NumberListInstance(version) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.VoiceListInstance = VoiceListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const country_1 = __webpack_require__(2001);
-const number_1 = __webpack_require__(2002);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const country_1 = __webpack_require__(2002);
+const number_1 = __webpack_require__(2003);
 function VoiceListInstance(version) {
     const instance = {};
     instance._version = version;
@@ -276457,7 +276510,7 @@ function VoiceListInstance(version) {
 
 
 /***/ }),
-/* 2001 */
+/* 2002 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -276482,10 +276535,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.CountryPage = exports.CountryInstance = exports.CountryContextImpl = exports.PricingV2TrunkingCountryInstanceTerminatingPrefixPrices = exports.PricingV2TrunkingCountryInstanceOriginatingCallPrices = void 0;
 exports.CountryListInstance = CountryListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class PricingV2TrunkingCountryInstanceOriginatingCallPrices {
     constructor(payload) {
         this.basePrice = payload["base_price"];
@@ -276752,7 +276805,7 @@ exports.CountryPage = CountryPage;
 
 
 /***/ }),
-/* 2002 */
+/* 2003 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -276774,9 +276827,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.NumberInstance = exports.NumberContextImpl = exports.PricingV2VoiceVoiceNumberOutboundCallPrices = exports.PricingV2VoiceVoiceNumberInboundCallPrice = void 0;
 exports.NumberListInstance = NumberListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 /**
  * The [InboundCallPrice](https://www.twilio.com/docs/voice/pricing#inbound-call-price) record.
  */
@@ -276948,7 +277001,7 @@ function NumberListInstance(version) {
 
 
 /***/ }),
-/* 2003 */
+/* 2004 */
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 "use strict";
@@ -276956,7 +277009,7 @@ function NumberListInstance(version) {
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-const ProxyBase_1 = __importDefault(__webpack_require__(2004));
+const ProxyBase_1 = __importDefault(__webpack_require__(2005));
 class Proxy extends ProxyBase_1.default {
     /**
      * @deprecated - Use v1.services instead
@@ -276970,7 +277023,7 @@ module.exports = Proxy;
 
 
 /***/ }),
-/* 2004 */
+/* 2005 */
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 "use strict";
@@ -276988,8 +277041,8 @@ module.exports = Proxy;
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-const Domain_1 = __importDefault(__webpack_require__(1538));
-const V1_1 = __importDefault(__webpack_require__(2005));
+const Domain_1 = __importDefault(__webpack_require__(1539));
+const V1_1 = __importDefault(__webpack_require__(2006));
 class ProxyBase extends Domain_1.default {
     /**
      * Initialize proxy domain
@@ -277005,49 +277058,6 @@ class ProxyBase extends Domain_1.default {
     }
 }
 module.exports = ProxyBase;
-
-
-/***/ }),
-/* 2005 */
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
-
-"use strict";
-
-/*
- * This code was generated by
- * ___ _ _ _ _ _    _ ____    ____ ____ _    ____ ____ _  _ ____ ____ ____ ___ __   __
- *  |  | | | | |    | |  | __ |  | |__| | __ | __ |___ |\ | |___ |__/ |__|  | |  | |__/
- *  |  |_|_| | |___ | |__|    |__| |  | |    |__] |___ | \| |___ |  \ |  |  | |__| |  \
- *
- * Twilio - Proxy
- * This is the public Twilio REST API.
- *
- * NOTE: This class is auto generated by OpenAPI Generator.
- * https://openapi-generator.tech
- * Do not edit the class manually.
- */
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-const Version_1 = __importDefault(__webpack_require__(1541));
-const service_1 = __webpack_require__(2006);
-class V1 extends Version_1.default {
-    /**
-     * Initialize the V1 version of Proxy
-     *
-     * @param domain - The Twilio (Twilio.Proxy) domain
-     */
-    constructor(domain) {
-        super(domain, "v1");
-    }
-    /** Getter for services resource */
-    get services() {
-        this._services = this._services || (0, service_1.ServiceListInstance)(this);
-        return this._services;
-    }
-}
-exports["default"] = V1;
 
 
 /***/ }),
@@ -277073,15 +277083,58 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
+const Version_1 = __importDefault(__webpack_require__(1542));
+const service_1 = __webpack_require__(2007);
+class V1 extends Version_1.default {
+    /**
+     * Initialize the V1 version of Proxy
+     *
+     * @param domain - The Twilio (Twilio.Proxy) domain
+     */
+    constructor(domain) {
+        super(domain, "v1");
+    }
+    /** Getter for services resource */
+    get services() {
+        this._services = this._services || (0, service_1.ServiceListInstance)(this);
+        return this._services;
+    }
+}
+exports["default"] = V1;
+
+
+/***/ }),
+/* 2007 */
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+"use strict";
+
+/*
+ * This code was generated by
+ * ___ _ _ _ _ _    _ ____    ____ ____ _    ____ ____ _  _ ____ ____ ____ ___ __   __
+ *  |  | | | | |    | |  | __ |  | |__| | __ | __ |___ |\ | |___ |__/ |__|  | |  | |__/
+ *  |  |_|_| | |___ | |__|    |__| |  | |    |__] |___ | \| |___ |  \ |  |  | |__| |  \
+ *
+ * Twilio - Proxy
+ * This is the public Twilio REST API.
+ *
+ * NOTE: This class is auto generated by OpenAPI Generator.
+ * https://openapi-generator.tech
+ * Do not edit the class manually.
+ */
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ServicePage = exports.ServiceInstance = exports.ServiceContextImpl = void 0;
 exports.ServiceListInstance = ServiceListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
-const phoneNumber_1 = __webpack_require__(2007);
-const session_1 = __webpack_require__(2008);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
+const phoneNumber_1 = __webpack_require__(2008);
+const session_1 = __webpack_require__(2009);
 class ServiceContextImpl {
     constructor(_version, sid) {
         this._version = _version;
@@ -277574,7 +277627,7 @@ exports.ServicePage = ServicePage;
 
 
 /***/ }),
-/* 2007 */
+/* 2008 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -277599,10 +277652,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.PhoneNumberPage = exports.PhoneNumberInstance = exports.PhoneNumberContextImpl = void 0;
 exports.PhoneNumberListInstance = PhoneNumberListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class PhoneNumberContextImpl {
     constructor(_version, serviceSid, sid) {
         this._version = _version;
@@ -278030,7 +278083,7 @@ exports.PhoneNumberPage = PhoneNumberPage;
 
 
 /***/ }),
-/* 2008 */
+/* 2009 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -278055,12 +278108,12 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.SessionPage = exports.SessionInstance = exports.SessionContextImpl = void 0;
 exports.SessionListInstance = SessionListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
-const interaction_1 = __webpack_require__(2009);
-const participant_1 = __webpack_require__(2010);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
+const interaction_1 = __webpack_require__(2010);
+const participant_1 = __webpack_require__(2011);
 class SessionContextImpl {
     constructor(_version, serviceSid, sid) {
         this._version = _version;
@@ -278540,7 +278593,7 @@ exports.SessionPage = SessionPage;
 
 
 /***/ }),
-/* 2009 */
+/* 2010 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -278565,10 +278618,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.InteractionPage = exports.InteractionInstance = exports.InteractionContextImpl = void 0;
 exports.InteractionListInstance = InteractionListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class InteractionContextImpl {
     constructor(_version, serviceSid, sessionSid, sid) {
         this._version = _version;
@@ -278892,7 +278945,7 @@ exports.InteractionPage = InteractionPage;
 
 
 /***/ }),
-/* 2010 */
+/* 2011 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -278917,11 +278970,11 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ParticipantPage = exports.ParticipantInstance = exports.ParticipantContextImpl = void 0;
 exports.ParticipantListInstance = ParticipantListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
-const messageInteraction_1 = __webpack_require__(2011);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
+const messageInteraction_1 = __webpack_require__(2012);
 class ParticipantContextImpl {
     constructor(_version, serviceSid, sessionSid, sid) {
         this._version = _version;
@@ -279307,7 +279360,7 @@ exports.ParticipantPage = ParticipantPage;
 
 
 /***/ }),
-/* 2011 */
+/* 2012 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -279332,10 +279385,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.MessageInteractionPage = exports.MessageInteractionInstance = exports.MessageInteractionContextImpl = void 0;
 exports.MessageInteractionListInstance = MessageInteractionListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class MessageInteractionContextImpl {
     constructor(_version, serviceSid, sessionSid, participantSid, sid) {
         this._version = _version;
@@ -279685,7 +279738,7 @@ exports.MessageInteractionPage = MessageInteractionPage;
 
 
 /***/ }),
-/* 2012 */
+/* 2013 */
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 "use strict";
@@ -279693,7 +279746,7 @@ exports.MessageInteractionPage = MessageInteractionPage;
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-const RoutesBase_1 = __importDefault(__webpack_require__(2013));
+const RoutesBase_1 = __importDefault(__webpack_require__(2014));
 class Routes extends RoutesBase_1.default {
     /**
      * @deprecated - Use v1.phoneNumbers instead
@@ -279721,7 +279774,7 @@ module.exports = Routes;
 
 
 /***/ }),
-/* 2013 */
+/* 2014 */
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 "use strict";
@@ -279739,8 +279792,8 @@ module.exports = Routes;
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-const Domain_1 = __importDefault(__webpack_require__(1538));
-const V2_1 = __importDefault(__webpack_require__(2014));
+const Domain_1 = __importDefault(__webpack_require__(1539));
+const V2_1 = __importDefault(__webpack_require__(2015));
 class RoutesBase extends Domain_1.default {
     /**
      * Initialize routes domain
@@ -279759,7 +279812,7 @@ module.exports = RoutesBase;
 
 
 /***/ }),
-/* 2014 */
+/* 2015 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -279781,10 +279834,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const Version_1 = __importDefault(__webpack_require__(1541));
-const phoneNumber_1 = __webpack_require__(2015);
-const sipDomain_1 = __webpack_require__(2016);
-const trunk_1 = __webpack_require__(2017);
+const Version_1 = __importDefault(__webpack_require__(1542));
+const phoneNumber_1 = __webpack_require__(2016);
+const sipDomain_1 = __webpack_require__(2017);
+const trunk_1 = __webpack_require__(2018);
 class V2 extends Version_1.default {
     /**
      * Initialize the V2 version of Routes
@@ -279814,7 +279867,7 @@ exports["default"] = V2;
 
 
 /***/ }),
-/* 2015 */
+/* 2016 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -279836,9 +279889,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.PhoneNumberInstance = exports.PhoneNumberContextImpl = void 0;
 exports.PhoneNumberListInstance = PhoneNumberListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class PhoneNumberContextImpl {
     constructor(_version, phoneNumber) {
         this._version = _version;
@@ -280039,7 +280092,7 @@ function PhoneNumberListInstance(version) {
 
 
 /***/ }),
-/* 2016 */
+/* 2017 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -280061,9 +280114,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.SipDomainInstance = exports.SipDomainContextImpl = void 0;
 exports.SipDomainListInstance = SipDomainListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class SipDomainContextImpl {
     constructor(_version, sipDomain) {
         this._version = _version;
@@ -280264,7 +280317,7 @@ function SipDomainListInstance(version) {
 
 
 /***/ }),
-/* 2017 */
+/* 2018 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -280286,9 +280339,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.TrunkInstance = exports.TrunkContextImpl = void 0;
 exports.TrunkListInstance = TrunkListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class TrunkContextImpl {
     constructor(_version, sipTrunkDomain) {
         this._version = _version;
@@ -280489,7 +280542,7 @@ function TrunkListInstance(version) {
 
 
 /***/ }),
-/* 2018 */
+/* 2019 */
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 "use strict";
@@ -280497,7 +280550,7 @@ function TrunkListInstance(version) {
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-const ServerlessBase_1 = __importDefault(__webpack_require__(2019));
+const ServerlessBase_1 = __importDefault(__webpack_require__(2020));
 class Serverless extends ServerlessBase_1.default {
     /**
      * @deprecated - Use v1.services instead
@@ -280511,7 +280564,7 @@ module.exports = Serverless;
 
 
 /***/ }),
-/* 2019 */
+/* 2020 */
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 "use strict";
@@ -280529,8 +280582,8 @@ module.exports = Serverless;
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-const Domain_1 = __importDefault(__webpack_require__(1538));
-const V1_1 = __importDefault(__webpack_require__(2020));
+const Domain_1 = __importDefault(__webpack_require__(1539));
+const V1_1 = __importDefault(__webpack_require__(2021));
 class ServerlessBase extends Domain_1.default {
     /**
      * Initialize serverless domain
@@ -280546,49 +280599,6 @@ class ServerlessBase extends Domain_1.default {
     }
 }
 module.exports = ServerlessBase;
-
-
-/***/ }),
-/* 2020 */
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
-
-"use strict";
-
-/*
- * This code was generated by
- * ___ _ _ _ _ _    _ ____    ____ ____ _    ____ ____ _  _ ____ ____ ____ ___ __   __
- *  |  | | | | |    | |  | __ |  | |__| | __ | __ |___ |\ | |___ |__/ |__|  | |  | |__/
- *  |  |_|_| | |___ | |__|    |__| |  | |    |__] |___ | \| |___ |  \ |  |  | |__| |  \
- *
- * Twilio - Serverless
- * This is the public Twilio REST API.
- *
- * NOTE: This class is auto generated by OpenAPI Generator.
- * https://openapi-generator.tech
- * Do not edit the class manually.
- */
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-const Version_1 = __importDefault(__webpack_require__(1541));
-const service_1 = __webpack_require__(2021);
-class V1 extends Version_1.default {
-    /**
-     * Initialize the V1 version of Serverless
-     *
-     * @param domain - The Twilio (Twilio.Serverless) domain
-     */
-    constructor(domain) {
-        super(domain, "v1");
-    }
-    /** Getter for services resource */
-    get services() {
-        this._services = this._services || (0, service_1.ServiceListInstance)(this);
-        return this._services;
-    }
-}
-exports["default"] = V1;
 
 
 /***/ }),
@@ -280614,17 +280624,60 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
+const Version_1 = __importDefault(__webpack_require__(1542));
+const service_1 = __webpack_require__(2022);
+class V1 extends Version_1.default {
+    /**
+     * Initialize the V1 version of Serverless
+     *
+     * @param domain - The Twilio (Twilio.Serverless) domain
+     */
+    constructor(domain) {
+        super(domain, "v1");
+    }
+    /** Getter for services resource */
+    get services() {
+        this._services = this._services || (0, service_1.ServiceListInstance)(this);
+        return this._services;
+    }
+}
+exports["default"] = V1;
+
+
+/***/ }),
+/* 2022 */
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+"use strict";
+
+/*
+ * This code was generated by
+ * ___ _ _ _ _ _    _ ____    ____ ____ _    ____ ____ _  _ ____ ____ ____ ___ __   __
+ *  |  | | | | |    | |  | __ |  | |__| | __ | __ |___ |\ | |___ |__/ |__|  | |  | |__/
+ *  |  |_|_| | |___ | |__|    |__| |  | |    |__] |___ | \| |___ |  \ |  |  | |__| |  \
+ *
+ * Twilio - Serverless
+ * This is the public Twilio REST API.
+ *
+ * NOTE: This class is auto generated by OpenAPI Generator.
+ * https://openapi-generator.tech
+ * Do not edit the class manually.
+ */
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ServicePage = exports.ServiceInstance = exports.ServiceContextImpl = void 0;
 exports.ServiceListInstance = ServiceListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
-const asset_1 = __webpack_require__(2022);
-const build_1 = __webpack_require__(2024);
-const environment_1 = __webpack_require__(2026);
-const function_1 = __webpack_require__(2030);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
+const asset_1 = __webpack_require__(2023);
+const build_1 = __webpack_require__(2025);
+const environment_1 = __webpack_require__(2027);
+const function_1 = __webpack_require__(2031);
 class ServiceContextImpl {
     constructor(_version, sid) {
         this._version = _version;
@@ -281104,7 +281157,7 @@ exports.ServicePage = ServicePage;
 
 
 /***/ }),
-/* 2022 */
+/* 2023 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -281129,11 +281182,11 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.AssetPage = exports.AssetInstance = exports.AssetContextImpl = void 0;
 exports.AssetListInstance = AssetListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
-const assetVersion_1 = __webpack_require__(2023);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
+const assetVersion_1 = __webpack_require__(2024);
 class AssetContextImpl {
     constructor(_version, serviceSid, sid) {
         this._version = _version;
@@ -281553,7 +281606,7 @@ exports.AssetPage = AssetPage;
 
 
 /***/ }),
-/* 2023 */
+/* 2024 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -281578,10 +281631,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.AssetVersionPage = exports.AssetVersionInstance = exports.AssetVersionContextImpl = void 0;
 exports.AssetVersionListInstance = AssetVersionListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class AssetVersionContextImpl {
     constructor(_version, serviceSid, assetSid, sid) {
         this._version = _version;
@@ -281838,7 +281891,7 @@ exports.AssetVersionPage = AssetVersionPage;
 
 
 /***/ }),
-/* 2024 */
+/* 2025 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -281863,11 +281916,11 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.BuildPage = exports.BuildInstance = exports.BuildContextImpl = void 0;
 exports.BuildListInstance = BuildListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
-const buildStatus_1 = __webpack_require__(2025);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
+const buildStatus_1 = __webpack_require__(2026);
 class BuildContextImpl {
     constructor(_version, serviceSid, sid) {
         this._version = _version;
@@ -282249,7 +282302,7 @@ exports.BuildPage = BuildPage;
 
 
 /***/ }),
-/* 2025 */
+/* 2026 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -282271,9 +282324,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.BuildStatusInstance = exports.BuildStatusContextImpl = void 0;
 exports.BuildStatusListInstance = BuildStatusListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class BuildStatusContextImpl {
     constructor(_version, serviceSid, sid) {
         this._version = _version;
@@ -282411,7 +282464,7 @@ function BuildStatusListInstance(version, serviceSid, sid) {
 
 
 /***/ }),
-/* 2026 */
+/* 2027 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -282436,13 +282489,13 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.EnvironmentPage = exports.EnvironmentInstance = exports.EnvironmentContextImpl = void 0;
 exports.EnvironmentListInstance = EnvironmentListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
-const deployment_1 = __webpack_require__(2027);
-const log_1 = __webpack_require__(2028);
-const variable_1 = __webpack_require__(2029);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
+const deployment_1 = __webpack_require__(2028);
+const log_1 = __webpack_require__(2029);
+const variable_1 = __webpack_require__(2030);
 class EnvironmentContextImpl {
     constructor(_version, serviceSid, sid) {
         this._version = _version;
@@ -282834,7 +282887,7 @@ exports.EnvironmentPage = EnvironmentPage;
 
 
 /***/ }),
-/* 2027 */
+/* 2028 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -282859,10 +282912,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.DeploymentPage = exports.DeploymentInstance = exports.DeploymentContextImpl = void 0;
 exports.DeploymentListInstance = DeploymentListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class DeploymentContextImpl {
     constructor(_version, serviceSid, environmentSid, sid) {
         this._version = _version;
@@ -283177,7 +283230,7 @@ exports.DeploymentPage = DeploymentPage;
 
 
 /***/ }),
-/* 2028 */
+/* 2029 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -283202,10 +283255,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.LogPage = exports.LogInstance = exports.LogContextImpl = void 0;
 exports.LogListInstance = LogListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class LogContextImpl {
     constructor(_version, serviceSid, environmentSid, sid) {
         this._version = _version;
@@ -283482,7 +283535,7 @@ exports.LogPage = LogPage;
 
 
 /***/ }),
-/* 2029 */
+/* 2030 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -283507,10 +283560,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.VariablePage = exports.VariableInstance = exports.VariableContextImpl = void 0;
 exports.VariableListInstance = VariableListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class VariableContextImpl {
     constructor(_version, serviceSid, environmentSid, sid) {
         this._version = _version;
@@ -283938,7 +283991,7 @@ exports.VariablePage = VariablePage;
 
 
 /***/ }),
-/* 2030 */
+/* 2031 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -283963,11 +284016,11 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.FunctionPage = exports.FunctionInstance = exports.FunctionContextImpl = void 0;
 exports.FunctionListInstance = FunctionListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
-const functionVersion_1 = __webpack_require__(2031);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
+const functionVersion_1 = __webpack_require__(2032);
 class FunctionContextImpl {
     constructor(_version, serviceSid, sid) {
         this._version = _version;
@@ -284387,7 +284440,7 @@ exports.FunctionPage = FunctionPage;
 
 
 /***/ }),
-/* 2031 */
+/* 2032 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -284412,11 +284465,11 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.FunctionVersionPage = exports.FunctionVersionInstance = exports.FunctionVersionContextImpl = void 0;
 exports.FunctionVersionListInstance = FunctionVersionListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
-const functionVersionContent_1 = __webpack_require__(2032);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
+const functionVersionContent_1 = __webpack_require__(2033);
 class FunctionVersionContextImpl {
     constructor(_version, serviceSid, functionSid, sid) {
         this._version = _version;
@@ -284687,7 +284740,7 @@ exports.FunctionVersionPage = FunctionVersionPage;
 
 
 /***/ }),
-/* 2032 */
+/* 2033 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -284709,9 +284762,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.FunctionVersionContentInstance = exports.FunctionVersionContentContextImpl = void 0;
 exports.FunctionVersionContentListInstance = FunctionVersionContentListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class FunctionVersionContentContextImpl {
     constructor(_version, serviceSid, functionSid, sid) {
         this._version = _version;
@@ -284857,7 +284910,7 @@ function FunctionVersionContentListInstance(version, serviceSid, functionSid, si
 
 
 /***/ }),
-/* 2033 */
+/* 2034 */
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 "use strict";
@@ -284865,7 +284918,7 @@ function FunctionVersionContentListInstance(version, serviceSid, functionSid, si
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-const StudioBase_1 = __importDefault(__webpack_require__(2034));
+const StudioBase_1 = __importDefault(__webpack_require__(2035));
 class Studio extends StudioBase_1.default {
     /**
      * @deprecated - Use v2.flows instead
@@ -284886,7 +284939,7 @@ module.exports = Studio;
 
 
 /***/ }),
-/* 2034 */
+/* 2035 */
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 "use strict";
@@ -284904,9 +284957,9 @@ module.exports = Studio;
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-const Domain_1 = __importDefault(__webpack_require__(1538));
-const V1_1 = __importDefault(__webpack_require__(2035));
-const V2_1 = __importDefault(__webpack_require__(2045));
+const Domain_1 = __importDefault(__webpack_require__(1539));
+const V1_1 = __importDefault(__webpack_require__(2036));
+const V2_1 = __importDefault(__webpack_require__(2046));
 class StudioBase extends Domain_1.default {
     /**
      * Initialize studio domain
@@ -284926,49 +284979,6 @@ class StudioBase extends Domain_1.default {
     }
 }
 module.exports = StudioBase;
-
-
-/***/ }),
-/* 2035 */
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
-
-"use strict";
-
-/*
- * This code was generated by
- * ___ _ _ _ _ _    _ ____    ____ ____ _    ____ ____ _  _ ____ ____ ____ ___ __   __
- *  |  | | | | |    | |  | __ |  | |__| | __ | __ |___ |\ | |___ |__/ |__|  | |  | |__/
- *  |  |_|_| | |___ | |__|    |__| |  | |    |__] |___ | \| |___ |  \ |  |  | |__| |  \
- *
- * Twilio - Studio
- * This is the public Twilio REST API.
- *
- * NOTE: This class is auto generated by OpenAPI Generator.
- * https://openapi-generator.tech
- * Do not edit the class manually.
- */
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-const Version_1 = __importDefault(__webpack_require__(1541));
-const flow_1 = __webpack_require__(2036);
-class V1 extends Version_1.default {
-    /**
-     * Initialize the V1 version of Studio
-     *
-     * @param domain - The Twilio (Twilio.Studio) domain
-     */
-    constructor(domain) {
-        super(domain, "v1");
-    }
-    /** Getter for flows resource */
-    get flows() {
-        this._flows = this._flows || (0, flow_1.FlowListInstance)(this);
-        return this._flows;
-    }
-}
-exports["default"] = V1;
 
 
 /***/ }),
@@ -284994,15 +285004,58 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
+const Version_1 = __importDefault(__webpack_require__(1542));
+const flow_1 = __webpack_require__(2037);
+class V1 extends Version_1.default {
+    /**
+     * Initialize the V1 version of Studio
+     *
+     * @param domain - The Twilio (Twilio.Studio) domain
+     */
+    constructor(domain) {
+        super(domain, "v1");
+    }
+    /** Getter for flows resource */
+    get flows() {
+        this._flows = this._flows || (0, flow_1.FlowListInstance)(this);
+        return this._flows;
+    }
+}
+exports["default"] = V1;
+
+
+/***/ }),
+/* 2037 */
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+"use strict";
+
+/*
+ * This code was generated by
+ * ___ _ _ _ _ _    _ ____    ____ ____ _    ____ ____ _  _ ____ ____ ____ ___ __   __
+ *  |  | | | | |    | |  | __ |  | |__| | __ | __ |___ |\ | |___ |__/ |__|  | |  | |__/
+ *  |  |_|_| | |___ | |__|    |__| |  | |    |__] |___ | \| |___ |  \ |  |  | |__| |  \
+ *
+ * Twilio - Studio
+ * This is the public Twilio REST API.
+ *
+ * NOTE: This class is auto generated by OpenAPI Generator.
+ * https://openapi-generator.tech
+ * Do not edit the class manually.
+ */
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.FlowPage = exports.FlowInstance = exports.FlowContextImpl = void 0;
 exports.FlowListInstance = FlowListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
-const engagement_1 = __webpack_require__(2037);
-const execution_1 = __webpack_require__(2041);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
+const engagement_1 = __webpack_require__(2038);
+const execution_1 = __webpack_require__(2042);
 class FlowContextImpl {
     constructor(_version, sid) {
         this._version = _version;
@@ -285317,7 +285370,7 @@ exports.FlowPage = FlowPage;
 
 
 /***/ }),
-/* 2037 */
+/* 2038 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -285342,12 +285395,12 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.EngagementPage = exports.EngagementInstance = exports.EngagementContextImpl = void 0;
 exports.EngagementListInstance = EngagementListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
-const engagementContext_1 = __webpack_require__(2038);
-const step_1 = __webpack_require__(2039);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
+const engagementContext_1 = __webpack_require__(2039);
+const step_1 = __webpack_require__(2040);
 class EngagementContextImpl {
     constructor(_version, flowSid, sid) {
         this._version = _version;
@@ -285735,7 +285788,7 @@ exports.EngagementPage = EngagementPage;
 
 
 /***/ }),
-/* 2038 */
+/* 2039 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -285757,9 +285810,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.EngagementContextInstance = exports.EngagementContextContextImpl = void 0;
 exports.EngagementContextListInstance = EngagementContextListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class EngagementContextContextImpl {
     constructor(_version, flowSid, engagementSid) {
         this._version = _version;
@@ -285897,7 +285950,7 @@ function EngagementContextListInstance(version, flowSid, engagementSid) {
 
 
 /***/ }),
-/* 2039 */
+/* 2040 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -285922,11 +285975,11 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.StepPage = exports.StepInstance = exports.StepContextImpl = void 0;
 exports.StepListInstance = StepListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
-const stepContext_1 = __webpack_require__(2040);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
+const stepContext_1 = __webpack_require__(2041);
 class StepContextImpl {
     constructor(_version, flowSid, engagementSid, sid) {
         this._version = _version;
@@ -286207,7 +286260,7 @@ exports.StepPage = StepPage;
 
 
 /***/ }),
-/* 2040 */
+/* 2041 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -286229,9 +286282,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.StepContextInstance = exports.StepContextContextImpl = void 0;
 exports.StepContextListInstance = StepContextListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class StepContextContextImpl {
     constructor(_version, flowSid, engagementSid, stepSid) {
         this._version = _version;
@@ -286377,7 +286430,7 @@ function StepContextListInstance(version, flowSid, engagementSid, stepSid) {
 
 
 /***/ }),
-/* 2041 */
+/* 2042 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -286402,12 +286455,12 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ExecutionPage = exports.ExecutionInstance = exports.ExecutionContextImpl = void 0;
 exports.ExecutionListInstance = ExecutionListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
-const executionContext_1 = __webpack_require__(2042);
-const executionStep_1 = __webpack_require__(2043);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
+const executionContext_1 = __webpack_require__(2043);
+const executionStep_1 = __webpack_require__(2044);
 class ExecutionContextImpl {
     constructor(_version, flowSid, sid) {
         this._version = _version;
@@ -286861,7 +286914,7 @@ exports.ExecutionPage = ExecutionPage;
 
 
 /***/ }),
-/* 2042 */
+/* 2043 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -286883,9 +286936,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ExecutionContextInstance = exports.ExecutionContextContextImpl = void 0;
 exports.ExecutionContextListInstance = ExecutionContextListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class ExecutionContextContextImpl {
     constructor(_version, flowSid, executionSid) {
         this._version = _version;
@@ -287023,7 +287076,7 @@ function ExecutionContextListInstance(version, flowSid, executionSid) {
 
 
 /***/ }),
-/* 2043 */
+/* 2044 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -287048,11 +287101,11 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ExecutionStepPage = exports.ExecutionStepInstance = exports.ExecutionStepContextImpl = void 0;
 exports.ExecutionStepListInstance = ExecutionStepListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
-const executionStepContext_1 = __webpack_require__(2044);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
+const executionStepContext_1 = __webpack_require__(2045);
 class ExecutionStepContextImpl {
     constructor(_version, flowSid, executionSid, sid) {
         this._version = _version;
@@ -287333,7 +287386,7 @@ exports.ExecutionStepPage = ExecutionStepPage;
 
 
 /***/ }),
-/* 2044 */
+/* 2045 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -287355,9 +287408,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ExecutionStepContextInstance = exports.ExecutionStepContextContextImpl = void 0;
 exports.ExecutionStepContextListInstance = ExecutionStepContextListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class ExecutionStepContextContextImpl {
     constructor(_version, flowSid, executionSid, stepSid) {
         this._version = _version;
@@ -287503,7 +287556,7 @@ function ExecutionStepContextListInstance(version, flowSid, executionSid, stepSi
 
 
 /***/ }),
-/* 2045 */
+/* 2046 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -287525,9 +287578,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const Version_1 = __importDefault(__webpack_require__(1541));
-const flow_1 = __webpack_require__(2046);
-const flowValidate_1 = __webpack_require__(2053);
+const Version_1 = __importDefault(__webpack_require__(1542));
+const flow_1 = __webpack_require__(2047);
+const flowValidate_1 = __webpack_require__(2054);
 class V2 extends Version_1.default {
     /**
      * Initialize the V2 version of Studio
@@ -287552,7 +287605,7 @@ exports["default"] = V2;
 
 
 /***/ }),
-/* 2046 */
+/* 2047 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -287577,13 +287630,13 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.FlowPage = exports.FlowInstance = exports.FlowContextImpl = void 0;
 exports.FlowListInstance = FlowListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
-const execution_1 = __webpack_require__(2047);
-const flowRevision_1 = __webpack_require__(2051);
-const flowTestUser_1 = __webpack_require__(2052);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
+const execution_1 = __webpack_require__(2048);
+const flowRevision_1 = __webpack_require__(2052);
+const flowTestUser_1 = __webpack_require__(2053);
 class FlowContextImpl {
     constructor(_version, sid) {
         this._version = _version;
@@ -288066,7 +288119,7 @@ exports.FlowPage = FlowPage;
 
 
 /***/ }),
-/* 2047 */
+/* 2048 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -288091,12 +288144,12 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ExecutionPage = exports.ExecutionInstance = exports.ExecutionContextImpl = void 0;
 exports.ExecutionListInstance = ExecutionListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
-const executionContext_1 = __webpack_require__(2048);
-const executionStep_1 = __webpack_require__(2049);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
+const executionContext_1 = __webpack_require__(2049);
+const executionStep_1 = __webpack_require__(2050);
 class ExecutionContextImpl {
     constructor(_version, flowSid, sid) {
         this._version = _version;
@@ -288552,7 +288605,7 @@ exports.ExecutionPage = ExecutionPage;
 
 
 /***/ }),
-/* 2048 */
+/* 2049 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -288574,9 +288627,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ExecutionContextInstance = exports.ExecutionContextContextImpl = void 0;
 exports.ExecutionContextListInstance = ExecutionContextListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class ExecutionContextContextImpl {
     constructor(_version, flowSid, executionSid) {
         this._version = _version;
@@ -288714,7 +288767,7 @@ function ExecutionContextListInstance(version, flowSid, executionSid) {
 
 
 /***/ }),
-/* 2049 */
+/* 2050 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -288739,11 +288792,11 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ExecutionStepPage = exports.ExecutionStepInstance = exports.ExecutionStepContextImpl = void 0;
 exports.ExecutionStepListInstance = ExecutionStepListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
-const executionStepContext_1 = __webpack_require__(2050);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
+const executionStepContext_1 = __webpack_require__(2051);
 class ExecutionStepContextImpl {
     constructor(_version, flowSid, executionSid, sid) {
         this._version = _version;
@@ -289024,7 +289077,7 @@ exports.ExecutionStepPage = ExecutionStepPage;
 
 
 /***/ }),
-/* 2050 */
+/* 2051 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -289046,9 +289099,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ExecutionStepContextInstance = exports.ExecutionStepContextContextImpl = void 0;
 exports.ExecutionStepContextListInstance = ExecutionStepContextListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class ExecutionStepContextContextImpl {
     constructor(_version, flowSid, executionSid, stepSid) {
         this._version = _version;
@@ -289194,7 +289247,7 @@ function ExecutionStepContextListInstance(version, flowSid, executionSid, stepSi
 
 
 /***/ }),
-/* 2051 */
+/* 2052 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -289219,10 +289272,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.FlowRevisionPage = exports.FlowRevisionInstance = exports.FlowRevisionContextImpl = void 0;
 exports.FlowRevisionListInstance = FlowRevisionListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class FlowRevisionContextImpl {
     constructor(_version, sid, revision) {
         this._version = _version;
@@ -289483,7 +289536,7 @@ exports.FlowRevisionPage = FlowRevisionPage;
 
 
 /***/ }),
-/* 2052 */
+/* 2053 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -289505,9 +289558,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.FlowTestUserInstance = exports.FlowTestUserContextImpl = void 0;
 exports.FlowTestUserListInstance = FlowTestUserListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class FlowTestUserContextImpl {
     constructor(_version, sid) {
         this._version = _version;
@@ -289693,7 +289746,7 @@ function FlowTestUserListInstance(version, sid) {
 
 
 /***/ }),
-/* 2053 */
+/* 2054 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -289715,8 +289768,8 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.FlowValidateInstance = void 0;
 exports.FlowValidateListInstance = FlowValidateListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
 function FlowValidateListInstance(version) {
     const instance = {};
     instance._version = version;
@@ -289825,7 +289878,7 @@ exports.FlowValidateInstance = FlowValidateInstance;
 
 
 /***/ }),
-/* 2054 */
+/* 2055 */
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 "use strict";
@@ -289833,7 +289886,7 @@ exports.FlowValidateInstance = FlowValidateInstance;
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-const SupersimBase_1 = __importDefault(__webpack_require__(2055));
+const SupersimBase_1 = __importDefault(__webpack_require__(2056));
 class Supersim extends SupersimBase_1.default {
     /**
      * @deprecated - Use v1.esimProfiles instead
@@ -289903,7 +289956,7 @@ module.exports = Supersim;
 
 
 /***/ }),
-/* 2055 */
+/* 2056 */
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 "use strict";
@@ -289921,8 +289974,8 @@ module.exports = Supersim;
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-const Domain_1 = __importDefault(__webpack_require__(1538));
-const V1_1 = __importDefault(__webpack_require__(2056));
+const Domain_1 = __importDefault(__webpack_require__(1539));
+const V1_1 = __importDefault(__webpack_require__(2057));
 class SupersimBase extends Domain_1.default {
     /**
      * Initialize supersim domain
@@ -289941,7 +289994,7 @@ module.exports = SupersimBase;
 
 
 /***/ }),
-/* 2056 */
+/* 2057 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -289963,16 +290016,16 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const Version_1 = __importDefault(__webpack_require__(1541));
-const esimProfile_1 = __webpack_require__(2057);
-const fleet_1 = __webpack_require__(2058);
-const ipCommand_1 = __webpack_require__(2059);
-const network_1 = __webpack_require__(2060);
-const networkAccessProfile_1 = __webpack_require__(2061);
-const settingsUpdate_1 = __webpack_require__(2063);
-const sim_1 = __webpack_require__(2064);
-const smsCommand_1 = __webpack_require__(2067);
-const usageRecord_1 = __webpack_require__(2068);
+const Version_1 = __importDefault(__webpack_require__(1542));
+const esimProfile_1 = __webpack_require__(2058);
+const fleet_1 = __webpack_require__(2059);
+const ipCommand_1 = __webpack_require__(2060);
+const network_1 = __webpack_require__(2061);
+const networkAccessProfile_1 = __webpack_require__(2062);
+const settingsUpdate_1 = __webpack_require__(2064);
+const sim_1 = __webpack_require__(2065);
+const smsCommand_1 = __webpack_require__(2068);
+const usageRecord_1 = __webpack_require__(2069);
 class V1 extends Version_1.default {
     /**
      * Initialize the V1 version of Supersim
@@ -290034,7 +290087,7 @@ exports["default"] = V1;
 
 
 /***/ }),
-/* 2057 */
+/* 2058 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -290059,10 +290112,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.EsimProfilePage = exports.EsimProfileInstance = exports.EsimProfileContextImpl = void 0;
 exports.EsimProfileListInstance = EsimProfileListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class EsimProfileContextImpl {
     constructor(_version, sid) {
         this._version = _version;
@@ -290397,7 +290450,7 @@ exports.EsimProfilePage = EsimProfilePage;
 
 
 /***/ }),
-/* 2058 */
+/* 2059 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -290422,10 +290475,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.FleetPage = exports.FleetInstance = exports.FleetContextImpl = void 0;
 exports.FleetListInstance = FleetListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class FleetContextImpl {
     constructor(_version, sid) {
         this._version = _version;
@@ -290857,7 +290910,7 @@ exports.FleetPage = FleetPage;
 
 
 /***/ }),
-/* 2059 */
+/* 2060 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -290882,10 +290935,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.IpCommandPage = exports.IpCommandInstance = exports.IpCommandContextImpl = void 0;
 exports.IpCommandListInstance = IpCommandListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class IpCommandContextImpl {
     constructor(_version, sid) {
         this._version = _version;
@@ -291234,7 +291287,7 @@ exports.IpCommandPage = IpCommandPage;
 
 
 /***/ }),
-/* 2060 */
+/* 2061 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -291259,10 +291312,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.NetworkPage = exports.NetworkInstance = exports.NetworkContextImpl = void 0;
 exports.NetworkListInstance = NetworkListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class NetworkContextImpl {
     constructor(_version, sid) {
         this._version = _version;
@@ -291513,7 +291566,7 @@ exports.NetworkPage = NetworkPage;
 
 
 /***/ }),
-/* 2061 */
+/* 2062 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -291538,11 +291591,11 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.NetworkAccessProfilePage = exports.NetworkAccessProfileInstance = exports.NetworkAccessProfileContextImpl = void 0;
 exports.NetworkAccessProfileListInstance = NetworkAccessProfileListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
-const networkAccessProfileNetwork_1 = __webpack_require__(2062);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
+const networkAccessProfileNetwork_1 = __webpack_require__(2063);
 class NetworkAccessProfileContextImpl {
     constructor(_version, sid) {
         this._version = _version;
@@ -291917,7 +291970,7 @@ exports.NetworkAccessProfilePage = NetworkAccessProfilePage;
 
 
 /***/ }),
-/* 2062 */
+/* 2063 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -291942,10 +291995,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.NetworkAccessProfileNetworkPage = exports.NetworkAccessProfileNetworkInstance = exports.NetworkAccessProfileNetworkContextImpl = void 0;
 exports.NetworkAccessProfileNetworkListInstance = NetworkAccessProfileNetworkListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class NetworkAccessProfileNetworkContextImpl {
     constructor(_version, networkAccessProfileSid, sid) {
         this._version = _version;
@@ -292287,7 +292340,7 @@ exports.NetworkAccessProfileNetworkPage = NetworkAccessProfileNetworkPage;
 
 
 /***/ }),
-/* 2063 */
+/* 2064 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -292312,9 +292365,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.SettingsUpdatePage = exports.SettingsUpdateInstance = void 0;
 exports.SettingsUpdateListInstance = SettingsUpdateListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
 function SettingsUpdateListInstance(version) {
     const instance = {};
     instance._version = version;
@@ -292483,7 +292536,7 @@ exports.SettingsUpdatePage = SettingsUpdatePage;
 
 
 /***/ }),
-/* 2064 */
+/* 2065 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -292508,12 +292561,12 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.SimPage = exports.SimInstance = exports.SimContextImpl = void 0;
 exports.SimListInstance = SimListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
-const billingPeriod_1 = __webpack_require__(2065);
-const simIpAddress_1 = __webpack_require__(2066);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
+const billingPeriod_1 = __webpack_require__(2066);
+const simIpAddress_1 = __webpack_require__(2067);
 class SimContextImpl {
     constructor(_version, sid) {
         this._version = _version;
@@ -292939,7 +292992,7 @@ exports.SimPage = SimPage;
 
 
 /***/ }),
-/* 2065 */
+/* 2066 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -292964,10 +293017,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.BillingPeriodPage = exports.BillingPeriodInstance = void 0;
 exports.BillingPeriodListInstance = BillingPeriodListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 function BillingPeriodListInstance(version, simSid) {
     if (!(0, utility_1.isValidPathParam)(simSid)) {
         throw new Error("Parameter 'simSid' is not valid.");
@@ -293131,7 +293184,7 @@ exports.BillingPeriodPage = BillingPeriodPage;
 
 
 /***/ }),
-/* 2066 */
+/* 2067 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -293156,10 +293209,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.SimIpAddressPage = exports.SimIpAddressInstance = void 0;
 exports.SimIpAddressListInstance = SimIpAddressListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 function SimIpAddressListInstance(version, simSid) {
     if (!(0, utility_1.isValidPathParam)(simSid)) {
         throw new Error("Parameter 'simSid' is not valid.");
@@ -293311,7 +293364,7 @@ exports.SimIpAddressPage = SimIpAddressPage;
 
 
 /***/ }),
-/* 2067 */
+/* 2068 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -293336,10 +293389,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.SmsCommandPage = exports.SmsCommandInstance = exports.SmsCommandContextImpl = void 0;
 exports.SmsCommandListInstance = SmsCommandListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class SmsCommandContextImpl {
     constructor(_version, sid) {
         this._version = _version;
@@ -293664,7 +293717,7 @@ exports.SmsCommandPage = SmsCommandPage;
 
 
 /***/ }),
-/* 2068 */
+/* 2069 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -293689,9 +293742,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.UsageRecordPage = exports.UsageRecordInstance = void 0;
 exports.UsageRecordListInstance = UsageRecordListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
 function UsageRecordListInstance(version) {
     const instance = {};
     instance._version = version;
@@ -293890,7 +293943,7 @@ exports.UsageRecordPage = UsageRecordPage;
 
 
 /***/ }),
-/* 2069 */
+/* 2070 */
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 "use strict";
@@ -293898,7 +293951,7 @@ exports.UsageRecordPage = UsageRecordPage;
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-const SyncBase_1 = __importDefault(__webpack_require__(2070));
+const SyncBase_1 = __importDefault(__webpack_require__(2071));
 class Sync extends SyncBase_1.default {
     /**
      * @deprecated - Use v1.services instead
@@ -293912,7 +293965,7 @@ module.exports = Sync;
 
 
 /***/ }),
-/* 2070 */
+/* 2071 */
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 "use strict";
@@ -293930,8 +293983,8 @@ module.exports = Sync;
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-const Domain_1 = __importDefault(__webpack_require__(1538));
-const V1_1 = __importDefault(__webpack_require__(2071));
+const Domain_1 = __importDefault(__webpack_require__(1539));
+const V1_1 = __importDefault(__webpack_require__(2072));
 class SyncBase extends Domain_1.default {
     /**
      * Initialize sync domain
@@ -293947,49 +294000,6 @@ class SyncBase extends Domain_1.default {
     }
 }
 module.exports = SyncBase;
-
-
-/***/ }),
-/* 2071 */
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
-
-"use strict";
-
-/*
- * This code was generated by
- * ___ _ _ _ _ _    _ ____    ____ ____ _    ____ ____ _  _ ____ ____ ____ ___ __   __
- *  |  | | | | |    | |  | __ |  | |__| | __ | __ |___ |\ | |___ |__/ |__|  | |  | |__/
- *  |  |_|_| | |___ | |__|    |__| |  | |    |__] |___ | \| |___ |  \ |  |  | |__| |  \
- *
- * Twilio - Sync
- * This is the public Twilio REST API.
- *
- * NOTE: This class is auto generated by OpenAPI Generator.
- * https://openapi-generator.tech
- * Do not edit the class manually.
- */
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-const Version_1 = __importDefault(__webpack_require__(1541));
-const service_1 = __webpack_require__(2072);
-class V1 extends Version_1.default {
-    /**
-     * Initialize the V1 version of Sync
-     *
-     * @param domain - The Twilio (Twilio.Sync) domain
-     */
-    constructor(domain) {
-        super(domain, "v1");
-    }
-    /** Getter for services resource */
-    get services() {
-        this._services = this._services || (0, service_1.ServiceListInstance)(this);
-        return this._services;
-    }
-}
-exports["default"] = V1;
 
 
 /***/ }),
@@ -294015,17 +294025,60 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
+const Version_1 = __importDefault(__webpack_require__(1542));
+const service_1 = __webpack_require__(2073);
+class V1 extends Version_1.default {
+    /**
+     * Initialize the V1 version of Sync
+     *
+     * @param domain - The Twilio (Twilio.Sync) domain
+     */
+    constructor(domain) {
+        super(domain, "v1");
+    }
+    /** Getter for services resource */
+    get services() {
+        this._services = this._services || (0, service_1.ServiceListInstance)(this);
+        return this._services;
+    }
+}
+exports["default"] = V1;
+
+
+/***/ }),
+/* 2073 */
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+"use strict";
+
+/*
+ * This code was generated by
+ * ___ _ _ _ _ _    _ ____    ____ ____ _    ____ ____ _  _ ____ ____ ____ ___ __   __
+ *  |  | | | | |    | |  | __ |  | |__| | __ | __ |___ |\ | |___ |__/ |__|  | |  | |__/
+ *  |  |_|_| | |___ | |__|    |__| |  | |    |__] |___ | \| |___ |  \ |  |  | |__| |  \
+ *
+ * Twilio - Sync
+ * This is the public Twilio REST API.
+ *
+ * NOTE: This class is auto generated by OpenAPI Generator.
+ * https://openapi-generator.tech
+ * Do not edit the class manually.
+ */
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ServicePage = exports.ServiceInstance = exports.ServiceContextImpl = void 0;
 exports.ServiceListInstance = ServiceListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
-const document_1 = __webpack_require__(2073);
-const syncList_1 = __webpack_require__(2075);
-const syncMap_1 = __webpack_require__(2078);
-const syncStream_1 = __webpack_require__(2081);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
+const document_1 = __webpack_require__(2074);
+const syncList_1 = __webpack_require__(2076);
+const syncMap_1 = __webpack_require__(2079);
+const syncStream_1 = __webpack_require__(2082);
 class ServiceContextImpl {
     constructor(_version, sid) {
         this._version = _version;
@@ -294543,7 +294596,7 @@ exports.ServicePage = ServicePage;
 
 
 /***/ }),
-/* 2073 */
+/* 2074 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -294568,11 +294621,11 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.DocumentPage = exports.DocumentInstance = exports.DocumentContextImpl = void 0;
 exports.DocumentListInstance = DocumentListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
-const documentPermission_1 = __webpack_require__(2074);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
+const documentPermission_1 = __webpack_require__(2075);
 class DocumentContextImpl {
     constructor(_version, serviceSid, sid) {
         this._version = _version;
@@ -295020,7 +295073,7 @@ exports.DocumentPage = DocumentPage;
 
 
 /***/ }),
-/* 2074 */
+/* 2075 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -295045,10 +295098,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.DocumentPermissionPage = exports.DocumentPermissionInstance = exports.DocumentPermissionContextImpl = void 0;
 exports.DocumentPermissionListInstance = DocumentPermissionListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class DocumentPermissionContextImpl {
     constructor(_version, serviceSid, documentSid, identity) {
         this._version = _version;
@@ -295428,7 +295481,7 @@ exports.DocumentPermissionPage = DocumentPermissionPage;
 
 
 /***/ }),
-/* 2075 */
+/* 2076 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -295453,12 +295506,12 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.SyncListPage = exports.SyncListInstance = exports.SyncListContextImpl = void 0;
 exports.SyncListListInstance = SyncListListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
-const syncListItem_1 = __webpack_require__(2076);
-const syncListPermission_1 = __webpack_require__(2077);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
+const syncListItem_1 = __webpack_require__(2077);
+const syncListPermission_1 = __webpack_require__(2078);
 class SyncListContextImpl {
     constructor(_version, serviceSid, sid) {
         this._version = _version;
@@ -295912,7 +295965,7 @@ exports.SyncListPage = SyncListPage;
 
 
 /***/ }),
-/* 2076 */
+/* 2077 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -295937,10 +295990,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.SyncListItemPage = exports.SyncListItemInstance = exports.SyncListItemContextImpl = void 0;
 exports.SyncListItemListInstance = SyncListItemListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class SyncListItemContextImpl {
     constructor(_version, serviceSid, listSid, index) {
         this._version = _version;
@@ -296412,7 +296465,7 @@ exports.SyncListItemPage = SyncListItemPage;
 
 
 /***/ }),
-/* 2077 */
+/* 2078 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -296437,10 +296490,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.SyncListPermissionPage = exports.SyncListPermissionInstance = exports.SyncListPermissionContextImpl = void 0;
 exports.SyncListPermissionListInstance = SyncListPermissionListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class SyncListPermissionContextImpl {
     constructor(_version, serviceSid, listSid, identity) {
         this._version = _version;
@@ -296820,7 +296873,7 @@ exports.SyncListPermissionPage = SyncListPermissionPage;
 
 
 /***/ }),
-/* 2078 */
+/* 2079 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -296845,12 +296898,12 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.SyncMapPage = exports.SyncMapInstance = exports.SyncMapContextImpl = void 0;
 exports.SyncMapListInstance = SyncMapListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
-const syncMapItem_1 = __webpack_require__(2079);
-const syncMapPermission_1 = __webpack_require__(2080);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
+const syncMapItem_1 = __webpack_require__(2080);
+const syncMapPermission_1 = __webpack_require__(2081);
 class SyncMapContextImpl {
     constructor(_version, serviceSid, sid) {
         this._version = _version;
@@ -297304,7 +297357,7 @@ exports.SyncMapPage = SyncMapPage;
 
 
 /***/ }),
-/* 2079 */
+/* 2080 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -297329,10 +297382,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.SyncMapItemPage = exports.SyncMapItemInstance = exports.SyncMapItemContextImpl = void 0;
 exports.SyncMapItemListInstance = SyncMapItemListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class SyncMapItemContextImpl {
     constructor(_version, serviceSid, mapSid, key) {
         this._version = _version;
@@ -297812,7 +297865,7 @@ exports.SyncMapItemPage = SyncMapItemPage;
 
 
 /***/ }),
-/* 2080 */
+/* 2081 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -297837,10 +297890,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.SyncMapPermissionPage = exports.SyncMapPermissionInstance = exports.SyncMapPermissionContextImpl = void 0;
 exports.SyncMapPermissionListInstance = SyncMapPermissionListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class SyncMapPermissionContextImpl {
     constructor(_version, serviceSid, mapSid, identity) {
         this._version = _version;
@@ -298220,7 +298273,7 @@ exports.SyncMapPermissionPage = SyncMapPermissionPage;
 
 
 /***/ }),
-/* 2081 */
+/* 2082 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -298245,11 +298298,11 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.SyncStreamPage = exports.SyncStreamInstance = exports.SyncStreamContextImpl = void 0;
 exports.SyncStreamListInstance = SyncStreamListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
-const streamMessage_1 = __webpack_require__(2082);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
+const streamMessage_1 = __webpack_require__(2083);
 class SyncStreamContextImpl {
     constructor(_version, serviceSid, sid) {
         this._version = _version;
@@ -298681,7 +298734,7 @@ exports.SyncStreamPage = SyncStreamPage;
 
 
 /***/ }),
-/* 2082 */
+/* 2083 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -298703,9 +298756,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.StreamMessageInstance = void 0;
 exports.StreamMessageListInstance = StreamMessageListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 function StreamMessageListInstance(version, serviceSid, streamSid) {
     if (!(0, utility_1.isValidPathParam)(serviceSid)) {
         throw new Error("Parameter 'serviceSid' is not valid.");
@@ -298800,7 +298853,7 @@ exports.StreamMessageInstance = StreamMessageInstance;
 
 
 /***/ }),
-/* 2083 */
+/* 2084 */
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 "use strict";
@@ -298808,7 +298861,7 @@ exports.StreamMessageInstance = StreamMessageInstance;
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-const TaskrouterBase_1 = __importDefault(__webpack_require__(2084));
+const TaskrouterBase_1 = __importDefault(__webpack_require__(2085));
 class Taskrouter extends TaskrouterBase_1.default {
     /**
      * @deprecated - Use v1.workspaces instead
@@ -298822,7 +298875,7 @@ module.exports = Taskrouter;
 
 
 /***/ }),
-/* 2084 */
+/* 2085 */
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 "use strict";
@@ -298840,8 +298893,8 @@ module.exports = Taskrouter;
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-const Domain_1 = __importDefault(__webpack_require__(1538));
-const V1_1 = __importDefault(__webpack_require__(2085));
+const Domain_1 = __importDefault(__webpack_require__(1539));
+const V1_1 = __importDefault(__webpack_require__(2086));
 class TaskrouterBase extends Domain_1.default {
     /**
      * Initialize taskrouter domain
@@ -298857,49 +298910,6 @@ class TaskrouterBase extends Domain_1.default {
     }
 }
 module.exports = TaskrouterBase;
-
-
-/***/ }),
-/* 2085 */
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
-
-"use strict";
-
-/*
- * This code was generated by
- * ___ _ _ _ _ _    _ ____    ____ ____ _    ____ ____ _  _ ____ ____ ____ ___ __   __
- *  |  | | | | |    | |  | __ |  | |__| | __ | __ |___ |\ | |___ |__/ |__|  | |  | |__/
- *  |  |_|_| | |___ | |__|    |__| |  | |    |__] |___ | \| |___ |  \ |  |  | |__| |  \
- *
- * Twilio - Taskrouter
- * This is the public Twilio REST API.
- *
- * NOTE: This class is auto generated by OpenAPI Generator.
- * https://openapi-generator.tech
- * Do not edit the class manually.
- */
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-const Version_1 = __importDefault(__webpack_require__(1541));
-const workspace_1 = __webpack_require__(2086);
-class V1 extends Version_1.default {
-    /**
-     * Initialize the V1 version of Taskrouter
-     *
-     * @param domain - The Twilio (Twilio.Taskrouter) domain
-     */
-    constructor(domain) {
-        super(domain, "v1");
-    }
-    /** Getter for workspaces resource */
-    get workspaces() {
-        this._workspaces = this._workspaces || (0, workspace_1.WorkspaceListInstance)(this);
-        return this._workspaces;
-    }
-}
-exports["default"] = V1;
 
 
 /***/ }),
@@ -298925,23 +298935,66 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
+const Version_1 = __importDefault(__webpack_require__(1542));
+const workspace_1 = __webpack_require__(2087);
+class V1 extends Version_1.default {
+    /**
+     * Initialize the V1 version of Taskrouter
+     *
+     * @param domain - The Twilio (Twilio.Taskrouter) domain
+     */
+    constructor(domain) {
+        super(domain, "v1");
+    }
+    /** Getter for workspaces resource */
+    get workspaces() {
+        this._workspaces = this._workspaces || (0, workspace_1.WorkspaceListInstance)(this);
+        return this._workspaces;
+    }
+}
+exports["default"] = V1;
+
+
+/***/ }),
+/* 2087 */
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+"use strict";
+
+/*
+ * This code was generated by
+ * ___ _ _ _ _ _    _ ____    ____ ____ _    ____ ____ _  _ ____ ____ ____ ___ __   __
+ *  |  | | | | |    | |  | __ |  | |__| | __ | __ |___ |\ | |___ |__/ |__|  | |  | |__/
+ *  |  |_|_| | |___ | |__|    |__| |  | |    |__] |___ | \| |___ |  \ |  |  | |__| |  \
+ *
+ * Twilio - Taskrouter
+ * This is the public Twilio REST API.
+ *
+ * NOTE: This class is auto generated by OpenAPI Generator.
+ * https://openapi-generator.tech
+ * Do not edit the class manually.
+ */
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.WorkspacePage = exports.WorkspaceInstance = exports.WorkspaceContextImpl = void 0;
 exports.WorkspaceListInstance = WorkspaceListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
-const activity_1 = __webpack_require__(2087);
-const event_1 = __webpack_require__(2088);
-const task_1 = __webpack_require__(2089);
-const taskChannel_1 = __webpack_require__(2091);
-const taskQueue_1 = __webpack_require__(2092);
-const worker_1 = __webpack_require__(2098);
-const workflow_1 = __webpack_require__(2105);
-const workspaceCumulativeStatistics_1 = __webpack_require__(2109);
-const workspaceRealTimeStatistics_1 = __webpack_require__(2110);
-const workspaceStatistics_1 = __webpack_require__(2111);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
+const activity_1 = __webpack_require__(2088);
+const event_1 = __webpack_require__(2089);
+const task_1 = __webpack_require__(2090);
+const taskChannel_1 = __webpack_require__(2092);
+const taskQueue_1 = __webpack_require__(2093);
+const worker_1 = __webpack_require__(2099);
+const workflow_1 = __webpack_require__(2106);
+const workspaceCumulativeStatistics_1 = __webpack_require__(2110);
+const workspaceRealTimeStatistics_1 = __webpack_require__(2111);
+const workspaceStatistics_1 = __webpack_require__(2112);
 class WorkspaceContextImpl {
     constructor(_version, sid) {
         this._version = _version;
@@ -299524,7 +299577,7 @@ exports.WorkspacePage = WorkspacePage;
 
 
 /***/ }),
-/* 2087 */
+/* 2088 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -299549,10 +299602,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ActivityPage = exports.ActivityInstance = exports.ActivityContextImpl = void 0;
 exports.ActivityListInstance = ActivityListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class ActivityContextImpl {
     constructor(_version, workspaceSid, sid) {
         this._version = _version;
@@ -299976,7 +300029,7 @@ exports.ActivityPage = ActivityPage;
 
 
 /***/ }),
-/* 2088 */
+/* 2089 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -300001,10 +300054,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.EventPage = exports.EventInstance = exports.EventContextImpl = void 0;
 exports.EventListInstance = EventListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class EventContextImpl {
     constructor(_version, workspaceSid, sid) {
         this._version = _version;
@@ -300317,7 +300370,7 @@ exports.EventPage = EventPage;
 
 
 /***/ }),
-/* 2089 */
+/* 2090 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -300342,11 +300395,11 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.TaskPage = exports.TaskInstance = exports.TaskContextImpl = void 0;
 exports.TaskListInstance = TaskListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
-const reservation_1 = __webpack_require__(2090);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
+const reservation_1 = __webpack_require__(2091);
 class TaskContextImpl {
     constructor(_version, workspaceSid, sid) {
         this._version = _version;
@@ -300910,7 +300963,7 @@ exports.TaskPage = TaskPage;
 
 
 /***/ }),
-/* 2090 */
+/* 2091 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -300935,10 +300988,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ReservationPage = exports.ReservationInstance = exports.ReservationContextImpl = void 0;
 exports.ReservationListInstance = ReservationListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class ReservationContextImpl {
     constructor(_version, workspaceSid, taskSid, sid) {
         this._version = _version;
@@ -301495,7 +301548,7 @@ exports.ReservationPage = ReservationPage;
 
 
 /***/ }),
-/* 2091 */
+/* 2092 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -301520,10 +301573,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.TaskChannelPage = exports.TaskChannelInstance = exports.TaskChannelContextImpl = void 0;
 exports.TaskChannelListInstance = TaskChannelListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class TaskChannelContextImpl {
     constructor(_version, workspaceSid, sid) {
         this._version = _version;
@@ -301953,7 +302006,7 @@ exports.TaskChannelPage = TaskChannelPage;
 
 
 /***/ }),
-/* 2092 */
+/* 2093 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -301978,15 +302031,15 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.TaskQueuePage = exports.TaskQueueInstance = exports.TaskQueueContextImpl = void 0;
 exports.TaskQueueListInstance = TaskQueueListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
-const taskQueueBulkRealTimeStatistics_1 = __webpack_require__(2093);
-const taskQueueCumulativeStatistics_1 = __webpack_require__(2094);
-const taskQueueRealTimeStatistics_1 = __webpack_require__(2095);
-const taskQueueStatistics_1 = __webpack_require__(2096);
-const taskQueuesStatistics_1 = __webpack_require__(2097);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
+const taskQueueBulkRealTimeStatistics_1 = __webpack_require__(2094);
+const taskQueueCumulativeStatistics_1 = __webpack_require__(2095);
+const taskQueueRealTimeStatistics_1 = __webpack_require__(2096);
+const taskQueueStatistics_1 = __webpack_require__(2097);
+const taskQueuesStatistics_1 = __webpack_require__(2098);
 class TaskQueueContextImpl {
     constructor(_version, workspaceSid, sid) {
         this._version = _version;
@@ -302519,7 +302572,7 @@ exports.TaskQueuePage = TaskQueuePage;
 
 
 /***/ }),
-/* 2093 */
+/* 2094 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -302541,9 +302594,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.TaskQueueBulkRealTimeStatisticsInstance = void 0;
 exports.TaskQueueBulkRealTimeStatisticsListInstance = TaskQueueBulkRealTimeStatisticsListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 function TaskQueueBulkRealTimeStatisticsListInstance(version, workspaceSid) {
     if (!(0, utility_1.isValidPathParam)(workspaceSid)) {
         throw new Error("Parameter 'workspaceSid' is not valid.");
@@ -302647,7 +302700,7 @@ exports.TaskQueueBulkRealTimeStatisticsInstance = TaskQueueBulkRealTimeStatistic
 
 
 /***/ }),
-/* 2094 */
+/* 2095 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -302669,9 +302722,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.TaskQueueCumulativeStatisticsInstance = exports.TaskQueueCumulativeStatisticsContextImpl = void 0;
 exports.TaskQueueCumulativeStatisticsListInstance = TaskQueueCumulativeStatisticsListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class TaskQueueCumulativeStatisticsContextImpl {
     constructor(_version, workspaceSid, taskQueueSid) {
         this._version = _version;
@@ -302868,7 +302921,7 @@ function TaskQueueCumulativeStatisticsListInstance(version, workspaceSid, taskQu
 
 
 /***/ }),
-/* 2095 */
+/* 2096 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -302890,9 +302943,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.TaskQueueRealTimeStatisticsInstance = exports.TaskQueueRealTimeStatisticsContextImpl = void 0;
 exports.TaskQueueRealTimeStatisticsListInstance = TaskQueueRealTimeStatisticsListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class TaskQueueRealTimeStatisticsContextImpl {
     constructor(_version, workspaceSid, taskQueueSid) {
         this._version = _version;
@@ -303057,7 +303110,7 @@ function TaskQueueRealTimeStatisticsListInstance(version, workspaceSid, taskQueu
 
 
 /***/ }),
-/* 2096 */
+/* 2097 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -303079,9 +303132,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.TaskQueueStatisticsInstance = exports.TaskQueueStatisticsContextImpl = void 0;
 exports.TaskQueueStatisticsListInstance = TaskQueueStatisticsListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class TaskQueueStatisticsContextImpl {
     constructor(_version, workspaceSid, taskQueueSid) {
         this._version = _version;
@@ -303245,7 +303298,7 @@ function TaskQueueStatisticsListInstance(version, workspaceSid, taskQueueSid) {
 
 
 /***/ }),
-/* 2097 */
+/* 2098 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -303270,10 +303323,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.TaskQueuesStatisticsPage = exports.TaskQueuesStatisticsInstance = void 0;
 exports.TaskQueuesStatisticsListInstance = TaskQueuesStatisticsListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 function TaskQueuesStatisticsListInstance(version, workspaceSid) {
     if (!(0, utility_1.isValidPathParam)(workspaceSid)) {
         throw new Error("Parameter 'workspaceSid' is not valid.");
@@ -303455,7 +303508,7 @@ exports.TaskQueuesStatisticsPage = TaskQueuesStatisticsPage;
 
 
 /***/ }),
-/* 2098 */
+/* 2099 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -303480,16 +303533,16 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.WorkerPage = exports.WorkerInstance = exports.WorkerContextImpl = void 0;
 exports.WorkerListInstance = WorkerListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
-const reservation_1 = __webpack_require__(2099);
-const workerChannel_1 = __webpack_require__(2100);
-const workerStatistics_1 = __webpack_require__(2101);
-const workersCumulativeStatistics_1 = __webpack_require__(2102);
-const workersRealTimeStatistics_1 = __webpack_require__(2103);
-const workersStatistics_1 = __webpack_require__(2104);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
+const reservation_1 = __webpack_require__(2100);
+const workerChannel_1 = __webpack_require__(2101);
+const workerStatistics_1 = __webpack_require__(2102);
+const workersCumulativeStatistics_1 = __webpack_require__(2103);
+const workersRealTimeStatistics_1 = __webpack_require__(2104);
+const workersStatistics_1 = __webpack_require__(2105);
 class WorkerContextImpl {
     constructor(_version, workspaceSid, sid) {
         this._version = _version;
@@ -304038,7 +304091,7 @@ exports.WorkerPage = WorkerPage;
 
 
 /***/ }),
-/* 2099 */
+/* 2100 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -304063,10 +304116,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ReservationPage = exports.ReservationInstance = exports.ReservationContextImpl = void 0;
 exports.ReservationListInstance = ReservationListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class ReservationContextImpl {
     constructor(_version, workspaceSid, workerSid, sid) {
         this._version = _version;
@@ -304611,7 +304664,7 @@ exports.ReservationPage = ReservationPage;
 
 
 /***/ }),
-/* 2100 */
+/* 2101 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -304636,10 +304689,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.WorkerChannelPage = exports.WorkerChannelInstance = exports.WorkerChannelContextImpl = void 0;
 exports.WorkerChannelListInstance = WorkerChannelListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class WorkerChannelContextImpl {
     constructor(_version, workspaceSid, workerSid, sid) {
         this._version = _version;
@@ -304972,7 +305025,7 @@ exports.WorkerChannelPage = WorkerChannelPage;
 
 
 /***/ }),
-/* 2101 */
+/* 2102 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -304994,9 +305047,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.WorkerStatisticsInstance = exports.WorkerStatisticsContextImpl = void 0;
 exports.WorkerStatisticsListInstance = WorkerStatisticsListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class WorkerStatisticsContextImpl {
     constructor(_version, workspaceSid, workerSid) {
         this._version = _version;
@@ -305154,7 +305207,7 @@ function WorkerStatisticsListInstance(version, workspaceSid, workerSid) {
 
 
 /***/ }),
-/* 2102 */
+/* 2103 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -305176,9 +305229,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.WorkersCumulativeStatisticsInstance = exports.WorkersCumulativeStatisticsContextImpl = void 0;
 exports.WorkersCumulativeStatisticsListInstance = WorkersCumulativeStatisticsListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class WorkersCumulativeStatisticsContextImpl {
     constructor(_version, workspaceSid) {
         this._version = _version;
@@ -305344,7 +305397,7 @@ function WorkersCumulativeStatisticsListInstance(version, workspaceSid) {
 
 
 /***/ }),
-/* 2103 */
+/* 2104 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -305366,9 +305419,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.WorkersRealTimeStatisticsInstance = exports.WorkersRealTimeStatisticsContextImpl = void 0;
 exports.WorkersRealTimeStatisticsListInstance = WorkersRealTimeStatisticsListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class WorkersRealTimeStatisticsContextImpl {
     constructor(_version, workspaceSid) {
         this._version = _version;
@@ -305508,7 +305561,7 @@ function WorkersRealTimeStatisticsListInstance(version, workspaceSid) {
 
 
 /***/ }),
-/* 2104 */
+/* 2105 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -305530,9 +305583,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.WorkersStatisticsInstance = exports.WorkersStatisticsContextImpl = void 0;
 exports.WorkersStatisticsListInstance = WorkersStatisticsListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class WorkersStatisticsContextImpl {
     constructor(_version, workspaceSid) {
         this._version = _version;
@@ -305696,7 +305749,7 @@ function WorkersStatisticsListInstance(version, workspaceSid) {
 
 
 /***/ }),
-/* 2105 */
+/* 2106 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -305721,13 +305774,13 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.WorkflowPage = exports.WorkflowInstance = exports.WorkflowContextImpl = void 0;
 exports.WorkflowListInstance = WorkflowListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
-const workflowCumulativeStatistics_1 = __webpack_require__(2106);
-const workflowRealTimeStatistics_1 = __webpack_require__(2107);
-const workflowStatistics_1 = __webpack_require__(2108);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
+const workflowCumulativeStatistics_1 = __webpack_require__(2107);
+const workflowRealTimeStatistics_1 = __webpack_require__(2108);
+const workflowStatistics_1 = __webpack_require__(2109);
 class WorkflowContextImpl {
     constructor(_version, workspaceSid, sid) {
         this._version = _version;
@@ -306234,7 +306287,7 @@ exports.WorkflowPage = WorkflowPage;
 
 
 /***/ }),
-/* 2106 */
+/* 2107 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -306256,9 +306309,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.WorkflowCumulativeStatisticsInstance = exports.WorkflowCumulativeStatisticsContextImpl = void 0;
 exports.WorkflowCumulativeStatisticsListInstance = WorkflowCumulativeStatisticsListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class WorkflowCumulativeStatisticsContextImpl {
     constructor(_version, workspaceSid, workflowSid) {
         this._version = _version;
@@ -306454,7 +306507,7 @@ function WorkflowCumulativeStatisticsListInstance(version, workspaceSid, workflo
 
 
 /***/ }),
-/* 2107 */
+/* 2108 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -306476,9 +306529,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.WorkflowRealTimeStatisticsInstance = exports.WorkflowRealTimeStatisticsContextImpl = void 0;
 exports.WorkflowRealTimeStatisticsListInstance = WorkflowRealTimeStatisticsListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class WorkflowRealTimeStatisticsContextImpl {
     constructor(_version, workspaceSid, workflowSid) {
         this._version = _version;
@@ -306632,7 +306685,7 @@ function WorkflowRealTimeStatisticsListInstance(version, workspaceSid, workflowS
 
 
 /***/ }),
-/* 2108 */
+/* 2109 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -306654,9 +306707,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.WorkflowStatisticsInstance = exports.WorkflowStatisticsContextImpl = void 0;
 exports.WorkflowStatisticsListInstance = WorkflowStatisticsListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class WorkflowStatisticsContextImpl {
     constructor(_version, workspaceSid, workflowSid) {
         this._version = _version;
@@ -306820,7 +306873,7 @@ function WorkflowStatisticsListInstance(version, workspaceSid, workflowSid) {
 
 
 /***/ }),
-/* 2109 */
+/* 2110 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -306842,9 +306895,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.WorkspaceCumulativeStatisticsInstance = exports.WorkspaceCumulativeStatisticsContextImpl = void 0;
 exports.WorkspaceCumulativeStatisticsListInstance = WorkspaceCumulativeStatisticsListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class WorkspaceCumulativeStatisticsContextImpl {
     constructor(_version, workspaceSid) {
         this._version = _version;
@@ -307032,7 +307085,7 @@ function WorkspaceCumulativeStatisticsListInstance(version, workspaceSid) {
 
 
 /***/ }),
-/* 2110 */
+/* 2111 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -307054,9 +307107,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.WorkspaceRealTimeStatisticsInstance = exports.WorkspaceRealTimeStatisticsContextImpl = void 0;
 exports.WorkspaceRealTimeStatisticsListInstance = WorkspaceRealTimeStatisticsListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class WorkspaceRealTimeStatisticsContextImpl {
     constructor(_version, workspaceSid) {
         this._version = _version;
@@ -307206,7 +307259,7 @@ function WorkspaceRealTimeStatisticsListInstance(version, workspaceSid) {
 
 
 /***/ }),
-/* 2111 */
+/* 2112 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -307228,9 +307281,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.WorkspaceStatisticsInstance = exports.WorkspaceStatisticsContextImpl = void 0;
 exports.WorkspaceStatisticsListInstance = WorkspaceStatisticsListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class WorkspaceStatisticsContextImpl {
     constructor(_version, workspaceSid) {
         this._version = _version;
@@ -307386,7 +307439,7 @@ function WorkspaceStatisticsListInstance(version, workspaceSid) {
 
 
 /***/ }),
-/* 2112 */
+/* 2113 */
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 "use strict";
@@ -307394,7 +307447,7 @@ function WorkspaceStatisticsListInstance(version, workspaceSid) {
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-const TrunkingBase_1 = __importDefault(__webpack_require__(2113));
+const TrunkingBase_1 = __importDefault(__webpack_require__(2114));
 class Trunking extends TrunkingBase_1.default {
     /**
      * @deprecated - Use v1.trunks instead
@@ -307408,7 +307461,7 @@ module.exports = Trunking;
 
 
 /***/ }),
-/* 2113 */
+/* 2114 */
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 "use strict";
@@ -307426,8 +307479,8 @@ module.exports = Trunking;
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-const Domain_1 = __importDefault(__webpack_require__(1538));
-const V1_1 = __importDefault(__webpack_require__(2114));
+const Domain_1 = __importDefault(__webpack_require__(1539));
+const V1_1 = __importDefault(__webpack_require__(2115));
 class TrunkingBase extends Domain_1.default {
     /**
      * Initialize trunking domain
@@ -307443,49 +307496,6 @@ class TrunkingBase extends Domain_1.default {
     }
 }
 module.exports = TrunkingBase;
-
-
-/***/ }),
-/* 2114 */
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
-
-"use strict";
-
-/*
- * This code was generated by
- * ___ _ _ _ _ _    _ ____    ____ ____ _    ____ ____ _  _ ____ ____ ____ ___ __   __
- *  |  | | | | |    | |  | __ |  | |__| | __ | __ |___ |\ | |___ |__/ |__|  | |  | |__/
- *  |  |_|_| | |___ | |__|    |__| |  | |    |__] |___ | \| |___ |  \ |  |  | |__| |  \
- *
- * Twilio - Trunking
- * This is the public Twilio REST API.
- *
- * NOTE: This class is auto generated by OpenAPI Generator.
- * https://openapi-generator.tech
- * Do not edit the class manually.
- */
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-const Version_1 = __importDefault(__webpack_require__(1541));
-const trunk_1 = __webpack_require__(2115);
-class V1 extends Version_1.default {
-    /**
-     * Initialize the V1 version of Trunking
-     *
-     * @param domain - The Twilio (Twilio.Trunking) domain
-     */
-    constructor(domain) {
-        super(domain, "v1");
-    }
-    /** Getter for trunks resource */
-    get trunks() {
-        this._trunks = this._trunks || (0, trunk_1.TrunkListInstance)(this);
-        return this._trunks;
-    }
-}
-exports["default"] = V1;
 
 
 /***/ }),
@@ -307511,18 +307521,61 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
+const Version_1 = __importDefault(__webpack_require__(1542));
+const trunk_1 = __webpack_require__(2116);
+class V1 extends Version_1.default {
+    /**
+     * Initialize the V1 version of Trunking
+     *
+     * @param domain - The Twilio (Twilio.Trunking) domain
+     */
+    constructor(domain) {
+        super(domain, "v1");
+    }
+    /** Getter for trunks resource */
+    get trunks() {
+        this._trunks = this._trunks || (0, trunk_1.TrunkListInstance)(this);
+        return this._trunks;
+    }
+}
+exports["default"] = V1;
+
+
+/***/ }),
+/* 2116 */
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+"use strict";
+
+/*
+ * This code was generated by
+ * ___ _ _ _ _ _    _ ____    ____ ____ _    ____ ____ _  _ ____ ____ ____ ___ __   __
+ *  |  | | | | |    | |  | __ |  | |__| | __ | __ |___ |\ | |___ |__/ |__|  | |  | |__/
+ *  |  |_|_| | |___ | |__|    |__| |  | |    |__] |___ | \| |___ |  \ |  |  | |__| |  \
+ *
+ * Twilio - Trunking
+ * This is the public Twilio REST API.
+ *
+ * NOTE: This class is auto generated by OpenAPI Generator.
+ * https://openapi-generator.tech
+ * Do not edit the class manually.
+ */
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.TrunkPage = exports.TrunkInstance = exports.TrunkContextImpl = void 0;
 exports.TrunkListInstance = TrunkListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
-const credentialList_1 = __webpack_require__(2116);
-const ipAccessControlList_1 = __webpack_require__(2117);
-const originationUrl_1 = __webpack_require__(2118);
-const phoneNumber_1 = __webpack_require__(2119);
-const recording_1 = __webpack_require__(2120);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
+const credentialList_1 = __webpack_require__(2117);
+const ipAccessControlList_1 = __webpack_require__(2118);
+const originationUrl_1 = __webpack_require__(2119);
+const phoneNumber_1 = __webpack_require__(2120);
+const recording_1 = __webpack_require__(2121);
 class TrunkContextImpl {
     constructor(_version, sid) {
         this._version = _version;
@@ -308063,7 +308116,7 @@ exports.TrunkPage = TrunkPage;
 
 
 /***/ }),
-/* 2116 */
+/* 2117 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -308088,10 +308141,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.CredentialListPage = exports.CredentialListInstance = exports.CredentialListContextImpl = void 0;
 exports.CredentialListListInstance = CredentialListListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class CredentialListContextImpl {
     constructor(_version, trunkSid, sid) {
         this._version = _version;
@@ -308437,7 +308490,7 @@ exports.CredentialListPage = CredentialListPage;
 
 
 /***/ }),
-/* 2117 */
+/* 2118 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -308462,10 +308515,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.IpAccessControlListPage = exports.IpAccessControlListInstance = exports.IpAccessControlListContextImpl = void 0;
 exports.IpAccessControlListListInstance = IpAccessControlListListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class IpAccessControlListContextImpl {
     constructor(_version, trunkSid, sid) {
         this._version = _version;
@@ -308811,7 +308864,7 @@ exports.IpAccessControlListPage = IpAccessControlListPage;
 
 
 /***/ }),
-/* 2118 */
+/* 2119 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -308836,10 +308889,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.OriginationUrlPage = exports.OriginationUrlInstance = exports.OriginationUrlContextImpl = void 0;
 exports.OriginationUrlListInstance = OriginationUrlListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class OriginationUrlContextImpl {
     constructor(_version, trunkSid, sid) {
         this._version = _version;
@@ -309303,7 +309356,7 @@ exports.OriginationUrlPage = OriginationUrlPage;
 
 
 /***/ }),
-/* 2119 */
+/* 2120 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -309328,10 +309381,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.PhoneNumberPage = exports.PhoneNumberInstance = exports.PhoneNumberContextImpl = void 0;
 exports.PhoneNumberListInstance = PhoneNumberListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class PhoneNumberContextImpl {
     constructor(_version, trunkSid, sid) {
         this._version = _version;
@@ -309715,7 +309768,7 @@ exports.PhoneNumberPage = PhoneNumberPage;
 
 
 /***/ }),
-/* 2120 */
+/* 2121 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -309737,9 +309790,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.RecordingInstance = exports.RecordingContextImpl = void 0;
 exports.RecordingListInstance = RecordingListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class RecordingContextImpl {
     constructor(_version, trunkSid) {
         this._version = _version;
@@ -309931,7 +309984,7 @@ function RecordingListInstance(version, trunkSid) {
 
 
 /***/ }),
-/* 2121 */
+/* 2122 */
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 "use strict";
@@ -309939,7 +309992,7 @@ function RecordingListInstance(version, trunkSid) {
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-const TrusthubBase_1 = __importDefault(__webpack_require__(2122));
+const TrusthubBase_1 = __importDefault(__webpack_require__(2123));
 class Trusthub extends TrusthubBase_1.default {
     /**
      * @deprecated - Use v1.customerProfiles instead
@@ -309995,7 +310048,7 @@ module.exports = Trusthub;
 
 
 /***/ }),
-/* 2122 */
+/* 2123 */
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 "use strict";
@@ -310013,8 +310066,8 @@ module.exports = Trusthub;
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-const Domain_1 = __importDefault(__webpack_require__(1538));
-const V1_1 = __importDefault(__webpack_require__(2123));
+const Domain_1 = __importDefault(__webpack_require__(1539));
+const V1_1 = __importDefault(__webpack_require__(2124));
 class TrusthubBase extends Domain_1.default {
     /**
      * Initialize trusthub domain
@@ -310033,7 +310086,7 @@ module.exports = TrusthubBase;
 
 
 /***/ }),
-/* 2123 */
+/* 2124 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -310055,17 +310108,17 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const Version_1 = __importDefault(__webpack_require__(1541));
-const complianceInquiries_1 = __webpack_require__(2124);
-const complianceRegistrationInquiries_1 = __webpack_require__(2125);
-const complianceTollfreeInquiries_1 = __webpack_require__(2126);
-const customerProfiles_1 = __webpack_require__(2127);
-const endUser_1 = __webpack_require__(2131);
-const endUserType_1 = __webpack_require__(2132);
-const policies_1 = __webpack_require__(2133);
-const supportingDocument_1 = __webpack_require__(2134);
-const supportingDocumentType_1 = __webpack_require__(2135);
-const trustProducts_1 = __webpack_require__(2136);
+const Version_1 = __importDefault(__webpack_require__(1542));
+const complianceInquiries_1 = __webpack_require__(2125);
+const complianceRegistrationInquiries_1 = __webpack_require__(2126);
+const complianceTollfreeInquiries_1 = __webpack_require__(2127);
+const customerProfiles_1 = __webpack_require__(2128);
+const endUser_1 = __webpack_require__(2132);
+const endUserType_1 = __webpack_require__(2133);
+const policies_1 = __webpack_require__(2134);
+const supportingDocument_1 = __webpack_require__(2135);
+const supportingDocumentType_1 = __webpack_require__(2136);
+const trustProducts_1 = __webpack_require__(2137);
 class V1 extends Version_1.default {
     /**
      * Initialize the V1 version of Trusthub
@@ -310139,7 +310192,7 @@ exports["default"] = V1;
 
 
 /***/ }),
-/* 2124 */
+/* 2125 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -310161,9 +310214,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ComplianceInquiriesInstance = exports.ComplianceInquiriesContextImpl = void 0;
 exports.ComplianceInquiriesListInstance = ComplianceInquiriesListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class ComplianceInquiriesContextImpl {
     constructor(_version, customerId) {
         this._version = _version;
@@ -310364,7 +310417,7 @@ function ComplianceInquiriesListInstance(version) {
 
 
 /***/ }),
-/* 2125 */
+/* 2126 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -310386,9 +310439,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ComplianceRegistrationInquiriesInstance = exports.ComplianceRegistrationInquiriesContextImpl = void 0;
 exports.ComplianceRegistrationInquiriesListInstance = ComplianceRegistrationInquiriesListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class ComplianceRegistrationInquiriesContextImpl {
     constructor(_version, registrationId) {
         this._version = _version;
@@ -310757,7 +310810,7 @@ function ComplianceRegistrationInquiriesListInstance(version) {
 
 
 /***/ }),
-/* 2126 */
+/* 2127 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -310779,8 +310832,8 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ComplianceTollfreeInquiriesInstance = void 0;
 exports.ComplianceTollfreeInquiriesListInstance = ComplianceTollfreeInquiriesListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
 function ComplianceTollfreeInquiriesListInstance(version) {
     const instance = {};
     instance._version = version;
@@ -311035,7 +311088,7 @@ exports.ComplianceTollfreeInquiriesInstance = ComplianceTollfreeInquiriesInstanc
 
 
 /***/ }),
-/* 2127 */
+/* 2128 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -311060,13 +311113,13 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.CustomerProfilesPage = exports.CustomerProfilesInstance = exports.CustomerProfilesContextImpl = void 0;
 exports.CustomerProfilesListInstance = CustomerProfilesListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
-const customerProfilesChannelEndpointAssignment_1 = __webpack_require__(2128);
-const customerProfilesEntityAssignments_1 = __webpack_require__(2129);
-const customerProfilesEvaluations_1 = __webpack_require__(2130);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
+const customerProfilesChannelEndpointAssignment_1 = __webpack_require__(2129);
+const customerProfilesEntityAssignments_1 = __webpack_require__(2130);
+const customerProfilesEvaluations_1 = __webpack_require__(2131);
 class CustomerProfilesContextImpl {
     constructor(_version, sid) {
         this._version = _version;
@@ -311560,7 +311613,7 @@ exports.CustomerProfilesPage = CustomerProfilesPage;
 
 
 /***/ }),
-/* 2128 */
+/* 2129 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -311585,10 +311638,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.CustomerProfilesChannelEndpointAssignmentPage = exports.CustomerProfilesChannelEndpointAssignmentInstance = exports.CustomerProfilesChannelEndpointAssignmentContextImpl = void 0;
 exports.CustomerProfilesChannelEndpointAssignmentListInstance = CustomerProfilesChannelEndpointAssignmentListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class CustomerProfilesChannelEndpointAssignmentContextImpl {
     constructor(_version, customerProfileSid, sid) {
         this._version = _version;
@@ -311943,7 +311996,7 @@ exports.CustomerProfilesChannelEndpointAssignmentPage = CustomerProfilesChannelE
 
 
 /***/ }),
-/* 2129 */
+/* 2130 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -311968,10 +312021,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.CustomerProfilesEntityAssignmentsPage = exports.CustomerProfilesEntityAssignmentsInstance = exports.CustomerProfilesEntityAssignmentsContextImpl = void 0;
 exports.CustomerProfilesEntityAssignmentsListInstance = CustomerProfilesEntityAssignmentsListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class CustomerProfilesEntityAssignmentsContextImpl {
     constructor(_version, customerProfileSid, sid) {
         this._version = _version;
@@ -312317,7 +312370,7 @@ exports.CustomerProfilesEntityAssignmentsPage = CustomerProfilesEntityAssignment
 
 
 /***/ }),
-/* 2130 */
+/* 2131 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -312342,10 +312395,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.CustomerProfilesEvaluationsPage = exports.CustomerProfilesEvaluationsInstance = exports.CustomerProfilesEvaluationsContextImpl = void 0;
 exports.CustomerProfilesEvaluationsListInstance = CustomerProfilesEvaluationsListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class CustomerProfilesEvaluationsContextImpl {
     constructor(_version, customerProfileSid, sid) {
         this._version = _version;
@@ -312646,7 +312699,7 @@ exports.CustomerProfilesEvaluationsPage = CustomerProfilesEvaluationsPage;
 
 
 /***/ }),
-/* 2131 */
+/* 2132 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -312671,10 +312724,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.EndUserPage = exports.EndUserInstance = exports.EndUserContextImpl = void 0;
 exports.EndUserListInstance = EndUserListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class EndUserContextImpl {
     constructor(_version, sid) {
         this._version = _version;
@@ -313094,7 +313147,7 @@ exports.EndUserPage = EndUserPage;
 
 
 /***/ }),
-/* 2132 */
+/* 2133 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -313119,10 +313172,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.EndUserTypePage = exports.EndUserTypeInstance = exports.EndUserTypeContextImpl = void 0;
 exports.EndUserTypeListInstance = EndUserTypeListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class EndUserTypeContextImpl {
     constructor(_version, sid) {
         this._version = _version;
@@ -313361,7 +313414,7 @@ exports.EndUserTypePage = EndUserTypePage;
 
 
 /***/ }),
-/* 2133 */
+/* 2134 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -313386,10 +313439,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.PoliciesPage = exports.PoliciesInstance = exports.PoliciesContextImpl = void 0;
 exports.PoliciesListInstance = PoliciesListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class PoliciesContextImpl {
     constructor(_version, sid) {
         this._version = _version;
@@ -313626,7 +313679,7 @@ exports.PoliciesPage = PoliciesPage;
 
 
 /***/ }),
-/* 2134 */
+/* 2135 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -313651,10 +313704,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.SupportingDocumentPage = exports.SupportingDocumentInstance = exports.SupportingDocumentContextImpl = void 0;
 exports.SupportingDocumentListInstance = SupportingDocumentListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class SupportingDocumentContextImpl {
     constructor(_version, sid) {
         this._version = _version;
@@ -314078,7 +314131,7 @@ exports.SupportingDocumentPage = SupportingDocumentPage;
 
 
 /***/ }),
-/* 2135 */
+/* 2136 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -314103,10 +314156,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.SupportingDocumentTypePage = exports.SupportingDocumentTypeInstance = exports.SupportingDocumentTypeContextImpl = void 0;
 exports.SupportingDocumentTypeListInstance = SupportingDocumentTypeListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class SupportingDocumentTypeContextImpl {
     constructor(_version, sid) {
         this._version = _version;
@@ -314345,7 +314398,7 @@ exports.SupportingDocumentTypePage = SupportingDocumentTypePage;
 
 
 /***/ }),
-/* 2136 */
+/* 2137 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -314370,13 +314423,13 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.TrustProductsPage = exports.TrustProductsInstance = exports.TrustProductsContextImpl = void 0;
 exports.TrustProductsListInstance = TrustProductsListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
-const trustProductsChannelEndpointAssignment_1 = __webpack_require__(2137);
-const trustProductsEntityAssignments_1 = __webpack_require__(2138);
-const trustProductsEvaluations_1 = __webpack_require__(2139);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
+const trustProductsChannelEndpointAssignment_1 = __webpack_require__(2138);
+const trustProductsEntityAssignments_1 = __webpack_require__(2139);
+const trustProductsEvaluations_1 = __webpack_require__(2140);
 class TrustProductsContextImpl {
     constructor(_version, sid) {
         this._version = _version;
@@ -314870,7 +314923,7 @@ exports.TrustProductsPage = TrustProductsPage;
 
 
 /***/ }),
-/* 2137 */
+/* 2138 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -314895,10 +314948,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.TrustProductsChannelEndpointAssignmentPage = exports.TrustProductsChannelEndpointAssignmentInstance = exports.TrustProductsChannelEndpointAssignmentContextImpl = void 0;
 exports.TrustProductsChannelEndpointAssignmentListInstance = TrustProductsChannelEndpointAssignmentListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class TrustProductsChannelEndpointAssignmentContextImpl {
     constructor(_version, trustProductSid, sid) {
         this._version = _version;
@@ -315262,7 +315315,7 @@ exports.TrustProductsChannelEndpointAssignmentPage = TrustProductsChannelEndpoin
 
 
 /***/ }),
-/* 2138 */
+/* 2139 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -315287,10 +315340,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.TrustProductsEntityAssignmentsPage = exports.TrustProductsEntityAssignmentsInstance = exports.TrustProductsEntityAssignmentsContextImpl = void 0;
 exports.TrustProductsEntityAssignmentsListInstance = TrustProductsEntityAssignmentsListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class TrustProductsEntityAssignmentsContextImpl {
     constructor(_version, trustProductSid, sid) {
         this._version = _version;
@@ -315636,7 +315689,7 @@ exports.TrustProductsEntityAssignmentsPage = TrustProductsEntityAssignmentsPage;
 
 
 /***/ }),
-/* 2139 */
+/* 2140 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -315661,10 +315714,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.TrustProductsEvaluationsPage = exports.TrustProductsEvaluationsInstance = exports.TrustProductsEvaluationsContextImpl = void 0;
 exports.TrustProductsEvaluationsListInstance = TrustProductsEvaluationsListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class TrustProductsEvaluationsContextImpl {
     constructor(_version, trustProductSid, sid) {
         this._version = _version;
@@ -315965,7 +316018,7 @@ exports.TrustProductsEvaluationsPage = TrustProductsEvaluationsPage;
 
 
 /***/ }),
-/* 2140 */
+/* 2141 */
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 "use strict";
@@ -315973,7 +316026,7 @@ exports.TrustProductsEvaluationsPage = TrustProductsEvaluationsPage;
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-const VerifyBase_1 = __importDefault(__webpack_require__(2141));
+const VerifyBase_1 = __importDefault(__webpack_require__(2142));
 class Verify extends VerifyBase_1.default {
     /**
      * @deprecated - Use v2.forms instead
@@ -316015,7 +316068,7 @@ module.exports = Verify;
 
 
 /***/ }),
-/* 2141 */
+/* 2142 */
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 "use strict";
@@ -316033,8 +316086,8 @@ module.exports = Verify;
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-const Domain_1 = __importDefault(__webpack_require__(1538));
-const V2_1 = __importDefault(__webpack_require__(2142));
+const Domain_1 = __importDefault(__webpack_require__(1539));
+const V2_1 = __importDefault(__webpack_require__(2143));
 class VerifyBase extends Domain_1.default {
     /**
      * Initialize verify domain
@@ -316053,7 +316106,7 @@ module.exports = VerifyBase;
 
 
 /***/ }),
-/* 2142 */
+/* 2143 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -316075,13 +316128,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const Version_1 = __importDefault(__webpack_require__(1541));
-const form_1 = __webpack_require__(2143);
-const safelist_1 = __webpack_require__(2144);
-const service_1 = __webpack_require__(2145);
-const template_1 = __webpack_require__(2162);
-const verificationAttempt_1 = __webpack_require__(2163);
-const verificationAttemptsSummary_1 = __webpack_require__(2164);
+const Version_1 = __importDefault(__webpack_require__(1542));
+const form_1 = __webpack_require__(2144);
+const safelist_1 = __webpack_require__(2145);
+const service_1 = __webpack_require__(2146);
+const template_1 = __webpack_require__(2163);
+const verificationAttempt_1 = __webpack_require__(2164);
+const verificationAttemptsSummary_1 = __webpack_require__(2165);
 class V2 extends Version_1.default {
     /**
      * Initialize the V2 version of Verify
@@ -316129,7 +316182,7 @@ exports["default"] = V2;
 
 
 /***/ }),
-/* 2143 */
+/* 2144 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -316151,9 +316204,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.FormInstance = exports.FormContextImpl = void 0;
 exports.FormListInstance = FormListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class FormContextImpl {
     constructor(_version, formType) {
         this._version = _version;
@@ -316280,7 +316333,7 @@ function FormListInstance(version) {
 
 
 /***/ }),
-/* 2144 */
+/* 2145 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -316302,9 +316355,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.SafelistInstance = exports.SafelistContextImpl = void 0;
 exports.SafelistListInstance = SafelistListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class SafelistContextImpl {
     constructor(_version, phoneNumber) {
         this._version = _version;
@@ -316524,7 +316577,7 @@ function SafelistListInstance(version) {
 
 
 /***/ }),
-/* 2145 */
+/* 2146 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -316549,21 +316602,21 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ServicePage = exports.ServiceInstance = exports.ServiceContextImpl = void 0;
 exports.ServiceListInstance = ServiceListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
-const accessToken_1 = __webpack_require__(2146);
-const approveChallenge_1 = __webpack_require__(2147);
-const entity_1 = __webpack_require__(2148);
-const messagingConfiguration_1 = __webpack_require__(2153);
-const newChallenge_1 = __webpack_require__(2154);
-const newFactor_1 = __webpack_require__(2155);
-const newVerifyFactor_1 = __webpack_require__(2156);
-const rateLimit_1 = __webpack_require__(2157);
-const verification_1 = __webpack_require__(2159);
-const verificationCheck_1 = __webpack_require__(2160);
-const webhook_1 = __webpack_require__(2161);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
+const accessToken_1 = __webpack_require__(2147);
+const approveChallenge_1 = __webpack_require__(2148);
+const entity_1 = __webpack_require__(2149);
+const messagingConfiguration_1 = __webpack_require__(2154);
+const newChallenge_1 = __webpack_require__(2155);
+const newFactor_1 = __webpack_require__(2156);
+const newVerifyFactor_1 = __webpack_require__(2157);
+const rateLimit_1 = __webpack_require__(2158);
+const verification_1 = __webpack_require__(2160);
+const verificationCheck_1 = __webpack_require__(2161);
+const webhook_1 = __webpack_require__(2162);
 class ServiceContextImpl {
     constructor(_version, sid) {
         this._version = _version;
@@ -317336,7 +317389,7 @@ exports.ServicePage = ServicePage;
 
 
 /***/ }),
-/* 2146 */
+/* 2147 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -317358,9 +317411,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.AccessTokenInstance = exports.AccessTokenContextImpl = void 0;
 exports.AccessTokenListInstance = AccessTokenListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class AccessTokenContextImpl {
     constructor(_version, serviceSid, sid) {
         this._version = _version;
@@ -317571,7 +317624,7 @@ function AccessTokenListInstance(version, serviceSid) {
 
 
 /***/ }),
-/* 2147 */
+/* 2148 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -317593,9 +317646,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ApproveChallengeInstance = exports.ApprovePasskeysChallengeRequestResponse = exports.ApprovePasskeysChallengeRequest = void 0;
 exports.ApproveChallengeListInstance = ApproveChallengeListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class ApprovePasskeysChallengeRequest {
     constructor(payload) {
         this.id = payload["id"];
@@ -317741,7 +317794,7 @@ exports.ApproveChallengeInstance = ApproveChallengeInstance;
 
 
 /***/ }),
-/* 2148 */
+/* 2149 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -317766,13 +317819,13 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.EntityPage = exports.EntityInstance = exports.EntityContextImpl = void 0;
 exports.EntityListInstance = EntityListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
-const challenge_1 = __webpack_require__(2149);
-const factor_1 = __webpack_require__(2151);
-const newFactor_1 = __webpack_require__(2152);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
+const challenge_1 = __webpack_require__(2150);
+const factor_1 = __webpack_require__(2152);
+const newFactor_1 = __webpack_require__(2153);
 class EntityContextImpl {
     constructor(_version, serviceSid, identity) {
         this._version = _version;
@@ -318154,7 +318207,7 @@ exports.EntityPage = EntityPage;
 
 
 /***/ }),
-/* 2149 */
+/* 2150 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -318179,11 +318232,11 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ChallengePage = exports.ChallengeInstance = exports.ChallengeContextImpl = void 0;
 exports.ChallengeListInstance = ChallengeListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
-const notification_1 = __webpack_require__(2150);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
+const notification_1 = __webpack_require__(2151);
 class ChallengeContextImpl {
     constructor(_version, serviceSid, identity, sid) {
         this._version = _version;
@@ -318620,7 +318673,7 @@ exports.ChallengePage = ChallengePage;
 
 
 /***/ }),
-/* 2150 */
+/* 2151 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -318642,9 +318695,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.NotificationInstance = void 0;
 exports.NotificationListInstance = NotificationListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 function NotificationListInstance(version, serviceSid, identity, challengeSid) {
     if (!(0, utility_1.isValidPathParam)(serviceSid)) {
         throw new Error("Parameter 'serviceSid' is not valid.");
@@ -318760,7 +318813,7 @@ exports.NotificationInstance = NotificationInstance;
 
 
 /***/ }),
-/* 2151 */
+/* 2152 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -318785,10 +318838,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.FactorPage = exports.FactorInstance = exports.FactorContextImpl = void 0;
 exports.FactorListInstance = FactorListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class FactorContextImpl {
     constructor(_version, serviceSid, identity, sid) {
         this._version = _version;
@@ -319196,7 +319249,7 @@ exports.FactorPage = FactorPage;
 
 
 /***/ }),
-/* 2152 */
+/* 2153 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -319218,9 +319271,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.NewFactorInstance = void 0;
 exports.NewFactorListInstance = NewFactorListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 function NewFactorListInstance(version, serviceSid, identity) {
     if (!(0, utility_1.isValidPathParam)(serviceSid)) {
         throw new Error("Parameter 'serviceSid' is not valid.");
@@ -319401,7 +319454,7 @@ exports.NewFactorInstance = NewFactorInstance;
 
 
 /***/ }),
-/* 2153 */
+/* 2154 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -319426,10 +319479,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.MessagingConfigurationPage = exports.MessagingConfigurationInstance = exports.MessagingConfigurationContextImpl = void 0;
 exports.MessagingConfigurationListInstance = MessagingConfigurationListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class MessagingConfigurationContextImpl {
     constructor(_version, serviceSid, country) {
         this._version = _version;
@@ -319843,7 +319896,7 @@ exports.MessagingConfigurationPage = MessagingConfigurationPage;
 
 
 /***/ }),
-/* 2154 */
+/* 2155 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -319865,9 +319918,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.NewChallengeInstance = exports.NewChallengeContextImpl = exports.CreatePasskeysChallengeRequest = void 0;
 exports.NewChallengeListInstance = NewChallengeListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class CreatePasskeysChallengeRequest {
     constructor(payload) {
         this.identity = payload["identity"];
@@ -320038,7 +320091,7 @@ function NewChallengeListInstance(version, serviceSid) {
 
 
 /***/ }),
-/* 2155 */
+/* 2156 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -320060,9 +320113,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.NewFactorInstance = exports.CreateNewPasskeysFactorRequestConfigRelyingParty = exports.CreateNewPasskeysFactorRequestConfig = exports.CreateNewPasskeysFactorRequest = void 0;
 exports.NewFactorListInstance = NewFactorListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class CreateNewPasskeysFactorRequest {
     constructor(payload) {
         this.friendlyName = payload["friendly_name"];
@@ -320206,7 +320259,7 @@ exports.NewFactorInstance = NewFactorInstance;
 
 
 /***/ }),
-/* 2156 */
+/* 2157 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -320228,9 +320281,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.NewVerifyFactorInstance = exports.VerifyPasskeysFactorRequestResponse = exports.VerifyPasskeysFactorRequest = void 0;
 exports.NewVerifyFactorListInstance = NewVerifyFactorListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class VerifyPasskeysFactorRequest {
     constructor(payload) {
         this.id = payload["id"];
@@ -320363,7 +320416,7 @@ exports.NewVerifyFactorInstance = NewVerifyFactorInstance;
 
 
 /***/ }),
-/* 2157 */
+/* 2158 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -320388,11 +320441,11 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.RateLimitPage = exports.RateLimitInstance = exports.RateLimitContextImpl = void 0;
 exports.RateLimitListInstance = RateLimitListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
-const bucket_1 = __webpack_require__(2158);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
+const bucket_1 = __webpack_require__(2159);
 class RateLimitContextImpl {
     constructor(_version, serviceSid, sid) {
         this._version = _version;
@@ -320818,7 +320871,7 @@ exports.RateLimitPage = RateLimitPage;
 
 
 /***/ }),
-/* 2158 */
+/* 2159 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -320843,10 +320896,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.BucketPage = exports.BucketInstance = exports.BucketContextImpl = void 0;
 exports.BucketListInstance = BucketListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class BucketContextImpl {
     constructor(_version, serviceSid, rateLimitSid, sid) {
         this._version = _version;
@@ -321274,7 +321327,7 @@ exports.BucketPage = BucketPage;
 
 
 /***/ }),
-/* 2159 */
+/* 2160 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -321296,9 +321349,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.VerificationInstance = exports.VerificationContextImpl = void 0;
 exports.VerificationListInstance = VerificationListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class VerificationContextImpl {
     constructor(_version, serviceSid, sid) {
         this._version = _version;
@@ -321635,7 +321688,7 @@ function VerificationListInstance(version, serviceSid) {
 
 
 /***/ }),
-/* 2160 */
+/* 2161 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -321657,9 +321710,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.VerificationCheckInstance = void 0;
 exports.VerificationCheckListInstance = VerificationCheckListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 function VerificationCheckListInstance(version, serviceSid) {
     if (!(0, utility_1.isValidPathParam)(serviceSid)) {
         throw new Error("Parameter 'serviceSid' is not valid.");
@@ -321795,7 +321848,7 @@ exports.VerificationCheckInstance = VerificationCheckInstance;
 
 
 /***/ }),
-/* 2161 */
+/* 2162 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -321820,10 +321873,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.WebhookPage = exports.WebhookInstance = exports.WebhookContextImpl = void 0;
 exports.WebhookListInstance = WebhookListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class WebhookContextImpl {
     constructor(_version, serviceSid, sid) {
         this._version = _version;
@@ -322281,7 +322334,7 @@ exports.WebhookPage = WebhookPage;
 
 
 /***/ }),
-/* 2162 */
+/* 2163 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -322306,9 +322359,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.TemplatePage = exports.TemplateInstance = void 0;
 exports.TemplateListInstance = TemplateListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
 function TemplateListInstance(version) {
     const instance = {};
     instance._version = version;
@@ -322467,7 +322520,7 @@ exports.TemplatePage = TemplatePage;
 
 
 /***/ }),
-/* 2163 */
+/* 2164 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -322492,10 +322545,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.VerificationAttemptPage = exports.VerificationAttemptInstance = exports.VerificationAttemptContextImpl = void 0;
 exports.VerificationAttemptListInstance = VerificationAttemptListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class VerificationAttemptContextImpl {
     constructor(_version, sid) {
         this._version = _version;
@@ -322778,7 +322831,7 @@ exports.VerificationAttemptPage = VerificationAttemptPage;
 
 
 /***/ }),
-/* 2164 */
+/* 2165 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -322800,8 +322853,8 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.VerificationAttemptsSummaryInstance = exports.VerificationAttemptsSummaryContextImpl = void 0;
 exports.VerificationAttemptsSummaryListInstance = VerificationAttemptsSummaryListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
 class VerificationAttemptsSummaryContextImpl {
     constructor(_version) {
         this._version = _version;
@@ -322955,7 +323008,7 @@ function VerificationAttemptsSummaryListInstance(version) {
 
 
 /***/ }),
-/* 2165 */
+/* 2166 */
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 "use strict";
@@ -322963,7 +323016,7 @@ function VerificationAttemptsSummaryListInstance(version) {
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-const VideoBase_1 = __importDefault(__webpack_require__(2166));
+const VideoBase_1 = __importDefault(__webpack_require__(2167));
 class Video extends VideoBase_1.default {
     /**
      * @deprecated - Use v1.compositions instead
@@ -323012,7 +323065,7 @@ module.exports = Video;
 
 
 /***/ }),
-/* 2166 */
+/* 2167 */
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 "use strict";
@@ -323030,8 +323083,8 @@ module.exports = Video;
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-const Domain_1 = __importDefault(__webpack_require__(1538));
-const V1_1 = __importDefault(__webpack_require__(2167));
+const Domain_1 = __importDefault(__webpack_require__(1539));
+const V1_1 = __importDefault(__webpack_require__(2168));
 class VideoBase extends Domain_1.default {
     /**
      * Initialize video domain
@@ -323050,7 +323103,7 @@ module.exports = VideoBase;
 
 
 /***/ }),
-/* 2167 */
+/* 2168 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -323072,13 +323125,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const Version_1 = __importDefault(__webpack_require__(1541));
-const composition_1 = __webpack_require__(2168);
-const compositionHook_1 = __webpack_require__(2169);
-const compositionSettings_1 = __webpack_require__(2170);
-const recording_1 = __webpack_require__(2171);
-const recordingSettings_1 = __webpack_require__(2172);
-const room_1 = __webpack_require__(2173);
+const Version_1 = __importDefault(__webpack_require__(1542));
+const composition_1 = __webpack_require__(2169);
+const compositionHook_1 = __webpack_require__(2170);
+const compositionSettings_1 = __webpack_require__(2171);
+const recording_1 = __webpack_require__(2172);
+const recordingSettings_1 = __webpack_require__(2173);
+const room_1 = __webpack_require__(2174);
 class V1 extends Version_1.default {
     /**
      * Initialize the V1 version of Video
@@ -323126,7 +323179,7 @@ exports["default"] = V1;
 
 
 /***/ }),
-/* 2168 */
+/* 2169 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -323151,10 +323204,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.CompositionPage = exports.CompositionInstance = exports.CompositionContextImpl = void 0;
 exports.CompositionListInstance = CompositionListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class CompositionContextImpl {
     constructor(_version, sid) {
         this._version = _version;
@@ -323568,7 +323621,7 @@ exports.CompositionPage = CompositionPage;
 
 
 /***/ }),
-/* 2169 */
+/* 2170 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -323593,10 +323646,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.CompositionHookPage = exports.CompositionHookInstance = exports.CompositionHookContextImpl = void 0;
 exports.CompositionHookListInstance = CompositionHookListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class CompositionHookContextImpl {
     constructor(_version, sid) {
         this._version = _version;
@@ -324100,7 +324153,7 @@ exports.CompositionHookPage = CompositionHookPage;
 
 
 /***/ }),
-/* 2170 */
+/* 2171 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -324122,8 +324175,8 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.CompositionSettingsInstance = exports.CompositionSettingsContextImpl = void 0;
 exports.CompositionSettingsListInstance = CompositionSettingsListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
 class CompositionSettingsContextImpl {
     constructor(_version) {
         this._version = _version;
@@ -324334,7 +324387,7 @@ function CompositionSettingsListInstance(version) {
 
 
 /***/ }),
-/* 2171 */
+/* 2172 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -324359,10 +324412,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.RecordingPage = exports.RecordingInstance = exports.RecordingContextImpl = void 0;
 exports.RecordingListInstance = RecordingListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class RecordingContextImpl {
     constructor(_version, sid) {
         this._version = _version;
@@ -324696,7 +324749,7 @@ exports.RecordingPage = RecordingPage;
 
 
 /***/ }),
-/* 2172 */
+/* 2173 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -324718,8 +324771,8 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.RecordingSettingsInstance = exports.RecordingSettingsContextImpl = void 0;
 exports.RecordingSettingsListInstance = RecordingSettingsListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
 class RecordingSettingsContextImpl {
     constructor(_version) {
         this._version = _version;
@@ -324930,7 +324983,7 @@ function RecordingSettingsListInstance(version) {
 
 
 /***/ }),
-/* 2173 */
+/* 2174 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -324955,14 +325008,14 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.RoomPage = exports.RoomInstance = exports.RoomContextImpl = void 0;
 exports.RoomListInstance = RoomListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
-const participant_1 = __webpack_require__(2174);
-const recordingRules_1 = __webpack_require__(2179);
-const roomRecording_1 = __webpack_require__(2180);
-const transcriptions_1 = __webpack_require__(2181);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
+const participant_1 = __webpack_require__(2175);
+const recordingRules_1 = __webpack_require__(2180);
+const roomRecording_1 = __webpack_require__(2181);
+const transcriptions_1 = __webpack_require__(2182);
 class RoomContextImpl {
     constructor(_version, sid) {
         this._version = _version;
@@ -325478,7 +325531,7 @@ exports.RoomPage = RoomPage;
 
 
 /***/ }),
-/* 2174 */
+/* 2175 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -325503,14 +325556,14 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ParticipantPage = exports.ParticipantInstance = exports.ParticipantContextImpl = void 0;
 exports.ParticipantListInstance = ParticipantListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
-const anonymize_1 = __webpack_require__(2175);
-const publishedTrack_1 = __webpack_require__(2176);
-const subscribeRules_1 = __webpack_require__(2177);
-const subscribedTrack_1 = __webpack_require__(2178);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
+const anonymize_1 = __webpack_require__(2176);
+const publishedTrack_1 = __webpack_require__(2177);
+const subscribeRules_1 = __webpack_require__(2178);
+const subscribedTrack_1 = __webpack_require__(2179);
 class ParticipantContextImpl {
     constructor(_version, roomSid, sid) {
         this._version = _version;
@@ -325895,7 +325948,7 @@ exports.ParticipantPage = ParticipantPage;
 
 
 /***/ }),
-/* 2175 */
+/* 2176 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -325917,9 +325970,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.AnonymizeInstance = exports.AnonymizeContextImpl = void 0;
 exports.AnonymizeListInstance = AnonymizeListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class AnonymizeContextImpl {
     constructor(_version, roomSid, sid) {
         this._version = _version;
@@ -326069,7 +326122,7 @@ function AnonymizeListInstance(version, roomSid, sid) {
 
 
 /***/ }),
-/* 2176 */
+/* 2177 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -326094,10 +326147,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.PublishedTrackPage = exports.PublishedTrackInstance = exports.PublishedTrackContextImpl = void 0;
 exports.PublishedTrackListInstance = PublishedTrackListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class PublishedTrackContextImpl {
     constructor(_version, roomSid, participantSid, sid) {
         this._version = _version;
@@ -326356,7 +326409,7 @@ exports.PublishedTrackPage = PublishedTrackPage;
 
 
 /***/ }),
-/* 2177 */
+/* 2178 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -326378,9 +326431,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.SubscribeRulesInstance = exports.VideoV1RoomRoomParticipantRoomParticipantSubscribeRuleRules = void 0;
 exports.SubscribeRulesListInstance = SubscribeRulesListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class VideoV1RoomRoomParticipantRoomParticipantSubscribeRuleRules {
     constructor(payload) {
         this.type = payload["type"];
@@ -326529,7 +326582,7 @@ exports.SubscribeRulesInstance = SubscribeRulesInstance;
 
 
 /***/ }),
-/* 2178 */
+/* 2179 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -326554,10 +326607,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.SubscribedTrackPage = exports.SubscribedTrackInstance = exports.SubscribedTrackContextImpl = void 0;
 exports.SubscribedTrackListInstance = SubscribedTrackListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class SubscribedTrackContextImpl {
     constructor(_version, roomSid, participantSid, sid) {
         this._version = _version;
@@ -326818,7 +326871,7 @@ exports.SubscribedTrackPage = SubscribedTrackPage;
 
 
 /***/ }),
-/* 2179 */
+/* 2180 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -326840,9 +326893,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.RecordingRulesInstance = exports.VideoV1RoomRoomRecordingRuleRules = void 0;
 exports.RecordingRulesListInstance = RecordingRulesListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class VideoV1RoomRoomRecordingRuleRules {
     constructor(payload) {
         this.type = payload["type"];
@@ -326985,7 +327038,7 @@ exports.RecordingRulesInstance = RecordingRulesInstance;
 
 
 /***/ }),
-/* 2180 */
+/* 2181 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -327010,10 +327063,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.RoomRecordingPage = exports.RoomRecordingInstance = exports.RoomRecordingContextImpl = void 0;
 exports.RoomRecordingListInstance = RoomRecordingListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class RoomRecordingContextImpl {
     constructor(_version, roomSid, sid) {
         this._version = _version;
@@ -327343,7 +327396,7 @@ exports.RoomRecordingPage = RoomRecordingPage;
 
 
 /***/ }),
-/* 2181 */
+/* 2182 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -327368,10 +327421,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.TranscriptionsPage = exports.TranscriptionsInstance = exports.TranscriptionsContextImpl = void 0;
 exports.TranscriptionsListInstance = TranscriptionsListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class TranscriptionsContextImpl {
     constructor(_version, roomSid, ttid) {
         this._version = _version;
@@ -327750,7 +327803,7 @@ exports.TranscriptionsPage = TranscriptionsPage;
 
 
 /***/ }),
-/* 2182 */
+/* 2183 */
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 "use strict";
@@ -327758,7 +327811,7 @@ exports.TranscriptionsPage = TranscriptionsPage;
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-const VoiceBase_1 = __importDefault(__webpack_require__(2183));
+const VoiceBase_1 = __importDefault(__webpack_require__(2184));
 class Voice extends VoiceBase_1.default {
     /**
      * @deprecated - Use v1.archivedCalls instead
@@ -327807,7 +327860,7 @@ module.exports = Voice;
 
 
 /***/ }),
-/* 2183 */
+/* 2184 */
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 "use strict";
@@ -327825,8 +327878,8 @@ module.exports = Voice;
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-const Domain_1 = __importDefault(__webpack_require__(1538));
-const V1_1 = __importDefault(__webpack_require__(2184));
+const Domain_1 = __importDefault(__webpack_require__(1539));
+const V1_1 = __importDefault(__webpack_require__(2185));
 class VoiceBase extends Domain_1.default {
     /**
      * Initialize voice domain
@@ -327845,7 +327898,7 @@ module.exports = VoiceBase;
 
 
 /***/ }),
-/* 2184 */
+/* 2185 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -327867,13 +327920,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const Version_1 = __importDefault(__webpack_require__(1541));
-const archivedCall_1 = __webpack_require__(2185);
-const byocTrunk_1 = __webpack_require__(2186);
-const connectionPolicy_1 = __webpack_require__(2187);
-const dialingPermissions_1 = __webpack_require__(2189);
-const ipRecord_1 = __webpack_require__(2194);
-const sourceIpMapping_1 = __webpack_require__(2195);
+const Version_1 = __importDefault(__webpack_require__(1542));
+const archivedCall_1 = __webpack_require__(2186);
+const byocTrunk_1 = __webpack_require__(2187);
+const connectionPolicy_1 = __webpack_require__(2188);
+const dialingPermissions_1 = __webpack_require__(2190);
+const ipRecord_1 = __webpack_require__(2195);
+const sourceIpMapping_1 = __webpack_require__(2196);
 class V1 extends Version_1.default {
     /**
      * Initialize the V1 version of Voice
@@ -327921,7 +327974,7 @@ exports["default"] = V1;
 
 
 /***/ }),
-/* 2185 */
+/* 2186 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -327943,9 +327996,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ArchivedCallContextImpl = void 0;
 exports.ArchivedCallListInstance = ArchivedCallListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class ArchivedCallContextImpl {
     constructor(_version, date, sid) {
         this._version = _version;
@@ -328015,7 +328068,7 @@ function ArchivedCallListInstance(version) {
 
 
 /***/ }),
-/* 2186 */
+/* 2187 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -328040,10 +328093,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ByocTrunkPage = exports.ByocTrunkInstance = exports.ByocTrunkContextImpl = void 0;
 exports.ByocTrunkListInstance = ByocTrunkListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class ByocTrunkContextImpl {
     constructor(_version, sid) {
         this._version = _version;
@@ -328535,7 +328588,7 @@ exports.ByocTrunkPage = ByocTrunkPage;
 
 
 /***/ }),
-/* 2187 */
+/* 2188 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -328560,11 +328613,11 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ConnectionPolicyPage = exports.ConnectionPolicyInstance = exports.ConnectionPolicyContextImpl = void 0;
 exports.ConnectionPolicyListInstance = ConnectionPolicyListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
-const connectionPolicyTarget_1 = __webpack_require__(2188);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
+const connectionPolicyTarget_1 = __webpack_require__(2189);
 class ConnectionPolicyContextImpl {
     constructor(_version, sid) {
         this._version = _version;
@@ -328980,7 +329033,7 @@ exports.ConnectionPolicyPage = ConnectionPolicyPage;
 
 
 /***/ }),
-/* 2188 */
+/* 2189 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -329005,10 +329058,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ConnectionPolicyTargetPage = exports.ConnectionPolicyTargetInstance = exports.ConnectionPolicyTargetContextImpl = void 0;
 exports.ConnectionPolicyTargetListInstance = ConnectionPolicyTargetListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class ConnectionPolicyTargetContextImpl {
     constructor(_version, connectionPolicySid, sid) {
         this._version = _version;
@@ -329454,7 +329507,7 @@ exports.ConnectionPolicyTargetPage = ConnectionPolicyTargetPage;
 
 
 /***/ }),
-/* 2189 */
+/* 2190 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -329475,11 +329528,11 @@ exports.ConnectionPolicyTargetPage = ConnectionPolicyTargetPage;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.DialingPermissionsListInstance = DialingPermissionsListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const bulkCountryUpdate_1 = __webpack_require__(2190);
-const country_1 = __webpack_require__(2191);
-const settings_1 = __webpack_require__(2193);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const bulkCountryUpdate_1 = __webpack_require__(2191);
+const country_1 = __webpack_require__(2192);
+const settings_1 = __webpack_require__(2194);
 function DialingPermissionsListInstance(version) {
     const instance = {};
     instance._version = version;
@@ -329520,7 +329573,7 @@ function DialingPermissionsListInstance(version) {
 
 
 /***/ }),
-/* 2190 */
+/* 2191 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -329542,8 +329595,8 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.BulkCountryUpdateInstance = void 0;
 exports.BulkCountryUpdateListInstance = BulkCountryUpdateListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
 function BulkCountryUpdateListInstance(version) {
     const instance = {};
     instance._version = version;
@@ -329634,7 +329687,7 @@ exports.BulkCountryUpdateInstance = BulkCountryUpdateInstance;
 
 
 /***/ }),
-/* 2191 */
+/* 2192 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -329659,11 +329712,11 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.CountryPage = exports.CountryInstance = exports.CountryContextImpl = void 0;
 exports.CountryListInstance = CountryListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
-const highriskSpecialPrefix_1 = __webpack_require__(2192);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
+const highriskSpecialPrefix_1 = __webpack_require__(2193);
 class CountryContextImpl {
     constructor(_version, isoCode) {
         this._version = _version;
@@ -329948,7 +330001,7 @@ exports.CountryPage = CountryPage;
 
 
 /***/ }),
-/* 2192 */
+/* 2193 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -329973,10 +330026,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.HighriskSpecialPrefixPage = exports.HighriskSpecialPrefixInstance = void 0;
 exports.HighriskSpecialPrefixListInstance = HighriskSpecialPrefixListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 function HighriskSpecialPrefixListInstance(version, isoCode) {
     if (!(0, utility_1.isValidPathParam)(isoCode)) {
         throw new Error("Parameter 'isoCode' is not valid.");
@@ -330126,7 +330179,7 @@ exports.HighriskSpecialPrefixPage = HighriskSpecialPrefixPage;
 
 
 /***/ }),
-/* 2193 */
+/* 2194 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -330148,8 +330201,8 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.SettingsInstance = exports.SettingsContextImpl = void 0;
 exports.SettingsListInstance = SettingsListInstance;
 const util_1 = __webpack_require__(78);
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
 class SettingsContextImpl {
     constructor(_version) {
         this._version = _version;
@@ -330330,7 +330383,7 @@ function SettingsListInstance(version) {
 
 
 /***/ }),
-/* 2194 */
+/* 2195 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -330355,10 +330408,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.IpRecordPage = exports.IpRecordInstance = exports.IpRecordContextImpl = void 0;
 exports.IpRecordListInstance = IpRecordListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class IpRecordContextImpl {
     constructor(_version, sid) {
         this._version = _version;
@@ -330768,7 +330821,7 @@ exports.IpRecordPage = IpRecordPage;
 
 
 /***/ }),
-/* 2195 */
+/* 2196 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -330793,10 +330846,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.SourceIpMappingPage = exports.SourceIpMappingInstance = exports.SourceIpMappingContextImpl = void 0;
 exports.SourceIpMappingListInstance = SourceIpMappingListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class SourceIpMappingContextImpl {
     constructor(_version, sid) {
         this._version = _version;
@@ -331202,7 +331255,7 @@ exports.SourceIpMappingPage = SourceIpMappingPage;
 
 
 /***/ }),
-/* 2196 */
+/* 2197 */
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 "use strict";
@@ -331210,7 +331263,7 @@ exports.SourceIpMappingPage = SourceIpMappingPage;
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-const WirelessBase_1 = __importDefault(__webpack_require__(2197));
+const WirelessBase_1 = __importDefault(__webpack_require__(2198));
 class Wireless extends WirelessBase_1.default {
     /**
      * @deprecated - Use v1.usageRecords instead
@@ -331245,7 +331298,7 @@ module.exports = Wireless;
 
 
 /***/ }),
-/* 2197 */
+/* 2198 */
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 "use strict";
@@ -331263,8 +331316,8 @@ module.exports = Wireless;
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-const Domain_1 = __importDefault(__webpack_require__(1538));
-const V1_1 = __importDefault(__webpack_require__(2198));
+const Domain_1 = __importDefault(__webpack_require__(1539));
+const V1_1 = __importDefault(__webpack_require__(2199));
 class WirelessBase extends Domain_1.default {
     /**
      * Initialize wireless domain
@@ -331283,7 +331336,7 @@ module.exports = WirelessBase;
 
 
 /***/ }),
-/* 2198 */
+/* 2199 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -331305,11 +331358,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const Version_1 = __importDefault(__webpack_require__(1541));
-const command_1 = __webpack_require__(2199);
-const ratePlan_1 = __webpack_require__(2200);
-const sim_1 = __webpack_require__(2201);
-const usageRecord_1 = __webpack_require__(2204);
+const Version_1 = __importDefault(__webpack_require__(1542));
+const command_1 = __webpack_require__(2200);
+const ratePlan_1 = __webpack_require__(2201);
+const sim_1 = __webpack_require__(2202);
+const usageRecord_1 = __webpack_require__(2205);
 class V1 extends Version_1.default {
     /**
      * Initialize the V1 version of Wireless
@@ -331344,7 +331397,7 @@ exports["default"] = V1;
 
 
 /***/ }),
-/* 2199 */
+/* 2200 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -331369,10 +331422,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.CommandPage = exports.CommandInstance = exports.CommandContextImpl = void 0;
 exports.CommandListInstance = CommandListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class CommandContextImpl {
     constructor(_version, sid) {
         this._version = _version;
@@ -331760,7 +331813,7 @@ exports.CommandPage = CommandPage;
 
 
 /***/ }),
-/* 2200 */
+/* 2201 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -331785,10 +331838,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.RatePlanPage = exports.RatePlanInstance = exports.RatePlanContextImpl = void 0;
 exports.RatePlanListInstance = RatePlanListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 class RatePlanContextImpl {
     constructor(_version, sid) {
         this._version = _version;
@@ -332260,7 +332313,7 @@ exports.RatePlanPage = RatePlanPage;
 
 
 /***/ }),
-/* 2201 */
+/* 2202 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -332285,12 +332338,12 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.SimPage = exports.SimInstance = exports.SimContextImpl = void 0;
 exports.SimListInstance = SimListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
-const dataSession_1 = __webpack_require__(2202);
-const usageRecord_1 = __webpack_require__(2203);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
+const dataSession_1 = __webpack_require__(2203);
+const usageRecord_1 = __webpack_require__(2204);
 class SimContextImpl {
     constructor(_version, sid) {
         this._version = _version;
@@ -332785,7 +332838,7 @@ exports.SimPage = SimPage;
 
 
 /***/ }),
-/* 2202 */
+/* 2203 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -332810,10 +332863,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.DataSessionPage = exports.DataSessionInstance = void 0;
 exports.DataSessionListInstance = DataSessionListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 function DataSessionListInstance(version, simSid) {
     if (!(0, utility_1.isValidPathParam)(simSid)) {
         throw new Error("Parameter 'simSid' is not valid.");
@@ -332993,7 +333046,7 @@ exports.DataSessionPage = DataSessionPage;
 
 
 /***/ }),
-/* 2203 */
+/* 2204 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -333018,10 +333071,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.UsageRecordPage = exports.UsageRecordInstance = void 0;
 exports.UsageRecordListInstance = UsageRecordListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
-const utility_1 = __webpack_require__(1539);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
+const utility_1 = __webpack_require__(1540);
 function UsageRecordListInstance(version, simSid) {
     if (!(0, utility_1.isValidPathParam)(simSid)) {
         throw new Error("Parameter 'simSid' is not valid.");
@@ -333191,7 +333244,7 @@ exports.UsageRecordPage = UsageRecordPage;
 
 
 /***/ }),
-/* 2204 */
+/* 2205 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -333216,9 +333269,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.UsageRecordPage = exports.UsageRecordInstance = void 0;
 exports.UsageRecordListInstance = UsageRecordListInstance;
 const util_1 = __webpack_require__(78);
-const Page_1 = __importDefault(__webpack_require__(1552));
-const deserialize = __webpack_require__(1544);
-const serialize = __webpack_require__(1547);
+const Page_1 = __importDefault(__webpack_require__(1553));
+const deserialize = __webpack_require__(1545);
+const serialize = __webpack_require__(1548);
 function UsageRecordListInstance(version) {
     const instance = {};
     instance._version = version;
@@ -333383,7 +333436,7 @@ exports.UsageRecordPage = UsageRecordPage;
 
 
 /***/ }),
-/* 2205 */
+/* 2206 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -333400,7 +333453,7 @@ exports.validateRequestWithBody = validateRequestWithBody;
 exports.validateIncomingRequest = validateIncomingRequest;
 exports.validateExpressRequest = validateExpressRequest;
 exports.webhook = webhook;
-const scmp = __webpack_require__(2206);
+const scmp = __webpack_require__(2207);
 const crypto_1 = __importDefault(__webpack_require__(778));
 const url_1 = __importDefault(__webpack_require__(963));
 const querystring_1 = __webpack_require__(951);
@@ -333712,14 +333765,14 @@ function webhook(opts, authToken) {
 
 
 /***/ }),
-/* 2206 */
+/* 2207 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 
 
 const crypto = __webpack_require__(778)
-const scmpCompare = __webpack_require__(2207)
+const scmpCompare = __webpack_require__(2208)
 
 /**
  * Does a constant-time Buffer comparison by not short-circuiting
@@ -333752,7 +333805,7 @@ module.exports = function scmp (a, b) {
 
 
 /***/ }),
-/* 2207 */
+/* 2208 */
 /***/ ((module) => {
 
 "use strict";
@@ -333769,7 +333822,7 @@ module.exports = function scmpCompare (a, b) {
 
 
 /***/ }),
-/* 2208 */
+/* 2209 */
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 "use strict";
@@ -333777,7 +333830,7 @@ module.exports = function scmpCompare (a, b) {
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-const jsonwebtoken_1 = __importDefault(__webpack_require__(1515));
+const jsonwebtoken_1 = __importDefault(__webpack_require__(1516));
 class AccessToken {
     /**
      * @param accountSid - The account's unique ID to which access is scoped
@@ -334032,7 +334085,7 @@ module.exports = AccessToken;
 
 
 /***/ }),
-/* 2209 */
+/* 2210 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -334042,7 +334095,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.OutgoingClientScope = exports.IncomingClientScope = exports.EventStreamScope = void 0;
-const jsonwebtoken_1 = __importDefault(__webpack_require__(1515));
+const jsonwebtoken_1 = __importDefault(__webpack_require__(1516));
 const querystring_1 = __importDefault(__webpack_require__(951));
 /**
  * @param filters
@@ -334161,7 +334214,7 @@ exports["default"] = ClientCapability;
 
 
 /***/ }),
-/* 2210 */
+/* 2211 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -334171,7 +334224,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Policy = void 0;
-const jsonwebtoken_1 = __importDefault(__webpack_require__(1515));
+const jsonwebtoken_1 = __importDefault(__webpack_require__(1516));
 /**
  * Create a new Policy
  */
@@ -334269,7 +334322,7 @@ exports["default"] = TaskRouterCapability;
 
 
 /***/ }),
-/* 2211 */
+/* 2212 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -334283,7 +334336,7 @@ exports.tasksUrl = tasksUrl;
 exports.activitiesUrl = activitiesUrl;
 exports.workersUrl = workersUrl;
 exports.reservationsUrl = reservationsUrl;
-const TaskRouterCapability_1 = __webpack_require__(2210);
+const TaskRouterCapability_1 = __webpack_require__(2211);
 const EVENT_URL_BASE = "https://event-bridge.twilio.com/v1/wschannels";
 const TASKROUTER_BASE_URL = "https://taskrouter.twilio.com";
 const TASKROUTER_VERSION = "v1";
@@ -334444,7 +334497,7 @@ function reservationsUrl(workspaceSid, workerSid, reservationSid) {
 
 
 /***/ }),
-/* 2212 */
+/* 2213 */
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 "use strict";
@@ -334458,7 +334511,7 @@ function reservationsUrl(workspaceSid, workerSid, reservationSid) {
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-const TwiML_1 = __importDefault(__webpack_require__(2213));
+const TwiML_1 = __importDefault(__webpack_require__(2214));
 class VoiceResponse extends TwiML_1.default {
     /**
      * <Response> TwiML for Voice
@@ -336141,7 +336194,7 @@ module.exports = VoiceResponse;
 
 
 /***/ }),
-/* 2213 */
+/* 2214 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -336150,7 +336203,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const xmlbuilder_1 = __importDefault(__webpack_require__(2214));
+const xmlbuilder_1 = __importDefault(__webpack_require__(2215));
 /* jshint ignore:start */
 /**
  * Parent TwiML object
@@ -336231,28 +336284,28 @@ class GenericNode extends TwiML {
 
 
 /***/ }),
-/* 2214 */
+/* 2215 */
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 // Generated by CoffeeScript 2.4.1
 (function() {
   var NodeType, WriterState, XMLDOMImplementation, XMLDocument, XMLDocumentCB, XMLStreamWriter, XMLStringWriter, assign, isFunction;
 
-  ({assign, isFunction} = __webpack_require__(2215));
+  ({assign, isFunction} = __webpack_require__(2216));
 
-  XMLDOMImplementation = __webpack_require__(2216);
+  XMLDOMImplementation = __webpack_require__(2217);
 
-  XMLDocument = __webpack_require__(2217);
+  XMLDocument = __webpack_require__(2218);
 
-  XMLDocumentCB = __webpack_require__(2245);
+  XMLDocumentCB = __webpack_require__(2246);
 
-  XMLStringWriter = __webpack_require__(2242);
+  XMLStringWriter = __webpack_require__(2243);
 
-  XMLStreamWriter = __webpack_require__(2246);
+  XMLStreamWriter = __webpack_require__(2247);
 
-  NodeType = __webpack_require__(2223);
+  NodeType = __webpack_require__(2224);
 
-  WriterState = __webpack_require__(2244);
+  WriterState = __webpack_require__(2245);
 
   // Creates a new document and returns the root node for
   // chain-building the document tree
@@ -336357,7 +336410,7 @@ class GenericNode extends TwiML {
 
 
 /***/ }),
-/* 2215 */
+/* 2216 */
 /***/ (function(module) {
 
 // Generated by CoffeeScript 2.4.1
@@ -336451,7 +336504,7 @@ class GenericNode extends TwiML {
 
 
 /***/ }),
-/* 2216 */
+/* 2217 */
 /***/ (function(module) {
 
 // Generated by CoffeeScript 2.4.1
@@ -336512,26 +336565,26 @@ class GenericNode extends TwiML {
 
 
 /***/ }),
-/* 2217 */
+/* 2218 */
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 // Generated by CoffeeScript 2.4.1
 (function() {
   var NodeType, XMLDOMConfiguration, XMLDOMImplementation, XMLDocument, XMLNode, XMLStringWriter, XMLStringifier, isPlainObject;
 
-  ({isPlainObject} = __webpack_require__(2215));
+  ({isPlainObject} = __webpack_require__(2216));
 
-  XMLDOMImplementation = __webpack_require__(2216);
+  XMLDOMImplementation = __webpack_require__(2217);
 
-  XMLDOMConfiguration = __webpack_require__(2218);
+  XMLDOMConfiguration = __webpack_require__(2219);
 
-  XMLNode = __webpack_require__(2221);
+  XMLNode = __webpack_require__(2222);
 
-  NodeType = __webpack_require__(2223);
+  NodeType = __webpack_require__(2224);
 
-  XMLStringifier = __webpack_require__(2241);
+  XMLStringifier = __webpack_require__(2242);
 
-  XMLStringWriter = __webpack_require__(2242);
+  XMLStringWriter = __webpack_require__(2243);
 
   // Represents an XML builder
   module.exports = XMLDocument = (function() {
@@ -336800,16 +336853,16 @@ class GenericNode extends TwiML {
 
 
 /***/ }),
-/* 2218 */
+/* 2219 */
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 // Generated by CoffeeScript 2.4.1
 (function() {
   var XMLDOMConfiguration, XMLDOMErrorHandler, XMLDOMStringList;
 
-  XMLDOMErrorHandler = __webpack_require__(2219);
+  XMLDOMErrorHandler = __webpack_require__(2220);
 
-  XMLDOMStringList = __webpack_require__(2220);
+  XMLDOMStringList = __webpack_require__(2221);
 
   // Implements the DOMConfiguration interface
   module.exports = XMLDOMConfiguration = (function() {
@@ -336886,7 +336939,7 @@ class GenericNode extends TwiML {
 
 
 /***/ }),
-/* 2219 */
+/* 2220 */
 /***/ (function(module) {
 
 // Generated by CoffeeScript 2.4.1
@@ -336912,7 +336965,7 @@ class GenericNode extends TwiML {
 
 
 /***/ }),
-/* 2220 */
+/* 2221 */
 /***/ (function(module) {
 
 // Generated by CoffeeScript 2.4.1
@@ -336962,7 +337015,7 @@ class GenericNode extends TwiML {
 
 
 /***/ }),
-/* 2221 */
+/* 2222 */
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 // Generated by CoffeeScript 2.4.1
@@ -336971,7 +337024,7 @@ class GenericNode extends TwiML {
     hasProp = {}.hasOwnProperty,
     splice = [].splice;
 
-  ({isObject, isFunction, isEmpty, getValue} = __webpack_require__(2215));
+  ({isObject, isFunction, isEmpty, getValue} = __webpack_require__(2216));
 
   XMLElement = null;
 
@@ -337017,19 +337070,19 @@ class GenericNode extends TwiML {
         // first execution, load dependencies that are otherwise
         // circular (so we can't load them at the top)
         if (!XMLElement) {
-          XMLElement = __webpack_require__(2222);
-          XMLCData = __webpack_require__(2226);
-          XMLComment = __webpack_require__(2228);
-          XMLDeclaration = __webpack_require__(2229);
-          XMLDocType = __webpack_require__(2230);
-          XMLRaw = __webpack_require__(2235);
-          XMLText = __webpack_require__(2236);
-          XMLProcessingInstruction = __webpack_require__(2237);
-          XMLDummy = __webpack_require__(2238);
-          NodeType = __webpack_require__(2223);
-          XMLNodeList = __webpack_require__(2239);
-          XMLNamedNodeMap = __webpack_require__(2225);
-          DocumentPosition = __webpack_require__(2240);
+          XMLElement = __webpack_require__(2223);
+          XMLCData = __webpack_require__(2227);
+          XMLComment = __webpack_require__(2229);
+          XMLDeclaration = __webpack_require__(2230);
+          XMLDocType = __webpack_require__(2231);
+          XMLRaw = __webpack_require__(2236);
+          XMLText = __webpack_require__(2237);
+          XMLProcessingInstruction = __webpack_require__(2238);
+          XMLDummy = __webpack_require__(2239);
+          NodeType = __webpack_require__(2224);
+          XMLNodeList = __webpack_require__(2240);
+          XMLNamedNodeMap = __webpack_require__(2226);
+          DocumentPosition = __webpack_require__(2241);
         }
       }
 
@@ -337967,7 +338020,7 @@ class GenericNode extends TwiML {
 
 
 /***/ }),
-/* 2222 */
+/* 2223 */
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 // Generated by CoffeeScript 2.4.1
@@ -337975,15 +338028,15 @@ class GenericNode extends TwiML {
   var NodeType, XMLAttribute, XMLElement, XMLNamedNodeMap, XMLNode, getValue, isFunction, isObject,
     hasProp = {}.hasOwnProperty;
 
-  ({isObject, isFunction, getValue} = __webpack_require__(2215));
+  ({isObject, isFunction, getValue} = __webpack_require__(2216));
 
-  XMLNode = __webpack_require__(2221);
+  XMLNode = __webpack_require__(2222);
 
-  NodeType = __webpack_require__(2223);
+  NodeType = __webpack_require__(2224);
 
-  XMLAttribute = __webpack_require__(2224);
+  XMLAttribute = __webpack_require__(2225);
 
-  XMLNamedNodeMap = __webpack_require__(2225);
+  XMLNamedNodeMap = __webpack_require__(2226);
 
   // Represents an element of the XML document
   module.exports = XMLElement = (function() {
@@ -338307,7 +338360,7 @@ class GenericNode extends TwiML {
 
 
 /***/ }),
-/* 2223 */
+/* 2224 */
 /***/ (function(module) {
 
 // Generated by CoffeeScript 2.4.1
@@ -338338,16 +338391,16 @@ class GenericNode extends TwiML {
 
 
 /***/ }),
-/* 2224 */
+/* 2225 */
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 // Generated by CoffeeScript 2.4.1
 (function() {
   var NodeType, XMLAttribute, XMLNode;
 
-  NodeType = __webpack_require__(2223);
+  NodeType = __webpack_require__(2224);
 
-  XMLNode = __webpack_require__(2221);
+  XMLNode = __webpack_require__(2222);
 
   // Represents an attribute
   module.exports = XMLAttribute = (function() {
@@ -338474,7 +338527,7 @@ class GenericNode extends TwiML {
 
 
 /***/ }),
-/* 2225 */
+/* 2226 */
 /***/ (function(module) {
 
 // Generated by CoffeeScript 2.4.1
@@ -338557,16 +338610,16 @@ class GenericNode extends TwiML {
 
 
 /***/ }),
-/* 2226 */
+/* 2227 */
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 // Generated by CoffeeScript 2.4.1
 (function() {
   var NodeType, XMLCData, XMLCharacterData;
 
-  NodeType = __webpack_require__(2223);
+  NodeType = __webpack_require__(2224);
 
-  XMLCharacterData = __webpack_require__(2227);
+  XMLCharacterData = __webpack_require__(2228);
 
   // Represents a  CDATA node
   module.exports = XMLCData = class XMLCData extends XMLCharacterData {
@@ -338604,14 +338657,14 @@ class GenericNode extends TwiML {
 
 
 /***/ }),
-/* 2227 */
+/* 2228 */
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 // Generated by CoffeeScript 2.4.1
 (function() {
   var XMLCharacterData, XMLNode;
 
-  XMLNode = __webpack_require__(2221);
+  XMLNode = __webpack_require__(2222);
 
   // Represents a character data node
   module.exports = XMLCharacterData = (function() {
@@ -338696,16 +338749,16 @@ class GenericNode extends TwiML {
 
 
 /***/ }),
-/* 2228 */
+/* 2229 */
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 // Generated by CoffeeScript 2.4.1
 (function() {
   var NodeType, XMLCharacterData, XMLComment;
 
-  NodeType = __webpack_require__(2223);
+  NodeType = __webpack_require__(2224);
 
-  XMLCharacterData = __webpack_require__(2227);
+  XMLCharacterData = __webpack_require__(2228);
 
   // Represents a comment node
   module.exports = XMLComment = class XMLComment extends XMLCharacterData {
@@ -338743,18 +338796,18 @@ class GenericNode extends TwiML {
 
 
 /***/ }),
-/* 2229 */
+/* 2230 */
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 // Generated by CoffeeScript 2.4.1
 (function() {
   var NodeType, XMLDeclaration, XMLNode, isObject;
 
-  ({isObject} = __webpack_require__(2215));
+  ({isObject} = __webpack_require__(2216));
 
-  XMLNode = __webpack_require__(2221);
+  XMLNode = __webpack_require__(2222);
 
-  NodeType = __webpack_require__(2223);
+  NodeType = __webpack_require__(2224);
 
   // Represents the XML declaration
   module.exports = XMLDeclaration = class XMLDeclaration extends XMLNode {
@@ -338800,28 +338853,28 @@ class GenericNode extends TwiML {
 
 
 /***/ }),
-/* 2230 */
+/* 2231 */
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 // Generated by CoffeeScript 2.4.1
 (function() {
   var NodeType, XMLDTDAttList, XMLDTDElement, XMLDTDEntity, XMLDTDNotation, XMLDocType, XMLNamedNodeMap, XMLNode, isObject;
 
-  ({isObject} = __webpack_require__(2215));
+  ({isObject} = __webpack_require__(2216));
 
-  XMLNode = __webpack_require__(2221);
+  XMLNode = __webpack_require__(2222);
 
-  NodeType = __webpack_require__(2223);
+  NodeType = __webpack_require__(2224);
 
-  XMLDTDAttList = __webpack_require__(2231);
+  XMLDTDAttList = __webpack_require__(2232);
 
-  XMLDTDEntity = __webpack_require__(2232);
+  XMLDTDEntity = __webpack_require__(2233);
 
-  XMLDTDElement = __webpack_require__(2233);
+  XMLDTDElement = __webpack_require__(2234);
 
-  XMLDTDNotation = __webpack_require__(2234);
+  XMLDTDNotation = __webpack_require__(2235);
 
-  XMLNamedNodeMap = __webpack_require__(2225);
+  XMLNamedNodeMap = __webpack_require__(2226);
 
   // Represents doctype declaration
   module.exports = XMLDocType = (function() {
@@ -339041,16 +339094,16 @@ class GenericNode extends TwiML {
 
 
 /***/ }),
-/* 2231 */
+/* 2232 */
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 // Generated by CoffeeScript 2.4.1
 (function() {
   var NodeType, XMLDTDAttList, XMLNode;
 
-  XMLNode = __webpack_require__(2221);
+  XMLNode = __webpack_require__(2222);
 
-  NodeType = __webpack_require__(2223);
+  NodeType = __webpack_require__(2224);
 
   // Represents an attribute list
   module.exports = XMLDTDAttList = class XMLDTDAttList extends XMLNode {
@@ -339113,18 +339166,18 @@ class GenericNode extends TwiML {
 
 
 /***/ }),
-/* 2232 */
+/* 2233 */
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 // Generated by CoffeeScript 2.4.1
 (function() {
   var NodeType, XMLDTDEntity, XMLNode, isObject;
 
-  ({isObject} = __webpack_require__(2215));
+  ({isObject} = __webpack_require__(2216));
 
-  XMLNode = __webpack_require__(2221);
+  XMLNode = __webpack_require__(2222);
 
-  NodeType = __webpack_require__(2223);
+  NodeType = __webpack_require__(2224);
 
   // Represents an entity declaration in the DTD
   module.exports = XMLDTDEntity = (function() {
@@ -339234,16 +339287,16 @@ class GenericNode extends TwiML {
 
 
 /***/ }),
-/* 2233 */
+/* 2234 */
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 // Generated by CoffeeScript 2.4.1
 (function() {
   var NodeType, XMLDTDElement, XMLNode;
 
-  XMLNode = __webpack_require__(2221);
+  XMLNode = __webpack_require__(2222);
 
-  NodeType = __webpack_require__(2223);
+  NodeType = __webpack_require__(2224);
 
   // Represents an attribute
   module.exports = XMLDTDElement = class XMLDTDElement extends XMLNode {
@@ -339284,16 +339337,16 @@ class GenericNode extends TwiML {
 
 
 /***/ }),
-/* 2234 */
+/* 2235 */
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 // Generated by CoffeeScript 2.4.1
 (function() {
   var NodeType, XMLDTDNotation, XMLNode;
 
-  XMLNode = __webpack_require__(2221);
+  XMLNode = __webpack_require__(2222);
 
-  NodeType = __webpack_require__(2223);
+  NodeType = __webpack_require__(2224);
 
   // Represents a NOTATION entry in the DTD
   module.exports = XMLDTDNotation = (function() {
@@ -339356,16 +339409,16 @@ class GenericNode extends TwiML {
 
 
 /***/ }),
-/* 2235 */
+/* 2236 */
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 // Generated by CoffeeScript 2.4.1
 (function() {
   var NodeType, XMLNode, XMLRaw;
 
-  NodeType = __webpack_require__(2223);
+  NodeType = __webpack_require__(2224);
 
-  XMLNode = __webpack_require__(2221);
+  XMLNode = __webpack_require__(2222);
 
   // Represents a  raw node
   module.exports = XMLRaw = class XMLRaw extends XMLNode {
@@ -339402,16 +339455,16 @@ class GenericNode extends TwiML {
 
 
 /***/ }),
-/* 2236 */
+/* 2237 */
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 // Generated by CoffeeScript 2.4.1
 (function() {
   var NodeType, XMLCharacterData, XMLText;
 
-  NodeType = __webpack_require__(2223);
+  NodeType = __webpack_require__(2224);
 
-  XMLCharacterData = __webpack_require__(2227);
+  XMLCharacterData = __webpack_require__(2228);
 
   // Represents a text node
   module.exports = XMLText = (function() {
@@ -339490,16 +339543,16 @@ class GenericNode extends TwiML {
 
 
 /***/ }),
-/* 2237 */
+/* 2238 */
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 // Generated by CoffeeScript 2.4.1
 (function() {
   var NodeType, XMLCharacterData, XMLProcessingInstruction;
 
-  NodeType = __webpack_require__(2223);
+  NodeType = __webpack_require__(2224);
 
-  XMLCharacterData = __webpack_require__(2227);
+  XMLCharacterData = __webpack_require__(2228);
 
   // Represents a processing instruction
   module.exports = XMLProcessingInstruction = class XMLProcessingInstruction extends XMLCharacterData {
@@ -339552,16 +339605,16 @@ class GenericNode extends TwiML {
 
 
 /***/ }),
-/* 2238 */
+/* 2239 */
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 // Generated by CoffeeScript 2.4.1
 (function() {
   var NodeType, XMLDummy, XMLNode;
 
-  XMLNode = __webpack_require__(2221);
+  XMLNode = __webpack_require__(2222);
 
-  NodeType = __webpack_require__(2223);
+  NodeType = __webpack_require__(2224);
 
   // Represents a  raw node
   module.exports = XMLDummy = class XMLDummy extends XMLNode {
@@ -339597,7 +339650,7 @@ class GenericNode extends TwiML {
 
 
 /***/ }),
-/* 2239 */
+/* 2240 */
 /***/ (function(module) {
 
 // Generated by CoffeeScript 2.4.1
@@ -339648,7 +339701,7 @@ class GenericNode extends TwiML {
 
 
 /***/ }),
-/* 2240 */
+/* 2241 */
 /***/ (function(module) {
 
 // Generated by CoffeeScript 2.4.1
@@ -339666,7 +339719,7 @@ class GenericNode extends TwiML {
 
 
 /***/ }),
-/* 2241 */
+/* 2242 */
 /***/ (function(module) {
 
 // Generated by CoffeeScript 2.4.1
@@ -339959,14 +340012,14 @@ class GenericNode extends TwiML {
 
 
 /***/ }),
-/* 2242 */
+/* 2243 */
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 // Generated by CoffeeScript 2.4.1
 (function() {
   var XMLStringWriter, XMLWriterBase;
 
-  XMLWriterBase = __webpack_require__(2243);
+  XMLWriterBase = __webpack_require__(2244);
 
   // Prints XML nodes as plain text
   module.exports = XMLStringWriter = class XMLStringWriter extends XMLWriterBase {
@@ -340005,7 +340058,7 @@ class GenericNode extends TwiML {
 
 
 /***/ }),
-/* 2243 */
+/* 2244 */
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 // Generated by CoffeeScript 2.4.1
@@ -340013,37 +340066,37 @@ class GenericNode extends TwiML {
   var NodeType, WriterState, XMLCData, XMLComment, XMLDTDAttList, XMLDTDElement, XMLDTDEntity, XMLDTDNotation, XMLDeclaration, XMLDocType, XMLDummy, XMLElement, XMLProcessingInstruction, XMLRaw, XMLText, XMLWriterBase, assign,
     hasProp = {}.hasOwnProperty;
 
-  ({assign} = __webpack_require__(2215));
+  ({assign} = __webpack_require__(2216));
 
-  NodeType = __webpack_require__(2223);
+  NodeType = __webpack_require__(2224);
 
-  XMLDeclaration = __webpack_require__(2229);
+  XMLDeclaration = __webpack_require__(2230);
 
-  XMLDocType = __webpack_require__(2230);
+  XMLDocType = __webpack_require__(2231);
 
-  XMLCData = __webpack_require__(2226);
+  XMLCData = __webpack_require__(2227);
 
-  XMLComment = __webpack_require__(2228);
+  XMLComment = __webpack_require__(2229);
 
-  XMLElement = __webpack_require__(2222);
+  XMLElement = __webpack_require__(2223);
 
-  XMLRaw = __webpack_require__(2235);
+  XMLRaw = __webpack_require__(2236);
 
-  XMLText = __webpack_require__(2236);
+  XMLText = __webpack_require__(2237);
 
-  XMLProcessingInstruction = __webpack_require__(2237);
+  XMLProcessingInstruction = __webpack_require__(2238);
 
-  XMLDummy = __webpack_require__(2238);
+  XMLDummy = __webpack_require__(2239);
 
-  XMLDTDAttList = __webpack_require__(2231);
+  XMLDTDAttList = __webpack_require__(2232);
 
-  XMLDTDElement = __webpack_require__(2233);
+  XMLDTDElement = __webpack_require__(2234);
 
-  XMLDTDEntity = __webpack_require__(2232);
+  XMLDTDEntity = __webpack_require__(2233);
 
-  XMLDTDNotation = __webpack_require__(2234);
+  XMLDTDNotation = __webpack_require__(2235);
 
-  WriterState = __webpack_require__(2244);
+  WriterState = __webpack_require__(2245);
 
   // Base class for XML writers
   module.exports = XMLWriterBase = class XMLWriterBase {
@@ -340496,7 +340549,7 @@ class GenericNode extends TwiML {
 
 
 /***/ }),
-/* 2244 */
+/* 2245 */
 /***/ (function(module) {
 
 // Generated by CoffeeScript 2.4.1
@@ -340512,7 +340565,7 @@ class GenericNode extends TwiML {
 
 
 /***/ }),
-/* 2245 */
+/* 2246 */
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 // Generated by CoffeeScript 2.4.1
@@ -340520,43 +340573,43 @@ class GenericNode extends TwiML {
   var NodeType, WriterState, XMLAttribute, XMLCData, XMLComment, XMLDTDAttList, XMLDTDElement, XMLDTDEntity, XMLDTDNotation, XMLDeclaration, XMLDocType, XMLDocument, XMLDocumentCB, XMLElement, XMLProcessingInstruction, XMLRaw, XMLStringWriter, XMLStringifier, XMLText, getValue, isFunction, isObject, isPlainObject,
     hasProp = {}.hasOwnProperty;
 
-  ({isObject, isFunction, isPlainObject, getValue} = __webpack_require__(2215));
+  ({isObject, isFunction, isPlainObject, getValue} = __webpack_require__(2216));
 
-  NodeType = __webpack_require__(2223);
+  NodeType = __webpack_require__(2224);
 
-  XMLDocument = __webpack_require__(2217);
+  XMLDocument = __webpack_require__(2218);
 
-  XMLElement = __webpack_require__(2222);
+  XMLElement = __webpack_require__(2223);
 
-  XMLCData = __webpack_require__(2226);
+  XMLCData = __webpack_require__(2227);
 
-  XMLComment = __webpack_require__(2228);
+  XMLComment = __webpack_require__(2229);
 
-  XMLRaw = __webpack_require__(2235);
+  XMLRaw = __webpack_require__(2236);
 
-  XMLText = __webpack_require__(2236);
+  XMLText = __webpack_require__(2237);
 
-  XMLProcessingInstruction = __webpack_require__(2237);
+  XMLProcessingInstruction = __webpack_require__(2238);
 
-  XMLDeclaration = __webpack_require__(2229);
+  XMLDeclaration = __webpack_require__(2230);
 
-  XMLDocType = __webpack_require__(2230);
+  XMLDocType = __webpack_require__(2231);
 
-  XMLDTDAttList = __webpack_require__(2231);
+  XMLDTDAttList = __webpack_require__(2232);
 
-  XMLDTDEntity = __webpack_require__(2232);
+  XMLDTDEntity = __webpack_require__(2233);
 
-  XMLDTDElement = __webpack_require__(2233);
+  XMLDTDElement = __webpack_require__(2234);
 
-  XMLDTDNotation = __webpack_require__(2234);
+  XMLDTDNotation = __webpack_require__(2235);
 
-  XMLAttribute = __webpack_require__(2224);
+  XMLAttribute = __webpack_require__(2225);
 
-  XMLStringifier = __webpack_require__(2241);
+  XMLStringifier = __webpack_require__(2242);
 
-  XMLStringWriter = __webpack_require__(2242);
+  XMLStringWriter = __webpack_require__(2243);
 
-  WriterState = __webpack_require__(2244);
+  WriterState = __webpack_require__(2245);
 
   // Represents an XML builder
   module.exports = XMLDocumentCB = class XMLDocumentCB {
@@ -341168,7 +341221,7 @@ class GenericNode extends TwiML {
 
 
 /***/ }),
-/* 2246 */
+/* 2247 */
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 // Generated by CoffeeScript 2.4.1
@@ -341176,11 +341229,11 @@ class GenericNode extends TwiML {
   var NodeType, WriterState, XMLStreamWriter, XMLWriterBase,
     hasProp = {}.hasOwnProperty;
 
-  NodeType = __webpack_require__(2223);
+  NodeType = __webpack_require__(2224);
 
-  XMLWriterBase = __webpack_require__(2243);
+  XMLWriterBase = __webpack_require__(2244);
 
-  WriterState = __webpack_require__(2244);
+  WriterState = __webpack_require__(2245);
 
   // Prints XML nodes to a stream
   module.exports = XMLStreamWriter = class XMLStreamWriter extends XMLWriterBase {
@@ -341383,7 +341436,7 @@ class GenericNode extends TwiML {
 
 
 /***/ }),
-/* 2247 */
+/* 2248 */
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 "use strict";
@@ -341397,7 +341450,7 @@ class GenericNode extends TwiML {
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-const TwiML_1 = __importDefault(__webpack_require__(2213));
+const TwiML_1 = __importDefault(__webpack_require__(2214));
 class MessagingResponse extends TwiML_1.default {
     /**
      * <Response> TwiML for Messages
@@ -341509,7 +341562,7 @@ module.exports = MessagingResponse;
 
 
 /***/ }),
-/* 2248 */
+/* 2249 */
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 "use strict";
@@ -341523,7 +341576,7 @@ module.exports = MessagingResponse;
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-const TwiML_1 = __importDefault(__webpack_require__(2213));
+const TwiML_1 = __importDefault(__webpack_require__(2214));
 class FaxResponse extends TwiML_1.default {
     /**
      * <Response> TwiML for Faxes
@@ -341582,7 +341635,7 @@ module.exports = FaxResponse;
 
 
 /***/ }),
-/* 2249 */
+/* 2250 */
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 "use strict";
@@ -341590,9 +341643,9 @@ module.exports = FaxResponse;
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-const CredentialProvider_1 = __importDefault(__webpack_require__(2250));
-const ApiTokenManager_1 = __importDefault(__webpack_require__(2251));
-const TokenAuthStrategy_1 = __importDefault(__webpack_require__(2255));
+const CredentialProvider_1 = __importDefault(__webpack_require__(2251));
+const ApiTokenManager_1 = __importDefault(__webpack_require__(2252));
+const TokenAuthStrategy_1 = __importDefault(__webpack_require__(2256));
 class ClientCredentialProvider extends CredentialProvider_1.default {
     constructor() {
         super("client-credentials");
@@ -341639,7 +341692,7 @@ module.exports = ClientCredentialProvider;
 
 
 /***/ }),
-/* 2250 */
+/* 2251 */
 /***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
@@ -341657,7 +341710,7 @@ exports["default"] = CredentialProvider;
 
 
 /***/ }),
-/* 2251 */
+/* 2252 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -341666,11 +341719,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const token_1 = __webpack_require__(1970);
-const OauthBase_1 = __importDefault(__webpack_require__(1964));
-const V2_1 = __importDefault(__webpack_require__(1968));
-const NoAuthCredentialProvider_1 = __importDefault(__webpack_require__(2252));
-const BaseTwilio_1 = __webpack_require__(1470);
+const token_1 = __webpack_require__(1971);
+const OauthBase_1 = __importDefault(__webpack_require__(1965));
+const V2_1 = __importDefault(__webpack_require__(1969));
+const NoAuthCredentialProvider_1 = __importDefault(__webpack_require__(2253));
+const BaseTwilio_1 = __webpack_require__(1471);
 class ApiTokenManager {
     constructor(params) {
         this.params = params;
@@ -341697,7 +341750,7 @@ exports["default"] = ApiTokenManager;
 
 
 /***/ }),
-/* 2252 */
+/* 2253 */
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 "use strict";
@@ -341705,8 +341758,8 @@ exports["default"] = ApiTokenManager;
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-const CredentialProvider_1 = __importDefault(__webpack_require__(2250));
-const NoAuthStrategy_1 = __importDefault(__webpack_require__(2253));
+const CredentialProvider_1 = __importDefault(__webpack_require__(2251));
+const NoAuthStrategy_1 = __importDefault(__webpack_require__(2254));
 var NoAuthCredentialProvider;
 (function (NoAuthCredentialProvider_1) {
     class NoAuthCredentialProvider extends CredentialProvider_1.default {
@@ -341723,7 +341776,7 @@ module.exports = NoAuthCredentialProvider;
 
 
 /***/ }),
-/* 2253 */
+/* 2254 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -341732,7 +341785,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const AuthStrategy_1 = __importDefault(__webpack_require__(2254));
+const AuthStrategy_1 = __importDefault(__webpack_require__(2255));
 class NoAuthStrategy extends AuthStrategy_1.default {
     constructor() {
         super("noauth");
@@ -341748,7 +341801,7 @@ exports["default"] = NoAuthStrategy;
 
 
 /***/ }),
-/* 2254 */
+/* 2255 */
 /***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
@@ -341766,7 +341819,7 @@ exports["default"] = AuthStrategy;
 
 
 /***/ }),
-/* 2255 */
+/* 2256 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -341775,8 +341828,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const AuthStrategy_1 = __importDefault(__webpack_require__(2254));
-const jsonwebtoken_1 = __importDefault(__webpack_require__(1515));
+const AuthStrategy_1 = __importDefault(__webpack_require__(2255));
+const jsonwebtoken_1 = __importDefault(__webpack_require__(1516));
 class TokenAuthStrategy extends AuthStrategy_1.default {
     constructor(tokenManager) {
         super("token");
@@ -341833,7 +341886,7 @@ exports["default"] = TokenAuthStrategy;
 
 
 /***/ }),
-/* 2256 */
+/* 2257 */
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 "use strict";
@@ -341841,9 +341894,9 @@ exports["default"] = TokenAuthStrategy;
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-const CredentialProvider_1 = __importDefault(__webpack_require__(2250));
-const OrgsTokenManager_1 = __importDefault(__webpack_require__(2257));
-const TokenAuthStrategy_1 = __importDefault(__webpack_require__(2255));
+const CredentialProvider_1 = __importDefault(__webpack_require__(2251));
+const OrgsTokenManager_1 = __importDefault(__webpack_require__(2258));
+const TokenAuthStrategy_1 = __importDefault(__webpack_require__(2256));
 class OrgsCredentialProvider extends CredentialProvider_1.default {
     constructor() {
         super("client-credentials");
@@ -341890,7 +341943,7 @@ module.exports = OrgsCredentialProvider;
 
 
 /***/ }),
-/* 2257 */
+/* 2258 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -341899,11 +341952,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const token_1 = __webpack_require__(1970);
-const OauthBase_1 = __importDefault(__webpack_require__(1964));
-const V2_1 = __importDefault(__webpack_require__(1968));
-const NoAuthCredentialProvider_1 = __importDefault(__webpack_require__(2252));
-const BaseTwilio_1 = __webpack_require__(1470);
+const token_1 = __webpack_require__(1971);
+const OauthBase_1 = __importDefault(__webpack_require__(1965));
+const V2_1 = __importDefault(__webpack_require__(1969));
+const NoAuthCredentialProvider_1 = __importDefault(__webpack_require__(2253));
+const BaseTwilio_1 = __webpack_require__(1471);
 class OrgsTokenManager {
     constructor(params) {
         this.params = params;
@@ -341930,23 +341983,23 @@ exports["default"] = OrgsTokenManager;
 
 
 /***/ }),
-/* 2258 */
+/* 2259 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 
 
-const Mailer = __webpack_require__(2259);
-const shared = __webpack_require__(2260);
-const SMTPPool = __webpack_require__(2283);
-const SMTPTransport = __webpack_require__(2290);
-const SendmailTransport = __webpack_require__(2291);
-const StreamTransport = __webpack_require__(2293);
-const JSONTransport = __webpack_require__(2294);
-const SESTransport = __webpack_require__(2295);
-const errors = __webpack_require__(2264);
-const nmfetch = __webpack_require__(2261);
-const packageData = __webpack_require__(2263);
+const Mailer = __webpack_require__(2260);
+const shared = __webpack_require__(2261);
+const SMTPPool = __webpack_require__(2284);
+const SMTPTransport = __webpack_require__(2291);
+const SendmailTransport = __webpack_require__(2292);
+const StreamTransport = __webpack_require__(2294);
+const JSONTransport = __webpack_require__(2295);
+const SESTransport = __webpack_require__(2296);
+const errors = __webpack_require__(2265);
+const nmfetch = __webpack_require__(2262);
+const packageData = __webpack_require__(2264);
 
 const ETHEREAL_API = (process.env.ETHEREAL_API || 'https://api.nodemailer.com').replace(/\/+$/, '');
 const ETHEREAL_WEB = (process.env.ETHEREAL_WEB || 'https://ethereal.email').replace(/\/+$/, '');
@@ -342088,25 +342141,25 @@ module.exports.getTestMessageUrl = function (info) {
 
 
 /***/ }),
-/* 2259 */
+/* 2260 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 
 
 const EventEmitter = __webpack_require__(867);
-const shared = __webpack_require__(2260);
-const mimeTypes = __webpack_require__(2266);
-const MailComposer = __webpack_require__(2267);
-const DKIM = __webpack_require__(2277);
-const httpProxyClient = __webpack_require__(2281);
-const errors = __webpack_require__(2264);
+const shared = __webpack_require__(2261);
+const mimeTypes = __webpack_require__(2267);
+const MailComposer = __webpack_require__(2268);
+const DKIM = __webpack_require__(2278);
+const httpProxyClient = __webpack_require__(2282);
+const errors = __webpack_require__(2265);
 const util = __webpack_require__(78);
 const urllib = __webpack_require__(963);
-const packageData = __webpack_require__(2263);
-const MailMessage = __webpack_require__(2282);
+const packageData = __webpack_require__(2264);
+const MailMessage = __webpack_require__(2283);
 const net = __webpack_require__(864);
-const dns = __webpack_require__(2265);
+const dns = __webpack_require__(2266);
 const crypto = __webpack_require__(778);
 
 /**
@@ -342541,7 +342594,7 @@ module.exports = Mail;
 
 
 /***/ }),
-/* 2260 */
+/* 2261 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
@@ -342552,8 +342605,8 @@ module.exports = Mail;
 const urllib = __webpack_require__(963);
 const util = __webpack_require__(78);
 const fs = __webpack_require__(863);
-const nmfetch = __webpack_require__(2261);
-const dns = __webpack_require__(2265);
+const nmfetch = __webpack_require__(2262);
+const dns = __webpack_require__(2266);
 const net = __webpack_require__(864);
 const os = __webpack_require__(797);
 
@@ -343246,7 +343299,7 @@ function createDefaultLogger(levels) {
 
 
 /***/ }),
-/* 2261 */
+/* 2262 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
@@ -343257,10 +343310,10 @@ const https = __webpack_require__(1000);
 const urllib = __webpack_require__(963);
 const zlib = __webpack_require__(868);
 const { PassThrough } = __webpack_require__(77);
-const Cookies = __webpack_require__(2262);
-const packageData = __webpack_require__(2263);
+const Cookies = __webpack_require__(2263);
+const packageData = __webpack_require__(2264);
 const net = __webpack_require__(864);
-const errors = __webpack_require__(2264);
+const errors = __webpack_require__(2265);
 
 const MAX_REDIRECTS = 5;
 
@@ -343531,7 +343584,7 @@ function nmfetch(url, options) {
 
 
 /***/ }),
-/* 2262 */
+/* 2263 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
@@ -343814,14 +343867,14 @@ module.exports = Cookies;
 
 
 /***/ }),
-/* 2263 */
+/* 2264 */
 /***/ ((module) => {
 
 "use strict";
 module.exports = /*#__PURE__*/JSON.parse('{"name":"nodemailer","version":"8.0.5","description":"Easy as cake e-mail sending from your Node.js applications","main":"lib/nodemailer.js","scripts":{"test":"node --test --test-concurrency=1 test/**/*.test.js test/**/*-test.js","test:coverage":"c8 node --test --test-concurrency=1 test/**/*.test.js test/**/*-test.js","format":"prettier --write \\"**/*.{js,json,md}\\"","format:check":"prettier --check \\"**/*.{js,json,md}\\"","lint":"eslint .","lint:fix":"eslint . --fix","update":"rm -rf node_modules/ package-lock.json && ncu -u && npm install","test:syntax":"docker run --rm -v \\"$PWD:/app:ro\\" -w /app node:6-alpine node test/syntax-compat.js"},"repository":{"type":"git","url":"https://github.com/nodemailer/nodemailer.git"},"keywords":["Nodemailer"],"author":"Andris Reinman","license":"MIT-0","bugs":{"url":"https://github.com/nodemailer/nodemailer/issues"},"homepage":"https://nodemailer.com/","devDependencies":{"@aws-sdk/client-sesv2":"3.1025.0","bunyan":"1.8.15","c8":"11.0.0","eslint":"10.2.0","eslint-config-prettier":"10.1.8","globals":"17.4.0","libbase64":"1.3.0","libmime":"5.3.7","libqp":"2.1.1","nodemailer-ntlm-auth":"1.0.4","prettier":"3.8.1","proxy":"1.0.2","proxy-test-server":"1.0.0","smtp-server":"3.18.3"},"engines":{"node":">=6.0.0"}}');
 
 /***/ }),
-/* 2264 */
+/* 2265 */
 /***/ ((module) => {
 
 "use strict";
@@ -343886,14 +343939,14 @@ for (const code of Object.keys(ERROR_CODES)) {
 
 
 /***/ }),
-/* 2265 */
+/* 2266 */
 /***/ ((module) => {
 
 "use strict";
 module.exports = require("dns");
 
 /***/ }),
-/* 2266 */
+/* 2267 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
@@ -346009,7 +346062,7 @@ module.exports = {
 
 
 /***/ }),
-/* 2267 */
+/* 2268 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
@@ -346017,9 +346070,9 @@ module.exports = {
 
 
 
-const MimeNode = __webpack_require__(2268);
-const mimeFuncs = __webpack_require__(2270);
-const { parseDataURI } = __webpack_require__(2260);
+const MimeNode = __webpack_require__(2269);
+const mimeFuncs = __webpack_require__(2271);
+const { parseDataURI } = __webpack_require__(2261);
 
 /**
  * Creates the object for composing a MimeNode instance out from the mail options
@@ -346615,7 +346668,7 @@ module.exports = MailComposer;
 
 
 /***/ }),
-/* 2268 */
+/* 2269 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
@@ -346625,20 +346678,20 @@ module.exports = MailComposer;
 
 const crypto = __webpack_require__(778);
 const fs = __webpack_require__(863);
-const punycode = __webpack_require__(2269);
+const punycode = __webpack_require__(2270);
 const { PassThrough } = __webpack_require__(77);
-const shared = __webpack_require__(2260);
+const shared = __webpack_require__(2261);
 
-const mimeFuncs = __webpack_require__(2270);
-const qp = __webpack_require__(2272);
-const base64 = __webpack_require__(2271);
-const addressparser = __webpack_require__(2273);
-const nmfetch = __webpack_require__(2261);
-const errors = __webpack_require__(2264);
-const LastNewline = __webpack_require__(2274);
+const mimeFuncs = __webpack_require__(2271);
+const qp = __webpack_require__(2273);
+const base64 = __webpack_require__(2272);
+const addressparser = __webpack_require__(2274);
+const nmfetch = __webpack_require__(2262);
+const errors = __webpack_require__(2265);
+const LastNewline = __webpack_require__(2275);
 
-const LeWindows = __webpack_require__(2275);
-const LeUnix = __webpack_require__(2276);
+const LeWindows = __webpack_require__(2276);
+const LeUnix = __webpack_require__(2277);
 
 const FORMATTED_HEADERS = ['From', 'Sender', 'To', 'Cc', 'Bcc', 'Reply-To', 'Date', 'References'];
 
@@ -347956,7 +348009,7 @@ module.exports = MimeNode;
 
 
 /***/ }),
-/* 2269 */
+/* 2270 */
 /***/ ((module) => {
 
 "use strict";
@@ -348423,7 +348476,7 @@ module.exports = punycode;
 
 
 /***/ }),
-/* 2270 */
+/* 2271 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
@@ -348431,9 +348484,9 @@ module.exports = punycode;
 
 
 
-const base64 = __webpack_require__(2271);
-const qp = __webpack_require__(2272);
-const mimeTypes = __webpack_require__(2266);
+const base64 = __webpack_require__(2272);
+const qp = __webpack_require__(2273);
+const mimeTypes = __webpack_require__(2267);
 
 module.exports = {
     /**
@@ -349040,7 +349093,7 @@ module.exports = {
 
 
 /***/ }),
-/* 2271 */
+/* 2272 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
@@ -349187,7 +349240,7 @@ module.exports = {
 
 
 /***/ }),
-/* 2272 */
+/* 2273 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
@@ -349424,7 +349477,7 @@ module.exports = {
 
 
 /***/ }),
-/* 2273 */
+/* 2274 */
 /***/ ((module) => {
 
 "use strict";
@@ -349813,7 +349866,7 @@ module.exports = addressparser;
 
 
 /***/ }),
-/* 2274 */
+/* 2275 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
@@ -349853,7 +349906,7 @@ module.exports = LastNewline;
 
 
 /***/ }),
-/* 2275 */
+/* 2276 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
@@ -349909,7 +349962,7 @@ module.exports = LeWindows;
 
 
 /***/ }),
-/* 2276 */
+/* 2277 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
@@ -349956,7 +350009,7 @@ module.exports = LeUnix;
 
 
 /***/ }),
-/* 2277 */
+/* 2278 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
@@ -349965,9 +350018,9 @@ module.exports = LeUnix;
 // FIXME:
 // replace this Transform mess with a method that pipes input argument to output argument
 
-const MessageParser = __webpack_require__(2278);
-const RelaxedBody = __webpack_require__(2279);
-const sign = __webpack_require__(2280);
+const MessageParser = __webpack_require__(2279);
+const RelaxedBody = __webpack_require__(2280);
+const sign = __webpack_require__(2281);
 const { PassThrough } = __webpack_require__(77);
 const fs = __webpack_require__(863);
 const path = __webpack_require__(846);
@@ -350208,7 +350261,7 @@ module.exports = DKIM;
 
 
 /***/ }),
-/* 2278 */
+/* 2279 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
@@ -350369,7 +350422,7 @@ module.exports = MessageParser;
 
 
 /***/ }),
-/* 2279 */
+/* 2280 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
@@ -350530,14 +350583,14 @@ module.exports = RelaxedBody;
 
 
 /***/ }),
-/* 2280 */
+/* 2281 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 
 
-const punycode = __webpack_require__(2269);
-const mimeFuncs = __webpack_require__(2270);
+const punycode = __webpack_require__(2270);
+const mimeFuncs = __webpack_require__(2271);
 const crypto = __webpack_require__(778);
 
 /**
@@ -350653,7 +350706,7 @@ function relaxedHeaderLine(line) {
 
 
 /***/ }),
-/* 2281 */
+/* 2282 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
@@ -350664,9 +350717,9 @@ function relaxedHeaderLine(line) {
  */
 
 const net = __webpack_require__(864);
-const tls = __webpack_require__(1495);
+const tls = __webpack_require__(1496);
 const urllib = __webpack_require__(963);
-const errors = __webpack_require__(2264);
+const errors = __webpack_require__(2265);
 
 /**
  * Establishes proxied connection to destinationPort
@@ -350804,15 +350857,15 @@ module.exports = httpProxyClient;
 
 
 /***/ }),
-/* 2282 */
+/* 2283 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 
 
-const shared = __webpack_require__(2260);
-const MimeNode = __webpack_require__(2268);
-const mimeFuncs = __webpack_require__(2270);
+const shared = __webpack_require__(2261);
+const MimeNode = __webpack_require__(2269);
+const mimeFuncs = __webpack_require__(2271);
 
 class MailMessage {
     constructor(mailer, data) {
@@ -351123,19 +351176,19 @@ module.exports = MailMessage;
 
 
 /***/ }),
-/* 2283 */
+/* 2284 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 
 
 const EventEmitter = __webpack_require__(867);
-const PoolResource = __webpack_require__(2284);
-const SMTPConnection = __webpack_require__(2285);
-const wellKnown = __webpack_require__(2288);
-const shared = __webpack_require__(2260);
-const errors = __webpack_require__(2264);
-const packageData = __webpack_require__(2263);
+const PoolResource = __webpack_require__(2285);
+const SMTPConnection = __webpack_require__(2286);
+const wellKnown = __webpack_require__(2289);
+const shared = __webpack_require__(2261);
+const errors = __webpack_require__(2265);
+const packageData = __webpack_require__(2264);
 
 /**
  * Creates a SMTP pool transport object for Nodemailer
@@ -351771,16 +351824,16 @@ module.exports = SMTPPool;
 
 
 /***/ }),
-/* 2284 */
+/* 2285 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 
 
-const SMTPConnection = __webpack_require__(2285);
-const assign = (__webpack_require__(2260).assign);
-const XOAuth2 = __webpack_require__(2287);
-const errors = __webpack_require__(2264);
+const SMTPConnection = __webpack_require__(2286);
+const assign = (__webpack_require__(2261).assign);
+const XOAuth2 = __webpack_require__(2288);
+const errors = __webpack_require__(2265);
 const EventEmitter = __webpack_require__(867);
 
 /**
@@ -352034,21 +352087,21 @@ module.exports = PoolResource;
 
 
 /***/ }),
-/* 2285 */
+/* 2286 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 
 
-const packageInfo = __webpack_require__(2263);
+const packageInfo = __webpack_require__(2264);
 const { EventEmitter } = __webpack_require__(867);
 const net = __webpack_require__(864);
-const tls = __webpack_require__(1495);
+const tls = __webpack_require__(1496);
 const os = __webpack_require__(797);
 const crypto = __webpack_require__(778);
-const DataStream = __webpack_require__(2286);
+const DataStream = __webpack_require__(2287);
 const { PassThrough } = __webpack_require__(77);
-const shared = __webpack_require__(2260);
+const shared = __webpack_require__(2261);
 
 // default timeout values in ms
 const CONNECTION_TIMEOUT = 2 * 60 * 1000; // how much to wait for the connection to be established
@@ -353969,7 +354022,7 @@ module.exports = SMTPConnection;
 
 
 /***/ }),
-/* 2286 */
+/* 2287 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
@@ -354081,17 +354134,17 @@ module.exports = DataStream;
 
 
 /***/ }),
-/* 2287 */
+/* 2288 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 
 
 const { Stream } = __webpack_require__(77);
-const nmfetch = __webpack_require__(2261);
+const nmfetch = __webpack_require__(2262);
 const crypto = __webpack_require__(778);
-const shared = __webpack_require__(2260);
-const errors = __webpack_require__(2264);
+const shared = __webpack_require__(2261);
+const errors = __webpack_require__(2265);
 
 /**
  * XOAUTH2 access_token generator for Gmail.
@@ -354524,13 +354577,13 @@ module.exports = XOAuth2;
 
 
 /***/ }),
-/* 2288 */
+/* 2289 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 
 
-const services = __webpack_require__(2289);
+const services = __webpack_require__(2290);
 const normalized = {};
 
 Object.keys(services).forEach(key => {
@@ -354578,26 +354631,26 @@ module.exports = function (key) {
 
 
 /***/ }),
-/* 2289 */
+/* 2290 */
 /***/ ((module) => {
 
 "use strict";
 module.exports = /*#__PURE__*/JSON.parse('{"126":{"description":"126 Mail (NetEase)","host":"smtp.126.com","port":465,"secure":true},"163":{"description":"163 Mail (NetEase)","host":"smtp.163.com","port":465,"secure":true},"1und1":{"description":"1&1 Mail (German hosting provider)","host":"smtp.1und1.de","port":465,"secure":true,"authMethod":"LOGIN"},"Aliyun":{"description":"Alibaba Cloud Mail","domains":["aliyun.com"],"host":"smtp.aliyun.com","port":465,"secure":true},"AliyunQiye":{"description":"Alibaba Cloud Enterprise Mail","host":"smtp.qiye.aliyun.com","port":465,"secure":true},"AOL":{"description":"AOL Mail","domains":["aol.com"],"host":"smtp.aol.com","port":587},"Aruba":{"description":"Aruba PEC (Italian email provider)","domains":["aruba.it","pec.aruba.it"],"aliases":["Aruba PEC"],"host":"smtps.aruba.it","port":465,"secure":true,"authMethod":"LOGIN"},"Bluewin":{"description":"Bluewin (Swiss email provider)","host":"smtpauths.bluewin.ch","domains":["bluewin.ch"],"port":465},"BOL":{"description":"BOL Mail (Brazilian provider)","domains":["bol.com.br"],"host":"smtp.bol.com.br","port":587,"requireTLS":true},"DebugMail":{"description":"DebugMail (email testing service)","host":"debugmail.io","port":25},"Disroot":{"description":"Disroot (privacy-focused provider)","domains":["disroot.org"],"host":"disroot.org","port":587,"secure":false,"authMethod":"LOGIN"},"DynectEmail":{"description":"Dyn Email Delivery","aliases":["Dynect"],"host":"smtp.dynect.net","port":25},"ElasticEmail":{"description":"Elastic Email","aliases":["Elastic Email"],"host":"smtp.elasticemail.com","port":465,"secure":true},"Ethereal":{"description":"Ethereal Email (email testing service)","aliases":["ethereal.email"],"host":"smtp.ethereal.email","port":587},"FastMail":{"description":"FastMail","domains":["fastmail.fm"],"host":"smtp.fastmail.com","port":465,"secure":true},"Feishu Mail":{"description":"Feishu Mail (Lark)","aliases":["Feishu","FeishuMail"],"domains":["www.feishu.cn"],"host":"smtp.feishu.cn","port":465,"secure":true},"Forward Email":{"description":"Forward Email (email forwarding service)","aliases":["FE","ForwardEmail"],"domains":["forwardemail.net"],"host":"smtp.forwardemail.net","port":465,"secure":true},"GandiMail":{"description":"Gandi Mail","aliases":["Gandi","Gandi Mail"],"host":"mail.gandi.net","port":587},"Gmail":{"description":"Gmail","aliases":["Google Mail"],"domains":["gmail.com","googlemail.com"],"host":"smtp.gmail.com","port":465,"secure":true},"GmailWorkspace":{"description":"Gmail Workspace","aliases":["Google Workspace Mail"],"host":"smtp-relay.gmail.com","port":465,"secure":true},"GMX":{"description":"GMX Mail","domains":["gmx.com","gmx.net","gmx.de"],"host":"mail.gmx.com","port":587},"Godaddy":{"description":"GoDaddy Email (US)","host":"smtpout.secureserver.net","port":25},"GodaddyAsia":{"description":"GoDaddy Email (Asia)","host":"smtp.asia.secureserver.net","port":25},"GodaddyEurope":{"description":"GoDaddy Email (Europe)","host":"smtp.europe.secureserver.net","port":25},"hot.ee":{"description":"Hot.ee (Estonian email provider)","host":"mail.hot.ee"},"Hotmail":{"description":"Outlook.com / Hotmail","aliases":["Outlook","Outlook.com","Hotmail.com"],"domains":["hotmail.com","outlook.com"],"host":"smtp-mail.outlook.com","port":587},"iCloud":{"description":"iCloud Mail","aliases":["Me","Mac"],"domains":["me.com","mac.com"],"host":"smtp.mail.me.com","port":587},"Infomaniak":{"description":"Infomaniak Mail (Swiss hosting provider)","host":"mail.infomaniak.com","domains":["ik.me","ikmail.com","etik.com"],"port":587},"KolabNow":{"description":"KolabNow (secure email service)","domains":["kolabnow.com"],"aliases":["Kolab"],"host":"smtp.kolabnow.com","port":465,"secure":true,"authMethod":"LOGIN"},"Loopia":{"description":"Loopia (Swedish hosting provider)","host":"mailcluster.loopia.se","port":465},"Loops":{"description":"Loops","host":"smtp.loops.so","port":587},"mail.ee":{"description":"Mail.ee (Estonian email provider)","host":"smtp.mail.ee"},"Mail.ru":{"description":"Mail.ru","host":"smtp.mail.ru","port":465,"secure":true},"Mailcatch.app":{"description":"Mailcatch (email testing service)","host":"sandbox-smtp.mailcatch.app","port":2525},"Maildev":{"description":"MailDev (local email testing)","port":1025,"ignoreTLS":true},"MailerSend":{"description":"MailerSend","host":"smtp.mailersend.net","port":587},"Mailgun":{"description":"Mailgun","host":"smtp.mailgun.org","port":465,"secure":true},"Mailjet":{"description":"Mailjet","host":"in.mailjet.com","port":587},"Mailosaur":{"description":"Mailosaur (email testing service)","host":"mailosaur.io","port":25},"Mailtrap":{"description":"Mailtrap","host":"live.smtp.mailtrap.io","port":587},"Mandrill":{"description":"Mandrill (by Mailchimp)","host":"smtp.mandrillapp.com","port":587},"Naver":{"description":"Naver Mail (Korean email provider)","host":"smtp.naver.com","port":587},"OhMySMTP":{"description":"OhMySMTP (email delivery service)","host":"smtp.ohmysmtp.com","port":587,"secure":false},"One":{"description":"One.com Email","host":"send.one.com","port":465,"secure":true},"OpenMailBox":{"description":"OpenMailBox","aliases":["OMB","openmailbox.org"],"host":"smtp.openmailbox.org","port":465,"secure":true},"Outlook365":{"description":"Microsoft 365 / Office 365","host":"smtp.office365.com","port":587,"secure":false},"Postmark":{"description":"Postmark","aliases":["PostmarkApp"],"host":"smtp.postmarkapp.com","port":2525},"Proton":{"description":"Proton Mail","aliases":["ProtonMail","Proton.me","Protonmail.com","Protonmail.ch"],"domains":["proton.me","protonmail.com","pm.me","protonmail.ch"],"host":"smtp.protonmail.ch","port":587,"requireTLS":true},"qiye.aliyun":{"description":"Alibaba Mail Enterprise Edition","host":"smtp.mxhichina.com","port":"465","secure":true},"QQ":{"description":"QQ Mail","domains":["qq.com"],"host":"smtp.qq.com","port":465,"secure":true},"QQex":{"description":"QQ Enterprise Mail","aliases":["QQ Enterprise"],"domains":["exmail.qq.com"],"host":"smtp.exmail.qq.com","port":465,"secure":true},"Resend":{"description":"Resend","host":"smtp.resend.com","port":465,"secure":true},"Runbox":{"description":"Runbox (Norwegian email provider)","domains":["runbox.com"],"host":"smtp.runbox.com","port":465,"secure":true},"SendCloud":{"description":"SendCloud (Chinese email delivery)","host":"smtp.sendcloud.net","port":2525},"SendGrid":{"description":"SendGrid","host":"smtp.sendgrid.net","port":587},"SendinBlue":{"description":"Brevo (formerly Sendinblue)","aliases":["Brevo"],"host":"smtp-relay.brevo.com","port":587},"SendPulse":{"description":"SendPulse","host":"smtp-pulse.com","port":465,"secure":true},"SES":{"description":"AWS SES US East (N. Virginia)","host":"email-smtp.us-east-1.amazonaws.com","port":465,"secure":true},"SES-AP-NORTHEAST-1":{"description":"AWS SES Asia Pacific (Tokyo)","host":"email-smtp.ap-northeast-1.amazonaws.com","port":465,"secure":true},"SES-AP-NORTHEAST-2":{"description":"AWS SES Asia Pacific (Seoul)","host":"email-smtp.ap-northeast-2.amazonaws.com","port":465,"secure":true},"SES-AP-NORTHEAST-3":{"description":"AWS SES Asia Pacific (Osaka)","host":"email-smtp.ap-northeast-3.amazonaws.com","port":465,"secure":true},"SES-AP-SOUTH-1":{"description":"AWS SES Asia Pacific (Mumbai)","host":"email-smtp.ap-south-1.amazonaws.com","port":465,"secure":true},"SES-AP-SOUTHEAST-1":{"description":"AWS SES Asia Pacific (Singapore)","host":"email-smtp.ap-southeast-1.amazonaws.com","port":465,"secure":true},"SES-AP-SOUTHEAST-2":{"description":"AWS SES Asia Pacific (Sydney)","host":"email-smtp.ap-southeast-2.amazonaws.com","port":465,"secure":true},"SES-CA-CENTRAL-1":{"description":"AWS SES Canada (Central)","host":"email-smtp.ca-central-1.amazonaws.com","port":465,"secure":true},"SES-EU-CENTRAL-1":{"description":"AWS SES Europe (Frankfurt)","host":"email-smtp.eu-central-1.amazonaws.com","port":465,"secure":true},"SES-EU-NORTH-1":{"description":"AWS SES Europe (Stockholm)","host":"email-smtp.eu-north-1.amazonaws.com","port":465,"secure":true},"SES-EU-WEST-1":{"description":"AWS SES Europe (Ireland)","host":"email-smtp.eu-west-1.amazonaws.com","port":465,"secure":true},"SES-EU-WEST-2":{"description":"AWS SES Europe (London)","host":"email-smtp.eu-west-2.amazonaws.com","port":465,"secure":true},"SES-EU-WEST-3":{"description":"AWS SES Europe (Paris)","host":"email-smtp.eu-west-3.amazonaws.com","port":465,"secure":true},"SES-SA-EAST-1":{"description":"AWS SES South America (São Paulo)","host":"email-smtp.sa-east-1.amazonaws.com","port":465,"secure":true},"SES-US-EAST-1":{"description":"AWS SES US East (N. Virginia)","host":"email-smtp.us-east-1.amazonaws.com","port":465,"secure":true},"SES-US-EAST-2":{"description":"AWS SES US East (Ohio)","host":"email-smtp.us-east-2.amazonaws.com","port":465,"secure":true},"SES-US-GOV-EAST-1":{"description":"AWS SES GovCloud (US-East)","host":"email-smtp.us-gov-east-1.amazonaws.com","port":465,"secure":true},"SES-US-GOV-WEST-1":{"description":"AWS SES GovCloud (US-West)","host":"email-smtp.us-gov-west-1.amazonaws.com","port":465,"secure":true},"SES-US-WEST-1":{"description":"AWS SES US West (N. California)","host":"email-smtp.us-west-1.amazonaws.com","port":465,"secure":true},"SES-US-WEST-2":{"description":"AWS SES US West (Oregon)","host":"email-smtp.us-west-2.amazonaws.com","port":465,"secure":true},"Seznam":{"description":"Seznam Email (Czech email provider)","aliases":["Seznam Email"],"domains":["seznam.cz","email.cz","post.cz","spoluzaci.cz"],"host":"smtp.seznam.cz","port":465,"secure":true},"SMTP2GO":{"description":"SMTP2GO","host":"mail.smtp2go.com","port":2525},"Sparkpost":{"description":"SparkPost","aliases":["SparkPost","SparkPost Mail"],"domains":["sparkpost.com"],"host":"smtp.sparkpostmail.com","port":587,"secure":false},"Tipimail":{"description":"Tipimail (email delivery service)","host":"smtp.tipimail.com","port":587},"Tutanota":{"description":"Tutanota (Tuta Mail)","domains":["tutanota.com","tuta.com","tutanota.de","tuta.io"],"host":"smtp.tutanota.com","port":465,"secure":true},"Yahoo":{"description":"Yahoo Mail","domains":["yahoo.com"],"host":"smtp.mail.yahoo.com","port":465,"secure":true},"Yandex":{"description":"Yandex Mail","domains":["yandex.ru"],"host":"smtp.yandex.ru","port":465,"secure":true},"Zimbra":{"description":"Zimbra Mail Server","aliases":["Zimbra Collaboration"],"host":"smtp.zimbra.com","port":587,"requireTLS":true},"Zoho":{"description":"Zoho Mail","host":"smtp.zoho.com","port":465,"secure":true,"authMethod":"LOGIN"}}');
 
 /***/ }),
-/* 2290 */
+/* 2291 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 
 
 const EventEmitter = __webpack_require__(867);
-const SMTPConnection = __webpack_require__(2285);
-const wellKnown = __webpack_require__(2288);
-const shared = __webpack_require__(2260);
-const XOAuth2 = __webpack_require__(2287);
-const errors = __webpack_require__(2264);
-const packageData = __webpack_require__(2263);
+const SMTPConnection = __webpack_require__(2286);
+const wellKnown = __webpack_require__(2289);
+const shared = __webpack_require__(2261);
+const XOAuth2 = __webpack_require__(2288);
+const errors = __webpack_require__(2265);
+const packageData = __webpack_require__(2264);
 
 /**
  * Creates a SMTP transport object for Nodemailer
@@ -354994,16 +355047,16 @@ module.exports = SMTPTransport;
 
 
 /***/ }),
-/* 2291 */
+/* 2292 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 
 
-const { spawn } = __webpack_require__(2292);
-const packageData = __webpack_require__(2263);
-const shared = __webpack_require__(2260);
-const errors = __webpack_require__(2264);
+const { spawn } = __webpack_require__(2293);
+const packageData = __webpack_require__(2264);
+const shared = __webpack_require__(2261);
+const errors = __webpack_require__(2265);
 
 /**
  * Generates a Transport object for Sendmail
@@ -355206,21 +355259,21 @@ module.exports = SendmailTransport;
 
 
 /***/ }),
-/* 2292 */
+/* 2293 */
 /***/ ((module) => {
 
 "use strict";
 module.exports = require("child_process");
 
 /***/ }),
-/* 2293 */
+/* 2294 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 
 
-const packageData = __webpack_require__(2263);
-const shared = __webpack_require__(2260);
+const packageData = __webpack_require__(2264);
+const shared = __webpack_require__(2261);
 
 /**
  * Generates a Transport object for streaming
@@ -355355,14 +355408,14 @@ module.exports = StreamTransport;
 
 
 /***/ }),
-/* 2294 */
+/* 2295 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 
 
-const packageData = __webpack_require__(2263);
-const shared = __webpack_require__(2260);
+const packageData = __webpack_require__(2264);
+const shared = __webpack_require__(2261);
 
 /**
  * Generates a Transport object to generate JSON output
@@ -355444,17 +355497,17 @@ module.exports = JSONTransport;
 
 
 /***/ }),
-/* 2295 */
+/* 2296 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 
 
 const EventEmitter = __webpack_require__(867);
-const packageData = __webpack_require__(2263);
-const shared = __webpack_require__(2260);
-const LeWindows = __webpack_require__(2275);
-const MimeNode = __webpack_require__(2268);
+const packageData = __webpack_require__(2264);
+const shared = __webpack_require__(2261);
+const LeWindows = __webpack_require__(2276);
+const MimeNode = __webpack_require__(2269);
 
 /**
  * Generates a Transport object for AWS SES
@@ -355674,7 +355727,7 @@ module.exports = SESTransport;
 
 
 /***/ }),
-/* 2296 */
+/* 2297 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -355779,7 +355832,7 @@ __decorate([
 
 
 /***/ }),
-/* 2297 */
+/* 2298 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -355793,10 +355846,10 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.NotificationsModule = void 0;
 const common_1 = __webpack_require__(10);
-const notifications_service_1 = __webpack_require__(1465);
-const notifications_controller_1 = __webpack_require__(2298);
-const whatsapp_service_1 = __webpack_require__(1466);
-const twilio_service_1 = __webpack_require__(1467);
+const notifications_service_1 = __webpack_require__(1466);
+const notifications_controller_1 = __webpack_require__(2299);
+const whatsapp_service_1 = __webpack_require__(1467);
+const twilio_service_1 = __webpack_require__(1468);
 const prisma_module_1 = __webpack_require__(1289);
 let NotificationsModule = class NotificationsModule {
 };
@@ -355812,7 +355865,7 @@ exports.NotificationsModule = NotificationsModule = __decorate([
 
 
 /***/ }),
-/* 2298 */
+/* 2299 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -355833,10 +355886,10 @@ var _a;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.NotificationsController = void 0;
 const common_1 = __webpack_require__(10);
-const notifications_service_1 = __webpack_require__(1465);
-const jwt_auth_guard_1 = __webpack_require__(2299);
-const roles_guard_1 = __webpack_require__(1461);
-const roles_decorator_1 = __webpack_require__(1460);
+const notifications_service_1 = __webpack_require__(1466);
+const jwt_auth_guard_1 = __webpack_require__(2300);
+const roles_guard_1 = __webpack_require__(1449);
+const roles_decorator_1 = __webpack_require__(1448);
 const client_1 = __webpack_require__(1291);
 let NotificationsController = class NotificationsController {
     constructor(notificationsService) {
@@ -355943,7 +355996,7 @@ exports.NotificationsController = NotificationsController = __decorate([
 
 
 /***/ }),
-/* 2299 */
+/* 2300 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -355970,7 +356023,7 @@ exports.JwtAuthGuard = JwtAuthGuard = __decorate([
 
 
 /***/ }),
-/* 2300 */
+/* 2301 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -355996,7 +356049,7 @@ exports.CustomersModule = CustomersModule = __decorate([
 
 
 /***/ }),
-/* 2301 */
+/* 2302 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -356010,8 +356063,8 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.BlogModule = void 0;
 const common_1 = __webpack_require__(10);
-const blog_controller_1 = __webpack_require__(2302);
-const blog_service_1 = __webpack_require__(2319);
+const blog_controller_1 = __webpack_require__(2303);
+const blog_service_1 = __webpack_require__(2320);
 let BlogModule = class BlogModule {
 };
 exports.BlogModule = BlogModule;
@@ -356024,7 +356077,7 @@ exports.BlogModule = BlogModule = __decorate([
 
 
 /***/ }),
-/* 2302 */
+/* 2303 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -356048,10 +356101,10 @@ const common_1 = __webpack_require__(10);
 const passport_1 = __webpack_require__(1418);
 const swagger_1 = __webpack_require__(1077);
 const express_1 = __webpack_require__(955);
-const uuid_1 = __webpack_require__(2303);
-const blog_service_1 = __webpack_require__(2319);
-const blog_dto_1 = __webpack_require__(2320);
-const common_2 = __webpack_require__(1458);
+const uuid_1 = __webpack_require__(2304);
+const blog_service_1 = __webpack_require__(2320);
+const blog_dto_1 = __webpack_require__(2321);
+const common_2 = __webpack_require__(1446);
 const client_1 = __webpack_require__(1291);
 let BlogController = class BlogController {
     constructor(blogService) {
@@ -356220,7 +356273,7 @@ exports.BlogController = BlogController = __decorate([
 
 
 /***/ }),
-/* 2303 */
+/* 2304 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -356236,15 +356289,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   validate: () => (/* reexport safe */ _validate_js__WEBPACK_IMPORTED_MODULE_6__["default"]),
 /* harmony export */   version: () => (/* reexport safe */ _version_js__WEBPACK_IMPORTED_MODULE_5__["default"])
 /* harmony export */ });
-/* harmony import */ var _v1_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2304);
-/* harmony import */ var _v3_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(2309);
-/* harmony import */ var _v4_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(2313);
-/* harmony import */ var _v5_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(2315);
-/* harmony import */ var _nil_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(2317);
-/* harmony import */ var _version_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(2318);
-/* harmony import */ var _validate_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(2307);
-/* harmony import */ var _stringify_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(2306);
-/* harmony import */ var _parse_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(2311);
+/* harmony import */ var _v1_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2305);
+/* harmony import */ var _v3_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(2310);
+/* harmony import */ var _v4_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(2314);
+/* harmony import */ var _v5_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(2316);
+/* harmony import */ var _nil_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(2318);
+/* harmony import */ var _version_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(2319);
+/* harmony import */ var _validate_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(2308);
+/* harmony import */ var _stringify_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(2307);
+/* harmony import */ var _parse_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(2312);
 
 
 
@@ -356256,7 +356309,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /***/ }),
-/* 2304 */
+/* 2305 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -356264,8 +356317,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _rng_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2305);
-/* harmony import */ var _stringify_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(2306);
+/* harmony import */ var _rng_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2306);
+/* harmony import */ var _stringify_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(2307);
 
  // **`v1()` - Generate time-based UUID**
 //
@@ -356363,7 +356416,7 @@ function v1(options, buf, offset) {
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (v1);
 
 /***/ }),
-/* 2305 */
+/* 2306 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -356387,7 +356440,7 @@ function rng() {
 }
 
 /***/ }),
-/* 2306 */
+/* 2307 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -356396,7 +356449,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__),
 /* harmony export */   unsafeStringify: () => (/* binding */ unsafeStringify)
 /* harmony export */ });
-/* harmony import */ var _validate_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2307);
+/* harmony import */ var _validate_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2308);
 
 /**
  * Convert array of 16 byte values to UUID string format of the form:
@@ -356432,24 +356485,6 @@ function stringify(arr, offset = 0) {
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (stringify);
 
 /***/ }),
-/* 2307 */
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var _regex_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2308);
-
-
-function validate(uuid) {
-  return typeof uuid === 'string' && _regex_js__WEBPACK_IMPORTED_MODULE_0__["default"].test(uuid);
-}
-
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (validate);
-
-/***/ }),
 /* 2308 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
@@ -356458,7 +356493,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (/^(?:[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}|00000000-0000-0000-0000-000000000000)$/i);
+/* harmony import */ var _regex_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2309);
+
+
+function validate(uuid) {
+  return typeof uuid === 'string' && _regex_js__WEBPACK_IMPORTED_MODULE_0__["default"].test(uuid);
+}
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (validate);
 
 /***/ }),
 /* 2309 */
@@ -356469,15 +356511,26 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _v35_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2310);
-/* harmony import */ var _md5_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(2312);
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (/^(?:[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}|00000000-0000-0000-0000-000000000000)$/i);
+
+/***/ }),
+/* 2310 */
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _v35_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2311);
+/* harmony import */ var _md5_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(2313);
 
 
 const v3 = (0,_v35_js__WEBPACK_IMPORTED_MODULE_0__["default"])('v3', 0x30, _md5_js__WEBPACK_IMPORTED_MODULE_1__["default"]);
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (v3);
 
 /***/ }),
-/* 2310 */
+/* 2311 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -356487,8 +356540,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   URL: () => (/* binding */ URL),
 /* harmony export */   "default": () => (/* binding */ v35)
 /* harmony export */ });
-/* harmony import */ var _stringify_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(2306);
-/* harmony import */ var _parse_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2311);
+/* harmony import */ var _stringify_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(2307);
+/* harmony import */ var _parse_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2312);
 
 
 
@@ -356557,7 +356610,7 @@ function v35(name, version, hashfunc) {
 }
 
 /***/ }),
-/* 2311 */
+/* 2312 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -356565,7 +356618,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _validate_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2307);
+/* harmony import */ var _validate_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2308);
 
 
 function parse(uuid) {
@@ -356603,7 +356656,7 @@ function parse(uuid) {
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (parse);
 
 /***/ }),
-/* 2312 */
+/* 2313 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -356628,7 +356681,7 @@ function md5(bytes) {
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (md5);
 
 /***/ }),
-/* 2313 */
+/* 2314 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -356636,9 +356689,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _native_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2314);
-/* harmony import */ var _rng_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(2305);
-/* harmony import */ var _stringify_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(2306);
+/* harmony import */ var _native_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2315);
+/* harmony import */ var _rng_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(2306);
+/* harmony import */ var _stringify_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(2307);
 
 
 
@@ -356670,7 +356723,7 @@ function v4(options, buf, offset) {
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (v4);
 
 /***/ }),
-/* 2314 */
+/* 2315 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -356686,7 +356739,7 @@ __webpack_require__.r(__webpack_exports__);
 });
 
 /***/ }),
-/* 2315 */
+/* 2316 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -356694,15 +356747,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _v35_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2310);
-/* harmony import */ var _sha1_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(2316);
+/* harmony import */ var _v35_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2311);
+/* harmony import */ var _sha1_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(2317);
 
 
 const v5 = (0,_v35_js__WEBPACK_IMPORTED_MODULE_0__["default"])('v5', 0x50, _sha1_js__WEBPACK_IMPORTED_MODULE_1__["default"]);
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (v5);
 
 /***/ }),
-/* 2316 */
+/* 2317 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -356727,7 +356780,7 @@ function sha1(bytes) {
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (sha1);
 
 /***/ }),
-/* 2317 */
+/* 2318 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -356738,7 +356791,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ('00000000-0000-0000-0000-000000000000');
 
 /***/ }),
-/* 2318 */
+/* 2319 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -356746,7 +356799,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _validate_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2307);
+/* harmony import */ var _validate_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2308);
 
 
 function version(uuid) {
@@ -356760,7 +356813,7 @@ function version(uuid) {
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (version);
 
 /***/ }),
-/* 2319 */
+/* 2320 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -357033,7 +357086,7 @@ exports.BlogService = BlogService = __decorate([
 
 
 /***/ }),
-/* 2320 */
+/* 2321 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -357202,7 +357255,7 @@ __decorate([
 
 
 /***/ }),
-/* 2321 */
+/* 2322 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -357216,8 +357269,8 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.TestimonialsModule = void 0;
 const common_1 = __webpack_require__(10);
-const testimonials_controller_1 = __webpack_require__(2322);
-const testimonials_service_1 = __webpack_require__(2323);
+const testimonials_controller_1 = __webpack_require__(2323);
+const testimonials_service_1 = __webpack_require__(2324);
 let TestimonialsModule = class TestimonialsModule {
 };
 exports.TestimonialsModule = TestimonialsModule;
@@ -357230,7 +357283,7 @@ exports.TestimonialsModule = TestimonialsModule = __decorate([
 
 
 /***/ }),
-/* 2322 */
+/* 2323 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -357253,9 +357306,9 @@ exports.TestimonialsController = void 0;
 const common_1 = __webpack_require__(10);
 const passport_1 = __webpack_require__(1418);
 const swagger_1 = __webpack_require__(1077);
-const testimonials_service_1 = __webpack_require__(2323);
-const testimonial_dto_1 = __webpack_require__(2324);
-const common_2 = __webpack_require__(1458);
+const testimonials_service_1 = __webpack_require__(2324);
+const testimonial_dto_1 = __webpack_require__(2325);
+const common_2 = __webpack_require__(1446);
 const client_1 = __webpack_require__(1291);
 let TestimonialsController = class TestimonialsController {
     constructor(testimonialsService) {
@@ -357352,7 +357405,7 @@ exports.TestimonialsController = TestimonialsController = __decorate([
 
 
 /***/ }),
-/* 2323 */
+/* 2324 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -357422,7 +357475,7 @@ exports.TestimonialsService = TestimonialsService = __decorate([
 
 
 /***/ }),
-/* 2324 */
+/* 2325 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -357573,7 +357626,7 @@ __decorate([
 
 
 /***/ }),
-/* 2325 */
+/* 2326 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -357587,8 +357640,8 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.TeamMembersModule = void 0;
 const common_1 = __webpack_require__(10);
-const team_members_controller_1 = __webpack_require__(2326);
-const team_members_service_1 = __webpack_require__(2327);
+const team_members_controller_1 = __webpack_require__(2327);
+const team_members_service_1 = __webpack_require__(2328);
 let TeamMembersModule = class TeamMembersModule {
 };
 exports.TeamMembersModule = TeamMembersModule;
@@ -357601,7 +357654,7 @@ exports.TeamMembersModule = TeamMembersModule = __decorate([
 
 
 /***/ }),
-/* 2326 */
+/* 2327 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -357624,9 +357677,9 @@ exports.TeamMembersController = void 0;
 const common_1 = __webpack_require__(10);
 const passport_1 = __webpack_require__(1418);
 const swagger_1 = __webpack_require__(1077);
-const team_members_service_1 = __webpack_require__(2327);
-const team_members_dto_1 = __webpack_require__(2328);
-const common_2 = __webpack_require__(1458);
+const team_members_service_1 = __webpack_require__(2328);
+const team_members_dto_1 = __webpack_require__(2329);
+const common_2 = __webpack_require__(1446);
 const client_1 = __webpack_require__(1291);
 let TeamMembersController = class TeamMembersController {
     constructor(teamMembersService) {
@@ -357722,7 +357775,7 @@ exports.TeamMembersController = TeamMembersController = __decorate([
 
 
 /***/ }),
-/* 2327 */
+/* 2328 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -357778,7 +357831,7 @@ exports.TeamMembersService = TeamMembersService = __decorate([
 
 
 /***/ }),
-/* 2328 */
+/* 2329 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -357926,7 +357979,7 @@ __decorate([
 
 
 /***/ }),
-/* 2329 */
+/* 2330 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -357940,8 +357993,8 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.GalleryModule = void 0;
 const common_1 = __webpack_require__(10);
-const gallery_controller_1 = __webpack_require__(2330);
-const gallery_service_1 = __webpack_require__(2331);
+const gallery_controller_1 = __webpack_require__(2331);
+const gallery_service_1 = __webpack_require__(2332);
 let GalleryModule = class GalleryModule {
 };
 exports.GalleryModule = GalleryModule;
@@ -357954,7 +358007,7 @@ exports.GalleryModule = GalleryModule = __decorate([
 
 
 /***/ }),
-/* 2330 */
+/* 2331 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -357977,9 +358030,9 @@ exports.GalleryController = void 0;
 const common_1 = __webpack_require__(10);
 const passport_1 = __webpack_require__(1418);
 const swagger_1 = __webpack_require__(1077);
-const gallery_service_1 = __webpack_require__(2331);
-const gallery_item_dto_1 = __webpack_require__(2332);
-const common_2 = __webpack_require__(1458);
+const gallery_service_1 = __webpack_require__(2332);
+const gallery_item_dto_1 = __webpack_require__(2333);
+const common_2 = __webpack_require__(1446);
 const client_1 = __webpack_require__(1291);
 let GalleryController = class GalleryController {
     constructor(galleryService) {
@@ -358087,7 +358140,7 @@ exports.GalleryController = GalleryController = __decorate([
 
 
 /***/ }),
-/* 2331 */
+/* 2332 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -358186,7 +358239,7 @@ exports.GalleryService = GalleryService = __decorate([
 
 
 /***/ }),
-/* 2332 */
+/* 2333 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -358354,7 +358407,7 @@ __decorate([
 
 
 /***/ }),
-/* 2333 */
+/* 2334 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -358368,8 +358421,8 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.FaqModule = void 0;
 const common_1 = __webpack_require__(10);
-const faq_controller_1 = __webpack_require__(2334);
-const faq_service_1 = __webpack_require__(2335);
+const faq_controller_1 = __webpack_require__(2335);
+const faq_service_1 = __webpack_require__(2336);
 const prisma_service_1 = __webpack_require__(1290);
 let FaqModule = class FaqModule {
 };
@@ -358383,7 +358436,7 @@ exports.FaqModule = FaqModule = __decorate([
 
 
 /***/ }),
-/* 2334 */
+/* 2335 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -358406,9 +358459,9 @@ exports.FaqController = void 0;
 const common_1 = __webpack_require__(10);
 const passport_1 = __webpack_require__(1418);
 const swagger_1 = __webpack_require__(1077);
-const faq_service_1 = __webpack_require__(2335);
-const faq_dto_1 = __webpack_require__(2336);
-const common_2 = __webpack_require__(1458);
+const faq_service_1 = __webpack_require__(2336);
+const faq_dto_1 = __webpack_require__(2337);
+const common_2 = __webpack_require__(1446);
 const client_1 = __webpack_require__(1291);
 let FaqController = class FaqController {
     constructor(faqService) {
@@ -358516,7 +358569,7 @@ exports.FaqController = FaqController = __decorate([
 
 
 /***/ }),
-/* 2335 */
+/* 2336 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -358584,7 +358637,7 @@ exports.FaqService = FaqService = __decorate([
 
 
 /***/ }),
-/* 2336 */
+/* 2337 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -358671,7 +358724,7 @@ __decorate([
 
 
 /***/ }),
-/* 2337 */
+/* 2338 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -358685,8 +358738,8 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ServiceAreasModule = void 0;
 const common_1 = __webpack_require__(10);
-const service_areas_controller_1 = __webpack_require__(2338);
-const service_areas_service_1 = __webpack_require__(2339);
+const service_areas_controller_1 = __webpack_require__(2339);
+const service_areas_service_1 = __webpack_require__(2340);
 let ServiceAreasModule = class ServiceAreasModule {
 };
 exports.ServiceAreasModule = ServiceAreasModule;
@@ -358699,7 +358752,7 @@ exports.ServiceAreasModule = ServiceAreasModule = __decorate([
 
 
 /***/ }),
-/* 2338 */
+/* 2339 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -358722,9 +358775,9 @@ exports.ServiceAreasController = void 0;
 const common_1 = __webpack_require__(10);
 const passport_1 = __webpack_require__(1418);
 const swagger_1 = __webpack_require__(1077);
-const service_areas_service_1 = __webpack_require__(2339);
-const service_area_dto_1 = __webpack_require__(2340);
-const common_2 = __webpack_require__(1458);
+const service_areas_service_1 = __webpack_require__(2340);
+const service_area_dto_1 = __webpack_require__(2341);
+const common_2 = __webpack_require__(1446);
 const client_1 = __webpack_require__(1291);
 let ServiceAreasController = class ServiceAreasController {
     constructor(serviceAreasService) {
@@ -358832,7 +358885,7 @@ exports.ServiceAreasController = ServiceAreasController = __decorate([
 
 
 /***/ }),
-/* 2339 */
+/* 2340 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -358906,7 +358959,7 @@ exports.ServiceAreasService = ServiceAreasService = __decorate([
 
 
 /***/ }),
-/* 2340 */
+/* 2341 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -359029,7 +359082,7 @@ __decorate([
 
 
 /***/ }),
-/* 2341 */
+/* 2342 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -359043,8 +359096,8 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.JobListingsModule = void 0;
 const common_1 = __webpack_require__(10);
-const job_listings_controller_1 = __webpack_require__(2342);
-const job_listings_service_1 = __webpack_require__(2343);
+const job_listings_controller_1 = __webpack_require__(2343);
+const job_listings_service_1 = __webpack_require__(2344);
 let JobListingsModule = class JobListingsModule {
 };
 exports.JobListingsModule = JobListingsModule;
@@ -359057,7 +359110,7 @@ exports.JobListingsModule = JobListingsModule = __decorate([
 
 
 /***/ }),
-/* 2342 */
+/* 2343 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -359080,9 +359133,9 @@ exports.JobListingsController = void 0;
 const common_1 = __webpack_require__(10);
 const passport_1 = __webpack_require__(1418);
 const swagger_1 = __webpack_require__(1077);
-const job_listings_service_1 = __webpack_require__(2343);
-const job_listing_dto_1 = __webpack_require__(2344);
-const common_2 = __webpack_require__(1458);
+const job_listings_service_1 = __webpack_require__(2344);
+const job_listing_dto_1 = __webpack_require__(2345);
+const common_2 = __webpack_require__(1446);
 const client_1 = __webpack_require__(1291);
 let JobListingsController = class JobListingsController {
     constructor(jobListingsService) {
@@ -359178,7 +359231,7 @@ exports.JobListingsController = JobListingsController = __decorate([
 
 
 /***/ }),
-/* 2343 */
+/* 2344 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -359243,7 +359296,7 @@ exports.JobListingsService = JobListingsService = __decorate([
 
 
 /***/ }),
-/* 2344 */
+/* 2345 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -359390,7 +359443,7 @@ __decorate([
 
 
 /***/ }),
-/* 2345 */
+/* 2346 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -359404,8 +359457,8 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.PricingPlansModule = void 0;
 const common_1 = __webpack_require__(10);
-const pricing_plans_controller_1 = __webpack_require__(2346);
-const pricing_plans_service_1 = __webpack_require__(2347);
+const pricing_plans_controller_1 = __webpack_require__(2347);
+const pricing_plans_service_1 = __webpack_require__(2348);
 let PricingPlansModule = class PricingPlansModule {
 };
 exports.PricingPlansModule = PricingPlansModule;
@@ -359418,7 +359471,7 @@ exports.PricingPlansModule = PricingPlansModule = __decorate([
 
 
 /***/ }),
-/* 2346 */
+/* 2347 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -359441,9 +359494,9 @@ exports.PricingPlansController = void 0;
 const common_1 = __webpack_require__(10);
 const passport_1 = __webpack_require__(1418);
 const swagger_1 = __webpack_require__(1077);
-const pricing_plans_service_1 = __webpack_require__(2347);
-const pricing_plan_dto_1 = __webpack_require__(2348);
-const common_2 = __webpack_require__(1458);
+const pricing_plans_service_1 = __webpack_require__(2348);
+const pricing_plan_dto_1 = __webpack_require__(2349);
+const common_2 = __webpack_require__(1446);
 const client_1 = __webpack_require__(1291);
 let PricingPlansController = class PricingPlansController {
     constructor(pricingPlansService) {
@@ -359539,7 +359592,7 @@ exports.PricingPlansController = PricingPlansController = __decorate([
 
 
 /***/ }),
-/* 2347 */
+/* 2348 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -359600,7 +359653,7 @@ exports.PricingPlansService = PricingPlansService = __decorate([
 
 
 /***/ }),
-/* 2348 */
+/* 2349 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -359736,7 +359789,7 @@ __decorate([
 
 
 /***/ }),
-/* 2349 */
+/* 2350 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -359750,8 +359803,8 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.SiteSettingsModule = void 0;
 const common_1 = __webpack_require__(10);
-const site_settings_controller_1 = __webpack_require__(2350);
-const site_settings_service_1 = __webpack_require__(2351);
+const site_settings_controller_1 = __webpack_require__(2351);
+const site_settings_service_1 = __webpack_require__(2352);
 const prisma_module_1 = __webpack_require__(1289);
 let SiteSettingsModule = class SiteSettingsModule {
 };
@@ -359767,7 +359820,7 @@ exports.SiteSettingsModule = SiteSettingsModule = __decorate([
 
 
 /***/ }),
-/* 2350 */
+/* 2351 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -359788,11 +359841,11 @@ var _a;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.SiteSettingsController = void 0;
 const common_1 = __webpack_require__(10);
-const site_settings_service_1 = __webpack_require__(2351);
-const jwt_auth_guard_1 = __webpack_require__(2299);
-const roles_guard_1 = __webpack_require__(1461);
-const roles_decorator_1 = __webpack_require__(1460);
-const current_user_decorator_1 = __webpack_require__(1459);
+const site_settings_service_1 = __webpack_require__(2352);
+const jwt_auth_guard_1 = __webpack_require__(2300);
+const roles_guard_1 = __webpack_require__(1449);
+const roles_decorator_1 = __webpack_require__(1448);
+const current_user_decorator_1 = __webpack_require__(1447);
 const client_1 = __webpack_require__(1291);
 let SiteSettingsController = class SiteSettingsController {
     constructor(siteSettingsService) {
@@ -359830,7 +359883,7 @@ exports.SiteSettingsController = SiteSettingsController = __decorate([
 
 
 /***/ }),
-/* 2351 */
+/* 2352 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -359967,7 +360020,7 @@ exports.SiteSettingsService = SiteSettingsService = __decorate([
 
 
 /***/ }),
-/* 2352 */
+/* 2353 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -359981,8 +360034,8 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.NavigationSettingsModule = void 0;
 const common_1 = __webpack_require__(10);
-const navigation_settings_controller_1 = __webpack_require__(2353);
-const navigation_settings_service_1 = __webpack_require__(2354);
+const navigation_settings_controller_1 = __webpack_require__(2354);
+const navigation_settings_service_1 = __webpack_require__(2355);
 const prisma_module_1 = __webpack_require__(1289);
 let NavigationSettingsModule = class NavigationSettingsModule {
 };
@@ -359998,7 +360051,7 @@ exports.NavigationSettingsModule = NavigationSettingsModule = __decorate([
 
 
 /***/ }),
-/* 2353 */
+/* 2354 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -360019,11 +360072,11 @@ var _a;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.NavigationSettingsController = void 0;
 const common_1 = __webpack_require__(10);
-const navigation_settings_service_1 = __webpack_require__(2354);
-const jwt_auth_guard_1 = __webpack_require__(2299);
-const roles_guard_1 = __webpack_require__(1461);
-const roles_decorator_1 = __webpack_require__(1460);
-const current_user_decorator_1 = __webpack_require__(1459);
+const navigation_settings_service_1 = __webpack_require__(2355);
+const jwt_auth_guard_1 = __webpack_require__(2300);
+const roles_guard_1 = __webpack_require__(1449);
+const roles_decorator_1 = __webpack_require__(1448);
+const current_user_decorator_1 = __webpack_require__(1447);
 const client_1 = __webpack_require__(1291);
 let NavigationSettingsController = class NavigationSettingsController {
     constructor(navigationSettingsService) {
@@ -360060,7 +360113,7 @@ exports.NavigationSettingsController = NavigationSettingsController = __decorate
 
 
 /***/ }),
-/* 2354 */
+/* 2355 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -360177,7 +360230,7 @@ exports.NavigationSettingsService = NavigationSettingsService = __decorate([
 
 
 /***/ }),
-/* 2355 */
+/* 2356 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -360191,8 +360244,8 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.HomepageSettingsModule = void 0;
 const common_1 = __webpack_require__(10);
-const homepage_settings_controller_1 = __webpack_require__(2356);
-const homepage_settings_service_1 = __webpack_require__(2357);
+const homepage_settings_controller_1 = __webpack_require__(2357);
+const homepage_settings_service_1 = __webpack_require__(2358);
 const prisma_module_1 = __webpack_require__(1289);
 let HomepageSettingsModule = class HomepageSettingsModule {
 };
@@ -360208,7 +360261,7 @@ exports.HomepageSettingsModule = HomepageSettingsModule = __decorate([
 
 
 /***/ }),
-/* 2356 */
+/* 2357 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -360229,11 +360282,11 @@ var _a;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.HomepageSettingsController = void 0;
 const common_1 = __webpack_require__(10);
-const homepage_settings_service_1 = __webpack_require__(2357);
-const jwt_auth_guard_1 = __webpack_require__(2299);
-const roles_guard_1 = __webpack_require__(1461);
-const roles_decorator_1 = __webpack_require__(1460);
-const current_user_decorator_1 = __webpack_require__(1459);
+const homepage_settings_service_1 = __webpack_require__(2358);
+const jwt_auth_guard_1 = __webpack_require__(2300);
+const roles_guard_1 = __webpack_require__(1449);
+const roles_decorator_1 = __webpack_require__(1448);
+const current_user_decorator_1 = __webpack_require__(1447);
 const client_1 = __webpack_require__(1291);
 let HomepageSettingsController = class HomepageSettingsController {
     constructor(homepageSettingsService) {
@@ -360270,7 +360323,7 @@ exports.HomepageSettingsController = HomepageSettingsController = __decorate([
 
 
 /***/ }),
-/* 2357 */
+/* 2358 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -360429,7 +360482,7 @@ exports.HomepageSettingsService = HomepageSettingsService = __decorate([
 
 
 /***/ }),
-/* 2358 */
+/* 2359 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -360443,8 +360496,8 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.FooterSettingsModule = void 0;
 const common_1 = __webpack_require__(10);
-const footer_settings_controller_1 = __webpack_require__(2359);
-const footer_settings_service_1 = __webpack_require__(2360);
+const footer_settings_controller_1 = __webpack_require__(2360);
+const footer_settings_service_1 = __webpack_require__(2361);
 const prisma_module_1 = __webpack_require__(1289);
 let FooterSettingsModule = class FooterSettingsModule {
 };
@@ -360460,7 +360513,7 @@ exports.FooterSettingsModule = FooterSettingsModule = __decorate([
 
 
 /***/ }),
-/* 2359 */
+/* 2360 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -360481,11 +360534,11 @@ var _a;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.FooterSettingsController = void 0;
 const common_1 = __webpack_require__(10);
-const footer_settings_service_1 = __webpack_require__(2360);
-const jwt_auth_guard_1 = __webpack_require__(2299);
-const roles_guard_1 = __webpack_require__(1461);
-const roles_decorator_1 = __webpack_require__(1460);
-const current_user_decorator_1 = __webpack_require__(1459);
+const footer_settings_service_1 = __webpack_require__(2361);
+const jwt_auth_guard_1 = __webpack_require__(2300);
+const roles_guard_1 = __webpack_require__(1449);
+const roles_decorator_1 = __webpack_require__(1448);
+const current_user_decorator_1 = __webpack_require__(1447);
 const client_1 = __webpack_require__(1291);
 let FooterSettingsController = class FooterSettingsController {
     constructor(footerSettingsService) {
@@ -360522,7 +360575,7 @@ exports.FooterSettingsController = FooterSettingsController = __decorate([
 
 
 /***/ }),
-/* 2360 */
+/* 2361 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -360678,7 +360731,7 @@ exports.FooterSettingsService = FooterSettingsService = __decorate([
 
 
 /***/ }),
-/* 2361 */
+/* 2362 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -360692,8 +360745,8 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.BlogCategoriesModule = void 0;
 const common_1 = __webpack_require__(10);
-const blog_categories_controller_1 = __webpack_require__(2362);
-const blog_categories_service_1 = __webpack_require__(2363);
+const blog_categories_controller_1 = __webpack_require__(2363);
+const blog_categories_service_1 = __webpack_require__(2364);
 const prisma_module_1 = __webpack_require__(1289);
 let BlogCategoriesModule = class BlogCategoriesModule {
 };
@@ -360709,7 +360762,7 @@ exports.BlogCategoriesModule = BlogCategoriesModule = __decorate([
 
 
 /***/ }),
-/* 2362 */
+/* 2363 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -360730,8 +360783,8 @@ var _a;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.BlogCategoriesController = void 0;
 const common_1 = __webpack_require__(10);
-const blog_categories_service_1 = __webpack_require__(2363);
-const jwt_auth_guard_1 = __webpack_require__(2299);
+const blog_categories_service_1 = __webpack_require__(2364);
+const jwt_auth_guard_1 = __webpack_require__(2300);
 let BlogCategoriesController = class BlogCategoriesController {
     constructor(blogCategoriesService) {
         this.blogCategoriesService = blogCategoriesService;
@@ -360819,7 +360872,7 @@ exports.BlogCategoriesController = BlogCategoriesController = __decorate([
 
 
 /***/ }),
-/* 2363 */
+/* 2364 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -360918,7 +360971,7 @@ exports.BlogCategoriesService = BlogCategoriesService = __decorate([
 
 
 /***/ }),
-/* 2364 */
+/* 2365 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -360932,8 +360985,8 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.UploadModule = void 0;
 const common_1 = __webpack_require__(10);
-const upload_controller_1 = __webpack_require__(2365);
-const upload_service_1 = __webpack_require__(2366);
+const upload_controller_1 = __webpack_require__(2366);
+const upload_service_1 = __webpack_require__(2367);
 const supabase_module_1 = __webpack_require__(1293);
 let UploadModule = class UploadModule {
 };
@@ -360949,7 +361002,7 @@ exports.UploadModule = UploadModule = __decorate([
 
 
 /***/ }),
-/* 2365 */
+/* 2366 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -360972,9 +361025,9 @@ exports.UploadController = void 0;
 const common_1 = __webpack_require__(10);
 const platform_express_1 = __webpack_require__(841);
 const express_1 = __webpack_require__(955);
-const upload_service_1 = __webpack_require__(2366);
+const upload_service_1 = __webpack_require__(2367);
 const passport_1 = __webpack_require__(1418);
-const common_2 = __webpack_require__(1458);
+const common_2 = __webpack_require__(1446);
 const client_1 = __webpack_require__(1291);
 const swagger_1 = __webpack_require__(1077);
 let UploadController = class UploadController {
@@ -361083,7 +361136,7 @@ exports.UploadController = UploadController = __decorate([
 
 
 /***/ }),
-/* 2366 */
+/* 2367 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -361185,7 +361238,7 @@ exports.UploadService = UploadService = __decorate([
 
 
 /***/ }),
-/* 2367 */
+/* 2368 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -361199,8 +361252,8 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.InvoicesModule = void 0;
 const common_1 = __webpack_require__(10);
-const invoices_controller_1 = __webpack_require__(2368);
-const invoices_service_1 = __webpack_require__(2369);
+const invoices_controller_1 = __webpack_require__(2369);
+const invoices_service_1 = __webpack_require__(2370);
 const prisma_module_1 = __webpack_require__(1289);
 let InvoicesModule = class InvoicesModule {
 };
@@ -361216,7 +361269,7 @@ exports.InvoicesModule = InvoicesModule = __decorate([
 
 
 /***/ }),
-/* 2368 */
+/* 2369 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -361238,9 +361291,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.InvoicesController = void 0;
 const common_1 = __webpack_require__(10);
 const swagger_1 = __webpack_require__(1077);
-const invoices_service_1 = __webpack_require__(2369);
-const jwt_auth_guard_1 = __webpack_require__(2299);
-const client_1 = __webpack_require__(1291);
+const invoices_service_1 = __webpack_require__(2370);
+const jwt_auth_guard_1 = __webpack_require__(2300);
+const enums_1 = __webpack_require__(1450);
 let InvoicesController = class InvoicesController {
     constructor(invoicesService) {
         this.invoicesService = invoicesService;
@@ -361298,7 +361351,7 @@ __decorate([
     __param(1, (0, common_1.Query)('limit')),
     __param(2, (0, common_1.Query)('status')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, String, typeof (_b = typeof client_1.InvoiceStatus !== "undefined" && client_1.InvoiceStatus) === "function" ? _b : Object]),
+    __metadata("design:paramtypes", [String, String, typeof (_b = typeof enums_1.InvoiceStatus !== "undefined" && enums_1.InvoiceStatus) === "function" ? _b : Object]),
     __metadata("design:returntype", Promise)
 ], InvoicesController.prototype, "getAllInvoices", null);
 __decorate([
@@ -361361,7 +361414,7 @@ exports.InvoicesController = InvoicesController = __decorate([
 
 
 /***/ }),
-/* 2369 */
+/* 2370 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -361380,7 +361433,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.InvoicesService = void 0;
 const common_1 = __webpack_require__(10);
 const prisma_service_1 = __webpack_require__(1290);
-const client_1 = __webpack_require__(1291);
+const enums_1 = __webpack_require__(1450);
 let InvoicesService = class InvoicesService {
     constructor(prisma) {
         this.prisma = prisma;
@@ -361459,7 +361512,7 @@ let InvoicesService = class InvoicesService {
                 taxRate,
                 taxAmount,
                 total,
-                status: client_1.InvoiceStatus.DRAFT,
+                status: enums_1.InvoiceStatus.DRAFT,
                 issuedAt: new Date(),
                 dueDate: dueDate || new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
             },
@@ -361534,7 +361587,7 @@ let InvoicesService = class InvoicesService {
             throw new common_1.NotFoundException('Invoice not found');
         }
         const updateData = { status };
-        if (status === client_1.InvoiceStatus.PAID && !invoice.paidAt) {
+        if (status === enums_1.InvoiceStatus.PAID && !invoice.paidAt) {
             updateData.paidAt = new Date();
         }
         const updated = await this.prisma.invoice.update({
@@ -361696,7 +361749,7 @@ exports.InvoicesService = InvoicesService = __decorate([
 
 
 /***/ }),
-/* 2370 */
+/* 2371 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -361710,8 +361763,8 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.EmailTemplatesModule = void 0;
 const common_1 = __webpack_require__(10);
-const email_templates_controller_1 = __webpack_require__(2371);
-const email_templates_service_1 = __webpack_require__(2372);
+const email_templates_controller_1 = __webpack_require__(2372);
+const email_templates_service_1 = __webpack_require__(2373);
 const prisma_module_1 = __webpack_require__(1289);
 let EmailTemplatesModule = class EmailTemplatesModule {
 };
@@ -361727,7 +361780,7 @@ exports.EmailTemplatesModule = EmailTemplatesModule = __decorate([
 
 
 /***/ }),
-/* 2371 */
+/* 2372 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -361748,8 +361801,8 @@ var _a;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.EmailTemplatesController = void 0;
 const common_1 = __webpack_require__(10);
-const email_templates_service_1 = __webpack_require__(2372);
-const jwt_auth_guard_1 = __webpack_require__(2299);
+const email_templates_service_1 = __webpack_require__(2373);
+const jwt_auth_guard_1 = __webpack_require__(2300);
 let EmailTemplatesController = class EmailTemplatesController {
     constructor(emailTemplatesService) {
         this.emailTemplatesService = emailTemplatesService;
@@ -361794,7 +361847,7 @@ exports.EmailTemplatesController = EmailTemplatesController = __decorate([
 
 
 /***/ }),
-/* 2372 */
+/* 2373 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -361972,7 +362025,7 @@ exports.EmailTemplatesService = EmailTemplatesService = __decorate([
 
 
 /***/ }),
-/* 2373 */
+/* 2374 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -362000,7 +362053,7 @@ exports.AuditModule = AuditModule = __decorate([
 
 
 /***/ }),
-/* 2374 */
+/* 2375 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -362014,8 +362067,8 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.AdminModule = void 0;
 const common_1 = __webpack_require__(10);
-const admin_controller_1 = __webpack_require__(2375);
-const admin_service_1 = __webpack_require__(2376);
+const admin_controller_1 = __webpack_require__(2376);
+const admin_service_1 = __webpack_require__(2377);
 let AdminModule = class AdminModule {
 };
 exports.AdminModule = AdminModule;
@@ -362028,7 +362081,7 @@ exports.AdminModule = AdminModule = __decorate([
 
 
 /***/ }),
-/* 2375 */
+/* 2376 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -362051,8 +362104,8 @@ exports.AdminController = void 0;
 const common_1 = __webpack_require__(10);
 const passport_1 = __webpack_require__(1418);
 const swagger_1 = __webpack_require__(1077);
-const admin_service_1 = __webpack_require__(2376);
-const common_2 = __webpack_require__(1458);
+const admin_service_1 = __webpack_require__(2377);
+const common_2 = __webpack_require__(1446);
 const client_1 = __webpack_require__(1291);
 let AdminController = class AdminController {
     constructor(adminService) {
@@ -362180,7 +362233,7 @@ exports.AdminController = AdminController = __decorate([
 
 
 /***/ }),
-/* 2376 */
+/* 2377 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -362442,7 +362495,7 @@ exports.AdminService = AdminService = __decorate([
 
 
 /***/ }),
-/* 2377 */
+/* 2378 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -362456,8 +362509,8 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.CompanyStatsModule = void 0;
 const common_1 = __webpack_require__(10);
-const company_stats_service_1 = __webpack_require__(2378);
-const company_stats_controller_1 = __webpack_require__(2379);
+const company_stats_service_1 = __webpack_require__(2379);
+const company_stats_controller_1 = __webpack_require__(2380);
 const prisma_module_1 = __webpack_require__(1289);
 let CompanyStatsModule = class CompanyStatsModule {
 };
@@ -362473,7 +362526,7 @@ exports.CompanyStatsModule = CompanyStatsModule = __decorate([
 
 
 /***/ }),
-/* 2378 */
+/* 2379 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -362534,7 +362587,7 @@ exports.CompanyStatsService = CompanyStatsService = __decorate([
 
 
 /***/ }),
-/* 2379 */
+/* 2380 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -362557,9 +362610,9 @@ exports.CompanyStatsController = void 0;
 const common_1 = __webpack_require__(10);
 const passport_1 = __webpack_require__(1418);
 const swagger_1 = __webpack_require__(1077);
-const company_stats_service_1 = __webpack_require__(2378);
-const company_stat_dto_1 = __webpack_require__(2380);
-const common_2 = __webpack_require__(1458);
+const company_stats_service_1 = __webpack_require__(2379);
+const company_stat_dto_1 = __webpack_require__(2381);
+const common_2 = __webpack_require__(1446);
 const client_1 = __webpack_require__(1291);
 let CompanyStatsController = class CompanyStatsController {
     constructor(companyStatsService) {
@@ -362655,7 +362708,7 @@ exports.CompanyStatsController = CompanyStatsController = __decorate([
 
 
 /***/ }),
-/* 2380 */
+/* 2381 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -362754,7 +362807,7 @@ __decorate([
 
 
 /***/ }),
-/* 2381 */
+/* 2382 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -362768,12 +362821,12 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.NewsletterModule = void 0;
 const common_1 = __webpack_require__(10);
-const schedule_1 = __webpack_require__(2382);
-const newsletter_controller_1 = __webpack_require__(2405);
-const newsletter_service_1 = __webpack_require__(2406);
-const newsletter_scheduler_1 = __webpack_require__(2407);
+const schedule_1 = __webpack_require__(2383);
+const newsletter_controller_1 = __webpack_require__(2406);
+const newsletter_service_1 = __webpack_require__(2407);
+const newsletter_scheduler_1 = __webpack_require__(2408);
 const prisma_module_1 = __webpack_require__(1289);
-const email_module_1 = __webpack_require__(2409);
+const email_module_1 = __webpack_require__(2410);
 let NewsletterModule = class NewsletterModule {
 };
 exports.NewsletterModule = NewsletterModule;
@@ -362788,7 +362841,7 @@ exports.NewsletterModule = NewsletterModule = __decorate([
 
 
 /***/ }),
-/* 2382 */
+/* 2383 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -362797,11 +362850,11 @@ function __export(m) {
     for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
 }
 exports.__esModule = true;
-__export(__webpack_require__(2383));
+__export(__webpack_require__(2384));
 
 
 /***/ }),
-/* 2383 */
+/* 2384 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -362821,27 +362874,27 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
     for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-__exportStar(__webpack_require__(2384), exports);
-__exportStar(__webpack_require__(2386), exports);
-__exportStar(__webpack_require__(2392), exports);
+__exportStar(__webpack_require__(2385), exports);
+__exportStar(__webpack_require__(2387), exports);
 __exportStar(__webpack_require__(2393), exports);
-__exportStar(__webpack_require__(2403), exports);
+__exportStar(__webpack_require__(2394), exports);
+__exportStar(__webpack_require__(2404), exports);
 
 
 /***/ }),
-/* 2384 */
+/* 2385 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.CronExpression = void 0;
-var cron_expression_enum_1 = __webpack_require__(2385);
+var cron_expression_enum_1 = __webpack_require__(2386);
 Object.defineProperty(exports, "CronExpression", ({ enumerable: true, get: function () { return cron_expression_enum_1.CronExpression; } }));
 
 
 /***/ }),
-/* 2385 */
+/* 2386 */
 /***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
@@ -362942,7 +362995,7 @@ var CronExpression;
 
 
 /***/ }),
-/* 2386 */
+/* 2387 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -362962,13 +363015,13 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
     for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-__exportStar(__webpack_require__(2387), exports);
-__exportStar(__webpack_require__(2390), exports);
+__exportStar(__webpack_require__(2388), exports);
 __exportStar(__webpack_require__(2391), exports);
+__exportStar(__webpack_require__(2392), exports);
 
 
 /***/ }),
-/* 2387 */
+/* 2388 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -362976,8 +363029,8 @@ __exportStar(__webpack_require__(2391), exports);
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Cron = Cron;
 const common_1 = __webpack_require__(10);
-const scheduler_type_enum_1 = __webpack_require__(2388);
-const schedule_constants_1 = __webpack_require__(2389);
+const scheduler_type_enum_1 = __webpack_require__(2389);
+const schedule_constants_1 = __webpack_require__(2390);
 /**
  * Creates a scheduled job.
  * @param cronTime The time to fire off your job. This can be in the form of cron syntax, a JS ```Date``` object or a Luxon ```DateTime``` object.
@@ -362995,7 +363048,7 @@ function Cron(cronTime, options = {}) {
 
 
 /***/ }),
-/* 2388 */
+/* 2389 */
 /***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
@@ -363011,7 +363064,7 @@ var SchedulerType;
 
 
 /***/ }),
-/* 2389 */
+/* 2390 */
 /***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
@@ -363027,7 +363080,7 @@ exports.SCHEDULE_MODULE_OPTIONS = 'SCHEDULE_MODULE_OPTIONS';
 
 
 /***/ }),
-/* 2390 */
+/* 2391 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -363035,8 +363088,8 @@ exports.SCHEDULE_MODULE_OPTIONS = 'SCHEDULE_MODULE_OPTIONS';
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Interval = Interval;
 const common_1 = __webpack_require__(10);
-const scheduler_type_enum_1 = __webpack_require__(2388);
-const schedule_constants_1 = __webpack_require__(2389);
+const scheduler_type_enum_1 = __webpack_require__(2389);
+const schedule_constants_1 = __webpack_require__(2390);
 /**
  * Schedules an interval (`setInterval`).
  *
@@ -363051,7 +363104,7 @@ function Interval(nameOrTimeout, timeout) {
 
 
 /***/ }),
-/* 2391 */
+/* 2392 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -363059,8 +363112,8 @@ function Interval(nameOrTimeout, timeout) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Timeout = Timeout;
 const common_1 = __webpack_require__(10);
-const scheduler_type_enum_1 = __webpack_require__(2388);
-const schedule_constants_1 = __webpack_require__(2389);
+const scheduler_type_enum_1 = __webpack_require__(2389);
+const schedule_constants_1 = __webpack_require__(2390);
 /**
  * Schedules a timeout (`setTimeout`).
  *
@@ -363075,7 +363128,7 @@ function Timeout(nameOrTimeout, timeout) {
 
 
 /***/ }),
-/* 2392 */
+/* 2393 */
 /***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
@@ -363084,7 +363137,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 
 
 /***/ }),
-/* 2393 */
+/* 2394 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -363100,11 +363153,11 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ScheduleModule = void 0;
 const common_1 = __webpack_require__(10);
 const core_1 = __webpack_require__(1);
-const schedule_metadata_accessor_1 = __webpack_require__(2394);
-const schedule_explorer_1 = __webpack_require__(2395);
-const scheduler_orchestrator_1 = __webpack_require__(2396);
-const scheduler_registry_1 = __webpack_require__(2403);
-const schedule_constants_1 = __webpack_require__(2389);
+const schedule_metadata_accessor_1 = __webpack_require__(2395);
+const schedule_explorer_1 = __webpack_require__(2396);
+const scheduler_orchestrator_1 = __webpack_require__(2397);
+const scheduler_registry_1 = __webpack_require__(2404);
+const schedule_constants_1 = __webpack_require__(2390);
 /**
  * @publicApi
  */
@@ -363201,7 +363254,7 @@ exports.ScheduleModule = ScheduleModule = ScheduleModule_1 = __decorate([
 
 
 /***/ }),
-/* 2394 */
+/* 2395 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -363219,7 +363272,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.SchedulerMetadataAccessor = void 0;
 const common_1 = __webpack_require__(10);
 const core_1 = __webpack_require__(1);
-const schedule_constants_1 = __webpack_require__(2389);
+const schedule_constants_1 = __webpack_require__(2390);
 let SchedulerMetadataAccessor = class SchedulerMetadataAccessor {
     reflector;
     constructor(reflector) {
@@ -363255,7 +363308,7 @@ exports.SchedulerMetadataAccessor = SchedulerMetadataAccessor = __decorate([
 
 
 /***/ }),
-/* 2395 */
+/* 2396 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -363276,10 +363329,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ScheduleExplorer = void 0;
 const common_1 = __webpack_require__(10);
 const core_1 = __webpack_require__(1);
-const scheduler_type_enum_1 = __webpack_require__(2388);
-const schedule_metadata_accessor_1 = __webpack_require__(2394);
-const scheduler_orchestrator_1 = __webpack_require__(2396);
-const schedule_constants_1 = __webpack_require__(2389);
+const scheduler_type_enum_1 = __webpack_require__(2389);
+const schedule_metadata_accessor_1 = __webpack_require__(2395);
+const scheduler_orchestrator_1 = __webpack_require__(2397);
+const schedule_constants_1 = __webpack_require__(2390);
 let ScheduleExplorer = class ScheduleExplorer {
     moduleOptions;
     schedulerOrchestrator;
@@ -363402,7 +363455,7 @@ exports.ScheduleExplorer = ScheduleExplorer = __decorate([
 
 
 /***/ }),
-/* 2396 */
+/* 2397 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -363419,8 +363472,8 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.SchedulerOrchestrator = void 0;
 const common_1 = __webpack_require__(10);
-const cron_1 = __webpack_require__(2397);
-const scheduler_registry_1 = __webpack_require__(2403);
+const cron_1 = __webpack_require__(2398);
+const scheduler_registry_1 = __webpack_require__(2404);
 let SchedulerOrchestrator = class SchedulerOrchestrator {
     schedulerRegistry;
     cronJobs = {};
@@ -363523,17 +363576,17 @@ exports.SchedulerOrchestrator = SchedulerOrchestrator = __decorate([
 
 
 /***/ }),
-/* 2397 */
+/* 2398 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.validateCronExpression = exports.timeout = exports.sendAt = exports.CronTime = exports.CronJob = void 0;
-const time_1 = __webpack_require__(2398);
-var job_1 = __webpack_require__(2402);
+const time_1 = __webpack_require__(2399);
+var job_1 = __webpack_require__(2403);
 Object.defineProperty(exports, "CronJob", ({ enumerable: true, get: function () { return job_1.CronJob; } }));
-var time_2 = __webpack_require__(2398);
+var time_2 = __webpack_require__(2399);
 Object.defineProperty(exports, "CronTime", ({ enumerable: true, get: function () { return time_2.CronTime; } }));
 const sendAt = (cronTime) => new time_1.CronTime(cronTime).sendAt();
 exports.sendAt = sendAt;
@@ -363543,16 +363596,16 @@ exports.validateCronExpression = time_1.CronTime.validateCronExpression;
 
 
 /***/ }),
-/* 2398 */
+/* 2399 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.CronTime = void 0;
-const luxon_1 = __webpack_require__(2399);
-const constants_1 = __webpack_require__(2400);
-const errors_1 = __webpack_require__(2401);
+const luxon_1 = __webpack_require__(2400);
+const constants_1 = __webpack_require__(2401);
+const errors_1 = __webpack_require__(2402);
 class CronTime {
     constructor(source, timeZone, utcOffset) {
         this.realDate = false;
@@ -363860,7 +363913,7 @@ exports.CronTime = CronTime;
 
 
 /***/ }),
-/* 2399 */
+/* 2400 */
 /***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
@@ -371659,7 +371712,7 @@ exports.Zone = Zone;
 
 
 /***/ }),
-/* 2400 */
+/* 2401 */
 /***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
@@ -371729,7 +371782,7 @@ exports.RE_RANGE = /^(\d+)(?:-(\d+))?(?:\/(\d+))?$/g;
 
 
 /***/ }),
-/* 2401 */
+/* 2402 */
 /***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
@@ -371748,7 +371801,7 @@ exports.ExclusiveParametersError = ExclusiveParametersError;
 
 
 /***/ }),
-/* 2402 */
+/* 2403 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -371764,9 +371817,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.CronJob = void 0;
-const child_process_1 = __webpack_require__(2292);
-const errors_1 = __webpack_require__(2401);
-const time_1 = __webpack_require__(2398);
+const child_process_1 = __webpack_require__(2293);
+const errors_1 = __webpack_require__(2402);
+const time_1 = __webpack_require__(2399);
 class CronJob {
     get isActive() {
         return this._isActive;
@@ -372014,7 +372067,7 @@ exports.CronJob = CronJob;
 
 
 /***/ }),
-/* 2403 */
+/* 2404 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -372029,7 +372082,7 @@ var SchedulerRegistry_1;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.SchedulerRegistry = void 0;
 const common_1 = __webpack_require__(10);
-const schedule_messages_1 = __webpack_require__(2404);
+const schedule_messages_1 = __webpack_require__(2405);
 let SchedulerRegistry = SchedulerRegistry_1 = class SchedulerRegistry {
     logger = new common_1.Logger(SchedulerRegistry_1.name);
     cronJobs = new Map();
@@ -372132,7 +372185,7 @@ exports.SchedulerRegistry = SchedulerRegistry = SchedulerRegistry_1 = __decorate
 
 
 /***/ }),
-/* 2404 */
+/* 2405 */
 /***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
@@ -372148,7 +372201,7 @@ exports.DUPLICATE_SCHEDULER = DUPLICATE_SCHEDULER;
 
 
 /***/ }),
-/* 2405 */
+/* 2406 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -372171,8 +372224,8 @@ exports.NewsletterController = void 0;
 const common_1 = __webpack_require__(10);
 const passport_1 = __webpack_require__(1418);
 const swagger_1 = __webpack_require__(1077);
-const newsletter_service_1 = __webpack_require__(2406);
-const newsletter_scheduler_1 = __webpack_require__(2407);
+const newsletter_service_1 = __webpack_require__(2407);
+const newsletter_scheduler_1 = __webpack_require__(2408);
 let NewsletterController = class NewsletterController {
     constructor(newsletterService, newsletterScheduler) {
         this.newsletterService = newsletterService;
@@ -372237,7 +372290,7 @@ exports.NewsletterController = NewsletterController = __decorate([
 
 
 /***/ }),
-/* 2406 */
+/* 2407 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -372307,7 +372360,7 @@ exports.NewsletterService = NewsletterService = __decorate([
 
 
 /***/ }),
-/* 2407 */
+/* 2408 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -372325,9 +372378,9 @@ var _a, _b;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.NewsletterScheduler = void 0;
 const common_1 = __webpack_require__(10);
-const schedule_1 = __webpack_require__(2382);
+const schedule_1 = __webpack_require__(2383);
 const prisma_service_1 = __webpack_require__(1290);
-const email_service_1 = __webpack_require__(2408);
+const email_service_1 = __webpack_require__(2409);
 let NewsletterScheduler = class NewsletterScheduler {
     constructor(prisma, emailService) {
         this.prisma = prisma;
@@ -372464,7 +372517,7 @@ exports.NewsletterScheduler = NewsletterScheduler = __decorate([
 
 
 /***/ }),
-/* 2408 */
+/* 2409 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -372515,7 +372568,7 @@ var _a;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.EmailService = void 0;
 const common_1 = __webpack_require__(10);
-const nodemailer = __importStar(__webpack_require__(2258));
+const nodemailer = __importStar(__webpack_require__(2259));
 const prisma_service_1 = __webpack_require__(1290);
 let EmailService = class EmailService {
     constructor(prisma) {
@@ -372573,7 +372626,7 @@ exports.EmailService = EmailService = __decorate([
 
 
 /***/ }),
-/* 2409 */
+/* 2410 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -372587,7 +372640,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.EmailModule = void 0;
 const common_1 = __webpack_require__(10);
-const email_service_1 = __webpack_require__(2408);
+const email_service_1 = __webpack_require__(2409);
 const prisma_module_1 = __webpack_require__(1289);
 let EmailModule = class EmailModule {
 };
@@ -372602,7 +372655,7 @@ exports.EmailModule = EmailModule = __decorate([
 
 
 /***/ }),
-/* 2410 */
+/* 2411 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -372616,8 +372669,8 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.FileManagerModule = void 0;
 const common_1 = __webpack_require__(10);
-const file_manager_controller_1 = __webpack_require__(2411);
-const file_manager_service_1 = __webpack_require__(2420);
+const file_manager_controller_1 = __webpack_require__(2412);
+const file_manager_service_1 = __webpack_require__(2421);
 const supabase_module_1 = __webpack_require__(1293);
 let FileManagerModule = class FileManagerModule {
 };
@@ -372633,7 +372686,7 @@ exports.FileManagerModule = FileManagerModule = __decorate([
 
 
 /***/ }),
-/* 2411 */
+/* 2412 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -372657,8 +372710,8 @@ const common_1 = __webpack_require__(10);
 const passport_1 = __webpack_require__(1418);
 const swagger_1 = __webpack_require__(1077);
 const platform_express_1 = __webpack_require__(841);
-const multer_1 = __webpack_require__(2412);
-const file_manager_service_1 = __webpack_require__(2420);
+const multer_1 = __webpack_require__(2413);
+const file_manager_service_1 = __webpack_require__(2421);
 let FileManagerController = class FileManagerController {
     constructor(fileManagerService) {
         this.fileManagerService = fileManagerService;
@@ -372816,14 +372869,14 @@ exports.FileManagerController = FileManagerController = __decorate([
 
 
 /***/ }),
-/* 2412 */
+/* 2413 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-var makeMiddleware = __webpack_require__(2413)
+var makeMiddleware = __webpack_require__(2414)
 
-var diskStorage = __webpack_require__(2418)
-var memoryStorage = __webpack_require__(2419)
-var MulterError = __webpack_require__(2415)
+var diskStorage = __webpack_require__(2419)
+var memoryStorage = __webpack_require__(2420)
+var MulterError = __webpack_require__(2416)
 
 function allowAll (req, file, cb) {
   cb(null, true)
@@ -372929,17 +372982,17 @@ module.exports.MulterError = MulterError
 
 
 /***/ }),
-/* 2413 */
+/* 2414 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var is = __webpack_require__(897)
 var Busboy = __webpack_require__(1010)
 var appendField = __webpack_require__(1016)
 
-var Counter = __webpack_require__(2414)
-var MulterError = __webpack_require__(2415)
-var FileAppender = __webpack_require__(2416)
-var removeUploadedFiles = __webpack_require__(2417)
+var Counter = __webpack_require__(2415)
+var MulterError = __webpack_require__(2416)
+var FileAppender = __webpack_require__(2417)
+var removeUploadedFiles = __webpack_require__(2418)
 
 function drainStream (stream) {
   stream.on('readable', () => {
@@ -373185,7 +373238,7 @@ module.exports = makeMiddleware
 
 
 /***/ }),
-/* 2414 */
+/* 2415 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var EventEmitter = (__webpack_require__(867).EventEmitter)
@@ -373219,7 +373272,7 @@ module.exports = Counter
 
 
 /***/ }),
-/* 2415 */
+/* 2416 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var util = __webpack_require__(78)
@@ -373249,7 +373302,7 @@ module.exports = MulterError
 
 
 /***/ }),
-/* 2416 */
+/* 2417 */
 /***/ ((module) => {
 
 function arrayRemove (arr, item) {
@@ -373320,7 +373373,7 @@ module.exports = FileAppender
 
 
 /***/ }),
-/* 2417 */
+/* 2418 */
 /***/ ((module) => {
 
 function removeUploadedFiles (uploadedFiles, remove, cb) {
@@ -373354,7 +373407,7 @@ module.exports = removeUploadedFiles
 
 
 /***/ }),
-/* 2418 */
+/* 2419 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var fs = __webpack_require__(863)
@@ -373425,7 +373478,7 @@ module.exports = function (opts) {
 
 
 /***/ }),
-/* 2419 */
+/* 2420 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var concat = __webpack_require__(1026)
@@ -373452,7 +373505,7 @@ module.exports = function (opts) {
 
 
 /***/ }),
-/* 2420 */
+/* 2421 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -374028,7 +374081,7 @@ exports.FileManagerService = FileManagerService = __decorate([
 
 
 /***/ }),
-/* 2421 */
+/* 2422 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -374042,8 +374095,8 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.DraftPreviewModule = void 0;
 const common_1 = __webpack_require__(10);
-const draft_preview_controller_1 = __webpack_require__(2422);
-const draft_preview_service_1 = __webpack_require__(2423);
+const draft_preview_controller_1 = __webpack_require__(2423);
+const draft_preview_service_1 = __webpack_require__(2424);
 let DraftPreviewModule = class DraftPreviewModule {
 };
 exports.DraftPreviewModule = DraftPreviewModule;
@@ -374057,7 +374110,7 @@ exports.DraftPreviewModule = DraftPreviewModule = __decorate([
 
 
 /***/ }),
-/* 2422 */
+/* 2423 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -374078,7 +374131,7 @@ var _a, _b;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.DraftPreviewController = void 0;
 const common_1 = __webpack_require__(10);
-const draft_preview_service_1 = __webpack_require__(2423);
+const draft_preview_service_1 = __webpack_require__(2424);
 let DraftPreviewController = class DraftPreviewController {
     constructor(draftPreviewService) {
         this.draftPreviewService = draftPreviewService;
@@ -374117,7 +374170,7 @@ exports.DraftPreviewController = DraftPreviewController = __decorate([
 
 
 /***/ }),
-/* 2423 */
+/* 2424 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";

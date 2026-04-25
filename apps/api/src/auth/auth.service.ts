@@ -47,7 +47,7 @@ export class AuthService {
       },
     });
 
-    const payload: JwtPayload = { sub: user.id, email: user.email, role: user.role };
+    const payload: JwtPayload = { sub: user.id, email: user.email, role: user.role as Role };
 
     return {
       access_token: this.jwtService.sign(payload),
@@ -55,7 +55,7 @@ export class AuthService {
         id: user.id,
         email: user.email,
         name: user.name,
-        role: user.role,
+        role: user.role as Role,
       },
     };
   }
@@ -83,7 +83,7 @@ export class AuthService {
       changes: { email: user.email, role: user.role },
     });
 
-    const payload: JwtPayload = { sub: user.id, email: user.email, role: user.role };
+    const payload: JwtPayload = { sub: user.id, email: user.email, role: user.role as Role };
 
     return {
       access_token: this.jwtService.sign(payload),
@@ -91,7 +91,7 @@ export class AuthService {
         id: user.id,
         email: user.email,
         name: user.name,
-        role: user.role,
+        role: user.role as Role,
       },
     };
   }
