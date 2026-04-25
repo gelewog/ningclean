@@ -1,10 +1,12 @@
+// Vercel serverless entry point
+// This file imports the NestJS source directly and is transpiled by Vercel at runtime
+
 import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
-import { NestExpressApplication } from '@nestjs/platform-express';
-import { AppModule } from './app.module';
+import { AppModule } from '../src/app.module';
 
-let app: NestExpressApplication | null = null;
+let app: any = null;
 
 async function bootstrap() {
   if (app) return app;
@@ -13,7 +15,7 @@ async function bootstrap() {
   console.log('[API] DATABASE_URL exists:', !!process.env.DATABASE_URL);
   console.log('[API] SUPABASE_URL exists:', !!process.env.SUPABASE_URL);
   
-  app = await NestFactory.create<NestExpressApplication>(AppModule);
+  app = await NestFactory.create(AppModule);
 
   // CORS
   app.enableCors({
@@ -53,16 +55,6 @@ async function bootstrap() {
   return app;
 }
 
-// Local dev
-if (!process.env.VERCEL) {
-  bootstrap().then(async (app) => {
-    const port = process.env.PORT || 4000;
-    await app.listen(port);
-    console.log(`🚀 API running on http://localhost:${port}`);
-  });
-}
-
-// Vercel handler - export for serverless
 export default async function handler(req: any, res: any) {
   try {
     const app = await bootstrap();
@@ -77,10 +69,4 @@ export default async function handler(req: any, res: any) {
   }
 }
 
-// Also export for potential direct usage
 export { bootstrap, handler };
-
-// CommonJS compatibility for Vercel serverless
-if (typeof (globalThis as any).module !== 'undefined') {
-  (globalThis as any).module.exports = { default: handler, handler, bootstrap };
-}
