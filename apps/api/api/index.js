@@ -1,3 +1,15 @@
-// Placeholder - Vercel will use dist/main.js instead
-// This file is not used in production
-module.exports = require('../dist/main.js');
+const { bootstrap } = require('../dist/main.js');
+
+module.exports = async function handler(req, res) {
+  try {
+    const app = await bootstrap();
+    const server = app.getHttpAdapter().getInstance();
+    return server(req, res);
+  } catch (error) {
+    console.error('[API] Handler error:', error);
+    res.status(500).json({
+      error: 'Server Error',
+      message: error.message,
+    });
+  }
+};
