@@ -1,31 +1,25 @@
-# Dockerfile for Railway - NestJS API
 FROM node:20-slim
 
-WORKDIR /app
-
 # Install build dependencies
-RUN apt-get update && apt-get install -y \
-    python3 \
-    make \
-    g++ \
-    && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y python3 make g++ && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app
 
 # Copy package files
 COPY package*.json ./
 COPY prisma ./prisma/
 
-# Install dependencies
-RUN npm ci
+# Install dependencies (pakai npm install, bukan npm ci)
+RUN npm install
 
 # Copy source code
 COPY . .
 
-# Generate Prisma client and build
-RUN npx prisma generate
-RUN npm run build
+# Generate Prisma client dan build
+RUN npx prisma generate && npm run build
 
 # Expose port
 EXPOSE 4000
 
-# Start application
+# Start app
 CMD ["npm", "run", "start:prod"]
