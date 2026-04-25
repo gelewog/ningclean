@@ -1,22 +1,12 @@
-// Vercel serverless entry point
-// Standalone bootstrap - does not depend on prebuilt dist/main.js
+// Vercel serverless entry point - TypeScript
+// Vercel akan compile ini langsung menggunakan @vercel/node
 
-const path = require('path');
-const { register } = require('ts-node');
+import { NestFactory } from '@nestjs/core';
+import { ValidationPipe } from '@nestjs/common';
+import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import { AppModule } from '../src/app.module';
 
-// Register ts-node to transpile TypeScript on the fly
-register({
-  transpileOnly: true,
-  project: path.join(__dirname, '..', 'tsconfig.json'),
-});
-
-// Now we can require TypeScript files
-const { NestFactory } = require('@nestjs/core');
-const { ValidationPipe } = require('@nestjs/common');
-const { SwaggerModule, DocumentBuilder } = require('@nestjs/swagger');
-const { AppModule } = require('../src/app.module');
-
-let app = null;
+let app: any = null;
 
 async function bootstrap() {
   if (app) return app;
@@ -65,12 +55,12 @@ async function bootstrap() {
   return app;
 }
 
-async function handler(req, res) {
+export default async function handler(req: any, res: any) {
   try {
     const app = await bootstrap();
     const server = app.getHttpAdapter().getInstance();
     return server(req, res);
-  } catch (error) {
+  } catch (error: any) {
     console.error('[API] Handler error:', error);
     res.status(500).json({ 
       error: 'Server Error', 
@@ -79,6 +69,4 @@ async function handler(req, res) {
   }
 }
 
-module.exports = handler;
-module.exports.handler = handler;
-module.exports.bootstrap = bootstrap;
+export { bootstrap, handler };
