@@ -23,14 +23,15 @@ RUN npx prisma generate
 # Copy source code
 COPY apps/api ./apps/api/
 
+# Copy start script
+COPY start.sh ./
+RUN chmod +x start.sh
+
 # Build API
 WORKDIR /app/apps/api
 RUN npx nest build
 
-# Final stage
+# Start
 WORKDIR /app
 ENV NODE_ENV=production
-
-# Start the application
-ENTRYPOINT ["node"]
-CMD ["apps/api/dist/main.js"]
+CMD ["./start.sh"]
