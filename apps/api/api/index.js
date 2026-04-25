@@ -1,62 +1,55 @@
-// Debug wrapper untuk check Vercel environment
+// Debug handler untuk Vercel
 const fs = require('fs');
 const path = require('path');
 
-// Check directory structure
 function listDir(dir, depth = 0) {
   if (depth > 3) return '[max depth]';
   try {
     const items = fs.readdirSync(dir);
     return items.map(item => {
       const fullPath = path.join(dir, item);
-      const stat = fs.statSync(fullPath);
-      if (stat.isDirectory()) {
-        return { [item]: listDir(fullPath, depth + 1) };
+      try {
+        const stat = fs.statSync(fullPath);
+        if (stat.isDirectory()) {
+          return { [item]: listDir(fullPath, depth + 1) };
+        }
+        return item;
+      } catch (e) {
+        return `${item} (error: ${e.message})`;
       }
-      return item;
     });
   } catch (e) {
     return `Error: ${e.message}`;
   }
 }
 
-module.exports = async function handler(req, res) {
+module.exports = async (req, res) => {
   const info = {
-    message: 'Debug handler',
+    message: 'Debug handler v2',
     url: req.url,
     method: req.method,
+    timestamp: new Date().toISOString(),
     __dirname,
     cwd: process.cwd(),
     env: {
       VERCEL: process.env.VERCEL,
       NODE_ENV: process.env.NODE_ENV,
+      VERCEL_REGION: process.env.VERCEL_REGION,
     }
   };
-  
-  // Check if dist/main.js exists
-  const mainPath = path.join(__dirname, '..', 'dist', 'main.js');
-  info.mainPath = mainPath;
-  info.mainExists = fs.existsSync(mainPath);
   
   // Check directory structure
   info.rootContents = listDir(__dirname, 0);
   info.parentContents = listDir(path.join(__dirname, '..'), 0);
   
-  // Try to load and log module exports
+  // Check if main.js exists
+  const mainPath = path.join(__dirname, '..', 'dist', 'main.js');
+  info.mainPath = mainPath;
+  info.mainExists = fs.existsSync(mainPath);
+  
   if (info.mainExists) {
-    try {
-      const m = require(mainPath);
-      info.moduleKeys = Object.keys(m);
-      info.hasDefault = !!m.default;
-      info.hasHandler = !!m.handler;
-      info.hasBootstrap = !!m.bootstrap;
-    } catch (e) {
-      info.moduleError = e.message;
-    }
+    info.mainSize = fs.statSync(mainPath).size;
   }
   
   return res.status(200).json(info);
 };
-
-module.exports.default = module.exports;
-module.exports.handler = module.exports;
