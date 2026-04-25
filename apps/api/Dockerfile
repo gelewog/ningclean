@@ -21,8 +21,8 @@ COPY . .
 # Create symlink untuk prisma client
 RUN ln -sf /app/prisma/node_modules/.prisma/client /app/node_modules/.prisma/client 2>/dev/null || true
 
-# Build NestJS
-RUN npm run build
+# Build NestJS dengan verbose
+RUN npm run build 2>&1 || (echo '=== Build failed ===' && cat /root/.npm/_logs/*.log 2>/dev/null || true && exit 1)
 
 # Expose port
 EXPOSE 4000
