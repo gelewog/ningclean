@@ -1,15 +1,11 @@
-// Vercel Serverless Handler for NestJS - with detailed error logging
+// Vercel Serverless Handler for NestJS
 const fs = require('fs');
 const path = require('path');
 
-// Helper to safely log
 function safeLog(...args) {
-  try {
-    console.log(...args);
-  } catch (e) {}
+  try { console.log(...args); } catch (e) {}
 }
 
-// Try to find and load main.js
 function findAndLoadMain() {
   const possiblePaths = [
     path.join(__dirname, 'main.js'),
@@ -20,14 +16,6 @@ function findAndLoadMain() {
   
   safeLog('[Vercel] Searching for main.js...');
   safeLog('[Vercel] __dirname:', __dirname);
-  safeLog('[Vercel] cwd:', process.cwd());
-  
-  // List current directory contents
-  try {
-    safeLog('[Vercel] Current dir contents:', fs.readdirSync(__dirname));
-  } catch (e) {
-    safeLog('[Vercel] Error reading dir:', e.message);
-  }
   
   for (const p of possiblePaths) {
     safeLog('[Vercel] Checking:', p, 'exists:', fs.existsSync(p));
@@ -38,18 +26,16 @@ function findAndLoadMain() {
         safeLog('[Vercel] Module loaded, exports:', Object.keys(mod));
         return mod;
       } catch (e) {
-        safeLog('[Vercel] Error loading module from', p, ':', e.message);
+        safeLog('[Vercel] Error loading module:', e.message);
         throw e;
       }
     }
   }
   
-  throw new Error('main.js not found in any location');
+  throw new Error('main.js not found');
 }
 
-// Create handler
 let handler;
-let errorInfo = null;
 
 try {
   const mainModule = findAndLoadMain();
@@ -57,23 +43,14 @@ try {
   safeLog('[Vercel] Handler type:', typeof handler);
   
   if (typeof handler !== 'function') {
-    throw new Error('Handler is not a function. Got: ' + typeof handler);
+    throw new Error('Handler is not a function');
   }
 } catch (e) {
   safeLog('[Vercel] Fatal error:', e.message);
-  errorInfo = {
-    message: e.message,
-    stack: e.stack,
-    cwd: process.cwd(),
-    __dirname: __dirname,
-  };
-  
-  // Create fallback error handler
   handler = async (req, res) => {
     return res.status(500).json({
-      error: 'Failed to initialize NestJS',
-      details: errorInfo,
-      hint: 'Check Vercel logs for more details',
+      error: 'Failed to initialize',
+      message: e.message,
     });
   };
 }
