@@ -1,12 +1,18 @@
 generator client {
   provider      = "prisma-client-js"
-  binaryTargets = ["native", "windows", "debian-openssl-3.0.x", "rhel-openssl-3.0.x"]
-  output        = "../node_modules/.prisma/client"
+  binaryTargets = ["native", "debian-openssl-3.0.x", "rhel-openssl-3.0.x"]
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+enum Role {
+  CUSTOMER
+  ADMIN
+  STAFF
 }
 
 model User {
@@ -499,12 +505,6 @@ model AuditLog {
   createdAt  DateTime @default(now())
 
   @@map("audit_logs")
-}
-
-enum Role {
-  CUSTOMER
-  ADMIN
-  STAFF
 }
 
 enum BookingStatus {

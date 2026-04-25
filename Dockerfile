@@ -1,23 +1,33 @@
 FROM node:20-slim
 
+# Install OpenSSL untuk Prisma
+RUN apt-get update -y && apt-get install -y openssl && rm -rf /var/lib/apt/lists/*
+
 WORKDIR /app
 
-# Install dependencies at root level
+# Copy root package files
 COPY package*.json ./
-COPY apps/api/package*.json ./apps/api/
-RUN npm ci --prefix .
 
 # Copy prisma schema
 COPY prisma ./prisma/
 
-# Copy source
+# Copy API package files
+COPY apps/api/package*.json ./apps/api/
+
+# Install dependencies
+RUN npm ci
+
+# Generate Prisma client
+RUN npx prisma generate
+
+# Copy source code
 COPY apps/api ./apps/api/
 
-# Build
+# Build API
 WORKDIR /app/apps/api
-RUN npx prisma generate
-RUN npm run build
+RUN npx nest build
 
 # Start
 WORKDIR /app
+ENV NODE_ENV=production
 CMD ["node", "apps/api/dist/main.js"]
