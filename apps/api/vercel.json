@@ -4,6 +4,6 @@
   "outputDirectory": "api",
   "framework": null,
   "rewrites": [
-    { "source": "/(.*)", "destination": "/main.js" }
+    { "source": "/(.*)", "destination": "/" }
   ]
 }
