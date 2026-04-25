@@ -27,7 +27,10 @@ COPY apps/api ./apps/api/
 WORKDIR /app/apps/api
 RUN npx nest build
 
-# Start
+# Final stage
 WORKDIR /app
 ENV NODE_ENV=production
-CMD ["node", "apps/api/dist/main.js"]
+
+# Start the application
+ENTRYPOINT ["node"]
+CMD ["apps/api/dist/main.js"]
