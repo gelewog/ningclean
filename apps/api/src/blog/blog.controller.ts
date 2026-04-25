@@ -18,7 +18,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { BlogService } from './blog.service';
 import { CreateBlogDto, UpdateBlogDto } from './dto/blog.dto';
 import { RolesGuard, Roles } from '../common';
-import { Role } from '@prisma/client';
+import { Role } from '../common';
 
 @ApiTags('Blog')
 @Controller('blog')

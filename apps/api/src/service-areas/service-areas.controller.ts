@@ -4,7 +4,7 @@ import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
 import { ServiceAreasService } from './service-areas.service';
 import { CreateServiceAreaDto, UpdateServiceAreaDto } from './dto/service-area.dto';
 import { RolesGuard, Roles } from '../common';
-import { Role } from '@prisma/client';
+import { Role } from '../common';
 
 @ApiTags('Service Areas')
 @Controller('service-areas')

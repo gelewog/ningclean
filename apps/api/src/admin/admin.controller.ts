@@ -3,7 +3,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
 import { AdminService } from './admin.service';
 import { RolesGuard, Roles } from '../common';
-import { Role, BookingStatus } from '@prisma/client';
+import { Role, BookingStatus } from '../common';
 
 @ApiTags('Admin')
 @Controller('admin')
@@ -52,7 +52,7 @@ export class AdminController {
   @Put('bookings/:id')
   @ApiOperation({ summary: 'Update booking (status, internal notes)' })
   updateBooking(@Param('id') id: string, @Body() data: { status?: string; internalNotes?: string }) {
-    const validStatuses: BookingStatus[] = ['PENDING', 'CONFIRMED', 'IN_PROGRESS', 'COMPLETED', 'CANCELLED'];
+    const validStatuses = ['PENDING', 'CONFIRMED', 'IN_PROGRESS', 'COMPLETED', 'CANCELLED'] as const;
     const updateData: { status?: BookingStatus; internalNotes?: string } = {};
     if (data.status && validStatuses.includes(data.status as BookingStatus)) {
       updateData.status = data.status as BookingStatus;
@@ -67,10 +67,10 @@ export class AdminController {
   @ApiOperation({ summary: 'Bulk update booking status' })
   bulkUpdateStatus(@Body() body: { ids: string[]; status: string }) {
     // Validate status is a valid BookingStatus
-    const validStatuses: BookingStatus[] = ['PENDING', 'CONFIRMED', 'IN_PROGRESS', 'COMPLETED', 'CANCELLED'];
-    const status = validStatuses.includes(body.status as BookingStatus) 
-      ? body.status as BookingStatus 
-      : 'PENDING';
+    const validStatuses = ['PENDING', 'CONFIRMED', 'IN_PROGRESS', 'COMPLETED', 'CANCELLED'] as const;
+    const status = validStatuses.includes(body.status as BookingStatus)
+      ? body.status as BookingStatus
+      : 'PENDING' as BookingStatus;
     return this.adminService.bulkUpdateBookingStatus(body.ids, status);
   }
 

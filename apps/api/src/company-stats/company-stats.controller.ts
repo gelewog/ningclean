@@ -4,7 +4,7 @@ import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
 import { CompanyStatsService } from './company-stats.service';
 import { CreateCompanyStatDto, UpdateCompanyStatDto } from './dto/company-stat.dto';
 import { RolesGuard, Roles } from '../common';
-import { Role } from '@prisma/client';
+import { Role } from '../common';
 
 @ApiTags('Company Stats')
 @Controller('company-stats')

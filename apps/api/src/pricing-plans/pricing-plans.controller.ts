@@ -4,7 +4,7 @@ import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
 import { PricingPlansService } from './pricing-plans.service';
 import { CreatePricingPlanDto, UpdatePricingPlanDto } from './dto/pricing-plan.dto';
 import { RolesGuard, Roles } from '../common';
-import { Role } from '@prisma/client';
+import { Role } from '../common';
 
 @ApiTags('Pricing Plans')
 @Controller('pricing-plans')

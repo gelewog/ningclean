@@ -14,7 +14,7 @@ import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
 import { FaqService } from './faq.service';
 import { CreateFaqDto, UpdateFaqDto } from './dto/faq.dto';
 import { RolesGuard, Roles } from '../common';
-import { Role } from '@prisma/client';
+import { Role } from '../common';
 
 @ApiTags('FAQ')
 @Controller('faq')

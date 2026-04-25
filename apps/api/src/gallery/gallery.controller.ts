@@ -4,7 +4,7 @@ import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
 import { GalleryService } from './gallery.service';
 import { CreateGalleryItemDto, UpdateGalleryItemDto } from './dto/gallery-item.dto';
 import { RolesGuard, Roles } from '../common';
-import { Role } from '@prisma/client';
+import { Role } from '../common';
 
 @ApiTags('Gallery')
 @Controller('gallery')

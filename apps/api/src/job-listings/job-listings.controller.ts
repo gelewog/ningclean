@@ -4,7 +4,7 @@ import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
 import { JobListingsService } from './job-listings.service';
 import { CreateJobListingDto, UpdateJobListingDto } from './dto/job-listing.dto';
 import { RolesGuard, Roles } from '../common';
-import { Role } from '@prisma/client';
+import { Role } from '../common';
 
 @ApiTags('Job Listings')
 @Controller('careers')

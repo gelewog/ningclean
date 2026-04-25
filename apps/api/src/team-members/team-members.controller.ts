@@ -4,7 +4,7 @@ import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
 import { TeamMembersService } from './team-members.service';
 import { CreateTeamMemberDto, UpdateTeamMemberDto } from './dto/team-members.dto';
 import { RolesGuard, Roles } from '../common';
-import { Role } from '@prisma/client';
+import { Role } from '../common';
 
 @ApiTags('Team Members')
 @Controller('team-members')

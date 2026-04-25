@@ -1,7 +1,9 @@
 FROM node:20-slim
 
 # Install OpenSSL untuk Prisma
-RUN apt-get update -y && apt-get install -y openssl && rm -rf /var/lib/apt/lists/*
+RUN apt-get update -y
+RUN apt-get install -y openssl
+RUN rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 
@@ -22,6 +24,10 @@ RUN npx prisma generate
 
 # Copy source code
 COPY apps/api ./apps/api/
+
+# Debug: Check if DTO files exist
+RUN ls -la /app/apps/api/src/team-members/dto/
+RUN ls -la /app/apps/api/src/testimonials/dto/
 
 # Copy start script
 COPY start.sh ./

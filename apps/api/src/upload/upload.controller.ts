@@ -16,7 +16,7 @@ import { Response } from 'express';
 import { UploadService } from './upload.service';
 import { AuthGuard } from '@nestjs/passport';
 import { RolesGuard, Roles } from '../common';
-import { Role } from '@prisma/client';
+import { Role } from '../common';
 import { ApiTags, ApiOperation, ApiBearerAuth, ApiConsumes, ApiBody } from '@nestjs/swagger';
 
 @ApiTags('Upload')
