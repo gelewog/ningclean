@@ -52,8 +52,8 @@ export class NotificationsService implements OnModuleInit {
       
       const settings = await this.prisma.notificationSettings.findFirst();
       this.settings = settings?.config || null;
-      if (settings?.secrets) {
-        this.settings = { ...this.settings, ...settings.secrets };
+      if (settings?.secrets && typeof settings.secrets === 'object') {
+        this.settings = { ...this.settings, ...(settings.secrets as object) };
       }
     } catch (error) {
       console.log('Failed to load notification settings:', error);
@@ -68,7 +68,7 @@ export class NotificationsService implements OnModuleInit {
     }
 
     try {
-      this.transporter = nodemailer.createTransporter({
+      this.transporter = nodemailer.createTransport({
         host: this.settings.smtpHost || 'smtp.gmail.com',
         port: this.settings.smtpPort || 587,
         secure: this.settings.smtpSecure || false,
@@ -95,15 +95,16 @@ export class NotificationsService implements OnModuleInit {
   /**
    * Get WhatsApp deep link for opening chat
    */
-  getWhatsAppLink(phone: string, message?: string): string | null {
-    return this.whatsAppService.getWhatsAppLink(phone, message);
+  getWhatsAppLink(phone: string, message?: string): string {
+    const encodedMessage = message ? encodeURIComponent(message) : '';
+    return `https://wa.me/${phone.replace(/[^0-9]/g, '')}?text=${encodedMessage}`;
   }
 
   /**
    * Format WhatsApp message for booking notification
    */
   private formatWhatsAppMessage(data: BookingNotificationData): string {
-    const { orderNumber, customerName, customerPhone, serviceName, serviceDate, serviceTime, address, totalAmount, notes } = data;
+    const { orderNumber, customerName, customerEmail, customerPhone, serviceName, serviceDate, serviceTime, address, totalAmount, notes } = data;
     return `🎉 *Booking Baru!*\n\n` +
       `*Order:* ${orderNumber}\n` +
       `*Nama:* ${customerName}\n` +
@@ -274,12 +275,15 @@ export class NotificationsService implements OnModuleInit {
   }
 
   // Get all notifications
-  async getNotifications(limit: number = 50, onlyUnread: boolean = false) {
-    const where = onlyUnread ? { isRead: false } : {};
+  async getNotifications(options: { page?: number; limit?: number; unreadOnly?: boolean }) {
+    const { page = 1, limit = 20, unreadOnly = false } = options;
+    const where = unreadOnly ? { isRead: false } : {};
+    const skip = (page - 1) * limit;
     return this.prisma.notification.findMany({
       where,
       orderBy: { createdAt: 'desc' },
       take: limit,
+      skip,
     });
   }
 
@@ -336,7 +340,7 @@ export class NotificationsService implements OnModuleInit {
   }) {
     return this.prisma.notification.create({
       data: {
-        type: params.type || 'SYSTEM',
+        type: (params.type as any) || 'SYSTEM',
         title: params.title,
         message: params.message,
         data: params.metadata || undefined,
