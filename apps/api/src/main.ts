@@ -3,11 +3,44 @@ import { ValidationPipe } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { AppModule } from './app.module';
+import * as path from 'path';
+import * as fs from 'fs';
 
 let cachedApp: NestExpressApplication | null = null;
 
+async function copyPrismaEngine() {
+  try {
+    const srcPaths = [
+      path.join(__dirname, '../../node_modules/.prisma/client/query_engine-windows.dll.node'),
+      path.join(process.cwd(), 'node_modules/.prisma/client/query_engine-windows.dll.node'),
+      path.join(process.cwd(), '../../node_modules/.prisma/client/query_engine-windows.dll.node'),
+    ];
+    
+    const destDir = path.join(process.cwd(), 'node_modules/.prisma/client');
+    const destPath = path.join(destDir, 'query_engine-windows.dll.node');
+    
+    if (fs.existsSync(destPath)) return; // Already exists
+    
+    for (const srcPath of srcPaths) {
+      if (fs.existsSync(srcPath)) {
+        fs.mkdirSync(destDir, { recursive: true });
+        fs.copyFileSync(srcPath, destPath);
+        console.log('[API] Copied Prisma engine from:', srcPath);
+        return;
+      }
+    }
+    
+    console.warn('[API] Prisma engine not found in any source location');
+  } catch (err) {
+    console.error('[API] Failed to copy Prisma engine:', err.message);
+  }
+}
+
 async function bootstrap() {
   if (cachedApp) return cachedApp;
+  
+  // Ensure Prisma engine is available
+  await copyPrismaEngine();
   
   console.log('[API] Starting NestJS app...');
   console.log('[API] DATABASE_URL exists:', !!process.env.DATABASE_URL);
@@ -63,6 +96,9 @@ if (!process.env.VERCEL) {
     const port = process.env.PORT || 4000;
     await app.listen(port);
     console.log(`🚀 API running on http://localhost:${port}`);
+  }).catch(err => {
+    console.error('[API] Bootstrap failed:', err.message);
+    process.exit(1);
   });
 }
 

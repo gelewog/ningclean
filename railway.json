@@ -6,7 +6,6 @@
   },
   "deploy": {
     "startCommand": "node apps/api/dist/main.js",
-    "healthcheckPath": "/api/",
-    "healthcheckTimeout": 100
+    "healthcheckPath": "/api/"
   }
 }
