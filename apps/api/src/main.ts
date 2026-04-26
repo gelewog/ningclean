@@ -25,6 +25,7 @@ async function bootstrap() {
       'https://web-nine-rouge-16.vercel.app',
       'https://admin-tau-green-45.vercel.app',
       'https://ningclean-admin-production.vercel.app',
+      'https://ningclean-admin-production.up.railway.app',
       'http://localhost:3000',
       'http://localhost:3001',
     ],
