@@ -13,7 +13,7 @@ import {
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Response } from 'express';
-import { UploadService } from './upload.service';
+import { UploadService, UploadResult } from './upload.service';
 import { AuthGuard } from '@nestjs/passport';
 import { RolesGuard, Roles } from '../common';
 import { Role } from '../common';
@@ -49,7 +49,7 @@ export class UploadController {
     @UploadedFile() file: Express.Multer.File,
     @Param('folder') folder: string,
     @Query('subfolder') subfolder?: string,
-  ) {
+  ): Promise<UploadResult> {
     if (!file) {
       throw new BadRequestException('No file uploaded');
     }

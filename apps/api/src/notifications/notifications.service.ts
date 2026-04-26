@@ -50,153 +50,79 @@ export class NotificationsService implements OnModuleInit {
         return;
       }
       
-      // Read from JSONB config and secrets fields
-      const result = await this.prisma.$queryRawUnsafe(`
-        SELECT 
-          "config",
-          "secrets"
-        FROM "notification_settings" 
-        LIMIT 1
-      `) as { config: any; secrets: any }[];
-      
-      if (result && result.length > 0) {
-        const row = result[0];
-        // Safely parse config and secrets
-        const config = row.config || {};
-        const secrets = row.secrets || {};
-        
-        this.settings = {
-          // WhatsApp
-          whatsappNumber: config.whatsapp?.number || null,
-          whatsappEnabled: config.whatsapp?.enabled || false,
-          whatsappMessage: config.whatsapp?.defaultMessage || null,
-          // Email
-          emailEnabled: config.email?.enabled || false,
-          emailHost: config.email?.host || null,
-          emailPort: config.email?.port || null,
-          emailUser: config.email?.user || null,
-          emailFrom: config.email?.from || null,
-          adminEmail: config.email?.adminEmail || null,
-          // Twilio
-          twilioAccountSid: config.twilio?.accountSid || null,
-          twilioFromNumber: config.twilio?.fromNumber || null,
-          // Secrets
-          emailPassword: secrets.emailPassword || null,
-          twilioAuthToken: secrets.twilioAuthToken || null,
-        };
-      } else {
-        // Return default settings
-        this.settings = {
-          whatsappNumber: null,
-          whatsappEnabled: false,
-          whatsappMessage: null,
-          emailEnabled: false,
-          emailHost: null,
-          emailPort: null,
-          emailUser: null,
-          emailFrom: null,
-          adminEmail: null,
-          twilioAccountSid: null,
-          twilioFromNumber: null,
-          emailPassword: null,
-          twilioAuthToken: null,
-        };
+      const settings = await this.prisma.notificationSettings.findFirst();
+      this.settings = settings?.config || null;
+      if (settings?.secrets) {
+        this.settings = { ...this.settings, ...settings.secrets };
       }
     } catch (error) {
-      console.error('Failed to load notification settings:', error);
+      console.log('Failed to load notification settings:', error);
       this.settings = null;
     }
   }
 
   private initializeTransporter() {
-    if (this.settings?.emailEnabled && this.settings?.emailHost && this.settings?.emailPassword) {
-      this.transporter = nodemailer.createTransport({
-        host: this.settings.emailHost,
-        port: this.settings.emailPort || 587,
-        secure: this.settings.emailPort === 465,
+    if (!this.settings?.emailUser || !this.settings?.emailPassword) {
+      console.log('Email transporter not initialized - credentials not configured');
+      return;
+    }
+
+    try {
+      this.transporter = nodemailer.createTransporter({
+        host: this.settings.smtpHost || 'smtp.gmail.com',
+        port: this.settings.smtpPort || 587,
+        secure: this.settings.smtpSecure || false,
         auth: {
           user: this.settings.emailUser,
           pass: this.settings.emailPassword,
         },
       });
+      console.log('Email transporter initialized successfully');
+    } catch (error) {
+      console.error('Failed to initialize email transporter:', error);
+      this.transporter = null;
     }
   }
 
+  /**
+   * Refresh settings from database
+   */
   async refreshSettings() {
     await this.loadSettings();
     this.initializeTransporter();
-    await this.whatsAppService.refreshSettings();
-    await this.twilioService.refreshSettings();
   }
 
   /**
-   * Generate WhatsApp Click-to-Chat link (for backward compatibility)
+   * Get WhatsApp deep link for opening chat
    */
-  getWhatsAppLink(message: string): string | null {
-    if (!this.settings?.whatsappNumber) {
-      return null;
-    }
-
-    const number = this.settings.whatsappNumber.replace(/\+/g, '');
-    const encodedMessage = encodeURIComponent(message);
-    return `https://wa.me/${number}?text=${encodedMessage}`;
+  getWhatsAppLink(phone: string, message?: string): string | null {
+    return this.whatsAppService.getWhatsAppLink(phone, message);
   }
 
   /**
-   * Format booking notification message for WhatsApp
+   * Format WhatsApp message for booking notification
    */
-  formatWhatsAppMessage(data: BookingNotificationData): string {
-    console.log('🔍 DEBUG formatWhatsAppMessage INPUT:');
-    console.log('   data.notes:', data.notes);
-    console.log('   data.notes type:', typeof data.notes);
-    console.log('   this.settings?.whatsappMessage exists:', !!this.settings?.whatsappMessage);
-    
-    // Use custom message from settings if available, otherwise use default
-    const defaultMessage = `🎉 *Booking Baru!*
-
-📋 *Order:* {orderNumber}
-👤 *Nama:* {customerName}
-📞 *Telepon:* {customerPhone}
-📅 *Tanggal:* {serviceDate}
-⏰ *Jam:* {serviceTime}
-🏠 *Alamat:* {address}
-🧹 *Layanan:* {serviceName}
-📝 *Catatan:* {notes}
-💰 *Total:* {totalAmount}
-
----
-Dikirim otomatis dari NingClean`;
-
-    const message = this.settings?.whatsappMessage || defaultMessage;
-    
-    console.log('🔍 Using message template:', this.settings?.whatsappMessage ? 'FROM SETTINGS' : 'DEFAULT');
-
-    // BEFORE replace - check if {notes} exists in template
-    console.log('🔍 Template includes {notes}:', message.includes('{notes}'));
-
-    const formattedMessage = message
-      .replace(/{orderNumber}/g, data.orderNumber)
-      .replace(/{customerName}/g, data.customerName)
-      .replace(/{customerEmail}/g, data.customerEmail || '-')
-      .replace(/{customerPhone}/g, data.customerPhone || '-')
-      .replace(/{serviceName}/g, data.serviceName)
-      .replace(/{serviceDate}/g, data.serviceDate)
-      .replace(/{serviceTime}/g, data.serviceTime)
-      .replace(/{address}/g, data.address)
-      .replace(/{totalAmount}/g, data.totalAmount)
-      .replace(/{notes}/g, data.notes || 'Tidak ada catatan');
-    
-    // AFTER replace
-    console.log('🔍 AFTER replace:');
-    console.log('   Formatted includes original notes:', data.notes ? formattedMessage.includes(data.notes) : 'N/A');
-    
-    return formattedMessage;
+  private formatWhatsAppMessage(data: BookingNotificationData): string {
+    const { orderNumber, customerName, customerPhone, serviceName, serviceDate, serviceTime, address, totalAmount, notes } = data;
+    return `🎉 *Booking Baru!*\n\n` +
+      `*Order:* ${orderNumber}\n` +
+      `*Nama:* ${customerName}\n` +
+      `*Email:* ${customerEmail}\n` +
+      `*Telepon:* ${customerPhone || '-'}\n\n` +
+      `*Layanan:* ${serviceName}\n` +
+      `*Tanggal:* ${serviceDate}\n` +
+      `*Jam:* ${serviceTime}\n` +
+      `*Alamat:* ${address}\n` +
+      `*Total:* ${totalAmount}\n` +
+      (notes ? `\n*Catatan:* ${notes}` : '');
   }
 
   /**
-   * Send email notification
+   * Send email notification for new booking
    */
-  async sendEmailNotification(data: BookingNotificationData): Promise<boolean> {
+  private async sendEmailNotification(data: BookingNotificationData): Promise<boolean> {
+    await this.loadSettings();
+    
     if (!this.transporter || !this.settings?.adminEmail) {
       console.log('Email notification skipped: transporter not configured or no admin email');
       return false;
@@ -297,171 +223,74 @@ Dikirim otomatis dari NingClean`;
 
     const waResult = await this.sendWhatsAppNotification(data);
     const waMessage = this.formatWhatsAppMessage(data);
-    const waLink = this.getWhatsAppLink(waMessage);
-    const emailSent = await this.sendEmailNotification(data);
-
+    const waLink = this.getWhatsAppLink(data.customerPhone || '', waMessage);
+    
     return {
       waSent: waResult.success,
       waMessageId: waResult.messageId,
       waError: waResult.error,
-      emailSent,
+      emailSent: await this.sendEmailNotification(data),
       waLink,
     };
   }
 
   /**
-   * Get current settings (for admin panel)
+   * Get current notification settings
    */
   async getSettings() {
     await this.loadSettings();
-    
-    // Return default values even if settings is null
-    const defaults = {
-      whatsappNumber: '',
-      whatsappMessage: '',
-      whatsappEnabled: false,
-      emailEnabled: false,
-      emailHost: 'smtp.gmail.com',
-      emailPort: 587,
-      emailUser: '',
-      emailFrom: '',
-      adminEmail: '',
-      twilioAccountSid: '',
-      twilioFromNumber: '',
-      twilioAuthToken: '',
-      hasTwilio: false,
-      hasPassword: false,
-    };
-    
-    if (!this.settings) return defaults;
-
     return {
-      whatsappNumber: this.settings.whatsappNumber || '',
-      whatsappMessage: this.settings.whatsappMessage || '',
-      whatsappEnabled: this.settings.whatsappEnabled || false,
-      emailEnabled: this.settings.emailEnabled || false,
-      emailHost: this.settings.emailHost || 'smtp.gmail.com',
-      emailPort: this.settings.emailPort || 587,
-      emailUser: this.settings.emailUser || '',
-      emailFrom: this.settings.emailFrom || '',
-      adminEmail: this.settings.adminEmail || '',
-      twilioAccountSid: this.settings.twilioAccountSid || '',
-      twilioFromNumber: this.settings.twilioFromNumber || '',
-      hasTwilio: !!this.settings.twilioAuthToken,
-      hasPassword: !!this.settings.emailPassword,
+      ...this.settings,
+      emailPassword: this.settings?.emailPassword ? '***hidden***' : undefined,
+      twilioAuthToken: this.settings?.twilioAuthToken ? '***hidden***' : undefined,
+      apiKey: this.settings?.apiKey ? '***hidden***' : undefined,
+      apiSecret: this.settings?.apiSecret ? '***hidden***' : undefined,
     };
   }
 
   /**
    * Update notification settings
    */
-  async updateSettings(data: {
-    whatsappNumber?: string;
-    whatsappMessage?: string;
-    whatsappEnabled?: boolean;
-    emailEnabled?: boolean;
-    emailHost?: string;
-    emailPort?: number;
-    emailUser?: string;
-    emailPassword?: string;
-    emailFrom?: string;
-    adminEmail?: string;
-    twilioAccountSid?: string;
-    twilioAuthToken?: string;
-    twilioFromNumber?: string;
-  }) {
-    // Build config JSON
-    const config: any = {
-      whatsapp: {},
-      email: {},
-      twilio: {},
+  async updateSettings(settings: any) {
+    await this.loadSettings();
+    
+    // Merge with existing settings
+    const newSettings = {
+      ...this.settings,
+      ...settings,
     };
-    const secrets: any = {};
-
-    if (data.whatsappNumber !== undefined) config.whatsapp.number = data.whatsappNumber;
-    if (data.whatsappMessage !== undefined) config.whatsapp.defaultMessage = data.whatsappMessage;
-    if (data.whatsappEnabled !== undefined) config.whatsapp.enabled = data.whatsappEnabled;
     
-    if (data.emailEnabled !== undefined) config.email.enabled = data.emailEnabled;
-    if (data.emailHost !== undefined) config.email.host = data.emailHost;
-    if (data.emailPort !== undefined) config.email.port = data.emailPort;
-    if (data.emailUser !== undefined) config.email.user = data.emailUser;
-    if (data.emailFrom !== undefined) config.email.from = data.emailFrom;
-    if (data.adminEmail !== undefined) config.email.adminEmail = data.adminEmail;
+    // Encrypt secrets
+    const encrypted = await this.prisma.$queryRaw`
+      SELECT pgp_sym_encrypt(${JSON.stringify(newSettings)}, ${process.env.ENCRYPTION_KEY || 'default'}) as encrypted
+    `;
     
-    if (data.twilioAccountSid !== undefined) config.twilio.accountSid = data.twilioAccountSid;
-    if (data.twilioFromNumber !== undefined) config.twilio.fromNumber = data.twilioFromNumber;
-
-    if (data.emailPassword) secrets.emailPassword = data.emailPassword;
-    if (data.twilioAuthToken) secrets.twilioAuthToken = data.twilioAuthToken;
-
-    try {
-      // Check if settings exist
-      const existing = await this.prisma.$queryRawUnsafe(`
-        SELECT id FROM "notification_settings" LIMIT 1
-      `) as { id: string }[];
-
-      if (existing.length > 0) {
-        // Update existing - merge config
-        await this.prisma.$executeRawUnsafe(`
-          UPDATE "notification_settings" 
-          SET 
-            "config" = "config" || $1::jsonb,
-            "secrets" = COALESCE("secrets", '{}'::jsonb) || $2::jsonb,
-            "updatedAt" = NOW()
-          WHERE id = $3
-        `, JSON.stringify(config), JSON.stringify(secrets), existing[0].id);
-      } else {
-        // Create new
-        await this.prisma.$executeRawUnsafe(`
-          INSERT INTO "notification_settings" (id, name, config, secrets, "createdAt", "updatedAt")
-          VALUES (gen_random_uuid(), 'default', $1::jsonb, $2::jsonb, NOW(), NOW())
-        `, JSON.stringify(config), JSON.stringify(secrets));
-      }
-      
-      await this.refreshSettings();
-      return { success: true };
-    } catch (error) {
-      console.error('Failed to update notification settings:', error);
-      throw error;
-    }
+    await this.prisma.notificationSettings.updateMany({
+      data: { config: encrypted[0].encrypted },
+    });
+    
+    await this.refreshSettings();
+    return this.getSettings();
   }
 
-  // ============ Notification CRUD Methods ============
-
-  async getNotifications(params: { page?: number; limit?: number; unreadOnly?: boolean }) {
-    const { page = 1, limit = 20, unreadOnly = false } = params;
-    const skip = (page - 1) * limit;
-
-    const where: any = {};
-    if (unreadOnly) where.isRead = false;
-
-    const [notifications, total] = await Promise.all([
-      this.prisma.notification.findMany({
-        where,
-        orderBy: { createdAt: 'desc' },
-        skip,
-        take: limit,
-      }),
-      this.prisma.notification.count({ where }),
-    ]);
-
-    return {
-      data: notifications,
-      total,
-      page,
-      limit,
-      totalPages: Math.ceil(total / limit),
-      unreadCount: await this.getUnreadCount(),
-    };
+  // Get all notifications
+  async getNotifications(limit: number = 50, onlyUnread: boolean = false) {
+    const where = onlyUnread ? { isRead: false } : {};
+    return this.prisma.notification.findMany({
+      where,
+      orderBy: { createdAt: 'desc' },
+      take: limit,
+    });
   }
 
-  async getUnreadCount(): Promise<number> {
+  // Get unread count
+  async getUnreadCount() {
     return this.prisma.notification.count({
       where: { isRead: false },
     });
   }
 
+  // Mark as read
   async markAsRead(id: string) {
     return this.prisma.notification.update({
       where: { id },
@@ -469,6 +298,7 @@ Dikirim otomatis dari NingClean`;
     });
   }
 
+  // Mark as unread
   async markAsUnread(id: string) {
     return this.prisma.notification.update({
       where: { id },
@@ -476,27 +306,30 @@ Dikirim otomatis dari NingClean`;
     });
   }
 
+  // Mark all as read
   async markAllAsRead() {
-    await this.prisma.notification.updateMany({
+    return this.prisma.notification.updateMany({
       where: { isRead: false },
       data: { isRead: true, readAt: new Date() },
     });
-    return { success: true };
   }
 
+  // Delete old notifications (cleanup)
   async deleteOldNotifications(days: number = 30) {
     const cutoffDate = new Date();
     cutoffDate.setDate(cutoffDate.getDate() - days);
-
-    const result = await this.prisma.notification.deleteMany({
-      where: { createdAt: { lt: cutoffDate }, isRead: true },
+    
+    return this.prisma.notification.deleteMany({
+      where: {
+        createdAt: { lt: cutoffDate },
+        isRead: true,
+      },
     });
-
-    return { deleted: result.count };
   }
 
+  // Create a new notification
   async createNotification(params: {
-    type?: 'BOOKING_NEW' | 'BOOKING_STATUS' | 'SYSTEM';
+    type?: string;
     title: string;
     message: string;
     metadata?: any;
@@ -509,5 +342,27 @@ Dikirim otomatis dari NingClean`;
         data: params.metadata || undefined,
       },
     });
+  }
+
+  // Alias methods for booking notifications compatibility
+  async sendBookingNotifications(data: any) {
+    console.log('[Notifications] sendBookingNotifications called:', data);
+    // Delegate to notifyNewBooking if it's booking data
+    if (data.orderNumber) {
+      return this.notifyNewBooking(data as BookingNotificationData);
+    }
+    return { waSent: false, emailSent: false };
+  }
+
+  async sendBookingConfirmed(data: any) {
+    console.log('[Notifications] sendBookingConfirmed called:', data);
+    // Implementation placeholder
+    return { waSent: false, emailSent: false };
+  }
+
+  async sendBookingCancelled(data: any) {
+    console.log('[Notifications] sendBookingCancelled called:', data);
+    // Implementation placeholder
+    return { waSent: false, emailSent: false };
   }
 }

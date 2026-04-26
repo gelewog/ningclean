@@ -1,7 +1,8 @@
 import { Injectable, BadRequestException } from '@nestjs/common';
 import { SupabaseService } from '../supabase/supabase.service';
 
-interface UploadResult {
+// UploadResult interface
+export interface UploadResult {
   success: boolean;
   message: string;
   data: {

@@ -66,11 +66,11 @@ export class SupabaseService implements OnModuleInit {
     return this.client;
   }
 
-  getAuth() {
+  getAuth(): any {
     return this.client?.auth;
   }
 
-  getStorage() {
+  getStorage(): any {
     return this.client?.storage;
   }
 
