@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "build": "npx prisma generate && npx nest build && npm run copy-prisma-engine",
-    "copy-prisma-engine": "node -e \"const fs=require('fs');const path=require('path');const src=path.join(process.cwd(),'../../node_modules/.prisma/client/query_engine-windows.dll.node');const dst=path.join(process.cwd(),'dist/query_engine-windows.dll.node');if(fs.existsSync(src)&&!fs.existsSync(dst)){fs.copyFileSync(src,dst);console.log('Copied Prisma engine');}\"",
+    "copy-prisma-engine": "node -e \"const fs=require('fs');const path=require('path');const platform=process.platform;if(platform==='win32'){const src=path.join(process.cwd(),'../../node_modules/.prisma/client/query_engine-windows.dll.node');const dst=path.join(process.cwd(),'dist/query_engine-windows.dll.node');if(fs.existsSync(src)&&!fs.existsSync(dst)){fs.copyFileSync(src,dst);console.log('Copied Prisma engine');}}else{const srcDir=path.join(process.cwd(),'../../node_modules/.prisma/client');const dstDir=path.join(process.cwd(),'dist');const files=fs.readdirSync(srcDir).filter(f=>f.startsWith('libquery_engine-linux'));if(files.length>0){const src=path.join(srcDir,files[0]);const dst=path.join(dstDir,files[0]);if(!fs.existsSync(dst)){fs.copyFileSync(src,dst);console.log('Copied Prisma engine:',files[0]);}}}\"",
     "start": "nest start",
     "start:dev": "npm run copy-prisma-engine && nest start --watch",
     "start:debug": "nest start --debug --watch",
