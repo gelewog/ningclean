@@ -20,6 +20,6 @@
     "esModuleInterop": true,
     "resolveJsonModule": true
   },
-  "include": ["src/**/*", "../prisma/generated/**/*"],
-  "exclude": ["node_modules", "dist", "prisma/seed.ts"]
+  "include": ["src/**/*", "../../prisma/**/*"],
+  "exclude": ["node_modules", "dist", "../../prisma/seed.ts"]
 }

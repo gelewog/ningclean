@@ -1,7 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateBlogDto, UpdateBlogDto } from './dto/blog.dto';
-import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class BlogService {
@@ -12,7 +11,7 @@ export class BlogService {
     const take = limit || 100;
     const skip = (page - 1) * take;
 
-    const where: Prisma.BlogPostWhereInput = {
+    const where: any = {
       publishedAt: { not: null },
     };
 
@@ -80,7 +79,7 @@ export class BlogService {
     const { page = 1, limit = 10, status, search } = params
     const skip = (page - 1) * limit
 
-    const where: Prisma.BlogPostWhereInput = {}
+    const where: any = {}
 
     if (status === 'draft') {
       where.publishedAt = null
@@ -197,7 +196,7 @@ export class BlogService {
     await this.findOne(id);
     
     // Build update data - filter out invalid fields for Prisma
-    const updateData: Prisma.BlogPostUpdateInput = {
+    const updateData: any = {
       ...(dto.slug !== undefined && { slug: dto.slug }),
       ...(dto.title !== undefined && { title: dto.title }),
       ...(dto.excerpt !== undefined && { excerpt: dto.excerpt }),

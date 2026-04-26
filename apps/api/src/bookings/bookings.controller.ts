@@ -13,7 +13,18 @@ import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
 import { BookingsService } from './bookings.service';
 import { CreateBookingDto, UpdateBookingStatusDto } from './dto/booking.dto';
 import { CurrentUser, RolesGuard, Roles } from '../common';
-import { User } from '@prisma/client';
+// User interface from Prisma (redefine locally to avoid import issues)
+interface User {
+  id: string;
+  email: string;
+  name: string;
+  phone?: string | null;
+  password: string;
+  role: string;
+  avatar?: string | null;
+  createdAt: Date;
+  updatedAt: Date;
+}
 import { Role, BookingStatus } from '../common/enums';
 
 @ApiTags('Bookings')

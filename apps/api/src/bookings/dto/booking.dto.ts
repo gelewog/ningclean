@@ -11,7 +11,7 @@ import {
 } from 'class-validator';
 import { Type } from 'class-transformer';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { BookingStatus } from '@prisma/client';
+import { BookingStatus } from '../../common/enums';
 
 class BookingItemDto {
   @ApiProperty()

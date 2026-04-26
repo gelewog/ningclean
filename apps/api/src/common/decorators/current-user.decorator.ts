@@ -1,5 +1,17 @@
 import { createParamDecorator, ExecutionContext } from '@nestjs/common';
-import { User as PrismaUser } from '@prisma/client';
+
+// User interface from Prisma schema (defined locally to avoid build issues)
+interface PrismaUser {
+  id: string;
+  email: string;
+  name: string;
+  phone?: string | null;
+  password: string;
+  role: string;
+  avatar?: string | null;
+  createdAt: Date;
+  updatedAt: Date;
+}
 
 export const CurrentUser = createParamDecorator(
   (data: keyof PrismaUser | undefined, ctx: ExecutionContext) => {

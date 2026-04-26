@@ -1,7 +1,41 @@
 import { Injectable, NotFoundException, ForbiddenException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateBookingDto } from './dto/booking.dto';
-import { Prisma, Role, BookingStatus, User, PrismaClient } from '@prisma/client';
+import { PrismaClient } from '@prisma/client';
+import { Role, BookingStatus } from '../common/enums';
+
+// Service interface from Prisma schema
+interface Service {
+  id: string;
+  name: string;
+  slug: string;
+  description: string;
+  price: number | { toNumber(): number };
+  duration: number;
+  icon?: string | null;
+  isActive: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+  category: string;
+  features: string[];
+  image?: string | null;
+  isFeatured: boolean;
+  availableCities: string[];
+}
+
+// User interface from Prisma schema
+interface User {
+  id: string;
+  email: string;
+  name: string;
+  phone?: string | null;
+  password: string;
+  role: string;
+  avatar?: string | null;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
 import { NotificationsService, BookingNotificationData } from '../notifications/notifications.service';
 
 interface FindAllQuery {
@@ -26,7 +60,7 @@ export class BookingsService {
     const { page = 1, limit = 10, status, area, search, dateFrom, dateTo, customerId } = query;
 
     // Build where clause
-    const where: Prisma.BookingWhereInput = {};
+    const where: any = {};
 
     // Non-admin users only see their own bookings
     if (user.role !== Role.ADMIN) {
@@ -156,20 +190,23 @@ export class BookingsService {
     const serviceIds = dto.items.map((item) => item.serviceId);
     const services = await this.prisma.service.findMany({
       where: { id: { in: serviceIds } },
-    });
+    }) as Service[];
 
     if (services.length !== serviceIds.length) {
       throw new NotFoundException('One or more services not found');
     }
 
-    const serviceMap = new Map(services.map((s) => [s.id, s]));
+    const serviceMap = new Map<string, Service>(services.map((s) => [s.id, s]));
 
     const itemsData = dto.items.map((item) => {
       const service = serviceMap.get(item.serviceId);
+      if (!service) {
+        throw new NotFoundException(`Service ${item.serviceId} not found`);
+      }
       return {
         serviceId: item.serviceId,
         quantity: item.quantity,
-        price: service.price,
+        price: service.price as any,
       };
     });
 
@@ -232,21 +269,24 @@ export class BookingsService {
     console.log('Fetching services with IDs:', serviceIds);
     const services = await this.prisma.service.findMany({
       where: { id: { in: serviceIds } },
-    });
+    }) as Service[];
     console.log('Found services:', services.length);
 
     if (services.length !== serviceIds.length) {
       throw new NotFoundException('One or more services not found');
     }
 
-    const serviceMap = new Map(services.map((s) => [s.id, s]));
+    const serviceMap = new Map<string, Service>(services.map((s) => [s.id, s]));
 
     const itemsData = dto.items.map((item) => {
       const service = serviceMap.get(item.serviceId);
+      if (!service) {
+        throw new NotFoundException(`Service ${item.serviceId} not found`);
+      }
       return {
         serviceId: item.serviceId,
         quantity: item.quantity,
-        price: service.price,
+        price: service.price as any,
       };
     });
 
@@ -484,31 +524,22 @@ export class BookingsService {
           orderNumber: booking.orderNumber,
           customerName,
           customerPhone,
-          serviceName: serviceNames,
-          totalAmount: booking.totalAmount,
-          serviceDate: formattedDate,
-          serviceTime: serviceTime,
-          address,
+          ...notificationData,
         },
       });
 
-      // Send notifications (WhatsApp, Email)
-      const result = await this.notificationsService.notifyNewBooking(notificationData);
-      console.log('Booking notifications sent:', result);
+      // Send via other channels (email, WhatsApp, etc.)
+      await this.notificationsService.sendBookingNotifications(notificationData);
+      
     } catch (error) {
-      console.error('Error sending booking notifications:', error);
+      console.error('Error in sendBookingNotifications:', error);
+      // Don't throw here - don't fail the booking creation due to notification errors
     }
   }
 
-  async updateStatus(id: string, status: BookingStatus) {
-    const booking = await this.prisma.booking.findUnique({ where: { id } });
-    if (!booking) {
-      throw new NotFoundException('Booking not found');
-    }
-
-    return this.prisma.booking.update({
+  async updateStatus(id: string, newStatus: BookingStatus, user: User) {
+    const booking = await this.prisma.booking.findUnique({
       where: { id },
-      data: { status },
       include: {
         customer: {
           select: { id: true, name: true, email: true, phone: true },
@@ -520,5 +551,95 @@ export class BookingsService {
         },
       },
     });
+
+    if (!booking) {
+      throw new NotFoundException('Booking not found');
+    }
+
+    // Check permissions
+    if (user.role !== Role.ADMIN && booking.customerId !== user.id) {
+      throw new ForbiddenException('Access denied');
+    }
+
+    // Customers can only cancel their own bookings
+    if (user.role !== Role.ADMIN && newStatus !== BookingStatus.CANCELLED) {
+      throw new ForbiddenException('Customers can only cancel bookings');
+    }
+
+    // Update booking
+    const updated = await this.prisma.booking.update({
+      where: { id },
+      data: { status: newStatus },
+      include: {
+        customer: {
+          select: { id: true, name: true, email: true, phone: true },
+        },
+        items: {
+          include: {
+            service: true,
+          },
+        },
+      },
+    });
+
+    // Send status update notification
+    if (newStatus === BookingStatus.CONFIRMED) {
+      await this.notificationsService.sendBookingConfirmed(updated);
+    } else if (newStatus === BookingStatus.CANCELLED) {
+      await this.notificationsService.sendBookingCancelled(updated);
+    }
+
+    return updated;
+  }
+
+  async delete(id: string, user: User) {
+    const booking = await this.prisma.booking.findUnique({
+      where: { id },
+    });
+
+    if (!booking) {
+      throw new NotFoundException('Booking not found');
+    }
+
+    if (user.role !== Role.ADMIN && booking.customerId !== user.id) {
+      throw new ForbiddenException('Access denied');
+    }
+
+    // Delete booking and its items (cascade)
+    await this.prisma.bookingItem.deleteMany({
+      where: { bookingId: id },
+    });
+
+    return this.prisma.booking.delete({
+      where: { id },
+    });
+  }
+
+  // Alias for public endpoint
+  async findOnePublic(id: string) {
+    const booking = await this.prisma.booking.findUnique({
+      where: { id },
+      include: {
+        customer: {
+          select: { 
+            id: true, 
+            name: true, 
+            email: true, 
+            phone: true 
+          },
+        },
+        items: {
+          include: {
+            service: true,
+          },
+        },
+      },
+    });
+
+    if (!booking) {
+      throw new NotFoundException('Booking not found');
+    }
+
+    return booking;
   }
 }
