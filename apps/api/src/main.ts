@@ -11,7 +11,19 @@ let cachedApp: NestExpressApplication | null = null;
 async function copyPrismaEngine() {
   try {
     const platform = process.platform;
-    const clientDir = path.join(process.cwd(), '../../node_modules/.prisma/client');
+    
+    // Try multiple possible source locations
+    const possibleSrcDirs = [
+      // From built dist folder
+      path.join(__dirname, '../../node_modules/.prisma/client'),
+      // From apps/api folder (monorepo)
+      path.join(process.cwd(), '../../node_modules/.prisma/client'),
+      path.join(process.cwd(), 'node_modules/.prisma/client'),
+      // From root (Docker container)
+      '/app/node_modules/.prisma/client',
+      '/node_modules/.prisma/client',
+    ];
+    
     const destDir = path.join(process.cwd(), 'node_modules/.prisma/client');
     
     // Find engine file based on platform
@@ -19,30 +31,35 @@ async function copyPrismaEngine() {
     if (platform === 'win32') {
       engineFile = 'query_engine-windows.dll.node';
     } else if (platform === 'linux') {
-      // Find linux engine (could be musl or glibc)
-      const files = fs.readdirSync(clientDir).filter(f => f.startsWith('libquery_engine-linux'));
-      if (files.length > 0) engineFile = files[0];
+      engineFile = 'libquery_engine-linux-arm64-openssl-3.0.x.so.node';
     } else if (platform === 'darwin') {
       engineFile = 'libquery_engine-darwin-arm64.dylib.node';
     }
     
     if (!engineFile) {
-      console.warn('[API] Unknown platform or engine not found:', platform);
+      console.warn('[API] Unknown platform:', platform);
       return;
     }
     
     const destPath = path.join(destDir, engineFile);
-    if (fs.existsSync(destPath)) return; // Already exists
-    
-    const srcPath = path.join(clientDir, engineFile);
-    if (fs.existsSync(srcPath)) {
-      fs.mkdirSync(destDir, { recursive: true });
-      fs.copyFileSync(srcPath, destPath);
-      console.log('[API] Copied Prisma engine:', engineFile);
+    if (fs.existsSync(destPath)) {
+      console.log('[API] Prisma engine already exists at:', destPath);
       return;
     }
     
+    // Find source engine
+    for (const srcDir of possibleSrcDirs) {
+      const srcPath = path.join(srcDir, engineFile);
+      if (fs.existsSync(srcPath)) {
+        fs.mkdirSync(destDir, { recursive: true });
+        fs.copyFileSync(srcPath, destPath);
+        console.log('[API] Copied Prisma engine from:', srcPath);
+        return;
+      }
+    }
+    
     console.warn('[API] Prisma engine not found:', engineFile);
+    console.log('[API] Searched in:', possibleSrcDirs);
   } catch (err) {
     console.error('[API] Failed to copy Prisma engine:', err.message);
   }
