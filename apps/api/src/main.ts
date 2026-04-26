@@ -4,19 +4,21 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { AppModule } from './app.module';
 
-let app: NestExpressApplication | null = null;
+let cachedApp: NestExpressApplication | null = null;
 
 async function bootstrap() {
-  if (app) return app;
+  if (cachedApp) return cachedApp;
   
   console.log('[API] Starting NestJS app...');
   console.log('[API] DATABASE_URL exists:', !!process.env.DATABASE_URL);
   console.log('[API] SUPABASE_URL exists:', !!process.env.SUPABASE_URL);
   
-  app = await NestFactory.create<NestExpressApplication>(AppModule);
+  cachedApp = await NestFactory.create<NestExpressApplication>(AppModule, {
+    logger: ['error', 'warn', 'log'],
+  });
 
   // CORS
-  app.enableCors({
+  cachedApp.enableCors({
     origin: [
       'https://ningclean.vercel.app',
       'https://ningclean-admin.vercel.app',
@@ -30,14 +32,14 @@ async function bootstrap() {
     allowedHeaders: 'Content-Type, Authorization, Accept',
   });
 
-  app.useGlobalPipes(
+  cachedApp.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
       transform: true,
     }),
   );
 
-  app.setGlobalPrefix('api');
+  cachedApp.setGlobalPrefix('api');
 
   // Swagger
   const config = new DocumentBuilder()
@@ -45,12 +47,12 @@ async function bootstrap() {
     .setVersion('1.0')
     .addBearerAuth()
     .build();
-  const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api/docs', app, document);
+  const document = SwaggerModule.createDocument(cachedApp, config);
+  SwaggerModule.setup('api/docs', cachedApp, document);
 
-  await app.init();
+  await cachedApp.init();
   console.log('[API] NestJS app initialized');
-  return app;
+  return cachedApp;
 }
 
 // Local dev
@@ -62,7 +64,7 @@ if (!process.env.VERCEL) {
   });
 }
 
-// Vercel handler - export for serverless
+// Vercel serverless handler
 export default async function handler(req: any, res: any) {
   try {
     const app = await bootstrap();
@@ -73,14 +75,9 @@ export default async function handler(req: any, res: any) {
     res.status(500).json({ 
       error: 'Server Error', 
       message: error.message,
+      stack: process.env.NODE_ENV === 'development' ? error.stack : undefined,
     });
   }
 }
 
-// Also export for potential direct usage
-export { bootstrap, handler };
-
-// CommonJS compatibility for Vercel serverless
-if (typeof (globalThis as any).module !== 'undefined') {
-  (globalThis as any).module.exports = { default: handler, handler, bootstrap };
-}
+export { bootstrap };

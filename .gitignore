@@ -65,7 +65,7 @@ article-*.txt
 articles-*.json
 
 # Folders
-dto/
+# dto/  <-- COMMENTED OUT - we need DTO folders for the API
 scripts-cek-db/
 .sixth/
 .playwright-mcp/
