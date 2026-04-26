@@ -7,7 +7,7 @@
     { "source": "/(.*)", "destination": "/api" }
   ],
   "functions": {
-    "apps/api/api/index.ts": {
+    "api/index.js": {
       "maxDuration": 30
     }
   }
