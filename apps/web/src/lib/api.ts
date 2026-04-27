@@ -244,7 +244,7 @@ export async function getTestimonials(areaSlug?: string) {
 // Site Settings (Public)
 export async function getSiteSettings() {
   try {
-    return await fetchApi<any>('/site-settings')
+    return await fetchApi<any>('/site-settings/public')
   } catch {
     return null
   }
