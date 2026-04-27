@@ -1,4 +1,6 @@
-const API_BASE = `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}/api`
+const rawApiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'
+// Remove trailing /api if present to avoid double /api/api
+const API_BASE = rawApiUrl.replace(/\/api$/, '') + '/api'
 
 const TOKEN_KEY = 'auth_token'
 const USER_KEY = 'auth_user'
