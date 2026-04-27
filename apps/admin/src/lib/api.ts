@@ -9,7 +9,7 @@ interface FetchOptions extends RequestInit {
 }
 
 // Helper: fetch with auth
-async function fetchApi<T>(endpoint: string, options: FetchOptions = {}): Promise<T> {
+export async function fetchApi<T>(endpoint: string, options: FetchOptions = {}): Promise<T> {
   const { token, ...fetchOptions } = options
   
   const headers: Record<string, string> = {
