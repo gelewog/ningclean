@@ -10,6 +10,11 @@ import { Role } from '../common';
 export class SiteSettingsController {
   constructor(private siteSettingsService: SiteSettingsService) {}
 
+  @Get('public')
+  async getPublicSettings() {
+    return this.siteSettingsService.getSettings();
+  }
+
   @Get()
   @UseGuards(JwtAuthGuard)
   async getSettings() {
