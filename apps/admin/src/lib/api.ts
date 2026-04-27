@@ -1,6 +1,8 @@
 import { Booking, Customer, Service, BlogPost, DashboardStats, PaginatedResponse } from '@/types'
 
-const API_BASE = `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}/api`
+const rawApiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'
+// Remove trailing /api if present to avoid double /api/api
+const API_BASE = rawApiUrl.replace(/\/api$/, '') + '/api'
 
 interface FetchOptions extends RequestInit {
   token?: string | null
