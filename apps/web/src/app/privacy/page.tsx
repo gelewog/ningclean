@@ -3,6 +3,8 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 import { Navigation } from '@/components/navigation';
 import { Footer } from '@/components/footer';
 import { SectionLoader } from '@/components/ui/Spinner';
@@ -252,47 +254,24 @@ export default function PrivacyPage() {
                       <h2 className="text-xl font-semibold page-text">{section.title}</h2>
                     </div>
 
-                    {/* Content */}
-                    <div className="text-[14px] page-text-muted leading-[1.9] space-y-4">
-                      {section.content.split('\n\n').map((para, pIdx) => {
-                        if (para.startsWith('**') && para.endsWith('**')) {
-                          return (
-                            <p key={pIdx} className="font-semibold page-text-muted">
-                              {para.replace(/\*\*/g, '')}
-                            </p>
-                          );
-                        }
-                        if (para.startsWith('-') || para.startsWith('1.') || para.startsWith('2.') || para.startsWith('3.') || para.startsWith('4.') || para.startsWith('5.')) {
-                          const items = para.split('\n').filter((l) => l.trim());
-                          return (
-                            <ul key={pIdx} className="space-y-2 list-none pl-0">
-                              {items.map((item, iIdx) => {
-                                const clean = item.replace(/^-\s*/, '').replace(/^\d+\.\s*/, '');
-                                const isBold = clean.startsWith('**') && clean.includes('**');
-                                const boldEnd = isBold ? clean.indexOf('**', 2) : -1;
-                                return (
-                                  <li key={iIdx} className="flex items-start gap-2.5">
-                                    <span className="text-emerald-400/50 mt-1.5">•</span>
-                                    <span>
-                                      {isBold && boldEnd > 0 ? (
-                                        <>
-                                          <strong className="page-text-muted font-semibold">{clean.slice(2, boldEnd)}</strong>
-                                          {clean.slice(boldEnd + 2)}
-                                        </>
-                                      ) : (
-                                        clean
-                                      )}
-                                    </span>
-                                  </li>
-                                );
-                              })}
-                            </ul>
-                          );
-                        }
-                        return (
-                          <p key={pIdx}>{para}</p>
-                        );
-                      })}
+                            <div className="prose prose-sm prose-invert max-w-none [&_ol]:list-none [&_ol]:p-0 [&_ol]:m-0 [&_ol]:mb-4 [&_ol]:[counter-reset:item] [&_ol>li]:[counter-increment:item] [&_ol>li]:flex [&_ol>li]:items-start [&_ol>li]:gap-3 [&_ol>li]:mb-2 [&_ol>li]:before:content-[counter(item)_'.'] [&_ol>li]:before:text-emerald-400/70 [&_ol>li]:before:font-medium [&_ol>li]:before:min-w-[24px] [&_ol>li]:before:text-right [&_ol>li]:before:shrink-0 [&_ol>li>p]:m-0 [&_ul]:list-none [&_ul]:p-0 [&_ul]:m-0 [&_ul]:mb-4 [&_ul>li]:flex [&_ul>li]:items-start [&_ul>li]:gap-3 [&_ul>li]:mb-2 [&_ul>li]:before:content-['•'] [&_ul>li]:before:text-emerald-400/50 [&_ul>li]:before:mt-1 [&_ul>li]:before:shrink-0 [&_ul>li>p]:m-0">
+                      <ReactMarkdown
+                        remarkPlugins={[remarkGfm]}
+                        components={{
+                          h1: ({ children }) => <h1 className="text-xl font-bold page-text mb-4">{children}</h1>,
+                          h2: ({ children }) => <h2 className="text-lg font-semibold page-text mt-6 mb-3">{children}</h2>,
+                          h3: ({ children }) => <h3 className="text-base font-semibold page-text mt-4 mb-2">{children}</h3>,
+                          p: ({ children }) => <p className="page-text-muted leading-relaxed mb-4">{children}</p>,
+                          strong: ({ children }) => <strong className="page-text font-semibold">{children}</strong>,
+                          em: ({ children }) => <em className="text-emerald-400/80 italic">{children}</em>,
+                          code: ({ children }) => <code className="px-1.5 py-0.5 rounded bg-white/5 text-emerald-400 text-[12px]">{children}</code>,
+                          a: ({ children, href }) => <a href={href} className="text-emerald-400 hover:underline">{children}</a>,
+                          blockquote: ({ children }) => <blockquote className="border-l-2 border-emerald-400/30 pl-4 my-4 page-text-muted italic">{children}</blockquote>,
+                          hr: () => <hr className="border-white/10 my-6" />,
+                        }}
+                      >
+                        {section.content}
+                      </ReactMarkdown>
                     </div>
                   </div>
                 </motion.div>
