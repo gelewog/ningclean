@@ -19,7 +19,9 @@
     "lint": "turbo run lint",
     "db:migrate": "prisma migrate deploy",
     "db:generate": "prisma generate",
-    "db:seed": "prisma db seed"
+    "db:seed": "prisma db seed",
+    "railway-build": "cd apps/api && npm install && npx prisma generate && npm run build",
+    "start": "cd apps/api && npm run start:prod"
   },
   "devDependencies": {
     "bcryptjs": "^3.0.3",
