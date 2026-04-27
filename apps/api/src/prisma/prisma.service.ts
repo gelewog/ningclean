@@ -10,10 +10,9 @@ export class PrismaService extends PrismaClient implements OnModuleInit, OnModul
   }
 
   async onModuleInit() {
-    // Skip DB connection saat build phase
-    // Railway build tidak butuh koneksi aktif
+    // Skip connection saat Railway build (RAILWAY_ENVIRONMENT tanpa RAILWAY_STATIC_URL = build phase)
     if (process.env.RAILWAY_ENVIRONMENT && !process.env.RAILWAY_STATIC_URL) {
-      console.log('⏭️ Build phase - skipping DB connection');
+      console.log('⏭️ Railway build phase - skipping DB connection');
       return;
     }
 
@@ -22,10 +21,7 @@ export class PrismaService extends PrismaClient implements OnModuleInit, OnModul
       console.log('✅ Database connected');
     } catch (error: any) {
       console.error('❌ Database connection failed:', error.message);
-      // Hanya throw error saat runtime, bukan build
-      if (process.env.RAILWAY_STATIC_URL || process.env.NODE_ENV === 'development') {
-        throw error;
-      }
+      throw error;
     }
   }
 
