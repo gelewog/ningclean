@@ -91,6 +91,7 @@ async function bootstrap() {
       'https://admin-lyart-six-78.vercel.app',
       'https://web-six-nu-15.vercel.app',
       'https://web-9hvr8n4xd-gelewog-gmailcoms-projects.vercel.app',
+      'https://ningclean-gelewog-gmailcoms-projects.vercel.app',
       'http://localhost:3000',
       'http://localhost:3001',
     ],
