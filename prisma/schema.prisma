@@ -10,6 +10,12 @@ datasource db {
   directUrl = env("DIRECT_URL")
 }
 
+// Connection pooling untuk Railway/Serverless
+enum ConnectionMode {
+  SESSION
+  POOLING
+}
+
 enum Role {
   CUSTOMER
   ADMIN
