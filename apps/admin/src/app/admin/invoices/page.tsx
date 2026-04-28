@@ -260,10 +260,10 @@ export default function InvoicesPage() {
                         <div className="flex-1 min-w-0">
                           <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 mb-1">
                             <h3 className="font-medium text-gray-900 dark:text-white text-sm sm:text-base truncate">{booking.orderNumber}</h3>
-                            <Badge className={BOOKING_STATUS_COLORS[(booking.status || 'unknown').toLowerCase()]} className="text-[10px] sm:text-xs px-1.5 py-0">
+                            <Badge variant={(booking.status || 'unknown').toLowerCase() === 'confirmed' ? 'success' : (booking.status || 'unknown').toLowerCase() === 'pending' ? 'warning' : (booking.status || 'unknown').toLowerCase() === 'cancelled' ? 'error' : 'default'} className="text-[10px] sm:text-xs px-1.5 py-0">
                               {BOOKING_STATUS_LABELS[(booking.status || 'unknown').toLowerCase()]}
                             </Badge>
-                            <Badge className={INVOICE_STATUS_COLORS[invStatus]} className="text-[10px] sm:text-xs px-1.5 py-0">
+                            <Badge variant={invStatus === 'paid' ? 'success' : invStatus === 'unpaid' ? 'warning' : 'error'} className="text-[10px] sm:text-xs px-1.5 py-0">
                               {INVOICE_STATUS_LABELS[invStatus]}
                             </Badge>
                           </div>

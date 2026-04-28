@@ -17,8 +17,9 @@ import {
   Modal, WhatsAppButton, StatusBadge, BookingStepProgress
 } from '@/components/admin/Modal'
 import {
-  getBookings, getToken, updateBookingStatus
+  getBookings, getToken,
 } from '@/lib/api'
+import { useBookings, useUpdateBookingStatus } from '@/lib/use-queries'
 import { Breadcrumb } from '@/components/admin/Breadcrumb'
 import { formatCurrency, formatDate, formatDateTime } from '@/lib/utils'
 import { toast } from 'sonner'

@@ -7,32 +7,36 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { StatCard } from '@/components/admin/StatCard'
 import { DataTable } from '@/components/admin/DataTable'
-import { getDashboardStats, getRecentBookings } from '@/lib/api'
+import { useDashboardStats, useRecentBookings } from '@/lib/use-queries'
 import { formatCurrency, formatDate, getStatusLabel } from '@/lib/utils'
 import Link from 'next/link'
 
+// Loading skeleton component
+function DashboardSkeleton() {
+  return (
+    <div className="w-full px-4 md:px-6 py-6 space-y-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        {[...Array(4)].map((_, i) => (
+          <div key={i} className="h-32 bg-gray-100 dark:bg-slate-800 rounded-2xl animate-pulse" />
+        ))}
+      </div>
+      <div className="h-96 bg-gray-100 dark:bg-slate-800 rounded-2xl animate-pulse" />
+    </div>
+  )
+}
+
 export default function DashboardPage() {
-  const [stats, setStats] = React.useState<any>(null)
-  const [recentBookings, setRecentBookings] = React.useState<any[]>([])
-  const [loading, setLoading] = React.useState(true)
+  // Use TanStack Query hooks for data fetching with caching
+  const { data: stats, isLoading: statsLoading, error: statsError } = useDashboardStats()
+  const { data: recentBookings = [], isLoading: bookingsLoading } = useRecentBookings(5)
+  
+  const loading = statsLoading || bookingsLoading
 
   React.useEffect(() => {
-    async function fetchData() {
-      try {
-        const [statsData, bookingsData] = await Promise.all([
-          getDashboardStats(),
-          getRecentBookings(5),
-        ])
-        setStats(statsData)
-        setRecentBookings(bookingsData)
-      } catch (error) {
-        console.error('Failed to fetch dashboard data:', error)
-      } finally {
-        setLoading(false)
-      }
+    if (statsError) {
+      console.error('Failed to fetch dashboard data:', statsError)
     }
-    fetchData()
-  }, [])
+  }, [statsError])
 
   const columns = [
     {

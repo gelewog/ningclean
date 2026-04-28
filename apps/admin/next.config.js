@@ -4,8 +4,18 @@ const nextConfig = {
   images: {
     domains: ['localhost', 'api.ningclean.com'],
   },
+  // Reduce memory usage during build
+  swcMinify: true,
+  experimental: {
+    // Disable some features to save memory
+    optimizeCss: false,
+  },
+  // Use webpack with less workers
+  webpack: (config, { isServer }) => {
+    config.parallelism = 1;
+    return config;
+  },
   async rewrites() {
-    // Proxy API requests to backend during development
     return [
       {
         source: '/api/proxy/:path*',
