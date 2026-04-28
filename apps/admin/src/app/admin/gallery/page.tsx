@@ -261,7 +261,7 @@ function GalleryFormModal({
                   {/* Before Image Upload */}
                   <div className="space-y-2">
                     <label className="text-sm font-medium text-gray-700 dark:text-slate-200">
-                      Before Image
+                      Before Image <span className="text-red-500">*</span>
                     </label>
                     <div className={`relative border-2 border-dashed rounded-2xl overflow-hidden transition-all ${
                       errors.beforeImage
@@ -326,7 +326,7 @@ function GalleryFormModal({
                   {/* After Image Upload */}
                   <div className="space-y-2">
                     <label className="text-sm font-medium text-gray-700 dark:text-slate-200">
-                      After Image
+                      After Image <span className="text-red-500">*</span>
                     </label>
                     <div className={`relative border-2 border-dashed rounded-2xl overflow-hidden transition-all ${
                       errors.afterImage
@@ -858,10 +858,9 @@ export default function GalleryPage() {
     const newErrors: Partial<GalleryFormData> = {}
     if (!formData.title.trim()) newErrors.title = 'Title is required'
     if (!formData.category.trim()) newErrors.category = 'Category is required'
-    // Require at least one image (imageUrl or beforeImage or afterImage)
-    if (!formData.imageUrl.trim() && !formData.beforeImage.trim() && !formData.afterImage.trim()) {
-      newErrors.imageUrl = 'At least one image is required'
-    }
+    // Both before and after images are required
+    if (!formData.beforeImage.trim()) newErrors.beforeImage = 'Before image is required'
+    if (!formData.afterImage.trim()) newErrors.afterImage = 'After image is required'
     setErrors(newErrors)
     return Object.keys(newErrors).length === 0
   }
@@ -1005,7 +1004,7 @@ export default function GalleryPage() {
       render: (value: string, row: GalleryItem) => (
         <div className="flex items-center gap-3">
           <img
-            src={getImageUrl(row.imageUrl)}
+            src={getImageUrl((row as any).afterImage || row.imageUrl)}
             alt=""
             className="h-14 w-14 rounded-lg object-cover"
           />

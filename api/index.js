@@ -21,9 +21,8 @@ async function bootstrap() {
   cachedApp.enableCors({
     origin: [
       'https://ningclean.vercel.app',
-      'https://ningclean-admin.vercel.app',
-      'https://web-nine-rouge-16.vercel.app',
-      'https://admin-tau-green-45.vercel.app',
+      'https://admin-lyart-six-78.vercel.app',
+      'https://web-six-nu-15.vercel.app',
       'http://localhost:3000',
       'http://localhost:3001',
     ],
