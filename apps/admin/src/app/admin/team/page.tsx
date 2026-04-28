@@ -482,28 +482,24 @@ export default function TeamPage() {
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-1.5">
                   <label className="block text-xs font-medium text-gray-500 dark:text-slate-400">Email</label>
-                  <div className="relative">
-                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-                    <Input
-                      type="email"
-                      placeholder="email@contoh.com"
-                      value={formData.email}
-                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                      className="pl-10 bg-white dark:bg-slate-900 border-gray-200 dark:border-slate-700"
-                    />
-                  </div>
+                  <Input
+                    type="email"
+                    placeholder="email@contoh.com"
+                    icon={<Mail className="h-4 w-4 text-gray-400" />}
+                    value={formData.email}
+                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                    className="pl-10 bg-white dark:bg-slate-900 border-gray-200 dark:border-slate-700"
+                  />
                 </div>
                 <div className="space-y-1.5">
                   <label className="block text-xs font-medium text-gray-500 dark:text-slate-400">Telepon</label>
-                  <div className="relative">
-                    <Phone className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-                    <Input
-                      placeholder="+62 xxx xxxx xxxx"
-                      value={formData.phone}
-                      onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                      className="pl-10 bg-white dark:bg-slate-900 border-gray-200 dark:border-slate-700"
-                    />
-                  </div>
+                  <Input
+                    placeholder="+62 xxx xxxx xxxx"
+                    icon={<Phone className="h-4 w-4 text-gray-400" />}
+                    value={formData.phone}
+                    onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                    className="pl-10 bg-white dark:bg-slate-900 border-gray-200 dark:border-slate-700"
+                  />
                 </div>
               </div>
               <div className="space-y-1.5">

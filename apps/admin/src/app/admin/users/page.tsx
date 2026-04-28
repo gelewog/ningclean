@@ -279,26 +279,22 @@ export default function UsersPage() {
                     </div>
                     <div>
                       <label className="block text-xs font-medium text-gray-500 dark:text-slate-400 uppercase tracking-wide mb-1">Email</label>
-                      <div className="relative">
-                        <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400 dark:text-slate-500" />
-                        <Input
-                          type="email"
-                          value={editForm.email}
-                          onChange={(e) => setEditForm({ ...editForm, email: e.target.value })}
-                          className="pl-10 bg-white dark:bg-slate-900 border-gray-200 dark:border-slate-700"
-                        />
-                      </div>
+                      <Input
+                        type="email"
+                        icon={<Mail className="h-4 w-4 text-gray-400 dark:text-slate-500" />}
+                        value={editForm.email}
+                        onChange={(e) => setEditForm({ ...editForm, email: e.target.value })}
+                        className="bg-white dark:bg-slate-900 border-gray-200 dark:border-slate-700"
+                      />
                     </div>
                     <div>
                       <label className="block text-xs font-medium text-gray-500 dark:text-slate-400 uppercase tracking-wide mb-1">Phone</label>
-                      <div className="relative">
-                        <Phone className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400 dark:text-slate-500" />
-                        <Input
-                          value={editForm.phone}
-                          onChange={(e) => setEditForm({ ...editForm, phone: e.target.value })}
-                          className="pl-10 bg-white dark:bg-slate-900 border-gray-200 dark:border-slate-700"
-                        />
-                      </div>
+                      <Input
+                        icon={<Phone className="h-4 w-4 text-gray-400 dark:text-slate-500" />}
+                        value={editForm.phone}
+                        onChange={(e) => setEditForm({ ...editForm, phone: e.target.value })}
+                        className="bg-white dark:bg-slate-900 border-gray-200 dark:border-slate-700"
+                      />
                     </div>
                   </div>
                 </div>

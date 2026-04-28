@@ -138,7 +138,7 @@ function SectionCard({ title, subtitle, children, accent = 'from-gray-600 to-gra
 
 function SettingRow({ label, description, children, className }: { label: string; description?: string; children: React.ReactNode; className?: string }) {
   return (
-    <div className={`flex items-center justify-between py-4 border-b border-gray-50 dark:border-slate-800 last:border-0 ${className || ''}`}>
+    <div className={`flex items-center justify-between py-4 border-b border-gray-200 dark:border-slate-700 last:border-0 ${className || ''}`}>
       <div>
         <p className="text-sm font-medium text-gray-700 dark:text-slate-200">{label}</p>
         {description && <p className="text-xs text-gray-400 dark:text-slate-500 mt-0.5">{description}</p>}
@@ -912,7 +912,7 @@ export default function SettingsPage() {
                     />
                   </SettingRow>
                   {footerSettings.showContact !== false && (
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-5 pt-4 border-t border-gray-50">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-5 pt-4 border-t border-gray-200 dark:border-slate-700">
                       <FormField label="Email">
                         <DarkInput
                           value={footerSettings.contactEmail || ''}
@@ -961,7 +961,7 @@ export default function SettingsPage() {
                     />
                   </SettingRow>
                   {footerSettings.showSocials !== false && (
-                    <div className="space-y-3 pt-4 border-t border-gray-50">
+                    <div className="space-y-3 pt-4 border-t border-gray-200 dark:border-slate-700">
                       {(footerSettings.socialLinks || []).map((social, index) => (
                         <div key={index} className="flex items-center gap-3">
                           <div className="w-24 text-sm font-medium text-gray-700 dark:text-slate-200">{social.name}</div>
@@ -1218,7 +1218,7 @@ export default function SettingsPage() {
                   </SettingRow>
 
                   {navSettings.showCtaButton && (
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-5 pt-4 border-t border-gray-50">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-5 pt-4 border-t border-gray-200 dark:border-slate-700">
                       <FormField label="CTA Button Text">
                         <DarkInput
                           value={navSettings.ctaButtonText || ''}
@@ -1234,10 +1234,10 @@ export default function SettingsPage() {
                     </div>
                   )}
 
-                  <SettingRow
+<SettingRow
                     label="Services Dropdown"
                     description="Tampilkan dropdown di menu Layanan"
-                    className="mt-4 pt-4 border-t border-gray-50"
+                    className="mt-4 pt-4 border-t border-gray-50 dark:border-slate-800"
                   >
                     <Toggle
                       checked={navSettings.showServicesDropdown || false}
@@ -1245,7 +1245,7 @@ export default function SettingsPage() {
                     />
                   </SettingRow>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mt-4 pt-4 border-t border-gray-50">
+<div className="grid grid-cols-1 md:grid-cols-2 gap-5 mt-4 pt-4 border-t border-gray-50 dark:border-slate-800">
                     <FormField label="Mobile Menu Style">
                       <DarkSelect
                         options={[
@@ -1518,7 +1518,7 @@ export default function SettingsPage() {
                   </SettingRow>
 
                   {notificationSettings.whatsappEnabled && (
-                    <div className="space-y-5 mt-4 pt-4 border-t border-gray-50">
+                    <div className="space-y-5 mt-4 pt-4 border-t border-gray-50 dark:border-slate-800">
                       <FormField label="Nomor WhatsApp" description="Format: kode negara + nomor">
                         <div className="relative">
                           <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-slate-500 text-sm">+</span>
@@ -1601,7 +1601,7 @@ export default function SettingsPage() {
                   </SettingRow>
 
                   {notificationSettings.emailEnabled && (
-                    <div className="space-y-5 mt-4 pt-4 border-t border-gray-50">
+                    <div className="space-y-5 mt-4 pt-4 border-t border-gray-50 dark:border-slate-800">
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                         <FormField label="SMTP Host">
                           <DarkInput

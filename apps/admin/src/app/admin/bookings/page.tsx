@@ -544,7 +544,7 @@ function BookingsContent() {
               loading={loading}
               onRowClick={row => { setSelectedBooking(row); setIsDetailOpen(true) }}
             />
-            <div className="border-t border-gray-100">
+            <div className="border-t border-gray-100 dark:border-slate-700">
               <Pagination
                 currentPage={pagination.page}
                 totalPages={pagination.totalPages}

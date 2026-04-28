@@ -128,18 +128,16 @@ function TestimonialFormModal({
                 <label className="text-sm font-medium text-gray-700 dark:text-slate-200">
                   Customer Name <span className="text-red-500">*</span>
                 </label>
-                <div className="relative">
-                  <User className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-                  <Input
-                    value={formData.name}
-                    onChange={(e) => {
-                      setFormData({ ...formData, name: e.target.value })
-                      setErrors({ ...errors, name: undefined })
-                    }}
-                    placeholder="Enter customer name"
-                    className={`pl-10 ${errors.name ? 'border-red-500 focus:border-red-500' : ''}`}
-                  />
-                </div>
+                <Input
+                  icon={<User className="h-4 w-4 text-gray-400" />}
+                  value={formData.name}
+                  onChange={(e) => {
+                    setFormData({ ...formData, name: e.target.value })
+                    setErrors({ ...errors, name: undefined })
+                  }}
+                  placeholder="Enter customer name"
+                  className={errors.name ? 'border-red-500 focus:border-red-500' : ''}
+                />
                 {errors.name && <p className="text-sm text-red-500">{errors.name}</p>}
               </div>
 

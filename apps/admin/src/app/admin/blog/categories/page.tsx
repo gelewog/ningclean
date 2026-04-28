@@ -141,7 +141,7 @@ function CategoryModal({
                 Slug <span className="text-red-500">*</span>
               </label>
               <div className="relative">
-                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm">/</span>
+                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-600 dark:text-slate-300 text-sm font-bold z-10 pointer-events-none">/</span>
                 <Input
                   value={formData.slug}
                   onChange={(e) => {

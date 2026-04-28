@@ -47,6 +47,7 @@ export interface Service {
 
 export interface Booking {
   id: string
+  orderNumber?: string
   customerId: string
   customerName: string
   customerEmail: string
