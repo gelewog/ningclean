@@ -4,6 +4,7 @@ on:
   push:
     branches: [master]
 
+# Environment variables untuk semua jobs
 env:
   NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL }}
 
@@ -12,34 +13,66 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
           cache: 'npm'
-      
+
       - name: Install Vercel CLI
         run: npm install -g vercel@latest
-      
-      - name: Deploy Admin
+
+      - name: Pull Vercel Environment Info
         working-directory: apps/admin
-        run: vercel deploy --yes --prod --token=${{ secrets.VERCEL_ADMIN_TOKEN }} --build-env NEXT_PUBLIC_API_URL="${{ secrets.NEXT_PUBLIC_API_URL }}"
+        run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_ADMIN_TOKEN }}
+
+      - name: Update Vercel Environment Variables
+        working-directory: apps/admin
+        run: |
+          vercel env rm NEXT_PUBLIC_API_URL production --yes --token=${{ secrets.VERCEL_ADMIN_TOKEN }} || true
+          echo "${{ secrets.NEXT_PUBLIC_API_URL }}" | vercel env add NEXT_PUBLIC_API_URL production --token=${{ secrets.VERCEL_ADMIN_TOKEN }}
+
+      - name: Build Project Artifacts
+        working-directory: apps/admin
+        env:
+          NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL }}
+        run: vercel build --prod --token=${{ secrets.VERCEL_ADMIN_TOKEN }}
+
+      - name: Deploy Project Artifacts to Vercel
+        working-directory: apps/admin
+        run: vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_ADMIN_TOKEN }}
 
   deploy-web:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
           cache: 'npm'
-      
+
       - name: Install Vercel CLI
         run: npm install -g vercel@latest
-      
-      - name: Deploy Web
+
+      - name: Pull Vercel Environment Info
         working-directory: apps/web
-        run: vercel deploy --yes --prod --token=${{ secrets.VERCEL_WEB_TOKEN }} --build-env NEXT_PUBLIC_API_URL="${{ secrets.NEXT_PUBLIC_API_URL }}"
+        run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_WEB_TOKEN }}
+
+      - name: Update Vercel Environment Variables
+        working-directory: apps/web
+        run: |
+          vercel env rm NEXT_PUBLIC_API_URL production --yes --token=${{ secrets.VERCEL_WEB_TOKEN }} || true
+          echo "${{ secrets.NEXT_PUBLIC_API_URL }}" | vercel env add NEXT_PUBLIC_API_URL production --token=${{ secrets.VERCEL_WEB_TOKEN }}
+
+      - name: Build Project Artifacts
+        working-directory: apps/web
+        env:
+          NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL }}
+        run: vercel build --prod --token=${{ secrets.VERCEL_WEB_TOKEN }}
+
+      - name: Deploy Project Artifacts to Vercel
+        working-directory: apps/web
+        run: vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_WEB_TOKEN }}
