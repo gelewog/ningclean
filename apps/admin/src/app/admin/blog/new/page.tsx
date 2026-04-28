@@ -124,23 +124,24 @@ export default function NewBlogPostPage() {
           animate={{ opacity: 1, y: 0 }}
           className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"
         >
-          <div className="flex items-center gap-4">
-            <Link href="/admin/blog" className="p-2 hover:bg-gray-100 dark:hover:bg-slate-800 rounded-xl transition-colors">
+          <div className="flex items-center gap-3">
+            <Link href="/admin/blog" className="p-2 hover:bg-gray-100 dark:hover:bg-slate-800 rounded-xl transition-colors shrink-0">
               <ArrowLeft className="w-5 h-5 text-gray-500 dark:text-slate-400" />
             </Link>
-            <div>
-              <h1 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Buat Post Baru</h1>
+            <div className="min-w-0">
+              <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-gray-900 dark:text-white truncate">Buat Post Baru</h1>
               <p className="text-sm text-gray-500 dark:text-slate-400 mt-0.5">Tulis artikel blog baru</p>
             </div>
           </div>
-          <div className="flex items-center gap-3">
-            <Button variant="outline" onClick={() => router.push('/admin/blog')}>
-              Batal
+          <div className="flex items-center gap-2 sm:gap-3">
+            <Button variant="outline" onClick={() => router.push('/admin/blog')} className="h-9 sm:h-10 px-3 sm:px-4">
+              <span className="hidden sm:inline">Batal</span>
+              <span className="sm:hidden">Batal</span>
             </Button>
             <Button 
               variant="outline" 
               onClick={() => {
-                // Simpan draft ke localStorage untuk preview
+                // Simpan draft ke localStorage untuk preview (fallback untuk local dev)
                 const draftData = {
                   title: formData.title || 'Untitled',
                   content: formData.content,
@@ -154,19 +155,23 @@ export default function NewBlogPostPage() {
                   category: undefined,
                 }
                 localStorage.setItem('blog_draft_preview', JSON.stringify(draftData))
-                window.open('/admin/blog/preview', '_blank')
+                // Open preview dengan URL dari environment variable
+                const webUrl = process.env.NEXT_PUBLIC_WEB_URL || 'http://localhost:3001'
+                window.open(`${webUrl}/admin/blog/preview`, '_blank')
               }}
+              className="h-9 sm:h-10 px-2 sm:px-4"
             >
-              <Eye className="w-4 h-4 mr-2" />
-              Preview Draft
+              <Eye className="w-4 h-4 sm:mr-2" />
+              <span className="hidden sm:inline">Preview Draft</span>
             </Button>
             <Button
               onClick={handleSubmit}
               disabled={loading}
-              className="bg-emerald-600 hover:bg-emerald-700"
+              className="bg-emerald-600 hover:bg-emerald-700 h-9 sm:h-10 px-3 sm:px-4"
             >
-              <Save className="w-4 h-4 mr-2" />
-              {loading ? 'Menyimpan...' : 'Simpan'}
+              <Save className="w-4 h-4 sm:mr-2" />
+              <span className="hidden sm:inline">{loading ? 'Menyimpan...' : 'Simpan'}</span>
+              <span className="sm:hidden">{loading ? '...' : 'Simpan'}</span>
             </Button>
           </div>
         </motion.div>
@@ -181,16 +186,15 @@ export default function NewBlogPostPage() {
               transition={{ delay: 0.1 }}
               className="bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-700 rounded-2xl overflow-hidden"
             >
-              <div className="px-6 py-4 border-b border-gray-100 dark:border-slate-700 bg-gray-50/50 dark:bg-slate-800/50">
-                <h3 className="font-semibold text-gray-900 dark:text-white">Judul Artikel</h3>
+              <div className="px-4 sm:px-6 py-3 sm:py-4 border-b border-gray-100 dark:border-slate-700 bg-gray-50/50 dark:bg-slate-800/50">
+                <h3 className="font-semibold text-gray-900 dark:text-white text-sm sm:text-base">Judul Artikel</h3>
               </div>
-              <div className="p-6">
+              <div className="p-4 sm:p-6">
                 <Input
                   placeholder="Judul artikel..."
                   value={formData.title}
                   onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                  className={`text-xl font-semibold border-0 p-0 h-auto focus:ring-0 placeholder:text-gray-300 dark:text-slate-600 bg-transparent ${errors.title ? 'border-red-500' : ''}`}
-                  style={{ fontSize: '24px', fontWeight: 600 }}
+                  className={`text-lg sm:text-xl font-semibold border-0 p-0 h-auto focus:ring-0 placeholder:text-gray-300 dark:text-slate-600 bg-transparent ${errors.title ? 'border-red-500' : ''}`}
                 />
                 {errors.title && <p className="text-sm text-red-500 mt-2">{errors.title}</p>}
               </div>
@@ -203,10 +207,10 @@ export default function NewBlogPostPage() {
               transition={{ delay: 0.15 }}
               className="bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-700 rounded-2xl overflow-hidden"
             >
-              <div className="px-6 py-4 border-b border-gray-100 dark:border-slate-700 bg-gray-50/50 dark:bg-slate-800/50">
-                <h3 className="font-semibold text-gray-900 dark:text-white">Cover Image</h3>
+              <div className="px-4 sm:px-6 py-3 sm:py-4 border-b border-gray-100 dark:border-slate-700 bg-gray-50/50 dark:bg-slate-800/50">
+                <h3 className="font-semibold text-gray-900 dark:text-white text-sm sm:text-base">Cover Image</h3>
               </div>
-              <div className="p-6">
+              <div className="p-4 sm:p-6">
                 <ImageUpload
                   folder="gallery"
                   value={formData.coverImage}
@@ -215,7 +219,7 @@ export default function NewBlogPostPage() {
                   autoUpload={false}
                   label=""
                   placeholder="https://... atau paste URL gambar"
-                  previewClassName="h-64 w-full"
+                  previewClassName="h-48 sm:h-64 w-full"
                 />
               </div>
             </motion.div>
@@ -227,10 +231,10 @@ export default function NewBlogPostPage() {
               transition={{ delay: 0.2 }}
               className="bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-700 rounded-2xl overflow-hidden"
             >
-              <div className="px-6 py-4 border-b border-gray-100 dark:border-slate-700 bg-gray-50/50 dark:bg-slate-800/50">
-                <h3 className="font-semibold text-gray-900 dark:text-white">Excerpt</h3>
+              <div className="px-4 sm:px-6 py-3 sm:py-4 border-b border-gray-100 dark:border-slate-700 bg-gray-50/50 dark:bg-slate-800/50">
+                <h3 className="font-semibold text-gray-900 dark:text-white text-sm sm:text-base">Excerpt</h3>
               </div>
-              <div className="p-6">
+              <div className="p-4 sm:p-6">
                 <Textarea
                   placeholder="Ringkasan singkat artikel..."
                   value={formData.excerpt}
@@ -249,11 +253,11 @@ export default function NewBlogPostPage() {
               transition={{ delay: 0.25 }}
               className="bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-700 rounded-2xl overflow-hidden"
             >
-              <div className="px-6 py-4 border-b border-gray-100 dark:border-slate-700 bg-gray-50/50 dark:bg-slate-800/50 flex items-center justify-between">
-                <h3 className="font-semibold text-gray-900 dark:text-white">Content</h3>
+              <div className="px-4 sm:px-6 py-3 sm:py-4 border-b border-gray-100 dark:border-slate-700 bg-gray-50/50 dark:bg-slate-800/50 flex items-center justify-between">
+                <h3 className="font-semibold text-gray-900 dark:text-white text-sm sm:text-base">Content</h3>
                 <Badge variant="info" className="text-xs">Rich Text</Badge>
               </div>
-              <div className="p-6">
+              <div className="p-4 sm:p-6">
                 <RichTextEditor
                   value={formData.content}
                   onChange={(value) => setFormData({ ...formData, content: value })}
@@ -266,7 +270,7 @@ export default function NewBlogPostPage() {
           </div>
 
           {/* Sidebar */}
-          <div className="space-y-6">
+          <div className="space-y-4 sm:space-y-6 order-first lg:order-last">
             {/* Publish */}
             <motion.div
               initial={{ opacity: 0, x: 16 }}
@@ -274,13 +278,13 @@ export default function NewBlogPostPage() {
               transition={{ delay: 0.1 }}
               className="bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-700 rounded-2xl overflow-hidden"
             >
-              <div className="px-6 py-4 border-b border-gray-100 dark:border-slate-700 bg-gray-50/50 dark:bg-slate-800/50">
-                <h3 className="font-semibold text-gray-900 dark:text-white">Publish</h3>
+              <div className="px-4 sm:px-6 py-3 sm:py-4 border-b border-gray-100 dark:border-slate-700 bg-gray-50/50 dark:bg-slate-800/50">
+                <h3 className="font-semibold text-gray-900 dark:text-white text-sm sm:text-base">Publish</h3>
               </div>
-              <div className="p-6 space-y-4">
+              <div className="p-4 sm:p-6 space-y-4">
                 <div>
                   <label className="text-sm font-medium text-gray-700 dark:text-slate-200 mb-2 block">Status</label>
-                  <div className="flex gap-4">
+                  <div className="flex gap-4 flex-wrap">
                     <label className="flex items-center gap-2 cursor-pointer">
                       <input
                         type="radio"
@@ -308,7 +312,7 @@ export default function NewBlogPostPage() {
                 <Button
                   onClick={handleSubmit}
                   disabled={loading}
-                  className="w-full bg-emerald-600 hover:bg-emerald-700"
+                  className="w-full bg-emerald-600 hover:bg-emerald-700 h-10"
                 >
                   {loading ? 'Menyimpan...' : 'Simpan Post'}
                 </Button>
@@ -322,13 +326,13 @@ export default function NewBlogPostPage() {
               transition={{ delay: 0.15 }}
               className="bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-700 rounded-2xl overflow-hidden"
             >
-              <div className="px-6 py-4 border-b border-gray-100 dark:border-slate-700 bg-gray-50/50 dark:bg-slate-800/50">
-                <h3 className="font-semibold text-gray-900 dark:text-white flex items-center gap-2">
+              <div className="px-4 sm:px-6 py-3 sm:py-4 border-b border-gray-100 dark:border-slate-700 bg-gray-50/50 dark:bg-slate-800/50">
+                <h3 className="font-semibold text-gray-900 dark:text-white flex items-center gap-2 text-sm sm:text-base">
                   <FolderOpen className="w-4 h-4" />
                   Kategori
                 </h3>
               </div>
-              <div className="p-6">
+              <div className="p-4 sm:p-6">
                 <select
                   value={formData.categoryId}
                   onChange={(e) => setFormData({ ...formData, categoryId: e.target.value })}
@@ -349,13 +353,13 @@ export default function NewBlogPostPage() {
               transition={{ delay: 0.2 }}
               className="bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-700 rounded-2xl overflow-hidden"
             >
-              <div className="px-6 py-4 border-b border-gray-100 dark:border-slate-700 bg-gray-50/50 dark:bg-slate-800/50">
-                <h3 className="font-semibold text-gray-900 dark:text-white flex items-center gap-2">
+              <div className="px-4 sm:px-6 py-3 sm:py-4 border-b border-gray-100 dark:border-slate-700 bg-gray-50/50 dark:bg-slate-800/50">
+                <h3 className="font-semibold text-gray-900 dark:text-white flex items-center gap-2 text-sm sm:text-base">
                   <Star className="w-4 h-4 text-amber-500" />
                   Featured Post
                 </h3>
               </div>
-              <div className="p-6">
+              <div className="p-4 sm:p-6">
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-gray-600 dark:text-slate-300">Tampilkan di homepage</span>
                   <input
@@ -375,10 +379,10 @@ export default function NewBlogPostPage() {
               transition={{ delay: 0.25 }}
               className="bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-700 rounded-2xl overflow-hidden"
             >
-              <div className="px-6 py-4 border-b border-gray-100 dark:border-slate-700 bg-gray-50/50 dark:bg-slate-800/50">
-                <h3 className="font-semibold text-gray-900 dark:text-white">Tags</h3>
+              <div className="px-4 sm:px-6 py-3 sm:py-4 border-b border-gray-100 dark:border-slate-700 bg-gray-50/50 dark:bg-slate-800/50">
+                <h3 className="font-semibold text-gray-900 dark:text-white text-sm sm:text-base">Tags</h3>
               </div>
-              <div className="p-6 space-y-3">
+              <div className="p-4 sm:p-6 space-y-3">
                 <Input
                   placeholder="tips, cleaning, rumah (pisah dengan koma)"
                   value={formData.tags}

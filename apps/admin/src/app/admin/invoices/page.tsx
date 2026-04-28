@@ -193,12 +193,11 @@ export default function InvoicesPage() {
           className="flex flex-col gap-3 sm:flex-row"
         >
           <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400 dark:text-slate-500" />
             <Input
+              icon={<Search className="h-4 w-4 text-gray-400 dark:text-slate-500" />}
               placeholder="Cari order number, nama, alamat..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="pl-10"
             />
           </div>
           <select
@@ -252,64 +251,67 @@ export default function InvoicesPage() {
                   return (
                     <div
                       key={booking.id}
-                      className="flex items-center gap-4 p-4 hover:bg-gray-50 dark:hover:bg-slate-800 transition-colors"
+                      className="flex flex-col sm:flex-row sm:items-center gap-3 p-4 hover:bg-gray-50 dark:hover:bg-slate-800 transition-colors"
                     >
-                      <div className="h-12 w-12 rounded-lg bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center">
-                        <FileText className="h-6 w-6 text-emerald-600" />
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-2 mb-1">
-                          <h3 className="font-medium text-gray-900 dark:text-white">{booking.orderNumber}</h3>
-                          <Badge className={BOOKING_STATUS_COLORS[(booking.status || 'unknown').toLowerCase()]}>
-                            {BOOKING_STATUS_LABELS[(booking.status || 'unknown').toLowerCase()]}
-                          </Badge>
-                          {/* Invoice Status Badge */}
-                          <Badge className={INVOICE_STATUS_COLORS[invStatus]}>
-                            {INVOICE_STATUS_LABELS[invStatus]}
-                          </Badge>
+                      <div className="flex items-center gap-3 sm:gap-4 flex-1 min-w-0">
+                        <div className="h-10 sm:h-12 w-10 sm:w-12 rounded-lg bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center flex-shrink-0">
+                          <FileText className="h-5 sm:h-6 w-5 sm:w-6 text-emerald-600" />
                         </div>
-                        <div className="flex items-center gap-3 text-sm text-gray-500 dark:text-slate-400">
-                          <span>{booking.guestName || 'Guest'}</span>
-                          <span>•</span>
-                          <span className="flex items-center gap-1">
-                            <Calendar className="h-3 w-3" />
-                            {booking.serviceDate ? formatDate(booking.serviceDate) : '-'}
-                          </span>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 mb-1">
+                            <h3 className="font-medium text-gray-900 dark:text-white text-sm sm:text-base truncate">{booking.orderNumber}</h3>
+                            <Badge className={BOOKING_STATUS_COLORS[(booking.status || 'unknown').toLowerCase()]} className="text-[10px] sm:text-xs px-1.5 py-0">
+                              {BOOKING_STATUS_LABELS[(booking.status || 'unknown').toLowerCase()]}
+                            </Badge>
+                            <Badge className={INVOICE_STATUS_COLORS[invStatus]} className="text-[10px] sm:text-xs px-1.5 py-0">
+                              {INVOICE_STATUS_LABELS[invStatus]}
+                            </Badge>
+                          </div>
+                          <div className="flex flex-wrap items-center gap-1 sm:gap-3 text-xs sm:text-sm text-gray-500 dark:text-slate-400">
+                            <span className="truncate max-w-[100px] sm:max-w-none">{booking.guestName || 'Guest'}</span>
+                            <span className="hidden sm:inline">•</span>
+                            <span className="flex items-center gap-1">
+                              <Calendar className="h-3 w-3" />
+                              {booking.serviceDate ? formatDate(booking.serviceDate) : '-'}
+                            </span>
+                          </div>
                         </div>
                       </div>
-                      <div className="text-right">
-                        <p className="font-semibold text-gray-900 dark:text-white">
+                      
+                      <div className="flex items-center justify-between sm:justify-end gap-2 sm:gap-4">
+                        <p className="font-semibold text-gray-900 dark:text-white text-sm sm:text-base">
                           Rp {Number(booking.totalAmount || 0).toLocaleString('id-ID')}
                         </p>
-                      </div>
-                      {/* Action Buttons */}
-                      <div className="flex items-center gap-2">
-                        {hasInvoice ? (
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={() => handlePreview(booking)}
-                            disabled={loadingInvoice}
-                            className="gap-2"
-                          >
-                            <Eye className="h-4 w-4" />
-                            Preview
-                          </Button>
-                        ) : (
-                          <Button
-                            size="sm"
-                            onClick={() => handleGenerateInvoice(booking)}
-                            disabled={generatingInvoice === booking.id}
-                            className="gap-2 bg-emerald-600 hover:bg-emerald-700"
-                          >
-                            {generatingInvoice === booking.id ? (
-                              <span className="animate-spin">⏳</span>
-                            ) : (
-                              <Plus className="h-4 w-4" />
-                            )}
-                            Buat Invoice
-                          </Button>
-                        )}
+                        
+                        <div className="flex items-center gap-2">
+                          {hasInvoice ? (
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => handlePreview(booking)}
+                              disabled={loadingInvoice}
+                              className="gap-1.5 sm:gap-2 px-2.5 sm:px-3"
+                            >
+                              <Eye className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+                              <span className="hidden sm:inline">Preview</span>
+                            </Button>
+                          ) : (
+                            <Button
+                              size="sm"
+                              onClick={() => handleGenerateInvoice(booking)}
+                              disabled={generatingInvoice === booking.id}
+                              className="gap-1.5 sm:gap-2 bg-emerald-600 hover:bg-emerald-700 px-2.5 sm:px-3"
+                            >
+                              {generatingInvoice === booking.id ? (
+                                <span className="animate-spin">⏳</span>
+                              ) : (
+                                <Plus className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+                              )}
+                              <span className="hidden sm:inline">Buat Invoice</span>
+                              <span className="sm:hidden">Buat</span>
+                            </Button>
+                          )}
+                        </div>
                       </div>
                     </div>
                   )

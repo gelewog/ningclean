@@ -164,70 +164,72 @@ export default function BlogPage() {
                 {filteredPosts.map((post) => (
                   <div
                     key={post.id}
-                    className="flex items-center gap-4 p-4 hover:bg-gray-50 dark:hover:bg-slate-800 transition-colors"
+                    className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 p-4 hover:bg-gray-50 dark:hover:bg-slate-800 transition-colors"
                   >
-                    {/* Thumbnail */}
-                    <div className="h-16 w-24 rounded-lg overflow-hidden bg-gray-100 dark:bg-slate-800 flex-shrink-0">
-                      {post.coverImage ? (
-                        <img
-                          src={getThumbnailUrl(post.coverImage)}
-                          alt={post.title}
-                          className="h-full w-full object-cover"
-                          loading="lazy"
-                        />
-                      ) : (
-                        <div className="h-full w-full flex items-center justify-center">
-                          <ImageIcon className="h-6 w-6 text-gray-300" />
+                    <div className="flex items-center gap-3 sm:gap-4 flex-1 min-w-0">
+                      <div className="h-14 sm:h-16 w-20 sm:w-24 rounded-lg overflow-hidden bg-gray-100 dark:bg-slate-800 flex-shrink-0">
+                        {post.coverImage ? (
+                          <img
+                            src={getThumbnailUrl(post.coverImage)}
+                            alt={post.title}
+                            className="h-full w-full object-cover"
+                            loading="lazy"
+                          />
+                        ) : (
+                          <div className="h-full w-full flex items-center justify-center">
+                            <ImageIcon className="h-5 sm:h-6 w-5 sm:w-6 text-gray-300" />
+                          </div>
+                        )}
+                      </div>
+
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-1.5 sm:gap-2 mb-1">
+                          <h3 className="font-medium text-gray-900 dark:text-white text-sm sm:text-base truncate">{post.title}</h3>
+                          {post.isFeatured && (
+                            <Star className="h-3.5 sm:h-4 w-3.5 sm:w-4 text-amber-500 flex-shrink-0" />
+                          )}
                         </div>
-                      )}
-                    </div>
-
-                    {/* Content */}
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2 mb-1">
-                        <h3 className="font-medium text-gray-900 dark:text-white truncate">{post.title}</h3>
-                        {post.isFeatured && (
-                          <Star className="h-4 w-4 text-amber-500 flex-shrink-0" />
-                        )}
-                      </div>
-                      <div className="flex items-center gap-3 text-sm text-gray-500 dark:text-slate-400">
-                        <span className="flex items-center gap-1">
-                          <Calendar className="h-3 w-3" />
-                          {formatDate(post.createdAt)}
-                        </span>
-                        <Badge
-                          variant={post.status === 'published' ? 'success' : 'default'}
-                          className="text-xs"
-                        >
-                          {post.status}
-                        </Badge>
-                        {post.category && (
-                          <Badge variant="info" className="text-xs">
-                            {post.category.name}
+                        <div className="flex flex-wrap items-center gap-1.5 sm:gap-3 text-xs sm:text-sm text-gray-500 dark:text-slate-400">
+                          <span className="flex items-center gap-1">
+                            <Calendar className="h-3 w-3" />
+                            {formatDate(post.createdAt)}
+                          </span>
+                          <Badge
+                            variant={post.status === 'published' ? 'success' : 'default'}
+                            className="text-[10px] sm:text-xs px-1.5 py-0"
+                          >
+                            {post.status}
                           </Badge>
-                        )}
+                          {post.category && (
+                            <Badge variant="info" className="text-[10px] sm:text-xs px-1.5 py-0 truncate max-w-[80px] sm:max-w-none">
+                              {post.category.name}
+                            </Badge>
+                          )}
+                        </div>
                       </div>
                     </div>
 
-                    {/* Actions */}
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center justify-end gap-1 sm:gap-2">
                       <Link href={`${process.env.NEXT_PUBLIC_WEB_URL || 'http://localhost:3001'}/blog/${post.slug}`} target="_blank">
-                        <Button variant="ghost" size="sm" className="text-gray-400 dark:text-slate-500 hover:text-gray-600 dark:text-slate-300">
+                        <Button variant="ghost" size="sm" className="h-8 w-8 sm:h-9 sm:w-auto sm:px-2 text-gray-400 dark:text-slate-500 hover:text-gray-600 dark:hover:text-slate-300">
                           <ExternalLink className="h-4 w-4" />
+                          <span className="hidden sm:inline sm:ml-1.5">View</span>
                         </Button>
                       </Link>
                       <Link href={`/admin/blog/${post.id}`}>
-                        <Button variant="ghost" size="sm" className="text-gray-400 dark:text-slate-500 hover:text-emerald-600">
+                        <Button variant="ghost" size="sm" className="h-8 w-8 sm:h-9 sm:w-auto sm:px-2 text-gray-400 dark:text-slate-500 hover:text-emerald-600">
                           <Edit className="h-4 w-4" />
+                          <span className="hidden sm:inline sm:ml-1.5">Edit</span>
                         </Button>
                       </Link>
                       <Button
                         variant="ghost"
                         size="sm"
                         onClick={() => setDeleteId(post.id)}
-                        className="text-gray-400 dark:text-slate-500 hover:text-red-600"
+                        className="h-8 w-8 sm:h-9 sm:w-auto sm:px-2 text-gray-400 dark:text-slate-500 hover:text-red-600"
                       >
                         <Trash2 className="h-4 w-4" />
+                        <span className="hidden sm:inline sm:ml-1.5">Delete</span>
                       </Button>
                     </div>
                   </div>
