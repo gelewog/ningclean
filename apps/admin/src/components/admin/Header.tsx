@@ -266,7 +266,7 @@ function SearchResultsPanel({
       animate={{ opacity: 1, y: 0, scale: 1 }}
       exit={{ opacity: 0, y: 6, scale: 0.97 }}
       transition={{ duration: 0.14 }}
-      className="absolute left-0 top-full mt-2 w-[420px] bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-700 rounded-2xl overflow-hidden z-50 shadow-xl shadow-gray-200/50 dark:shadow-slate-900/50"
+      className="absolute left-0 top-full mt-2 w-[calc(100vw-2rem)] sm:w-[420px] bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-700 rounded-2xl overflow-hidden z-50 shadow-xl shadow-gray-200/50 dark:shadow-slate-900/50"
       onClick={e => e.stopPropagation()}
     >
       {/* Quick Actions - Always visible */}
@@ -417,7 +417,7 @@ function NotificationPanel({
       animate={{ opacity: 1, y: 0, scale: 1 }}
       exit={{ opacity: 0, y: 6, scale: 0.97 }}
       transition={{ duration: 0.14 }}
-      className="absolute right-0 top-full mt-2 w-[360px] bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-700 rounded-2xl overflow-hidden z-50 shadow-xl shadow-gray-200/50 dark:shadow-slate-900/50"
+      className="absolute right-0 sm:right-0 left-4 sm:left-auto top-full mt-2 w-[calc(100vw-2rem)] sm:w-[360px] bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-700 rounded-2xl overflow-hidden z-50 shadow-xl shadow-gray-200/50 dark:shadow-slate-900/50"
       onClick={e => e.stopPropagation()}
     >
       {/* Header */}
