@@ -220,13 +220,14 @@ function GalleryFormModal({
               {/* Close Button */}
               <button
                 onClick={onClose}
-                className="absolute top-4 right-4 w-8 h-8 rounded-xl bg-gray-100 dark:bg-slate-800 hover:bg-gray-200 dark:hover:bg-slate-700 flex items-center justify-center transition-colors"
+                className="absolute top-4 right-4 z-20 w-8 h-8 rounded-xl bg-gray-100 dark:bg-slate-800 hover:bg-gray-200 dark:hover:bg-slate-700 flex items-center justify-center transition-colors cursor-pointer shadow-md"
+                type="button"
               >
                 <X className="w-4 h-4 text-gray-500 dark:text-slate-400" />
               </button>
 
               {/* Decorative Elements */}
-              <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-emerald-500/10 to-transparent rounded-bl-full" />
+              <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-emerald-500/10 to-transparent rounded-bl-full pointer-events-none" />
             </div>
 
             {/* Scrollable Content */}
@@ -662,7 +663,8 @@ function GalleryDeleteModal({
               {/* Close Button */}
               <button
                 onClick={onClose}
-                className="absolute top-4 right-4 w-8 h-8 rounded-xl bg-gray-100 dark:bg-slate-800 hover:bg-gray-200 dark:hover:bg-slate-700 flex items-center justify-center transition-colors"
+                className="absolute top-4 right-4 z-20 w-8 h-8 rounded-xl bg-gray-100 dark:bg-slate-800 hover:bg-gray-200 dark:hover:bg-slate-700 flex items-center justify-center transition-colors cursor-pointer shadow-md"
+                type="button"
               >
                 <X className="w-4 h-4 text-gray-500 dark:text-slate-400" />
               </button>
