@@ -515,8 +515,8 @@ export default function SettingsPage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
         >
-          <div className="overflow-x-auto -mx-4 px-4 scrollbar-hide">
-            <div className="flex gap-2 min-w-max">
+          <div className="overflow-x-auto -mx-4 px-4 pb-3 custom-scrollbar">
+            <div className="flex gap-2 min-w-max px-1">
               {tabs.map(tab => {
                 const Icon = tab.icon
                 const isActive = activeTab === tab.id
