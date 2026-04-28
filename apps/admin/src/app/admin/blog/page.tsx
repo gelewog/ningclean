@@ -250,11 +250,11 @@ export default function BlogPage() {
 
       {/* Delete Confirmation */}
       {deleteId && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+        <div className="fixed inset-0 z-50 flex items-start sm:items-center justify-center p-0 sm:p-6 bg-black/50">
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="bg-white dark:bg-slate-900 rounded-2xl p-6 w-full max-w-md mx-4 shadow-2xl"
+            className="bg-white dark:bg-slate-900 sm:rounded-2xl p-6 w-full h-full sm:h-auto sm:max-w-md shadow-2xl"
           >
             <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-2">Hapus Post?</h3>
             <p className="text-gray-600 dark:text-slate-300 mb-6">

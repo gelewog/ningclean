@@ -180,7 +180,7 @@ function ServiceModal({
         onClick={onClose}
       />
       
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 pointer-events-none">
+      <div className="fixed inset-0 z-50 flex items-start sm:items-center justify-center p-0 sm:p-6 pointer-events-none">
         <motion.div
           ref={modalRef}
           initial={{ opacity: 0, scale: 0.95, y: 20 }}
@@ -578,7 +578,7 @@ function DeleteModal({
           initial={{ opacity: 0, scale: 0.95, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: 20 }}
-          className="pointer-events-auto w-full max-w-md bg-white dark:bg-slate-900 rounded-2xl shadow-2xl border border-gray-200 dark:border-slate-700 overflow-hidden"
+          className="pointer-events-auto w-full h-full sm:h-auto sm:max-w-md bg-white dark:bg-slate-900 sm:rounded-2xl shadow-2xl border-0 sm:border border-gray-200 dark:border-slate-700 overflow-hidden"
         >
           <div className="p-6 text-center">
             <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-red-50 dark:bg-red-900/30 flex items-center justify-center">
