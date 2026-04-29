@@ -14,6 +14,7 @@ import { Textarea } from '@/components/ui/textarea'
 import { Badge } from '@/components/ui/badge'
 import { ImageUpload, useImageUpload } from '@/components/ui/ImageUpload'
 import { getServices, createService, updateService, deleteService } from '@/lib/api'
+import { useServices, useCreateService, useUpdateService, useDeleteService } from '@/lib/use-queries'
 import { formatCurrency } from '@/lib/utils'
 import { Breadcrumb } from '@/components/admin/Breadcrumb'
 import { toast } from 'sonner'
@@ -180,57 +181,58 @@ function ServiceModal({
         onClick={onClose}
       />
       
-      <div className="fixed inset-0 z-50 flex items-start sm:items-center justify-center p-0 sm:p-6 pointer-events-none">
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 pointer-events-none">
         <motion.div
           ref={modalRef}
           initial={{ opacity: 0, scale: 0.95, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: 20 }}
           transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-          className="pointer-events-auto w-full max-w-2xl max-h-[90vh] bg-white dark:bg-slate-900 rounded-2xl shadow-2xl border border-gray-200 dark:border-slate-700 overflow-hidden flex flex-col"
+          className="pointer-events-auto w-full max-w-2xl max-h-[85vh] sm:max-h-[90vh] bg-white dark:bg-slate-900 rounded-2xl shadow-2xl border border-gray-200 dark:border-slate-700 overflow-hidden flex flex-col"
           onClick={(e) => e.stopPropagation()}
         >
           {/* Header */}
-          <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100 dark:border-slate-700 bg-gradient-to-r from-blue-50/50 to-transparent dark:from-blue-900/20 dark:to-transparent">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-blue-100 dark:bg-blue-900/40 flex items-center justify-center">
-                {isEditing ? <Edit className="w-5 h-5 text-blue-600 dark:text-blue-400" /> : <Plus className="w-5 h-5 text-blue-600 dark:text-blue-400" />}
+          <div className="flex items-center justify-between px-4 sm:px-6 py-3 sm:py-4 border-b border-gray-100 dark:border-slate-700 bg-gradient-to-r from-blue-50/50 to-transparent dark:from-blue-900/20 dark:to-transparent">
+            <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+              <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl bg-blue-100 dark:bg-blue-900/40 flex items-center justify-center flex-shrink-0">
+                {isEditing ? <Edit className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600 dark:text-blue-400" /> : <Plus className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600 dark:text-blue-400" />}
               </div>
-              <div>
-                <h2 className="text-lg font-bold text-gray-900 dark:text-white">{isEditing ? 'Edit Service' : 'Create Service'}</h2>
-                <p className="text-xs text-gray-500 dark:text-slate-400">{isEditing ? 'Update service details' : 'Add a new cleaning service'}</p>
+              <div className="min-w-0">
+                <h2 className="text-sm sm:text-lg font-bold text-gray-900 dark:text-white truncate">{isEditing ? 'Edit Service' : 'Create Service'}</h2>
+                <p className="text-[10px] sm:text-xs text-gray-500 dark:text-slate-400 hidden xs:block">{isEditing ? 'Update service details' : 'Add a new cleaning service'}</p>
               </div>
             </div>
             <Button
               variant="ghost"
               size="icon"
               onClick={onClose}
-              className="rounded-lg"
+              className="rounded-lg h-8 w-8 sm:h-10 sm:w-10 flex-shrink-0"
             >
-              <X className="w-5 h-5" />
+              <X className="w-4 h-4 sm:w-5 sm:h-5" />
             </Button>
           </div>
 
-          {/* Tabs */}
-          <div className="px-6 border-b border-gray-100 dark:border-slate-700">
-            <div className="flex gap-1">
+          {/* Tabs - Horizontal scroll on mobile with hidden scrollbar */}
+          <div className="px-4 sm:px-6 border-b border-gray-100 dark:border-slate-700">
+            <div className="flex justify-between sm:justify-start sm:gap-1">
               {[
-                { key: 'basic', label: 'Basic Info', icon: Package },
-                { key: 'details', label: 'Details', icon: List },
-                { key: 'features', label: 'Features', icon: CheckCircle2 },
-                { key: 'cities', label: 'Available Cities', icon: Building },
+                { key: 'basic', label: 'Basic', icon: Package, shortLabel: 'Basic' },
+                { key: 'details', label: 'Details', icon: List, shortLabel: 'Info' },
+                { key: 'features', label: 'Features', icon: CheckCircle2, shortLabel: 'Feat' },
+                { key: 'cities', label: 'Cities', icon: Building, shortLabel: 'City' },
               ].map((tab) => (
                 <button
                   key={tab.key}
                   onClick={() => setActiveTab(tab.key as any)}
-                  className={`flex items-center gap-2 px-4 py-3 text-sm font-medium transition-all border-b-2 -mb-px ${
+                  className={`flex-1 sm:flex-none flex items-center justify-center sm:justify-start gap-1.5 sm:gap-2 px-2 sm:px-4 py-2.5 sm:py-3 text-[11px] sm:text-sm font-medium transition-all border-b-2 ${
                     activeTab === tab.key
                       ? 'border-blue-500 text-blue-600 dark:text-blue-400'
                       : 'border-transparent text-gray-500 dark:text-slate-400 hover:text-gray-700 dark:hover:text-slate-300'
                   }`}
                 >
-                  <tab.icon className="w-4 h-4" />
-                  {tab.label}
+                  <tab.icon className="w-3.5 h-3.5" />
+                  <span className="sm:hidden truncate">{tab.shortLabel}</span>
+                  <span className="hidden sm:inline">{tab.label}</span>
                 </button>
               ))}
             </div>
@@ -238,7 +240,7 @@ function ServiceModal({
 
           {/* Scrollable Content */}
           <div className="flex-1 overflow-y-auto">
-            <form onSubmit={onSubmit} className="p-6 space-y-6">
+            <form onSubmit={onSubmit} className="p-4 sm:p-6 space-y-4 sm:space-y-6">
               {/* Basic Info Tab */}
               {activeTab === 'basic' && (
                 <motion.div
@@ -379,7 +381,7 @@ function ServiceModal({
                             className={`flex items-center justify-center aspect-square rounded-xl transition-all ${
                               formData.icon === icon.name
                                 ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-500/25'
-                                : 'bg-white dark:bg-slate-700 border border-gray-200 dark:border-slate-600 text-gray-500 dark:text-slate-400 hover:bg-gray-100 dark:hover:bg-slate-600'
+                                : 'bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-600 text-gray-500 dark:text-slate-400 hover:bg-gray-100 dark:hover:bg-slate-600'
                             }`}
                           >
                             <IconComponent className="w-5 h-5" />
@@ -517,17 +519,18 @@ function ServiceModal({
           </div>
 
           {/* Footer */}
-          <div className="flex items-center justify-between px-6 py-4 border-t border-gray-100 dark:border-slate-700 bg-gray-50/50 dark:bg-slate-800/50">
-            <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-slate-400">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-0 px-4 sm:px-6 py-4 border-t border-gray-100 dark:border-slate-700 bg-gray-50/50 dark:bg-slate-800/50">
+            <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-slate-400 order-2 sm:order-1">
               <span className="text-red-500">*</span> Required fields
             </div>
-            <div className="flex items-center gap-3">
-              <Button variant="outline" onClick={onClose} disabled={loading}>
+            <div className="flex items-center gap-2 sm:gap-3 order-1 sm:order-2">
+              <Button variant="outline" onClick={onClose} disabled={loading} className="flex-1 sm:flex-none">
                 Cancel
               </Button>
-              <Button onClick={onSubmit} disabled={loading} className="gap-2 bg-emerald-600 hover:bg-emerald-700">
+              <Button onClick={onSubmit} disabled={loading} className="flex-1 sm:flex-none gap-2 bg-emerald-600 hover:bg-emerald-700">
                 {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
-                {isEditing ? 'Update Service' : 'Create Service'}
+                <span className="sm:hidden">{isEditing ? 'Save' : 'Create'}</span>
+                <span className="hidden sm:inline">{isEditing ? 'Update Service' : 'Create Service'}</span>
               </Button>
             </div>
           </div>
@@ -580,25 +583,25 @@ function DeleteModal({
           exit={{ opacity: 0, scale: 0.95, y: 20 }}
           className="pointer-events-auto w-full h-full sm:h-auto sm:max-w-md bg-white dark:bg-slate-900 sm:rounded-2xl shadow-2xl border-0 sm:border border-gray-200 dark:border-slate-700 overflow-hidden"
         >
-          <div className="p-6 text-center">
-            <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-red-50 dark:bg-red-900/30 flex items-center justify-center">
-              <AlertCircle className="w-8 h-8 text-red-500" />
+          <div className="p-4 sm:p-6 text-center">
+            <div className="w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-3 sm:mb-4 rounded-full bg-red-50 dark:bg-red-900/30 flex items-center justify-center">
+              <AlertCircle className="w-6 h-6 sm:w-8 sm:h-8 text-red-500" />
             </div>
-            <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-2">Delete Service</h3>
-            <p className="text-sm text-gray-500 dark:text-slate-400">
+            <h3 className="text-base sm:text-lg font-bold text-gray-900 dark:text-white mb-2">Delete Service</h3>
+            <p className="text-xs sm:text-sm text-gray-500 dark:text-slate-400">
               Are you sure you want to delete <strong className="text-gray-900 dark:text-white">{serviceName}</strong>?
               <br />This action cannot be undone.
             </p>
           </div>
-          <div className="flex items-center justify-center gap-3 px-6 py-4 border-t border-gray-100 dark:border-slate-700 bg-gray-50/50 dark:bg-slate-800/50">
-            <Button variant="outline" onClick={onClose} disabled={loading}>
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-2 sm:gap-3 px-4 sm:px-6 py-3 sm:py-4 border-t border-gray-100 dark:border-slate-700 bg-gray-50/50 dark:bg-slate-800/50">
+            <Button variant="outline" onClick={onClose} disabled={loading} className="w-full sm:w-auto text-sm order-1 sm:order-1">
               Cancel
             </Button>
             <Button
               variant="error" 
               onClick={onConfirm}
               disabled={loading}
-              className="gap-2"
+              className="w-full sm:w-auto gap-2 text-sm order-2 sm:order-2"
             >
               {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Trash className="w-4 h-4" />}
               Delete Service
@@ -611,15 +614,16 @@ function DeleteModal({
 }
 
 export default function ServicesPage() {
-  const [services, setServices] = React.useState<any[]>([])
-  const [loading, setLoading] = React.useState(true)
+  const { data: services = [], isLoading: loading, refetch } = useServices(true)
+  const createServiceMutation = useCreateService()
+  const updateServiceMutation = useUpdateService()
+  const deleteServiceMutation = useDeleteService()
+  
   const [isModalOpen, setIsModalOpen] = React.useState(false)
   const [isDeleteModalOpen, setIsDeleteModalOpen] = React.useState(false)
   const [selectedService, setSelectedService] = React.useState<any>(null)
   const [isEditing, setIsEditing] = React.useState(false)
   const [filterActive, setFilterActive] = React.useState<'all' | 'active' | 'inactive'>('all')
-  const [formLoading, setFormLoading] = React.useState(false)
-  const [deleteLoading, setDeleteLoading] = React.useState(false)
   const [formData, setFormData] = React.useState<ServiceFormData>({
     name: '',
     slug: '',
@@ -636,22 +640,6 @@ export default function ServicesPage() {
   const [errors, setErrors] = React.useState<Partial<ServiceFormData>>({})
   const [selectedImageFile, setSelectedImageFile] = React.useState<File | null>(null)
   const { uploadImage } = useImageUpload()
-
-  React.useEffect(() => {
-    fetchServices()
-  }, [])
-
-  async function fetchServices() {
-    setLoading(true)
-    try {
-      const data = await getServices(true)
-      setServices(data)
-    } catch (error) {
-      toast.error('Failed to fetch services')
-    } finally {
-      setLoading(false)
-    }
-  }
 
   function generateSlug(name: string): string {
     return name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')
@@ -723,7 +711,7 @@ export default function ServicesPage() {
     // Upload image if there's a new file selected
     let imageUrl = formData.image
     if (selectedImageFile) {
-      const uploadedUrl = await uploadImage(selectedImageFile, 'services')
+      const uploadedUrl = await uploadImage(selectedImageFile, 'services') as string
       if (uploadedUrl) {
         imageUrl = uploadedUrl
       } else {
@@ -748,57 +736,52 @@ export default function ServicesPage() {
       availableCities: formData.availableCities,
     }
 
-    setFormLoading(true)
-    try {
-      if (isEditing && selectedService) {
-        await updateService(selectedService.id, serviceData)
-        toast.success('Service updated successfully')
-      } else {
-        await createService(serviceData)
-        toast.success('Service created successfully')
-      }
-      setSelectedImageFile(null)
-      setIsModalOpen(false)
-      fetchServices()
-    } catch (error: any) {
-      toast.error(`Failed to ${isEditing ? 'update' : 'create'} service: ${error.message}`)
-    } finally {
-      setFormLoading(false)
+    if (isEditing && selectedService) {
+      updateServiceMutation.mutate(
+        { id: selectedService.id, data: serviceData },
+        {
+          onSuccess: () => {
+            setSelectedImageFile(null)
+            setIsModalOpen(false)
+            refetch()
+          },
+        }
+      )
+    } else {
+      createServiceMutation.mutate(serviceData, {
+        onSuccess: () => {
+          setSelectedImageFile(null)
+          setIsModalOpen(false)
+          refetch()
+        },
+      })
     }
   }
 
   async function handleToggleActive(service: any) {
     const newIsActive = !service.isActive
-    const serviceName = service.name
-
-    setServices(prev => prev.map(s =>
-      s.id === service.id ? { ...s, isActive: newIsActive } : s
-    ))
-
-    try {
-      await updateService(service.id, { isActive: newIsActive })
-      toast.success(`Service "${serviceName}" ${newIsActive ? 'activated' : 'deactivated'}`)
-    } catch (error: any) {
-      setServices(prev => prev.map(s =>
-        s.id === service.id ? { ...s, isActive: !newIsActive } : s
-      ))
-      toast.error(`Failed to update: ${error.message || 'Unknown error'}`)
-    }
+    updateServiceMutation.mutate(
+      { id: service.id, data: { isActive: newIsActive } },
+      {
+        onSuccess: () => {
+          toast.success(`Service "${service.name}" ${newIsActive ? 'activated' : 'deactivated'}`)
+          refetch()
+        },
+        onError: (error: any) => {
+          toast.error(`Failed to update: ${error.message || 'Unknown error'}`)
+        },
+      }
+    )
   }
 
   async function handleDelete() {
     if (!selectedService) return
-    setDeleteLoading(true)
-    try {
-      await deleteService(selectedService.id)
-      toast.success('Service deleted successfully')
-      setIsDeleteModalOpen(false)
-      fetchServices()
-    } catch (error) {
-      toast.error('Failed to delete service')
-    } finally {
-      setDeleteLoading(false)
-    }
+    deleteServiceMutation.mutate(selectedService.id, {
+      onSuccess: () => {
+        setIsDeleteModalOpen(false)
+        refetch()
+      },
+    })
   }
 
   function getIconComponent(iconName: string) {
@@ -829,30 +812,31 @@ export default function ServicesPage() {
   }, [services, filterActive])
 
   return (
-    <div className="min-h-screen bg-gray-50/50 dark:bg-slate-900 text-gray-900 dark:text-white">
+    <div className="min-h-screen bg-gray-50/50 dark:bg-slate-800 text-gray-900 dark:text-white">
       {/* Topbar */}
-      <Breadcrumb items={[{ label: 'Services' }]} />
+      <Breadcrumb items={[{ label: 'Layanan' }]} />
 
-      <div className="w-full px-4 md:px-6 py-6 space-y-6">
+      <div className="w-full px-3 sm:px-6 py-3 sm:py-6 space-y-3 sm:space-y-6">
         {/* Page Header */}
         <motion.div
           initial={{ opacity: 0, y: -16 }}
           animate={{ opacity: 1, y: 0 }}
-          className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"
+          className="flex flex-wrap items-start justify-between gap-3 sm:gap-4"
         >
           <div>
-            <h1 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Services</h1>
-            <p className="text-sm text-gray-500 dark:text-slate-400 mt-1">Manage cleaning services and pricing</p>
-          </div>
-          <div className="flex items-center gap-3">
-            <div className="px-4 py-2 bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700">
-              <span className="text-sm text-gray-500 dark:text-slate-400">Total: </span>
-              <span className="text-sm font-bold text-gray-900 dark:text-white">{services.length}</span>
+            <div className="flex items-center gap-3">
+              <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Layanan</h1>
+              <Button onClick={openCreateModal} className="bg-emerald-600 hover:bg-emerald-700 h-8 text-xs px-3">
+                <Plus className="h-4 w-4" />
+              </Button>
             </div>
-            <Button onClick={openCreateModal} className="gap-2 bg-emerald-600 hover:bg-emerald-700">
-              <Plus className="h-4 w-4" />
-              Add Service
-            </Button>
+            <p className="text-xs sm:text-sm text-gray-500 dark:text-slate-400 mt-0.5 sm:mt-1">Kelola layanan cleaning dan harga</p>
+          </div>
+          <div className="flex items-center gap-2 sm:gap-3">
+            <div className="px-2 sm:px-3 py-1.5 sm:py-2 bg-white dark:bg-slate-900 rounded-lg sm:rounded-xl border border-gray-200 dark:border-slate-600">
+              <span className="text-xs sm:text-sm text-gray-500 dark:text-slate-400">Total: </span>
+              <span className="text-xs sm:text-sm font-bold text-gray-900 dark:text-white">{services.length}</span>
+            </div>
           </div>
         </motion.div>
 
@@ -860,24 +844,24 @@ export default function ServicesPage() {
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="flex gap-2"
+          className="flex gap-2 overflow-x-auto pb-1 -mx-3 px-3 sm:mx-0 sm:px-0"
         >
           {[
-            { key: 'all', label: 'All', count: services.length, color: 'blue' },
-            { key: 'active', label: 'Active', count: services.filter(s => s.isActive).length, color: 'emerald' },
-            { key: 'inactive', label: 'Inactive', count: services.filter(s => !s.isActive).length, color: 'gray' },
+            { key: 'all', label: 'All', count: services.length, color: 'bg-blue-500 text-white border-blue-500 shadow-lg shadow-blue-500/25', inactiveColor: 'bg-white dark:bg-slate-800 border-gray-200 dark:border-slate-700 text-gray-600 dark:text-slate-400 hover:border-gray-300 dark:hover:border-slate-600' },
+            { key: 'active', label: 'Active', count: services.filter(s => s.isActive).length, color: 'bg-emerald-500 text-white border-emerald-500 shadow-lg shadow-emerald-500/25', inactiveColor: 'bg-white dark:bg-slate-800 border-gray-200 dark:border-slate-700 text-gray-600 dark:text-slate-400 hover:border-gray-300 dark:hover:border-slate-600' },
+            { key: 'inactive', label: 'Inactive', count: services.filter(s => !s.isActive).length, color: 'bg-gray-500 text-white border-gray-500 shadow-lg shadow-gray-500/25', inactiveColor: 'bg-white dark:bg-slate-800 border-gray-200 dark:border-slate-700 text-gray-600 dark:text-slate-400 hover:border-gray-300 dark:hover:border-slate-600' },
           ].map((tab: any) => (
             <button
               key={tab.key}
               onClick={() => setFilterActive(tab.key as any)}
-              className={`flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-medium transition-all border ${
+              className={`flex items-center gap-2 rounded-xl px-3 py-2 sm:px-4 sm:py-2.5 text-xs sm:text-sm font-medium transition-all border whitespace-nowrap flex-shrink-0 ${
                 filterActive === tab.key
-                  ? `bg-${tab.color}-500 text-white border-${tab.color}-500 shadow-lg shadow-${tab.color}-500/25`
-                  : 'bg-white dark:bg-slate-800 border-gray-200 dark:border-slate-700 text-gray-600 dark:text-slate-400 hover:border-gray-300 dark:hover:border-slate-600'
+                  ? tab.color
+                  : tab.inactiveColor
               }`}
             >
               {tab.label}
-              <span className={`px-2 py-0.5 rounded-full text-xs ${
+              <span className={`px-1.5 py-0.5 sm:px-2 sm:py-0.5 rounded-full text-[10px] sm:text-xs ${
                 filterActive === tab.key
                   ? 'bg-white/20 text-white'
                   : 'bg-gray-100 dark:bg-slate-700 text-gray-600 dark:text-slate-400'
@@ -893,7 +877,7 @@ export default function ServicesPage() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.1 }}
-          className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3"
+          className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3"
         >
           <AnimatePresence mode="popLayout">
             {loading
@@ -901,18 +885,18 @@ export default function ServicesPage() {
                   <motion.div key={`skeleton-${i}`} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
                     <Card className="overflow-hidden">
                       <CardHeader className="pb-2">
-                        <div className="skeleton mb-2 h-12 w-12 rounded-lg" />
-                        <div className="skeleton h-6 w-3/4 rounded" />
+                        <div className="skeleton mb-2 h-10 w-10 sm:h-12 sm:w-12 rounded-lg" />
+                        <div className="skeleton h-5 sm:h-6 w-3/4 rounded" />
                       </CardHeader>
                       <CardContent>
-                        <div className="skeleton mb-2 h-4 w-full rounded" />
-                        <div className="skeleton h-4 w-2/3 rounded" />
+                        <div className="skeleton mb-2 h-3 sm:h-4 w-full rounded" />
+                        <div className="skeleton h-3 sm:h-4 w-2/3 rounded" />
                       </CardContent>
                     </Card>
                   </motion.div>
                 ))
               : filteredServices.map((service, index) => {
-                  const IconComponent = getIconComponent(service.icon)
+                  const IconComponent = getIconComponent(service.icon || 'Package')
                   return (
                     <motion.div
                       key={service.id}
@@ -929,37 +913,37 @@ export default function ServicesPage() {
                             <img
                               src={service.image}
                               alt={service.name}
-                              className="h-40 w-full object-cover"
+                              className="h-32 sm:h-40 w-full object-cover"
                             />
                           ) : (
-                            <div className="flex h-40 w-full items-center justify-center bg-gradient-to-br from-gray-100 to-gray-50 dark:from-slate-700 dark:to-slate-600">
-                              <IconComponent className="h-16 w-16 text-gray-300 dark:text-slate-500" />
+                            <div className="flex h-32 sm:h-40 w-full items-center justify-center bg-gradient-to-br from-gray-100 to-gray-50 dark:from-slate-700 dark:to-slate-600">
+                              <IconComponent className="h-12 w-12 sm:h-16 sm:w-16 text-gray-300 dark:text-slate-500" />
                             </div>
                           )}
                           {service.isFeatured && (
                             <div className="absolute right-2 top-2">
-                              <Badge variant="warning" className="gap-1 shadow-lg">
-                                <Star className="h-3 w-3 fill-current" />
-                                Featured
+                              <Badge variant="warning" className="gap-1 shadow-lg text-[10px] sm:text-xs py-0.5">
+                                <Star className="h-2.5 w-2.5 sm:h-3 sm:w-3 fill-current" />
+                                <span className="hidden sm:inline">Featured</span>
                               </Badge>
                             </div>
                           )}
                           {!service.isActive && (
                             <div className="absolute left-2 top-2">
-                              <Badge variant="default" className="shadow-lg dark:bg-slate-700 dark:text-slate-300 dark:border-slate-600">Inactive</Badge>
+                              <Badge variant="default" className="shadow-lg text-[10px] sm:text-xs py-0.5 dark:bg-slate-700 dark:text-slate-300 dark:border-slate-600">Inactive</Badge>
                             </div>
                           )}
                         </div>
                         
-                        <CardHeader className="pb-2 dark:bg-slate-800">
+                        <CardHeader className="pb-2 dark:bg-slate-800 p-3 sm:p-6">
                           <div className="flex items-start justify-between">
-                            <div className="flex items-center gap-3">
-                              <div className={`rounded-xl p-3 ${service.isActive ? 'bg-gradient-to-br from-emerald-500 to-emerald-600 text-white shadow-lg shadow-emerald-500/25' : 'bg-gray-200 dark:bg-slate-700 text-gray-400 dark:text-slate-400'}`}>
-                                <IconComponent className="h-6 w-6" />
+                            <div className="flex items-center gap-2 sm:gap-3">
+                              <div className={`rounded-lg sm:rounded-xl p-2 sm:p-3 ${service.isActive ? 'bg-gradient-to-br from-emerald-500 to-emerald-600 text-white shadow-lg shadow-emerald-500/25' : 'bg-gray-200 dark:bg-slate-700 text-gray-400 dark:text-slate-400'}`}>
+                                <IconComponent className="h-4 w-4 sm:h-6 sm:w-6" />
                               </div>
-                              <div>
-                                <CardTitle className="text-base font-bold dark:text-white">{service.name}</CardTitle>
-                                <span className={`inline-block rounded-full px-2.5 py-1 text-xs font-medium border ${getCategoryBadge(service.category)} mt-1`}>
+                              <div className="min-w-0">
+                                <CardTitle className="text-sm sm:text-base font-bold dark:text-white truncate">{service.name}</CardTitle>
+                                <span className={`inline-block rounded-full px-2 py-0.5 text-[10px] sm:text-xs font-medium border mt-0.5 sm:mt-1 ${getCategoryBadge(service.category)}`}>
                                   {service.category}
                                 </span>
                               </div>
@@ -967,29 +951,29 @@ export default function ServicesPage() {
                           </div>
                         </CardHeader>
                         
-                        <CardContent className="dark:bg-slate-800">
-                          <p className="mb-4 text-sm text-gray-500 dark:text-slate-400 line-clamp-2">{service.description}</p>
-                          <div className="flex items-center justify-between">
+                        <CardContent className="dark:bg-slate-800 p-3 sm:p-6 pt-0 sm:pt-0">
+                          <p className="mb-3 sm:mb-4 text-xs sm:text-sm text-gray-500 dark:text-slate-400 line-clamp-2">{service.description}</p>
+                          <div className="flex items-center justify-between gap-2">
                             <div>
-                              <p className="text-lg font-bold text-emerald-600 dark:text-emerald-400">{formatCurrency(service.price)}</p>
-                              <p className="text-xs text-gray-400 dark:text-slate-400 flex items-center gap-1">
-                                <Clock className="w-3 h-3" />
+                              <p className="text-base sm:text-lg font-bold text-emerald-600 dark:text-emerald-400">{formatCurrency(service.price)}</p>
+                              <p className="text-[10px] sm:text-xs text-gray-400 dark:text-slate-400 flex items-center gap-1">
+                                <Clock className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
                                 {service.duration} min
                               </p>
                             </div>
-                            <div className="flex items-center gap-1">
-                              <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-gray-50 dark:bg-slate-700 border border-gray-100 dark:border-slate-600">
-                                <span className="text-xs text-gray-500 dark:text-slate-300">Active</span>
+                            <div className="flex items-center gap-1 sm:gap-1">
+                              <div className="flex items-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-1 sm:py-1.5 rounded-lg bg-gray-50 dark:bg-slate-700 border border-gray-100 dark:border-slate-600">
+                                <span className="text-[10px] sm:text-xs text-gray-500 dark:text-slate-300 hidden xs:inline">Active</span>
                                 <Switch
                                   checked={service.isActive}
                                   onChange={() => handleToggleActive(service)}
                                 />
                               </div>
-                              <Button variant="ghost" size="icon" onClick={() => openEditModal(service)} className="hover:bg-blue-50 dark:hover:bg-blue-900/30 hover:text-blue-600 dark:text-slate-400">
-                                <Edit className="h-4 w-4" />
+                              <Button variant="ghost" size="icon" onClick={() => openEditModal(service)} className="h-8 w-8 sm:h-9 sm:w-9 hover:bg-blue-50 dark:hover:bg-blue-900/30 hover:text-blue-600 dark:text-slate-400">
+                                <Edit className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                               </Button>
-                              <Button variant="ghost" size="icon" onClick={() => openDeleteModal(service)} className="hover:bg-red-50 dark:hover:bg-red-900/30 hover:text-red-600 dark:text-slate-400">
-                                <Trash2 className="h-4 w-4" />
+                              <Button variant="ghost" size="icon" onClick={() => openDeleteModal(service)} className="h-8 w-8 sm:h-9 sm:w-9 hover:bg-red-50 dark:hover:bg-red-900/30 hover:text-red-600 dark:text-slate-400">
+                                <Trash2 className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                               </Button>
                             </div>
                           </div>
@@ -1006,14 +990,14 @@ export default function ServicesPage() {
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="py-16 text-center"
+            className="py-12 sm:py-16 text-center px-4"
           >
-            <div className="w-20 h-20 mx-auto mb-4 rounded-full bg-gray-100 dark:bg-slate-800 flex items-center justify-center">
-              <Package className="w-10 h-10 text-gray-400 dark:text-slate-600" />
+            <div className="w-16 h-16 sm:w-20 sm:h-20 mx-auto mb-4 rounded-full bg-gray-100 dark:bg-slate-800 flex items-center justify-center">
+              <Package className="w-8 h-8 sm:w-10 sm:h-10 text-gray-400 dark:text-slate-600" />
             </div>
-            <p className="text-lg font-medium text-gray-900 dark:text-white">No services found</p>
-            <p className="text-sm text-gray-500 dark:text-slate-400 mt-1">Get started by creating your first service</p>
-            <Button onClick={openCreateModal} className="mt-4 gap-2">
+            <p className="text-base sm:text-lg font-medium text-gray-900 dark:text-white">No services found</p>
+            <p className="text-xs sm:text-sm text-gray-500 dark:text-slate-400 mt-1">Get started by creating your first service</p>
+            <Button onClick={openCreateModal} className="mt-4 gap-2 text-sm">
               <Plus className="h-4 w-4" />
               Add Service
             </Button>
@@ -1030,7 +1014,7 @@ export default function ServicesPage() {
         setFormData={setFormData}
         errors={errors}
         onSubmit={handleSubmit}
-        loading={formLoading}
+        loading={createServiceMutation.isPending || updateServiceMutation.isPending}
         selectedImageFile={selectedImageFile}
         setSelectedImageFile={setSelectedImageFile}
       />
@@ -1041,7 +1025,7 @@ export default function ServicesPage() {
         onClose={() => setIsDeleteModalOpen(false)}
         serviceName={selectedService?.name || ''}
         onConfirm={handleDelete}
-        loading={deleteLoading}
+        loading={deleteServiceMutation.isPending}
       />
     </div>
   )

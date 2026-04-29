@@ -111,21 +111,21 @@ export default function EmailTemplatesPage() {
       {/* Topbar */}
       <Breadcrumb items={[{ label: 'Email Templates' }]} />
 
-      <div className="w-full px-4 md:px-6 py-6 space-y-6">
+      <div className="w-full px-3 sm:px-6 py-3 sm:py-6 space-y-3 sm:space-y-6">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: -16 }}
           animate={{ opacity: 1, y: 0 }}
-          className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"
+          className="flex flex-wrap items-start justify-between gap-4"
         >
           <div>
             <h1 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Email & SMS Templates</h1>
-            <p className="text-sm text-gray-500 dark:text-slate-400 mt-1">Kelola template email dan SMS untuk notifikasi</p>
+            <p className="text-xs sm:text-sm text-gray-500 dark:text-slate-400 mt-1">Kelola template email dan SMS untuk notifikasi</p>
           </div>
           <div className="flex items-center gap-2">
             <div className="px-4 py-2 bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700">
-              <span className="text-sm text-gray-500 dark:text-slate-400">Total: </span>
-              <span className="text-sm font-bold text-gray-900 dark:text-white">{templates.length}</span>
+              <span className="text-xs sm:text-sm text-gray-500 dark:text-slate-400">Total: </span>
+              <span className="text-xs sm:text-sm font-bold text-gray-900 dark:text-white">{templates.length}</span>
             </div>
           </div>
         </motion.div>
@@ -187,7 +187,7 @@ export default function EmailTemplatesPage() {
                                 <Badge variant="default">Disabled</Badge>
                               )}
                             </div>
-                            <p className="text-sm text-gray-500 dark:text-slate-400">{info.description}</p>
+                            <p className="text-xs sm:text-sm text-gray-500 dark:text-slate-400">{info.description}</p>
                           </div>
                         </div>
                         {!isEditing ? (

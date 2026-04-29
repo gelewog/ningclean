@@ -4,16 +4,17 @@ import * as React from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { 
   Plus, Edit, Trash2, DollarSign, Calendar, Star, X, 
-  AlertCircle, Tag, Search, Hash
+  AlertCircle, Tag, Search, Hash, CheckCircle2, XCircle, Clock,
+  Package, Zap
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Badge } from '@/components/ui/badge'
 import { DataTable } from '@/components/admin/DataTable'
-import { getPricingPlans, createPricingPlan, updatePricingPlan, deletePricingPlan } from '@/lib/api'
+import { usePricingPlans, useCreatePricingPlan, useUpdatePricingPlan, useDeletePricingPlan } from '@/lib/use-queries'
 import { PricingPlan } from '@/types'
 import { Breadcrumb } from '@/components/admin/Breadcrumb'
-import { formatCurrency, formatDate } from '@/lib/utils'
+import { formatCurrency, formatDate, cn } from '@/lib/utils'
 import { toast } from 'sonner'
 
 interface PricingFormData {
@@ -29,10 +30,16 @@ interface PricingFormData {
 }
 
 const billingCycles = [
-  { value: 'monthly', label: 'Monthly' },
-  { value: 'yearly', label: 'Yearly' },
-  { value: 'one-time', label: 'One-time' }
+  { value: 'monthly', label: 'Bulanan' },
+  { value: 'yearly', label: 'Tahunan' },
+  { value: 'one-time', label: 'Sekali Bayar' }
 ]
+
+const billingCycleLabels: Record<string, string> = {
+  monthly: 'Bulanan',
+  yearly: 'Tahunan',
+  'one-time': 'Sekali Bayar'
+}
 
 function generateSlug(name: string): string {
   return name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')
@@ -90,24 +97,24 @@ function PricingFormModal({
         onClick={onClose}
       />
       
-      <div className="fixed inset-0 z-50 flex items-start sm:items-center justify-center p-0 sm:p-6 pointer-events-none">
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 pointer-events-none">
         <motion.div
           initial={{ opacity: 0, scale: 0.95, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: 20 }}
           transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-          className="pointer-events-auto w-full max-w-xl bg-white dark:bg-slate-900 rounded-2xl shadow-2xl border border-gray-200 dark:border-slate-700 overflow-hidden flex flex-col max-h-[90vh]"
+          className="pointer-events-auto w-full max-w-xl bg-white dark:bg-slate-900 rounded-2xl shadow-2xl border border-gray-200 dark:border-slate-600 overflow-hidden flex flex-col max-h-[90vh]"
           onClick={(e) => e.stopPropagation()}
         >
           {/* Header */}
-          <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100 dark:border-slate-700 bg-gradient-to-r from-emerald-50/50 to-transparent dark:from-emerald-900/20 dark:to-transparent flex-shrink-0">
+          <div className="flex items-center justify-between px-4 sm:px-6 py-4 border-b border-gray-100 dark:border-slate-700 bg-gradient-to-r from-emerald-50/50 to-transparent dark:from-emerald-900/20 dark:to-transparent flex-shrink-0">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-xl bg-emerald-100 dark:bg-emerald-900/40 flex items-center justify-center">
                 <Tag className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
               </div>
               <div>
                 <h2 className="text-lg font-bold text-gray-900 dark:text-white">
-                  {isEditing ? 'Edit Pricing Plan' : 'Create Pricing Plan'}
+                  {isEditing ? 'Edit Paket Harga' : 'Tambah Paket Harga'}
                 </h2>
                 <p className="text-xs text-gray-500 dark:text-slate-400">
                   {isEditing ? 'Perbarui paket harga' : 'Buat paket harga baru'}
@@ -126,12 +133,12 @@ function PricingFormModal({
 
           {/* Scrollable Content */}
           <div className="flex-1 overflow-y-auto">
-            <div className="p-6 space-y-5">
+            <div className="p-4 sm:p-6 space-y-5">
               {/* Name & Slug */}
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <label className="text-sm font-medium text-gray-700 dark:text-slate-200">
-                    Plan Name <span className="text-red-500">*</span>
+                    Nama Paket <span className="text-red-500">*</span>
                   </label>
                   <Input
                     value={formData.name}
@@ -140,7 +147,7 @@ function PricingFormModal({
                       setFormData({ ...formData, name, slug: isEditing ? formData.slug : generateSlug(name) })
                       setErrors({ ...errors, name: '' })
                     }}
-                    placeholder="e.g., Premium"
+                    placeholder="Contoh: Premium"
                     className={errors.name ? 'border-red-500 focus:border-red-500' : ''}
                   />
                   {errors.name && <p className="text-sm text-red-500">{errors.name}</p>}
@@ -157,7 +164,7 @@ function PricingFormModal({
                         setFormData({ ...formData, slug: e.target.value })
                         setErrors({ ...errors, slug: '' })
                       }}
-                      placeholder="e.g., premium"
+                      placeholder="Contoh: premium"
                       className={`pl-7 ${errors.slug ? 'border-red-500 focus:border-red-500' : ''}`}
                     />
                   </div>
@@ -168,7 +175,7 @@ function PricingFormModal({
               {/* Description */}
               <div className="space-y-2">
                 <label className="text-sm font-medium text-gray-700 dark:text-slate-200">
-                  Description <span className="text-red-500">*</span>
+                  Deskripsi <span className="text-red-500">*</span>
                 </label>
                 <textarea
                   value={formData.description}
@@ -176,7 +183,7 @@ function PricingFormModal({
                     setFormData({ ...formData, description: e.target.value })
                     setErrors({ ...errors, description: '' })
                   }}
-                  placeholder="Enter plan description..."
+                  placeholder="Masukkan deskripsi paket..."
                   rows={3}
                   className={`w-full px-3 py-2 rounded-lg border text-sm bg-white dark:bg-slate-800 text-gray-900 dark:text-slate-100 resize-none focus:outline-none focus:ring-2 focus:ring-emerald-500/20 transition-all placeholder:text-gray-400 dark:placeholder:text-slate-500 ${errors.description ? 'border-red-500' : 'border-gray-200 dark:border-slate-700 focus:border-emerald-500 dark:focus:border-emerald-400'}`}
                 />
@@ -184,10 +191,10 @@ function PricingFormModal({
               </div>
 
               {/* Price, Billing & Order */}
-              <div className="grid grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div className="space-y-2">
                   <label className="text-sm font-medium text-gray-700 dark:text-slate-200">
-                    Price (IDR) <span className="text-red-500">*</span>
+                    Harga (IDR) <span className="text-red-500">*</span>
                   </label>
                   <div className="relative">
                     <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-600 dark:text-slate-300 text-sm font-bold z-10 pointer-events-none">Rp</span>
@@ -206,12 +213,12 @@ function PricingFormModal({
                 </div>
                 <div className="space-y-2">
                   <label className="text-sm font-medium text-gray-700 dark:text-slate-200">
-                    Billing Cycle
+                    Siklus Tagihan
                   </label>
                   <select
                     value={formData.billingCycle}
                     onChange={(e) => setFormData({ ...formData, billingCycle: e.target.value })}
-                    className="w-full rounded-lg border border-gray-200 dark:border-slate-700 px-3 py-2 text-sm bg-white dark:bg-slate-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 dark:focus:border-emerald-400"
+                    className="w-full rounded-lg border border-gray-200 dark:border-slate-600 px-3 py-2 text-sm bg-white dark:bg-slate-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 dark:focus:border-emerald-400"
                   >
                     {billingCycles.map(cycle => (
                       <option key={cycle.value} value={cycle.value}>{cycle.label}</option>
@@ -220,7 +227,7 @@ function PricingFormModal({
                 </div>
                 <div className="space-y-2">
                   <label className="text-sm font-medium text-gray-700 dark:text-slate-200">
-                    Display Order
+                    Urutan Tampilan
                   </label>
                   <Input
                     type="number"
@@ -234,14 +241,14 @@ function PricingFormModal({
               {/* Features */}
               <div className="space-y-2">
                 <label className="text-sm font-medium text-gray-700 dark:text-slate-200">
-                  Features (one per line)
+                  Fitur (satu per baris)
                 </label>
                 <textarea
                   value={formData.features}
                   onChange={(e) => setFormData({ ...formData, features: e.target.value })}
-                  placeholder="Full house cleaning&#10;Weekend availability&#10;Priority support"
+                  placeholder="Membersihkan seluruh rumah&#10;Tersedia akhir pekan&#10;Dukungan prioritas"
                   rows={4}
-                  className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-slate-700 text-sm text-gray-900 dark:text-slate-100 bg-white dark:bg-slate-800 resize-none focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 dark:focus:border-emerald-400 transition-all placeholder:text-gray-400 dark:placeholder:text-slate-500"
+                  className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-slate-600 text-sm text-gray-900 dark:text-slate-100 bg-white dark:bg-slate-800 resize-none focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 dark:focus:border-emerald-400 transition-all placeholder:text-gray-400 dark:placeholder:text-slate-500"
                 />
                 <p className="text-xs text-gray-400 dark:text-slate-500">
                   Masukkan fitur per baris
@@ -249,7 +256,7 @@ function PricingFormModal({
               </div>
 
               {/* Toggles */}
-              <div className="flex flex-col gap-3 p-4 bg-gray-50 dark:bg-slate-800 rounded-xl border border-gray-100 dark:border-slate-700">
+              <div className="flex flex-col gap-3 p-4 bg-gray-50 dark:bg-slate-800/50 rounded-xl border border-gray-100 dark:border-slate-700">
                 <label className="flex items-center gap-3 cursor-pointer">
                   <input
                     type="checkbox"
@@ -258,7 +265,7 @@ function PricingFormModal({
                     className="w-5 h-5 rounded border-gray-300 text-emerald-600 focus:ring-emerald-500"
                   />
                   <div>
-                    <span className="text-sm font-medium text-gray-900 dark:text-white">Popular/Recommended</span>
+                    <span className="text-sm font-medium text-gray-900 dark:text-white">Populer/Rekomendasi</span>
                     <p className="text-xs text-gray-500 dark:text-slate-400">Tandai sebagai paket paling populer</p>
                   </div>
                 </label>
@@ -270,7 +277,7 @@ function PricingFormModal({
                     className="w-5 h-5 rounded border-gray-300 text-emerald-600 focus:ring-emerald-500"
                   />
                   <div>
-                    <span className="text-sm font-medium text-gray-900 dark:text-white">Active</span>
+                    <span className="text-sm font-medium text-gray-900 dark:text-white">Aktif</span>
                     <p className="text-xs text-gray-500 dark:text-slate-400">Paket tersedia untuk publik</p>
                   </div>
                 </label>
@@ -279,7 +286,7 @@ function PricingFormModal({
           </div>
 
           {/* Footer */}
-          <div className="flex items-center justify-end gap-3 px-6 py-4 border-t border-gray-100 dark:border-slate-700 bg-gray-50/50 dark:bg-slate-800/50 flex-shrink-0">
+          <div className="flex items-center justify-end gap-3 px-4 sm:px-6 py-4 border-t border-gray-100 dark:border-slate-700 bg-gray-50/50 dark:bg-slate-800/50 flex-shrink-0">
             <Button variant="outline" onClick={onClose}>
               Batal
             </Button>
@@ -295,7 +302,7 @@ function PricingFormModal({
                 </>
               ) : (
                 <>
-                  {isEditing ? 'Simpan Perubahan' : 'Buat Paket'}
+                  {isEditing ? 'Simpan Perubahan' : 'Tambah Paket'}
                 </>
               )}
             </Button>
@@ -339,29 +346,29 @@ function PricingDeleteModal({
         onClick={onClose}
       />
       
-      <div className="fixed inset-0 z-50 flex items-start sm:items-center justify-center p-0 sm:p-6 pointer-events-none">
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 pointer-events-none">
         <motion.div
           initial={{ opacity: 0, scale: 0.95, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: 20 }}
           transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-          className="pointer-events-auto w-full h-full sm:h-auto sm:max-w-md bg-white dark:bg-slate-900 sm:rounded-2xl shadow-2xl border-0 sm:border border-gray-200 dark:border-slate-700 overflow-hidden"
+          className="pointer-events-auto w-full max-w-md bg-white dark:bg-slate-900 rounded-2xl shadow-2xl border border-gray-200 dark:border-slate-600 overflow-hidden"
           onClick={(e) => e.stopPropagation()}
         >
-          <div className="p-6">
+          <div className="p-4 sm:p-6">
             <div className="flex items-center gap-4">
               <div className="w-12 h-12 rounded-xl bg-red-100 dark:bg-red-900/30 flex items-center justify-center flex-shrink-0">
                 <AlertCircle className="w-6 h-6 text-red-600 dark:text-red-400" />
               </div>
               <div>
-                <h2 className="text-lg font-bold text-gray-900 dark:text-white">Hapus Pricing Plan</h2>
-                <p className="text-sm text-gray-500 dark:text-slate-400">
+                <h2 className="text-lg font-bold text-gray-900 dark:text-white">Hapus Paket Harga</h2>
+                <p className="text-xs sm:text-sm text-gray-500 dark:text-slate-400">
                   Tindakan ini tidak dapat dibatalkan
                 </p>
               </div>
             </div>
 
-            <div className="mt-6 p-4 bg-gray-50 dark:bg-slate-800 rounded-xl border border-gray-100 dark:border-slate-700">
+            <div className="mt-6 p-4 bg-gray-50 dark:bg-slate-800/50 rounded-xl border border-gray-100 dark:border-slate-700">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-lg bg-emerald-50 dark:bg-emerald-900/30 flex items-center justify-center">
                   <Tag className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
@@ -369,11 +376,11 @@ function PricingDeleteModal({
                 <div>
                   <p className="text-sm font-medium text-gray-900 dark:text-white">{item.name}</p>
                   <p className="text-xs text-gray-500 dark:text-slate-400">
-                    {formatCurrency(item.price)} / {item.billingCycle}
+                    {formatCurrency(item.price)} / {billingCycleLabels[item.billingCycle] || item.billingCycle}
                   </p>
                   {item.isPopular && (
                     <span className="inline-flex items-center gap-1 mt-1 text-xs text-amber-600 dark:text-amber-400">
-                      <Star className="w-3 h-3 fill-amber-400" /> Popular
+                      <Star className="w-3 h-3 fill-amber-400" /> Populer
                     </span>
                   )}
                 </div>
@@ -409,9 +416,166 @@ function PricingDeleteModal({
   )
 }
 
+// Modern Mobile Card Component
+function PricingMobileCard({ 
+  plan, 
+  onEdit, 
+  onDelete 
+}: { 
+  plan: PricingPlan
+  onEdit: (p: PricingPlan) => void
+  onDelete: (p: PricingPlan) => void
+}) {
+  return (
+    <div className="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-gray-100 dark:border-slate-700 overflow-hidden">
+      {/* Header with Icon and Badges */}
+      <div className="p-4 flex items-start gap-3 border-b border-gray-100 dark:border-slate-700/50">
+        <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-600 shadow-lg shadow-emerald-500/20 flex-shrink-0">
+          <Tag className="h-6 w-6 text-white" />
+        </div>
+        <div className="flex-1 min-w-0">
+          <div className="flex items-start justify-between gap-2">
+            <div className="min-w-0">
+              <h3 className="font-semibold text-gray-900 dark:text-white truncate">
+                {plan.name}
+              </h3>
+              <p className="text-xs text-gray-500 dark:text-slate-400 capitalize">
+                {billingCycleLabels[plan.billingCycle] || plan.billingCycle}
+              </p>
+            </div>
+            {plan.isPopular && (
+              <Star className="h-5 w-5 fill-amber-400 text-amber-400 flex-shrink-0" />
+            )}
+          </div>
+          
+          <div className="flex flex-wrap gap-1.5 mt-2">
+            <Badge variant={plan.isActive ? 'success' : 'default'} className="text-xs">
+              {plan.isActive ? 'Aktif' : 'Nonaktif'}
+            </Badge>
+            {plan.isPopular && (
+              <Badge variant="warning" className="text-xs">
+                Populer
+              </Badge>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* Content */}
+      <div className="p-4">
+        {/* Price */}
+        <div className="flex items-center gap-2 mb-3">
+          <div className="w-8 h-8 rounded-lg bg-green-50 dark:bg-green-900/30 flex items-center justify-center">
+            <DollarSign className="h-4 w-4 text-green-600 dark:text-green-400" />
+          </div>
+          <div className="min-w-0">
+            <p className="text-lg font-bold text-gray-900 dark:text-white truncate">
+              {formatCurrency(plan.price)}
+            </p>
+            <p className="text-xs text-gray-500 dark:text-slate-400">
+              per {billingCycleLabels[plan.billingCycle] || plan.billingCycle}
+            </p>
+          </div>
+        </div>
+        
+        {/* Description */}
+        <p className="text-sm text-gray-600 dark:text-slate-300 line-clamp-2 mb-3">
+          {plan.description}
+        </p>
+        
+        {/* Features Count */}
+        <div className="flex items-center gap-2 pt-3 border-t border-gray-100 dark:border-slate-700/50">
+          <div className="w-6 h-6 rounded bg-blue-50 dark:bg-blue-900/30 flex items-center justify-center">
+            <Hash className="h-3 w-3 text-blue-600 dark:text-blue-400" />
+          </div>
+          <span className="text-sm text-gray-600 dark:text-slate-400">
+            {plan.features?.length || 0} fitur
+          </span>
+        </div>
+
+        {/* Order & Date */}
+        <div className="flex items-center justify-between mt-2 text-xs text-gray-400 dark:text-slate-500">
+          <div className="flex items-center gap-1">
+            <Clock className="h-3 w-3" />
+            <span>Urutan: {plan.order}</span>
+          </div>
+          <span>{formatDate(plan.createdAt)}</span>
+        </div>
+      </div>
+
+      {/* Actions */}
+      <div className="flex items-center justify-end gap-2 px-4 py-3 bg-gray-50/50 dark:bg-slate-800/30 border-t border-gray-100 dark:border-slate-700/50">
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => onEdit(plan)}
+          className="h-8 px-3 text-sm text-gray-600 dark:text-slate-400 hover:text-emerald-600 hover:bg-emerald-50 dark:hover:bg-emerald-900/20"
+        >
+          <Edit className="h-3.5 w-3.5 mr-1.5" />
+          Edit
+        </Button>
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => onDelete(plan)}
+          className="h-8 px-3 text-sm text-gray-600 dark:text-slate-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20"
+        >
+          <Trash2 className="h-3.5 w-3.5 mr-1.5" />
+          Hapus
+        </Button>
+      </div>
+    </div>
+  )
+}
+
+// Mobile Skeleton Card
+function PricingMobileSkeleton({ index }: { index: number }) {
+  return (
+    <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-gray-200 dark:border-slate-600 overflow-hidden animate-pulse">
+      <div className="p-4 flex items-start gap-3 border-b border-gray-100 dark:border-slate-700/50">
+        <div className="h-12 w-12 rounded-xl bg-gray-200 dark:bg-slate-700 flex-shrink-0" />
+        <div className="flex-1 space-y-2">
+          <div className="flex items-center justify-between">
+            <div className="h-4 w-24 bg-gray-200 dark:bg-slate-700 rounded" />
+            <div className="h-5 w-5 bg-gray-200 dark:bg-slate-700 rounded" />
+          </div>
+          <div className="h-3 w-20 bg-gray-200 dark:bg-slate-700 rounded" />
+          <div className="flex gap-1.5">
+            <div className="h-5 w-12 bg-gray-200 dark:bg-slate-700 rounded-full" />
+            <div className="h-5 w-16 bg-gray-200 dark:bg-slate-700 rounded-full" />
+          </div>
+        </div>
+      </div>
+      <div className="p-4 space-y-3">
+        <div className="flex items-center gap-2">
+          <div className="h-8 w-8 bg-gray-200 dark:bg-slate-700 rounded-lg" />
+          <div className="space-y-1">
+            <div className="h-5 w-28 bg-gray-200 dark:bg-slate-700 rounded" />
+            <div className="h-3 w-20 bg-gray-200 dark:bg-slate-700 rounded" />
+          </div>
+        </div>
+        <div className="h-4 w-full bg-gray-200 dark:bg-slate-700 rounded" />
+        <div className="h-4 w-4/5 bg-gray-200 dark:bg-slate-700 rounded" />
+        <div className="flex items-center gap-2 pt-2 border-t border-gray-100 dark:border-slate-700/50">
+          <div className="h-6 w-6 bg-gray-200 dark:bg-slate-700 rounded" />
+          <div className="h-4 w-16 bg-gray-200 dark:bg-slate-700 rounded" />
+        </div>
+      </div>
+      <div className="flex items-center justify-end gap-2 px-4 py-3 border-t border-gray-100 dark:border-slate-700/50">
+        <div className="h-8 w-16 bg-gray-200 dark:bg-slate-700 rounded" />
+        <div className="h-8 w-16 bg-gray-200 dark:bg-slate-700 rounded" />
+      </div>
+    </div>
+  )
+}
+
 export default function PricingPage() {
-  const [items, setItems] = React.useState<PricingPlan[]>([])
-  const [loading, setLoading] = React.useState(true)
+  const { data: plansData, isLoading: loading } = usePricingPlans()
+  const createMutation = useCreatePricingPlan()
+  const updateMutation = useUpdatePricingPlan()
+  const deleteMutation = useDeletePricingPlan()
+  
+  const plans = plansData || []
   const [isModalOpen, setIsModalOpen] = React.useState(false)
   const [isDeleteModalOpen, setIsDeleteModalOpen] = React.useState(false)
   const [selectedItem, setSelectedItem] = React.useState<PricingPlan | null>(null)
@@ -431,22 +595,6 @@ export default function PricingPage() {
   const [saving, setSaving] = React.useState(false)
   const [deleting, setDeleting] = React.useState(false)
   const [search, setSearch] = React.useState('')
-
-  React.useEffect(() => {
-    fetchItems()
-  }, [])
-
-  async function fetchItems() {
-    setLoading(true)
-    try {
-      const data = await getPricingPlans()
-      setItems(data)
-    } catch (error) {
-      toast.error('Failed to fetch pricing plans')
-    } finally {
-      setLoading(false)
-    }
-  }
 
   function openCreateModal() {
     setIsEditing(false)
@@ -491,49 +639,44 @@ export default function PricingPage() {
 
   function validateForm(): boolean {
     const newErrors: Partial<PricingFormData> = {}
-    if (!formData.name.trim()) newErrors.name = 'Name is required'
-    if (!formData.slug.trim()) newErrors.slug = 'Slug is required'
-    if (!formData.price.trim()) newErrors.price = 'Price is required'
+    if (!formData.name.trim()) newErrors.name = 'Nama wajib diisi'
+    if (!formData.slug.trim()) newErrors.slug = 'Slug wajib diisi'
+    if (!formData.price.trim()) newErrors.price = 'Harga wajib diisi'
     if (isNaN(Number(formData.price)) || Number(formData.price) < 0) {
-      newErrors.price = 'Price must be a valid number'
+      newErrors.price = 'Harga harus berupa angka valid'
     }
-    if (!formData.description.trim()) newErrors.description = 'Description is required'
+    if (!formData.description.trim()) newErrors.description = 'Deskripsi wajib diisi'
     setErrors(newErrors)
     return Object.keys(newErrors).length === 0
   }
 
   async function handleSubmit() {
     if (!validateForm()) return
-
+    
     setSaving(true)
-    const featuresArray = formData.features
-      ? formData.features.split('\n').map(f => f.trim()).filter(Boolean)
-      : []
-
-    const itemData = {
-      name: formData.name,
-      slug: formData.slug,
-      description: formData.description,
-      price: Number(formData.price),
-      billingCycle: formData.billingCycle,
-      features: featuresArray,
-      isPopular: formData.isPopular,
-      isActive: formData.isActive,
-      order: formData.order,
-    }
-
     try {
+      const data = {
+        name: formData.name,
+        slug: formData.slug,
+        description: formData.description,
+        price: Number(formData.price),
+        billingCycle: formData.billingCycle,
+        features: formData.features.split('\n').filter(f => f.trim()),
+        isPopular: formData.isPopular,
+        isActive: formData.isActive,
+        order: formData.order,
+      }
+
       if (isEditing && selectedItem) {
-        await updatePricingPlan(selectedItem.id, itemData)
-        toast.success('Pricing plan updated successfully')
+        await updateMutation.mutateAsync({ id: selectedItem.id, data })
+        toast.success('Paket harga berhasil diperbarui')
       } else {
-        await createPricingPlan(itemData)
-        toast.success('Pricing plan created successfully')
+        await createMutation.mutateAsync(data)
+        toast.success('Paket harga berhasil ditambahkan')
       }
       setIsModalOpen(false)
-      fetchItems()
     } catch (error) {
-      toast.error(`Failed to ${isEditing ? 'update' : 'create'} pricing plan`)
+      toast.error(isEditing ? 'Gagal memperbarui paket harga' : 'Gagal menambahkan paket harga')
     } finally {
       setSaving(false)
     }
@@ -541,104 +684,102 @@ export default function PricingPage() {
 
   async function handleDelete() {
     if (!selectedItem) return
+    
     setDeleting(true)
     try {
-      await deletePricingPlan(selectedItem.id)
-      toast.success('Pricing plan deleted successfully')
+      await deleteMutation.mutateAsync(selectedItem.id)
+      toast.success('Paket harga berhasil dihapus')
       setIsDeleteModalOpen(false)
-      fetchItems()
     } catch (error) {
-      toast.error('Failed to delete pricing plan')
+      toast.error('Gagal menghapus paket harga')
     } finally {
       setDeleting(false)
     }
   }
 
-  async function handleTogglePopular(item: PricingPlan) {
-    try {
-      await updatePricingPlan(item.id, { isPopular: !item.isPopular })
-      toast.success(`Plan ${!item.isPopular ? 'marked as popular' : 'unmarked'}`)
-      fetchItems()
-    } catch (error) {
-      toast.error('Failed to update plan')
-    }
-  }
-
-  const filteredItems = React.useMemo(() => {
-    if (!search) return items
+  const filteredPlans = React.useMemo(() => {
+    if (!search) return plans
     const term = search.toLowerCase()
-    return items.filter(item => 
-      item.name.toLowerCase().includes(term) || 
-      item.description.toLowerCase().includes(term)
+    return plans.filter(p => 
+      p.name.toLowerCase().includes(term) || 
+      p.description.toLowerCase().includes(term) ||
+      p.slug.toLowerCase().includes(term)
     )
-  }, [items, search])
+  }, [plans, search])
 
   const columns = [
     {
       key: 'name',
-      label: 'Plan',
+      label: 'Paket',
       render: (value: string, row: PricingPlan) => (
         <div className="flex items-center gap-3">
           <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-600 shadow-lg shadow-emerald-500/20">
             <Tag className="h-5 w-5 text-white" />
           </div>
           <div>
-            <div className="flex items-center gap-2">
-              <p className="font-semibold text-gray-900 dark:text-white">{value}</p>
-              {row.isPopular && (
-                <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-              )}
-            </div>
-            <p className="text-xs text-gray-500 dark:text-slate-400 capitalize">{row.billingCycle}</p>
+            <p className="font-semibold text-gray-900 dark:text-white">{value}</p>
+            <p className="text-xs text-gray-500 dark:text-slate-400">/{row.slug}</p>
           </div>
         </div>
       ),
     },
     {
       key: 'price',
-      label: 'Price',
-      render: (value: number) => (
-        <div className="flex items-center gap-2">
-          <div className="w-6 h-6 rounded bg-green-50 dark:bg-green-900/30 flex items-center justify-center">
-            <DollarSign className="h-3 w-3 text-green-600 dark:text-green-400" />
-          </div>
-          <span className="font-semibold text-gray-900 dark:text-white">
-            {formatCurrency(value)}
-          </span>
+      label: 'Harga',
+      render: (value: number, row: PricingPlan) => (
+        <div>
+          <p className="font-semibold text-gray-900 dark:text-white">{formatCurrency(value)}</p>
+          <p className="text-xs text-gray-500 dark:text-slate-400">
+            /{billingCycleLabels[row.billingCycle] || row.billingCycle}
+          </p>
         </div>
       ),
     },
     {
+      key: 'billingCycle',
+      label: 'Siklus',
+      render: (value: string) => (
+        <Badge variant="outline">
+          {billingCycleLabels[value] || value}
+        </Badge>
+      ),
+    },
+    {
       key: 'features',
-      label: 'Features',
+      label: 'Fitur',
       render: (value: string[]) => (
-        <div className="flex items-center gap-2">
-          <div className="w-6 h-6 rounded bg-blue-50 dark:bg-blue-900/30 flex items-center justify-center">
-            <Hash className="h-3 w-3 text-blue-600 dark:text-blue-400" />
-          </div>
-          <span className="text-sm text-gray-700 dark:text-slate-300">
-            {value?.length || 0} fitur
-          </span>
+        <span className="text-sm text-gray-600 dark:text-slate-400">
+          {value?.length || 0} fitur
+        </span>
+      ),
+    },
+    {
+      key: 'isPopular',
+      label: 'Status',
+      render: (value: boolean, row: PricingPlan) => (
+        <div className="flex flex-wrap gap-1">
+          {value && (
+            <Badge variant="warning" className="text-xs">
+              <Star className="h-3 w-3 mr-1" />
+              Populer
+            </Badge>
+          )}
+          <Badge variant={row.isActive ? 'success' : 'default'} className="text-xs">
+            {row.isActive ? 'Aktif' : 'Nonaktif'}
+          </Badge>
         </div>
       ),
     },
     {
       key: 'order',
-      label: 'Order',
-      render: (value: number) => <span className="text-sm text-gray-700 dark:text-slate-300">{value}</span>,
-    },
-    {
-      key: 'isActive',
-      label: 'Status',
-      render: (value: boolean) => (
-        <Badge variant={value ? 'success' : 'default'}>
-          {value ? 'Active' : 'Inactive'}
-        </Badge>
+      label: 'Urutan',
+      render: (value: number) => (
+        <span className="text-sm text-gray-500 dark:text-slate-400">{value}</span>
       ),
     },
     {
       key: 'createdAt',
-      label: 'Created',
+      label: 'Dibuat',
       render: (value: string) => (
         <div className="flex items-center gap-1 text-sm text-gray-500 dark:text-slate-400">
           <Calendar className="h-3.5 w-3.5" />
@@ -662,31 +803,46 @@ export default function PricingPage() {
     },
   ]
 
-  return (
-    <div className="min-h-screen bg-gray-50/50 dark:bg-slate-900 text-gray-900 dark:text-white">
-      {/* Topbar */}
-      <Breadcrumb items={[{ label: 'Pricing' }]} />
+  // Custom renderCard untuk mobile
+  const renderCard = (row: PricingPlan) => (
+    <PricingMobileCard
+      plan={row}
+      onEdit={openEditModal}
+      onDelete={openDeleteModal}
+    />
+  )
 
-      <div className="w-full px-4 md:px-6 py-6 space-y-6">
+  // Custom skeletonCard untuk mobile
+  const skeletonCard = (i: number) => (
+    <PricingMobileSkeleton key={i} index={i} />
+  )
+
+  return (
+    <div className="min-h-screen bg-gray-50/50 dark:bg-slate-800 text-gray-900 dark:text-white">
+      {/* Topbar */}
+      <Breadcrumb items={[{ label: 'Harga' }]} />
+
+      <div className="w-full px-3 sm:px-6 py-3 sm:py-6 space-y-3 sm:space-y-6">
         {/* Page Header */}
         <motion.div
           initial={{ opacity: 0, y: -16 }}
           animate={{ opacity: 1, y: 0 }}
-          className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"
+          className="flex flex-wrap items-start justify-between gap-3 sm:gap-4"
         >
           <div>
-            <h1 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Pricing Plans</h1>
-            <p className="text-sm text-gray-500 dark:text-slate-400 mt-1">Manage pricing tiers and plans</p>
+            <div className="flex items-center gap-3">
+              <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Paket Harga</h1>
+              <Button onClick={openCreateModal} className="bg-emerald-600 hover:bg-emerald-700 gap-2 h-8 text-xs px-3">
+                <Plus className="h-4 w-4" />
+              </Button>
+            </div>
+            <p className="text-xs sm:text-sm text-gray-500 dark:text-slate-400 mt-1">Kelola paket harga dan layanan</p>
           </div>
           <div className="flex items-center gap-2">
-            <div className="px-4 py-2 bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700">
-              <span className="text-sm text-gray-500 dark:text-slate-400">Total: </span>
-              <span className="text-sm font-bold text-gray-900 dark:text-white">{items.length}</span>
+            <div className="px-2 sm:px-3 py-1.5 sm:py-2 bg-white dark:bg-slate-900 rounded-lg sm:rounded-xl border border-gray-200 dark:border-slate-600">
+              <span className="text-xs sm:text-sm text-gray-500 dark:text-slate-400">Total: </span>
+              <span className="text-xs sm:text-sm font-bold text-gray-900 dark:text-white">{plans.length}</span>
             </div>
-            <Button onClick={openCreateModal} className="bg-emerald-600 hover:bg-emerald-700 gap-2">
-              <Plus className="h-4 w-4" />
-              New Plan
-            </Button>
           </div>
         </motion.div>
 
@@ -695,44 +851,46 @@ export default function PricingPage() {
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
+          className="bg-white dark:bg-slate-900 rounded-xl border border-gray-200 dark:border-slate-700 shadow-sm p-3 sm:p-4"
         >
           <div className="relative max-w-md">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400 dark:text-slate-500 z-10 pointer-events-none" />
             <Input
-              placeholder="Search pricing plans..."
-              className="pl-10 bg-white dark:bg-slate-800 border-gray-200 dark:border-slate-700"
+              placeholder="Cari paket harga..."
+              className="pl-10 bg-white dark:bg-slate-800 border-gray-200 dark:border-slate-700 relative z-1"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
             />
           </div>
         </motion.div>
 
-        {/* Table */}
+        {/* Table / Mobile Cards */}
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.15 }}
+          className="sm:bg-white sm:dark:bg-slate-900 sm:shadow-sm sm:border sm:border-gray-200 dark:sm:border-slate-700 sm:rounded-2xl overflow-hidden"
         >
-          <div className="bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-700 rounded-2xl overflow-hidden shadow-sm">
-            <DataTable
-              columns={columns}
-              data={filteredItems}
-              loading={loading}
-              emptyState={
-                <div className="flex flex-col items-center justify-center py-16 text-center">
-                  <div className="mb-4 rounded-full bg-gray-100 dark:bg-slate-800 p-4">
-                    <Tag className="h-8 w-8 text-gray-400 dark:text-slate-500" />
-                  </div>
-                  <p className="text-sm font-medium text-gray-900 dark:text-white">
-                    {search ? 'No plans found' : 'No pricing plans yet'}
-                  </p>
-                  <p className="mt-1 text-sm text-gray-500 dark:text-slate-400">
-                    {search ? 'Try different keywords' : 'Click the button above to add your first plan'}
-                  </p>
+          <DataTable
+            columns={columns}
+            data={filteredPlans}
+            loading={loading}
+            renderCard={renderCard}
+            skeletonCard={skeletonCard}
+            emptyState={
+              <div className="flex flex-col items-center justify-center py-16 text-center">
+                <div className="mb-4 rounded-full bg-gray-100 dark:bg-slate-800 p-4">
+                  <Tag className="h-8 w-8 text-gray-400 dark:text-slate-500" />
                 </div>
-              }
-            />
-          </div>
+                <p className="text-sm font-medium text-gray-900 dark:text-white">
+                  {search ? 'Tidak ada paket ditemukan' : 'Belum ada paket harga'}
+                </p>
+                <p className="mt-1 text-sm text-gray-500 dark:text-slate-400">
+                  {search ? 'Coba kata kunci lain' : 'Klik tombol Tambah untuk membuat paket pertama'}
+                </p>
+              </div>
+            }
+          />
         </motion.div>
       </div>
 

@@ -4,7 +4,7 @@ import * as React from 'react'
 import { useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
-  Search, Mail, Phone, MapPin, Calendar, DollarSign, Eye, Star, Edit, Save, X, Plus, Trash2,
+  Search, Mail, Phone, MapPin, Calendar, DollarSign, Eye, Star, Edit, Save, X, Plus, Trash2, Wallet,
   User, Clock, Package, FileText, MoreHorizontal, ChevronRight, Building2, Hash, UserCheck, Users, ExternalLink
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
@@ -12,7 +12,7 @@ import { Input } from '@/components/ui/input'
 import { Badge } from '@/components/ui/badge'
 import { Pagination } from '@/components/admin/Pagination'
 import { DataTable } from '@/components/admin/DataTable'
-import { getCustomers, getCustomerBookings, updateCustomer } from '@/lib/api'
+import { getCustomers, getCustomerBookings, updateCustomer, deleteCustomer } from '@/lib/api'
 import { formatCurrency, formatDate, getStatusLabel } from '@/lib/utils'
 import { toast } from 'sonner'
 import { Breadcrumb } from '@/components/admin/Breadcrumb'
@@ -38,7 +38,8 @@ function CustomerDetailModal({
   setEditAddresses,
   saving,
   onSave,
-  onUpdateCustomer
+  onUpdateCustomer,
+  onDelete
 }: {
   isOpen: boolean
   onClose: () => void
@@ -53,6 +54,7 @@ function CustomerDetailModal({
   saving: boolean
   onSave: () => void
   onUpdateCustomer: (c: any) => void
+  onDelete: () => void
 }) {
   const router = useRouter()
   const modalRef = React.useRef<HTMLDivElement>(null)
@@ -117,27 +119,6 @@ function CustomerDetailModal({
               </div>
             </div>
             <div className="flex items-center gap-2">
-              {!isEditing ? (
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setIsEditing(true)}
-                  className="gap-2"
-                >
-                  <Edit className="w-4 h-4" />
-                  Edit
-                </Button>
-              ) : (
-                <Button
-                  size="sm"
-                  onClick={onSave}
-                  disabled={saving}
-                  className="gap-2 bg-emerald-600 hover:bg-emerald-700"
-                >
-                  <Save className="w-4 h-4" />
-                  {saving ? 'Saving...' : 'Save'}
-                </Button>
-              )}
               <Button
                 variant="ghost"
                 size="icon"
@@ -438,15 +419,43 @@ function CustomerDetailModal({
           </div>
 
           {/* Footer */}
-          <div className="flex items-center justify-end gap-3 px-6 py-4 border-t border-gray-100 dark:border-slate-700 bg-gray-50/50 dark:bg-slate-800/50">
-            {isEditing && (
-              <Button variant="outline" onClick={() => setIsEditing(false)}>
-                Cancel
+          <div className="flex items-center justify-between gap-3 px-6 py-4 border-t border-gray-100 dark:border-slate-700 bg-gray-50/50 dark:bg-slate-800/50">
+            {/* Left side - Delete button */}
+            <div>
+              <Button 
+                variant="ghost" 
+                size="sm"
+                onClick={onDelete}
+                className="text-red-600 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-900/20"
+              >
+                <Trash2 className="h-4 w-4 mr-2" />
+                Hapus
               </Button>
-            )}
-            <Button variant="outline" onClick={onClose}>
-              Close
-            </Button>
+            </div>
+            
+            {/* Right side - Edit/Close buttons */}
+            <div className="flex items-center gap-2">
+              {!isEditing ? (
+                <Button size="sm" onClick={() => setIsEditing(true)} className="gap-2">
+                  <Edit className="h-4 w-4" />
+                  Edit
+                </Button>
+              ) : (
+                <>
+                  <Button variant="outline" size="sm" onClick={() => setIsEditing(false)}>
+                    Batal
+                  </Button>
+                  <Button size="sm" onClick={onSave} disabled={saving}>
+                    {saving ? (
+                      <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin mr-2" />
+                    ) : (
+                      <Save className="h-4 w-4 mr-2" />
+                    )}
+                    Simpan
+                  </Button>
+                </>
+              )}
+            </div>
           </div>
         </motion.div>
       </div>
@@ -463,6 +472,7 @@ export default function CustomersPage() {
   const [isDetailOpen, setIsDetailOpen] = React.useState(false)
   const [pagination, setPagination] = React.useState({ page: 1, limit: 10, total: 0, totalPages: 0 })
   const [search, setSearch] = React.useState('')
+  const [statusFilter, setStatusFilter] = React.useState<'all' | 'registered' | 'guest'>('all')
   const [isEditing, setIsEditing] = React.useState(false)
   const [editNotes, setEditNotes] = React.useState('')
   const [editAddresses, setEditAddresses] = React.useState<CustomerAddress[]>([])
@@ -470,7 +480,7 @@ export default function CustomersPage() {
 
   React.useEffect(() => {
     fetchCustomers()
-  }, [pagination.page, search])
+  }, [pagination.page, search, statusFilter])
 
   async function fetchCustomers() {
     setLoading(true)
@@ -480,11 +490,17 @@ export default function CustomersPage() {
         limit: pagination.limit,
         search: search || undefined,
       })
-      setCustomers(response.data)
+      let filteredData = response.data
+      if (statusFilter === 'registered') {
+        filteredData = filteredData.filter((c: any) => c.userId)
+      } else if (statusFilter === 'guest') {
+        filteredData = filteredData.filter((c: any) => !c.userId)
+      }
+      setCustomers(filteredData)
       setPagination((prev) => ({
         ...prev,
-        total: response.total,
-        totalPages: response.totalPages,
+        total: filteredData.length,
+        totalPages: Math.ceil(filteredData.length / pagination.limit),
       }))
     } catch (error) {
       toast.error('Failed to fetch customers')
@@ -549,6 +565,26 @@ export default function CustomersPage() {
     }
   }
 
+  async function handleDeleteCustomer() {
+    if (!selectedCustomer || !selectedCustomer.id) {
+      toast.error('Customer tidak valid')
+      return
+    }
+
+    if (!confirm('Apakah Anda yakin ingin menghapus customer ini?\n\nTindakan ini akan menghapus data customer dan tidak dapat dibatalkan.')) {
+      return
+    }
+
+    try {
+      await deleteCustomer(selectedCustomer.id)
+      toast.success('Customer berhasil dihapus')
+      setIsDetailOpen(false)
+      fetchCustomers()
+    } catch (error) {
+      toast.error('Gagal menghapus customer')
+    }
+  }
+
   function handleSearch(value: string) {
     setSearch(value)
     setPagination((prev) => ({ ...prev, page: 1 }))
@@ -577,7 +613,7 @@ export default function CustomersPage() {
     },
     {
       key: 'phone',
-      label: 'Phone',
+      label: 'Telepon',
       render: (value: string) => (
         <div className="flex items-center gap-2 text-sm">
           <div className="w-6 h-6 rounded bg-emerald-50 dark:bg-emerald-900/30 flex items-center justify-center">
@@ -589,7 +625,7 @@ export default function CustomersPage() {
     },
     {
       key: 'totalBookings',
-      label: 'Bookings',
+      label: 'Booking',
       render: (value: number) => (
         <div className="flex items-center gap-2">
           <div className="w-6 h-6 rounded bg-blue-50 dark:bg-blue-900/30 flex items-center justify-center">
@@ -601,14 +637,14 @@ export default function CustomersPage() {
     },
     {
       key: 'totalSpent',
-      label: 'Total Spent',
+      label: 'Total Pengeluaran',
       render: (value: number) => (
         <span className="text-sm font-bold text-emerald-600 dark:text-emerald-400">{formatCurrency(value)}</span>
       ),
     },
     {
       key: 'createdAt',
-      label: 'Joined',
+      label: 'Bergabung',
       render: (value: string) => (
         <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-slate-400">
           <Clock className="h-3.5 w-3.5" />
@@ -618,7 +654,7 @@ export default function CustomersPage() {
     },
     {
       key: 'source',
-      label: 'Source',
+      label: 'Sumber',
       render: (_: any, row: any) => {
         const isRegistered = !!row.userId
         return (
@@ -626,12 +662,12 @@ export default function CustomersPage() {
             {isRegistered ? (
               <>
                 <UserCheck className="w-3 h-3" />
-                Registered
+                Terdaftar
               </>
             ) : (
               <>
                 <Users className="w-3 h-3" />
-                Guest
+                Tamu
               </>
             )}
           </Badge>
@@ -650,43 +686,54 @@ export default function CustomersPage() {
   ]
 
   return (
-    <div className="min-h-screen bg-gray-50/50 dark:bg-slate-900 text-gray-900 dark:text-white">
+    <div className="min-h-screen bg-gray-50 dark:bg-slate-800 text-gray-900 dark:text-white">
       {/* Topbar */}
-      <Breadcrumb items={[{ label: 'Customers' }]} />
+      <Breadcrumb items={[{ label: 'Customer' }]} />
 
-      <div className="w-full px-4 md:px-6 py-6 space-y-6">
+      <div className="w-full px-3 sm:px-6 py-3 sm:py-6 space-y-3 sm:space-y-6">
         {/* Page Header */}
         <motion.div
           initial={{ opacity: 0, y: -16 }}
           animate={{ opacity: 1, y: 0 }}
-          className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"
+          className="flex flex-wrap items-start justify-between gap-4"
         >
           <div>
-            <h1 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Customers</h1>
-            <p className="text-sm text-gray-500 dark:text-slate-400 mt-1">Manage and view customer information</p>
+            <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Customer</h1>
+            <p className="text-xs sm:text-sm text-gray-500 dark:text-slate-400 mt-0.5 sm:mt-1">Kelola dan lihat informasi customer</p>
           </div>
           <div className="flex items-center gap-2">
-            <div className="px-4 py-2 bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700">
-              <span className="text-sm text-gray-500 dark:text-slate-400">Total: </span>
-              <span className="text-sm font-bold text-gray-900 dark:text-white">{pagination.total}</span>
+            <div className="px-4 py-2 bg-white dark:bg-slate-900 rounded-xl border border-gray-200 dark:border-slate-700 shadow-sm">
+              <span className="text-xs sm:text-sm text-gray-500 dark:text-slate-400">Total: </span>
+              <span className="text-xs sm:text-sm font-bold text-gray-900 dark:text-white">{pagination.total}</span>
             </div>
           </div>
         </motion.div>
 
-        {/* Search */}
+        {/* Search & Filter */}
         <motion.div
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1 }}
+          className="bg-white dark:bg-slate-900 rounded-xl border border-gray-200 dark:border-slate-700 shadow-sm p-3 sm:p-4"
         >
-          <div className="relative max-w-md">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-            <Input
-              placeholder="Search by name or email..."
-              className="pl-10 bg-white dark:bg-slate-800 border-gray-200 dark:border-slate-700"
-              value={search}
-              onChange={(e) => handleSearch(e.target.value)}
-            />
+          <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
+            <div className="relative flex-1 sm:max-w-md">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400 dark:text-slate-500 z-10 pointer-events-none" />
+              <Input
+                placeholder="Cari nama atau email..."
+                className="pl-10 h-10 sm:h-11 bg-gray-50 dark:bg-slate-800 border-gray-200 dark:border-slate-600 rounded-lg relative z-1"
+                value={search}
+                onChange={(e) => handleSearch(e.target.value)}
+              />
+            </div>
+            <select
+              value={statusFilter}
+              onChange={(e) => setStatusFilter(e.target.value as 'all' | 'registered' | 'guest')}
+              className="h-10 px-3 rounded-lg bg-gray-100 dark:bg-slate-800 border border-gray-200 dark:border-slate-600 text-sm text-gray-700 dark:text-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 w-full sm:w-auto"
+            >
+              <option value="all">Semua Customer</option>
+              <option value="registered">Terdaftar</option>
+              <option value="guest">Tamu</option>
+            </select>
           </div>
         </motion.div>
 
@@ -696,14 +743,119 @@ export default function CustomersPage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.15 }}
         >
-          <div className="bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-700 rounded-2xl overflow-hidden shadow-sm">
+          <div className="sm:bg-white sm:dark:bg-slate-900 sm:rounded-2xl sm:shadow-sm sm:border sm:border-gray-200 dark:sm:border-slate-700 overflow-hidden">
             <DataTable
               columns={columns}
               data={customers}
               loading={loading}
               onRowClick={openCustomerDetail}
+              renderCard={(row: any) => (
+                <div className="bg-white dark:bg-slate-900 rounded-2xl border border-gray-200 dark:border-slate-700 shadow-sm hover:shadow-md transition-all duration-300 p-3 cursor-pointer active:scale-[0.99]">
+                  {/* Header - Avatar & Name */}
+                  <div className="flex items-start gap-3 pb-2 border-b border-gray-100 dark:border-slate-700/50">
+                    <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-600 text-lg font-bold text-white shadow-lg shadow-emerald-500/20 flex-shrink-0">
+                      {row.name?.charAt(0).toUpperCase() || '?'}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-1.5 flex-wrap">
+                        <p className="font-semibold text-gray-900 dark:text-white truncate">{row.name}</p>
+                        {row.isVip && <Star className="h-3.5 w-3.5 text-amber-500 fill-amber-500 flex-shrink-0" />}
+                      </div>
+                      <p className="text-xs text-gray-500 dark:text-slate-400 truncate">{row.email}</p>
+                    </div>
+                    <button 
+                      onClick={(e) => { e.stopPropagation(); openCustomerDetail(row); }}
+                      className="w-8 h-8 rounded-lg bg-white dark:bg-slate-700 border border-gray-200 dark:border-slate-600 flex items-center justify-center text-gray-500 dark:text-slate-400 hover:bg-emerald-50 dark:hover:bg-emerald-900/30 hover:text-emerald-600 dark:hover:text-emerald-400 hover:border-emerald-200 dark:hover:border-emerald-700/50 transition-all flex-shrink-0"
+                    >
+                      <Eye className="h-4 w-4" />
+                    </button>
+                  </div>
+
+                  {/* Stats Grid */}
+                  <div className="grid grid-cols-2 gap-2 py-2">
+                    <div className="bg-blue-50/50 dark:bg-blue-900/10 rounded-xl p-2.5 flex items-center gap-2">
+                      <div className="w-8 h-8 rounded-lg bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center flex-shrink-0">
+                        <Phone className="h-3.5 w-3.5 text-blue-600 dark:text-blue-400" />
+                      </div>
+                      <div className="min-w-0">
+                        <p className="text-[10px] text-gray-500 dark:text-slate-400">Telepon</p>
+                        <p className="text-xs font-medium text-gray-700 dark:text-slate-300 truncate">{row.phone || '—'}</p>
+                      </div>
+                    </div>
+
+                    <div className="bg-purple-50/50 dark:bg-purple-900/10 rounded-xl p-2.5 flex items-center gap-2">
+                      <div className="w-8 h-8 rounded-lg bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center flex-shrink-0">
+                        <Calendar className="h-3.5 w-3.5 text-purple-600 dark:text-purple-400" />
+                      </div>
+                      <div>
+                        <p className="text-[10px] text-gray-500 dark:text-slate-400">Booking</p>
+                        <p className="text-xs font-medium text-gray-700 dark:text-slate-300">{row.totalBookings || 0}</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Footer - Total & Status */}
+                  <div className="flex items-center justify-between pt-2 border-t border-gray-100 dark:border-slate-700/50">
+                    <div className="flex items-center gap-1.5">
+                      <Wallet className="h-3.5 w-3.5 text-emerald-600" />
+                      <span className="text-xs font-bold text-emerald-600 dark:text-emerald-400">{formatCurrency(row.totalSpent || 0)}</span>
+                    </div>
+                    {!!row.userId ? (
+                      <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-blue-50 dark:bg-blue-900/20 border border-blue-100 dark:border-blue-800">
+                        <UserCheck className="w-3 h-3 text-blue-600 dark:text-blue-400" />
+                        <span className="text-[10px] font-medium text-blue-700 dark:text-blue-400">Terdaftar</span>
+                      </span>
+                    ) : (
+                      <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-gray-100 dark:bg-slate-700 border border-gray-200 dark:border-slate-600">
+                        <Users className="w-3 h-3 text-gray-500 dark:text-slate-400" />
+                        <span className="text-[10px] font-medium text-gray-600 dark:text-slate-400">Tamu</span>
+                      </span>
+                    )}
+                  </div>
+                </div>
+              )}
+              skeletonCard={(i) => (
+                <div
+                  key={i}
+                  className="bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-700 rounded-2xl p-3 animate-pulse shadow-sm"
+                >
+                  {/* Header - Avatar & Name */}
+                  <div className="flex items-start gap-3 pb-2 border-b border-gray-100 dark:border-slate-700/50">
+                    <div className="skeleton h-12 w-12 rounded-xl flex-shrink-0 dark:bg-slate-700" />
+                    <div className="flex-1 min-w-0 pt-0.5">
+                      <div className="skeleton h-4 w-28 rounded dark:bg-slate-700 mb-2" />
+                      <div className="skeleton h-3 w-full max-w-[160px] rounded dark:bg-slate-700" />
+                    </div>
+                    <div className="skeleton h-8 w-8 rounded-lg flex-shrink-0 dark:bg-slate-700" />
+                  </div>
+
+                  {/* Stats Grid */}
+                  <div className="grid grid-cols-2 gap-2 py-2">
+                    <div className="bg-blue-50/50 dark:bg-slate-800/50 rounded-xl p-2.5 flex items-center gap-2">
+                      <div className="skeleton h-8 w-8 rounded-lg flex-shrink-0 dark:bg-slate-700" />
+                      <div className="flex-1 min-w-0">
+                        <div className="skeleton h-2.5 w-10 rounded dark:bg-slate-700 mb-1.5" />
+                        <div className="skeleton h-3.5 w-20 rounded dark:bg-slate-700" />
+                      </div>
+                    </div>
+                    <div className="bg-purple-50/50 dark:bg-slate-800/50 rounded-xl p-2.5 flex items-center gap-2">
+                      <div className="skeleton h-8 w-8 rounded-lg flex-shrink-0 dark:bg-slate-700" />
+                      <div className="flex-1 min-w-0">
+                        <div className="skeleton h-2.5 w-10 rounded dark:bg-slate-700 mb-1.5" />
+                        <div className="skeleton h-3.5 w-6 rounded dark:bg-slate-700" />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Footer - Total & Status */}
+                  <div className="flex items-center justify-between pt-2 border-t border-gray-100 dark:border-slate-700/50">
+                    <div className="skeleton h-4 w-20 rounded dark:bg-slate-700" />
+                    <div className="skeleton h-5 w-16 rounded-full dark:bg-slate-700" />
+                  </div>
+                </div>
+              )}
             />
-            <div className="border-t border-gray-100 dark:border-slate-700">
+            <div className="sm:border-t sm:border-gray-100 dark:sm:border-slate-700">
               <Pagination
                 currentPage={pagination.page}
                 totalPages={pagination.totalPages}
@@ -734,6 +886,7 @@ export default function CustomersPage() {
         saving={saving}
         onSave={handleSaveCustomer}
         onUpdateCustomer={setSelectedCustomer}
+        onDelete={handleDeleteCustomer}
       />
     </div>
   )

@@ -2,15 +2,15 @@
 
 import * as React from 'react'
 import { motion } from 'framer-motion'
-import { Search, Mail, Shield, Calendar, Edit3, Save, X, Key, Phone } from 'lucide-react'
+import { Search, Mail, Shield, Calendar, Edit3, Save, X, Phone } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Badge } from '@/components/ui/badge'
 import { Modal } from '@/components/admin/Modal'
 import { DataTable } from '@/components/admin/DataTable'
 import { formatDate } from '@/lib/utils'
-import { getToken } from '@/lib/api'
 import { Breadcrumb } from '@/components/admin/Breadcrumb'
+import { useUsers, useUpdateUser } from '@/lib/use-queries'
 
 interface User {
   id: string
@@ -23,37 +23,15 @@ interface User {
 }
 
 export default function UsersPage() {
-  const [users, setUsers] = React.useState<User[]>([])
-  const [loading, setLoading] = React.useState(true)
   const [search, setSearch] = React.useState('')
   const [selectedUser, setSelectedUser] = React.useState<User | null>(null)
   const [isEditOpen, setIsEditOpen] = React.useState(false)
   const [editForm, setEditForm] = React.useState({ name: '', email: '', phone: '' })
-  const [saving, setSaving] = React.useState(false)
 
-  React.useEffect(() => {
-    fetchUsers()
-  }, [])
-
-  async function fetchUsers() {
-    setLoading(true)
-    try {
-      const token = getToken()
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}/admin/users`, {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      })
-      if (res.ok) {
-        const data = await res.json()
-        setUsers(data)
-      }
-    } catch (error) {
-      console.error('Failed to fetch users:', error)
-    } finally {
-      setLoading(false)
-    }
-  }
+  // TanStack Query hooks
+  const { data: usersData, isLoading: loading } = useUsers({ search })
+  const users = usersData?.data || []
+  const updateMutation = useUpdateUser()
 
   function openEdit(user: User) {
     setSelectedUser(user)
@@ -63,27 +41,21 @@ export default function UsersPage() {
 
   async function saveUser() {
     if (!selectedUser) return
-    setSaving(true)
-    try {
-      const token = getToken()
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}/admin/users/${selectedUser.id}`, {
-        method: 'PUT',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(editForm)
-      })
-      if (res.ok) {
-        await fetchUsers()
-        setIsEditOpen(false)
+    
+    updateMutation.mutate(
+      { 
+        id: selectedUser.id, 
+        data: editForm 
+      },
+      {
+        onSuccess: () => {
+          setIsEditOpen(false)
+        }
       }
-    } catch (error) {
-      console.error('Failed to save user:', error)
-    } finally {
-      setSaving(false)
-    }
+    )
   }
+
+  const saving = updateMutation.isPending
 
   const filteredUsers = users.filter(user =>
     user.name?.toLowerCase().includes(search.toLowerCase()) ||
@@ -154,11 +126,11 @@ export default function UsersPage() {
   ]
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-slate-900 text-gray-900 dark:text-white">
+    <div className="min-h-screen bg-gray-50 dark:bg-slate-800 text-gray-900 dark:text-white">
       {/* Topbar */}
       <Breadcrumb items={[{ label: 'Users' }]} />
 
-      <div className="w-full px-4 md:px-6 py-6 space-y-6">
+      <div className="w-full px-3 sm:px-6 py-3 sm:py-6 space-y-3 sm:space-y-6">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: -16 }}
@@ -167,7 +139,7 @@ export default function UsersPage() {
         >
           <div>
             <h1 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Users</h1>
-            <p className="text-sm text-gray-500 dark:text-slate-400 mt-0.5">Manage admin and staff accounts</p>
+            <p className="text-xs sm:text-sm text-gray-500 dark:text-slate-400 mt-0.5">Manage admin and staff accounts</p>
           </div>
         </motion.div>
 
@@ -235,7 +207,7 @@ export default function UsersPage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.15 }}
         >
-           <div className="bg-white dark:bg-slate-900 border border-gray-100 dark:border-slate-700 rounded-2xl overflow-hidden shadow-sm dark:shadow-slate-900/50">
+           <div className="sm:bg-white sm:dark:bg-slate-900 sm:border sm:dark:border-slate-700 sm:rounded-2xl shadow-sm overflow-hidden">
             {loading ? (
               <div className="flex items-center justify-center h-32">
                 <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 dark:border-blue-400"></div>

@@ -439,40 +439,41 @@ export default function SettingsPage() {
   ]
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-slate-900 text-gray-900 dark:text-white">
+    <div className="min-h-screen bg-gray-50 dark:bg-slate-800 text-gray-900 dark:text-white">
       {/* Topbar */}
       <Breadcrumb items={[{ label: 'Settings' }]} />
 
-      <div className="w-full px-4 md:px-6 py-6 space-y-6">
+      <div className="w-full px-3 sm:px-6 py-3 sm:py-6 space-y-3 sm:space-y-6">
         {/* Page Header */}
         <motion.div
           initial={{ opacity: 0, y: -16 }}
           animate={{ opacity: 1, y: 0 }}
-          className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"
+          className="flex flex-wrap items-start justify-between gap-3 sm:gap-4"
         >
           <div>
-            <h1 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Settings</h1>
-            <p className="text-sm text-gray-500 dark:text-slate-400 mt-0.5">Kelola pengaturan website dan konfigurasi sistem</p>
+            <div className="flex items-center gap-3">
+              <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Settings</h1>
+              <button
+                onClick={loadSettings}
+                className="inline-flex items-center h-8 px-3 rounded-lg bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-600 text-xs font-medium text-gray-700 dark:text-slate-200 hover:bg-gray-50 dark:hover:bg-slate-800 transition-all"
+              >
+                <RefreshCw className="w-3.5 h-3.5" />
+              </button>
+            </div>
+            <p className="text-xs sm:text-sm text-gray-500 dark:text-slate-400 mt-0.5">Kelola pengaturan website dan konfigurasi sistem</p>
           </div>
           <div className="flex items-center gap-2">
             <button
-              onClick={loadSettings}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-700 text-sm font-medium text-gray-700 dark:text-slate-200 hover:bg-gray-50 dark:hover:bg-slate-800 hover:text-gray-900 transition-all"
-            >
-              <RefreshCw className="w-3.5 h-3.5" />
-              Reset
-            </button>
-            <button
               onClick={handleSave}
               disabled={saving}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium bg-emerald-600 hover:bg-emerald-700 text-white border border-emerald-700 shadow-sm hover:shadow-md transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+              className="inline-flex items-center gap-2 h-8 px-3 rounded-lg text-xs font-medium bg-emerald-600 hover:bg-emerald-700 text-white border border-emerald-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {saving ? (
                 <div className="w-3.5 h-3.5 animate-spin rounded-full border-2 border-white/30 border-t-white" />
               ) : (
                 <Save className="w-3.5 h-3.5" />
               )}
-              Simpan Changes
+              <span>Simpan</span>
             </button>
           </div>
         </motion.div>
@@ -563,7 +564,7 @@ export default function SettingsPage() {
           </motion.div>
         )}
         {loading ? (
-          <div className="bg-white dark:bg-slate-900 border border-gray-100 dark:border-slate-700 rounded-2xl overflow-hidden shadow-sm dark:shadow-slate-900/50">
+          <div className="sm:bg-white sm:dark:bg-slate-900 sm:shadow-sm sm:border sm:border-gray-200 dark:sm:border-slate-700 sm:rounded-2xl overflow-hidden">
             <div className="flex items-center justify-center py-20">
               <div className="h-8 w-8 animate-spin rounded-full border-4 border-gray-200 border-t-emerald-500" />
             </div>
@@ -1027,9 +1028,9 @@ export default function SettingsPage() {
                   </SettingRow>
 
                   {!settings.is24Hours && (
-                    <div className="space-y-2 mt-4 pt-4 border-t border-gray-50 dark:border-slate-800">
+                    <div className="space-y-2 mt-4 pt-4 border-t border-gray-100 dark:border-slate-700">
                       {DAYS.map(day => (
-                        <div key={day} className="flex items-center gap-4 py-3 border-b border-gray-50 dark:border-slate-800 last:border-0">
+                        <div key={day} className="flex items-center gap-4 py-3 border-b border-gray-100 dark:border-slate-700 last:border-0">
                           <span className="w-28 text-sm font-medium text-gray-700 dark:text-slate-200">{DAY_LABELS[day]}</span>
                           <div className="flex items-center gap-2">
                             <input
@@ -1237,7 +1238,7 @@ export default function SettingsPage() {
 <SettingRow
                     label="Services Dropdown"
                     description="Tampilkan dropdown di menu Layanan"
-                    className="mt-4 pt-4 border-t border-gray-50 dark:border-slate-800"
+                    className="mt-4 pt-4 border-t border-gray-100 dark:border-slate-700"
                   >
                     <Toggle
                       checked={navSettings.showServicesDropdown || false}
@@ -1245,7 +1246,7 @@ export default function SettingsPage() {
                     />
                   </SettingRow>
 
-<div className="grid grid-cols-1 md:grid-cols-2 gap-5 mt-4 pt-4 border-t border-gray-50 dark:border-slate-800">
+<div className="grid grid-cols-1 md:grid-cols-2 gap-5 mt-4 pt-4 border-t border-gray-100 dark:border-slate-700">
                     <FormField label="Mobile Menu Style">
                       <DarkSelect
                         options={[
@@ -1518,7 +1519,7 @@ export default function SettingsPage() {
                   </SettingRow>
 
                   {notificationSettings.whatsappEnabled && (
-                    <div className="space-y-5 mt-4 pt-4 border-t border-gray-50 dark:border-slate-800">
+                    <div className="space-y-5 mt-4 pt-4 border-t border-gray-100 dark:border-slate-700">
                       <FormField label="Nomor WhatsApp" description="Format: kode negara + nomor">
                         <div className="relative">
                           <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-slate-500 text-sm">+</span>
@@ -1601,7 +1602,7 @@ export default function SettingsPage() {
                   </SettingRow>
 
                   {notificationSettings.emailEnabled && (
-                    <div className="space-y-5 mt-4 pt-4 border-t border-gray-50 dark:border-slate-800">
+                    <div className="space-y-5 mt-4 pt-4 border-t border-gray-100 dark:border-slate-700">
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                         <FormField label="SMTP Host">
                           <DarkInput
@@ -1725,7 +1726,7 @@ export default function SettingsPage() {
                   icon={Layout}
                 >
                   <div className="space-y-0">
-                    <div className="flex items-center justify-between py-4 border-b border-gray-50 dark:border-slate-800">
+                    <div className="flex items-center justify-between py-4 border-b border-gray-100 dark:border-slate-700">
                       <div>
                         <p className="text-sm font-medium text-gray-700 dark:text-slate-200">Compact View</p>
                         <p className="text-xs text-gray-400 dark:text-slate-500 mt-0.5">Tampilkan lebih banyak data per halaman</p>
@@ -1736,7 +1737,7 @@ export default function SettingsPage() {
                       />
                     </div>
 
-                    <div className="flex items-center justify-between py-4 border-b border-gray-50 dark:border-slate-800">
+                    <div className="flex items-center justify-between py-4 border-b border-gray-100 dark:border-slate-700">
                       <div>
                         <p className="text-sm font-medium text-gray-700 dark:text-slate-200">Show Live Indicator</p>
                         <p className="text-xs text-gray-400 dark:text-slate-500 mt-0.5">Tampilkan indikator live di header</p>

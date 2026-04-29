@@ -11,8 +11,8 @@ import { Input } from '@/components/ui/input'
 import { Badge } from '@/components/ui/badge'
 import { DataTable } from '@/components/admin/DataTable'
 import { ImageUpload, useImageUpload } from '@/components/ui/ImageUpload'
-import { getGalleryItems, createGalleryItem, updateGalleryItem, deleteGalleryItem } from '@/lib/api'
 import { GalleryItem } from '@/types'
+import { useGallery, useCreateGalleryItem, useUpdateGalleryItem, useDeleteGalleryItem } from '@/lib/use-queries'
 import { Breadcrumb } from '@/components/admin/Breadcrumb'
 import { formatDate } from '@/lib/utils'
 import { toast } from 'sonner'
@@ -211,7 +211,7 @@ function GalleryFormModal({
                   <h2 className="text-xl font-bold text-gray-900 dark:text-white">
                     {isEditing ? 'Edit Gallery Item' : 'Create Gallery Item'}
                   </h2>
-                  <p className="text-sm text-gray-500 dark:text-slate-400 mt-0.5">
+                  <p className="text-xs sm:text-sm text-gray-500 dark:text-slate-400 mt-0.5">
                     {isEditing ? 'Perbarui informasi gallery item' : 'Buat gallery item baru'}
                   </p>
                 </div>
@@ -656,7 +656,7 @@ function GalleryDeleteModal({
                 </div>
                 <div>
                   <h2 className="text-xl font-bold text-gray-900 dark:text-white">Hapus Gallery Item</h2>
-                  <p className="text-sm text-gray-500 dark:text-slate-400 mt-0.5">Tindakan ini tidak dapat dibatalkan</p>
+                  <p className="text-xs sm:text-sm text-gray-500 dark:text-slate-400 mt-0.5">Tindakan ini tidak dapat dibatalkan</p>
                 </div>
               </div>
 
@@ -693,7 +693,7 @@ function GalleryDeleteModal({
                   {/* Info */}
                   <div className="flex-1 min-w-0">
                     <h3 className="text-base font-semibold text-gray-900 dark:text-white truncate">{item.title}</h3>
-                    <p className="text-sm text-gray-500 dark:text-slate-400 mt-0.5">{item.category}</p>
+                    <p className="text-xs sm:text-sm text-gray-500 dark:text-slate-400 mt-0.5">{item.category}</p>
                     {item.location && (
                       <div className="flex items-center gap-1.5 mt-2">
                         <MapPin className="w-3.5 h-3.5 text-gray-400" />
@@ -771,8 +771,10 @@ export default function GalleryPage() {
     return `${API_BASE.replace('/api', '')}${url}`;
   };
 
-  const [items, setItems] = React.useState<GalleryItem[]>([])
-  const [loading, setLoading] = React.useState(true)
+  const { data: items = [], isLoading: loading } = useGallery()
+  const createMutation = useCreateGalleryItem()
+  const updateMutation = useUpdateGalleryItem()
+  const deleteMutation = useDeleteGalleryItem()
   const [isModalOpen, setIsModalOpen] = React.useState(false)
   const [isDeleteModalOpen, setIsDeleteModalOpen] = React.useState(false)
   const [selectedItem, setSelectedItem] = React.useState<GalleryItem | null>(null)
@@ -790,28 +792,10 @@ export default function GalleryPage() {
     order: 0,
   })
   const [errors, setErrors] = React.useState<Partial<GalleryFormData>>({})
-  const [saving, setSaving] = React.useState(false)
-  const [deleting, setDeleting] = React.useState(false)
   const [selectedImageFile, setSelectedImageFile] = React.useState<File | null>(null)
   const [selectedBeforeFile, setSelectedBeforeFile] = React.useState<File | null>(null)
   const [selectedAfterFile, setSelectedAfterFile] = React.useState<File | null>(null)
   const { uploadImage } = useImageUpload()
-
-  React.useEffect(() => {
-    fetchItems()
-  }, [])
-
-  async function fetchItems() {
-    setLoading(true)
-    try {
-      const data = await getGalleryItems()
-      setItems(data)
-    } catch (error) {
-      toast.error('Failed to fetch gallery items')
-    } finally {
-      setLoading(false)
-    }
-  }
 
   function openCreateModal() {
     setIsEditing(false)
@@ -870,7 +854,6 @@ export default function GalleryPage() {
   async function handleSubmit() {
     if (!validateForm()) return
 
-    setSaving(true)
     console.log('[Gallery] handleSubmit started')
     console.log('[Gallery] selectedImageFile:', selectedImageFile)
     console.log('[Gallery] selectedBeforeFile:', selectedBeforeFile)
@@ -892,7 +875,6 @@ export default function GalleryPage() {
         imageUrl = uploadedUrl
       } else {
         toast.error('Failed to upload image')
-        setSaving(false)
         return
       }
     } else {
@@ -907,7 +889,6 @@ export default function GalleryPage() {
         beforeImage = uploadedUrl
       } else {
         toast.error('Failed to upload before image')
-        setSaving(false)
         return
       }
     } else {
@@ -922,7 +903,6 @@ export default function GalleryPage() {
         afterImage = uploadedUrl
       } else {
         toast.error('Failed to upload after image')
-        setSaving(false)
         return
       }
     } else {
@@ -946,7 +926,6 @@ export default function GalleryPage() {
     // Final validation - imageUrl must be valid
     if (!itemData.imageUrl) {
       toast.error('At least one image is required')
-      setSaving(false)
       return
     }
 
@@ -954,48 +933,37 @@ export default function GalleryPage() {
 
     try {
       if (isEditing && selectedItem) {
-        await updateGalleryItem(selectedItem.id, itemData)
-        toast.success('Gallery item updated successfully')
+        const result = await updateMutation.mutateAsync({ id: selectedItem.id, data: itemData })
+        console.log('[Gallery] Update result:', result)
       } else {
-        const result = await createGalleryItem(itemData)
+        const result = await createMutation.mutateAsync(itemData)
         console.log('[Gallery] Create result:', result)
-        toast.success('Gallery item created successfully')
       }
       setSelectedImageFile(null)
       setSelectedBeforeFile(null)
       setSelectedAfterFile(null)
       setIsModalOpen(false)
-      fetchItems()
     } catch (error: any) {
       console.error('[Gallery] Error:', error)
       toast.error(`Failed to ${isEditing ? 'update' : 'create'} gallery item: ${error?.message || error}`)
-    } finally {
-      setSaving(false)
     }
   }
 
   async function handleDelete() {
     if (!selectedItem) return
-    setDeleting(true)
     try {
-      await deleteGalleryItem(selectedItem.id)
-      toast.success('Gallery item deleted successfully')
+      await deleteMutation.mutateAsync(selectedItem.id)
       setIsDeleteModalOpen(false)
-      fetchItems()
-    } catch (error) {
-      toast.error('Failed to delete gallery item')
-    } finally {
-      setDeleting(false)
+    } catch (error: any) {
+      toast.error(error?.message || 'Failed to delete gallery item')
     }
   }
 
   async function handleToggleFeatured(item: GalleryItem) {
     try {
-      await updateGalleryItem(item.id, { isFeatured: !item.isFeatured })
-      toast.success(`Item ${!item.isFeatured ? 'featured' : 'unfeatured'}`)
-      fetchItems()
-    } catch (error) {
-      toast.error('Failed to update item')
+      await updateMutation.mutateAsync({ id: item.id, data: { isFeatured: !item.isFeatured } })
+    } catch (error: any) {
+      toast.error(error?.message || 'Failed to update item')
     }
   }
 
@@ -1031,11 +999,8 @@ export default function GalleryPage() {
     {
       key: 'isFeatured',
       label: 'Featured',
-      render: (value: boolean) => (
-        <button onClick={() => {
-          const item = items.find(i => i.isFeatured === value)
-          if (item) handleToggleFeatured(item)
-        }}>
+      render: (value: boolean, row: GalleryItem) => (
+        <button onClick={() => handleToggleFeatured(row)}>
           <Star className={`h-5 w-5 ${value ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300 dark:text-slate-600'}`} />
         </button>
       ),
@@ -1081,25 +1046,32 @@ export default function GalleryPage() {
   ]
 
   return (
-    <div className="min-h-screen bg-gray-50/50 dark:bg-slate-900 text-gray-900 dark:text-white">
+    <div className="min-h-screen bg-gray-50/50 dark:bg-slate-800 text-gray-900 dark:text-white">
       {/* Topbar */}
       <Breadcrumb items={[{ label: 'Gallery' }]} />
 
-      <div className="w-full px-4 md:px-6 py-6 space-y-6">
+      <div className="w-full px-3 sm:px-6 py-3 sm:py-6 space-y-3 sm:space-y-6">
         {/* Page Header */}
         <motion.div
           initial={{ opacity: 0, y: -16 }}
           animate={{ opacity: 1, y: 0 }}
-          className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"
+          className="flex flex-wrap items-start justify-between gap-3 sm:gap-4"
         >
           <div>
-            <h1 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Gallery</h1>
-            <p className="text-sm text-gray-500 dark:text-slate-400 mt-1">Manage gallery items and portfolio</p>
+            <div className="flex items-center gap-3">
+              <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Gallery</h1>
+              <Button onClick={openCreateModal} className="bg-emerald-600 hover:bg-emerald-700 h-8 text-xs px-3">
+                <Plus className="h-4 w-4" />
+              </Button>
+            </div>
+            <p className="text-xs sm:text-sm text-gray-500 dark:text-slate-400 mt-1">Manage gallery items and portfolio</p>
           </div>
-          <Button onClick={openCreateModal} className="bg-emerald-600 hover:bg-emerald-700 gap-2">
-            <Plus className="h-4 w-4" />
-            New Gallery Item
-          </Button>
+          <div className="flex items-center gap-2">
+            <div className="px-2 sm:px-3 py-1.5 sm:py-2 bg-white dark:bg-slate-900 rounded-lg sm:rounded-xl border border-gray-200 dark:border-slate-600">
+              <span className="text-xs sm:text-sm text-gray-500 dark:text-slate-400">Total: </span>
+              <span className="text-xs sm:text-sm font-bold text-gray-900 dark:text-white">{items.length}</span>
+            </div>
+          </div>
         </motion.div>
 
         {/* Table */}
@@ -1108,11 +1080,141 @@ export default function GalleryPage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.15 }}
         >
-          <div className="bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-700 rounded-2xl overflow-hidden shadow-sm">
+          <div className="sm:bg-white sm:dark:bg-slate-900 sm:shadow-sm sm:border sm:border-gray-200 dark:sm:border-slate-700 sm:rounded-2xl overflow-hidden">
             <DataTable
               columns={columns}
               data={items}
               loading={loading}
+              renderCard={(row: GalleryItem) => (
+                <div className="bg-white dark:bg-slate-900 rounded-2xl border border-gray-200 dark:border-slate-700 shadow-sm hover:shadow-md transition-all duration-300 p-4 active:scale-[0.99]">
+                  {/* Header - Image Preview */}
+                  <div className="relative aspect-[4/3] rounded-xl overflow-hidden mb-4 bg-gray-100 dark:bg-slate-800">
+                    {row.beforeImage && row.afterImage ? (
+                      <BeforeAfterPreview 
+                        beforeImage={getImageUrl(row.beforeImage)}
+                        afterImage={getImageUrl(row.afterImage)}
+                      />
+                    ) : row.imageUrl ? (
+                      <img
+                        src={getImageUrl(row.imageUrl)}
+                        alt={row.title}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center">
+                        <ImageIcon className="h-12 w-12 text-gray-300 dark:text-slate-600" />
+                      </div>
+                    )}
+                    {/* Featured Badge - Top Left */}
+                    {row.isFeatured && (
+                      <div className="absolute top-2 left-2 z-30">
+                        <span className="flex items-center gap-1 text-[10px] font-bold px-2 py-1 rounded-full bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400 border border-amber-200 dark:border-amber-800">
+                          <Star className="h-3 w-3 fill-amber-500" />
+                          FEATURED
+                        </span>
+                      </div>
+                    )}
+                    {/* Status Badge - Top Right */}
+                    <div className="absolute top-2 right-2 z-30">
+                      <span className={`text-[10px] px-2 py-1 rounded-full font-medium border ${
+                        row.isActive
+                          ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400 border-emerald-200 dark:border-emerald-800'
+                          : 'bg-gray-100 text-gray-600 dark:bg-slate-700 dark:text-gray-400 border-gray-200 dark:border-slate-600'
+                      }`}>
+                        {row.isActive ? 'Aktif' : 'Nonaktif'}
+                      </span>
+                    </div>
+                    {/* Before Badge - Bottom Left */}
+                    {row.beforeImage && (
+                      <div className="absolute bottom-2 left-2 z-30">
+                        <span className="text-[10px] px-2 py-1 rounded-md bg-black/70 backdrop-blur-sm text-white font-medium">
+                          Before
+                        </span>
+                      </div>
+                    )}
+                    {/* After Badge - Bottom Right */}
+                    {row.afterImage && (
+                      <div className="absolute bottom-2 right-2 z-30">
+                        <span className="text-[10px] px-2 py-1 rounded-md bg-emerald-500/90 backdrop-blur-sm text-white font-medium">
+                          After
+                        </span>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Content */}
+                  <div className="space-y-3">
+                    {/* Title */}
+                    <div>
+                      <h3 className="font-bold text-gray-900 dark:text-white text-base truncate">
+                        {row.title}
+                      </h3>
+                      {row.description && (
+                        <p className="text-xs text-gray-500 dark:text-slate-400 line-clamp-2 mt-1">
+                          {row.description}
+                        </p>
+                      )}
+                    </div>
+
+                    {/* Category & Location */}
+                    <div className="flex flex-wrap gap-2">
+                      <span className="inline-flex items-center gap-1 text-[10px] px-2 py-1 rounded-full bg-blue-50 text-blue-700 dark:bg-blue-900/20 dark:text-blue-400 border border-blue-100 dark:border-blue-800">
+                        <Folder className="h-3 w-3" />
+                        {row.category}
+                      </span>
+                      {row.location && (
+                        <span className="inline-flex items-center gap-1 text-[10px] px-2 py-1 rounded-full bg-orange-50 text-orange-700 dark:bg-orange-900/20 dark:text-orange-400 border border-orange-100 dark:border-orange-800">
+                          <MapPin className="h-3 w-3" />
+                          {row.location}
+                        </span>
+                      )}
+                    </div>
+
+                    {/* Footer - Order & Actions */}
+                    <div className="flex items-center justify-between pt-3 border-t border-gray-100 dark:border-slate-700/50">
+                      <span className="text-xs text-gray-400 dark:text-slate-500">
+                        Urutan: <span className="font-medium text-gray-600 dark:text-slate-300">{row.order}</span>
+                      </span>
+                      <div className="flex items-center gap-2">
+                        <button
+                          onClick={(e) => { e.stopPropagation(); openEditModal(row); }}
+                          className="h-9 w-9 rounded-xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 flex items-center justify-center text-gray-600 dark:text-slate-400 hover:bg-emerald-50 hover:text-emerald-600 dark:hover:bg-emerald-900/20 dark:hover:text-emerald-400 transition-colors shadow-sm"
+                        >
+                          <Edit className="h-4 w-4" />
+                        </button>
+                        <button
+                          onClick={(e) => { e.stopPropagation(); openDeleteModal(row); }}
+                          className="h-9 w-9 rounded-xl border border-red-200 dark:border-red-800/50 bg-red-50 dark:bg-red-900/20 flex items-center justify-center text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/30 transition-colors shadow-sm"
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+              skeletonCard={(i: number) => (
+                <div className="bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-700 rounded-2xl p-4 animate-pulse shadow-sm">
+                  {/* Image Skeleton */}
+                  <div className="aspect-[4/3] rounded-xl bg-gray-200 dark:bg-slate-700 mb-4" />
+                  {/* Content Skeleton */}
+                  <div className="space-y-3">
+                    <div className="h-5 w-3/4 rounded bg-gray-200 dark:bg-slate-700" />
+                    <div className="h-4 w-full rounded bg-gray-100 dark:bg-slate-700" />
+                    <div className="flex gap-2">
+                      <div className="h-6 w-20 rounded-full bg-blue-100 dark:bg-slate-700" />
+                      <div className="h-6 w-24 rounded-full bg-orange-100 dark:bg-slate-700" />
+                    </div>
+                    <div className="flex items-center justify-between pt-3 border-t border-gray-100 dark:border-slate-700">
+                      <div className="h-4 w-16 rounded bg-gray-100 dark:bg-slate-700" />
+                      <div className="flex gap-2">
+                        <div className="h-9 w-9 rounded-xl bg-gray-200 dark:bg-slate-700" />
+                        <div className="h-9 w-9 rounded-xl bg-red-100 dark:bg-slate-700" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
             />
           </div>
         </motion.div>
@@ -1130,7 +1232,7 @@ export default function GalleryPage() {
         setFormData={setFormData}
         errors={errors}
         setErrors={setErrors}
-        saving={saving}
+        saving={createMutation.isPending || updateMutation.isPending}
         onSave={handleSubmit}
         selectedImageFile={selectedImageFile}
         setSelectedImageFile={setSelectedImageFile}
@@ -1146,7 +1248,7 @@ export default function GalleryPage() {
         onClose={() => setIsDeleteModalOpen(false)}
         item={selectedItem}
         onConfirm={handleDelete}
-        deleting={deleting}
+        deleting={deleteMutation.isPending}
         getImageUrl={getImageUrl}
       />
     </div>

@@ -3,7 +3,7 @@
 import * as React from 'react'
 import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
-import { ArrowLeft, Save, Eye, Star, FolderOpen, ChevronRight } from 'lucide-react'
+import { ArrowLeft, Save, Eye, Star, FolderOpen } from 'lucide-react'
 import { ImageUpload, useImageUpload } from '@/components/ui/ImageUpload'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -11,9 +11,9 @@ import { Textarea } from '@/components/ui/textarea'
 import { Badge } from '@/components/ui/badge'
 import { RichTextEditor } from '@/components/editor/RichTextEditor'
 import Link from 'next/link'
-import { createBlogPost, getBlogCategories, BlogCategory } from '@/lib/api'
 import { toast } from 'sonner'
 import { Breadcrumb } from '@/components/admin/Breadcrumb'
+import { useBlogCategories, useCreateBlogPost } from '@/lib/use-queries'
 
 interface BlogFormData {
   title: string
@@ -28,8 +28,8 @@ interface BlogFormData {
 
 export default function NewBlogPostPage() {
   const router = useRouter()
-  const [loading, setLoading] = React.useState(false)
-  const [categories, setCategories] = React.useState<BlogCategory[]>([])
+  const { data: categories = [] } = useBlogCategories()
+  const createPostMutation = useCreateBlogPost()
   const [formData, setFormData] = React.useState<BlogFormData>({
     title: '',
     content: '',
@@ -44,19 +44,6 @@ export default function NewBlogPostPage() {
   const [selectedCoverFile, setSelectedCoverFile] = React.useState<File | null>(null)
   const { uploadImage } = useImageUpload()
 
-  React.useEffect(() => {
-    fetchCategories()
-  }, [])
-
-  async function fetchCategories() {
-    try {
-      const data = await getBlogCategories()
-      setCategories(data)
-    } catch (error) {
-      console.error('Failed to fetch categories')
-    }
-  }
-
   function validateForm(): boolean {
     const newErrors: Partial<BlogFormData> = {}
     if (!formData.title.trim()) newErrors.title = 'Title harus diisi'
@@ -70,7 +57,8 @@ export default function NewBlogPostPage() {
     e.preventDefault()
     if (!validateForm()) return
 
-    setLoading(true)
+    const loadingToast = toast.loading('Menyimpan post...')
+
     try {
       // Upload cover image jika ada file yang dipilih
       let coverImageUrl = formData.coverImage
@@ -79,18 +67,17 @@ export default function NewBlogPostPage() {
         if (uploadedUrl) {
           coverImageUrl = uploadedUrl
         } else {
-          toast.error('Gagal upload cover image')
-          setLoading(false)
+          toast.error('Gagal upload cover image', { id: loadingToast })
           return
         }
       }
 
       const tags = formData.tags.split(',').map(t => t.trim()).filter(Boolean)
-      
+
       // Konversi status ke publishedAt untuk database
       const publishedAt = formData.status === 'published' ? new Date().toISOString() : null
-      
-      await createBlogPost({
+
+      await createPostMutation.mutateAsync({
         title: formData.title,
         slug: formData.title.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, ''),
         content: formData.content,
@@ -102,18 +89,18 @@ export default function NewBlogPostPage() {
         isFeatured: formData.isFeatured,
         publishedAt,
       })
+
+      toast.dismiss(loadingToast)
       setSelectedCoverFile(null)
-      toast.success('Post berhasil dibuat')
       router.push('/admin/blog')
     } catch (error: any) {
+      toast.dismiss(loadingToast)
       toast.error(error.message || 'Gagal membuat post')
-    } finally {
-      setLoading(false)
     }
   }
 
   return (
-    <div className="min-h-screen bg-gray-50/50 dark:bg-slate-900 text-gray-900 dark:text-white">
+    <div className="min-h-screen bg-gray-50/50 dark:bg-slate-800 text-gray-900 dark:text-white">
       {/* Topbar */}
       <Breadcrumb items={[{ label: 'Blog', href: '/admin/blog' }, { label: 'New Post' }]} />
 
@@ -138,8 +125,8 @@ export default function NewBlogPostPage() {
               <span className="hidden sm:inline">Batal</span>
               <span className="sm:hidden">Batal</span>
             </Button>
-            <Button 
-              variant="outline" 
+            <Button
+              variant="outline"
               onClick={() => {
                 // Simpan draft ke localStorage untuk preview (fallback untuk local dev)
                 const draftData = {
@@ -166,12 +153,12 @@ export default function NewBlogPostPage() {
             </Button>
             <Button
               onClick={handleSubmit}
-              disabled={loading}
+              disabled={createPostMutation.isPending}
               className="bg-emerald-600 hover:bg-emerald-700 h-9 sm:h-10 px-3 sm:px-4"
             >
               <Save className="w-4 h-4 sm:mr-2" />
-              <span className="hidden sm:inline">{loading ? 'Menyimpan...' : 'Simpan'}</span>
-              <span className="sm:hidden">{loading ? '...' : 'Simpan'}</span>
+              <span className="hidden sm:inline">{createPostMutation.isPending ? 'Menyimpan...' : 'Simpan'}</span>
+              <span className="sm:hidden">{createPostMutation.isPending ? '...' : 'Simpan'}</span>
             </Button>
           </div>
         </motion.div>
@@ -311,10 +298,10 @@ export default function NewBlogPostPage() {
                 </div>
                 <Button
                   onClick={handleSubmit}
-                  disabled={loading}
+                  disabled={createPostMutation.isPending}
                   className="w-full bg-emerald-600 hover:bg-emerald-700 h-10"
                 >
-                  {loading ? 'Menyimpan...' : 'Simpan Post'}
+                  {createPostMutation.isPending ? 'Menyimpan...' : 'Simpan Post'}
                 </Button>
               </div>
             </motion.div>
@@ -339,7 +326,7 @@ export default function NewBlogPostPage() {
                   className="w-full h-10 px-3 rounded-xl border border-gray-200 dark:border-slate-700 text-sm bg-gray-50 dark:bg-slate-800 dark:text-slate-200 focus:outline-none focus:border-emerald-500"
                 >
                   <option value="">Tidak ada kategori</option>
-                  {categories.map(cat => (
+                  {categories.map((cat: {id: string, name: string}) => (
                     <option key={cat.id} value={cat.id}>{cat.name}</option>
                   ))}
                 </select>

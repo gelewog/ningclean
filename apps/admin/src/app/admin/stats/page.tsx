@@ -10,11 +10,16 @@ import { Textarea } from '@/components/ui/textarea'
 import { Badge } from '@/components/ui/badge'
 import { Modal } from '@/components/admin/Modal'
 import { DataTable } from '@/components/admin/DataTable'
-import { getCompanyStats, createCompanyStat, updateCompanyStat, deleteCompanyStat } from '@/lib/api'
 import { CompanyStat } from '@/types'
 import { Breadcrumb } from '@/components/admin/Breadcrumb'
 import { formatDate } from '@/lib/utils'
 import { toast } from 'sonner'
+import {
+  useCompanyStats,
+  useCreateCompanyStat,
+  useUpdateCompanyStat,
+  useDeleteCompanyStat,
+} from '@/lib/use-queries'
 
 interface CompanyStatFormData {
   title: string
@@ -41,8 +46,11 @@ const iconOptions = [
 ]
 
 export default function CompanyStatsPage() {
-  const [stats, setStats] = React.useState<CompanyStat[]>([])
-  const [loading, setLoading] = React.useState(true)
+  const { data: stats = [], isLoading, error } = useCompanyStats()
+  const { mutate: createStat, isPending: isCreating } = useCreateCompanyStat()
+  const { mutate: updateStat, isPending: isUpdating } = useUpdateCompanyStat()
+  const { mutate: deleteStat, isPending: isDeleting } = useDeleteCompanyStat()
+
   const [isModalOpen, setIsModalOpen] = React.useState(false)
   const [isDeleteModalOpen, setIsDeleteModalOpen] = React.useState(false)
   const [selectedStat, setSelectedStat] = React.useState<CompanyStat | null>(null)
@@ -57,21 +65,12 @@ export default function CompanyStatsPage() {
   })
   const [errors, setErrors] = React.useState<Partial<CompanyStatFormData>>({})
 
+  // Show error toast if query fails
   React.useEffect(() => {
-    fetchStats()
-  }, [])
-
-  async function fetchStats() {
-    setLoading(true)
-    try {
-      const data = await getCompanyStats()
-      setStats(data)
-    } catch (error) {
+    if (error) {
       toast.error('Failed to fetch company stats')
-    } finally {
-      setLoading(false)
     }
-  }
+  }, [error])
 
   function openCreateModal() {
     setIsEditing(false)
@@ -129,31 +128,40 @@ export default function CompanyStatsPage() {
       isActive: formData.isActive,
     }
 
-    try {
-      if (isEditing && selectedStat) {
-        await updateCompanyStat(selectedStat.id, statData)
-        toast.success('Company stat updated successfully')
-      } else {
-        await createCompanyStat(statData)
-        toast.success('Company stat created successfully')
-      }
-      setIsModalOpen(false)
-      fetchStats()
-    } catch (error) {
-      toast.error(`Failed to ${isEditing ? 'update' : 'create'} company stat`)
+    if (isEditing && selectedStat) {
+      updateStat(
+        { id: selectedStat.id, data: statData },
+        {
+          onSuccess: () => {
+            setIsModalOpen(false)
+          },
+          onError: () => {
+            toast.error('Failed to update company stat')
+          },
+        }
+      )
+    } else {
+      createStat(statData, {
+        onSuccess: () => {
+          setIsModalOpen(false)
+        },
+        onError: () => {
+          toast.error('Failed to create company stat')
+        },
+      })
     }
   }
 
   async function handleDelete() {
     if (!selectedStat) return
-    try {
-      await deleteCompanyStat(selectedStat.id)
-      toast.success('Company stat deleted successfully')
-      setIsDeleteModalOpen(false)
-      fetchStats()
-    } catch (error) {
-      toast.error('Failed to delete company stat')
-    }
+    deleteStat(selectedStat.id, {
+      onSuccess: () => {
+        setIsDeleteModalOpen(false)
+      },
+      onError: () => {
+        toast.error('Failed to delete company stat')
+      },
+    })
   }
 
   const columns = [
@@ -245,12 +253,14 @@ export default function CompanyStatsPage() {
     },
   ]
 
+  const loading = isLoading || isCreating || isUpdating || isDeleting
+
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-slate-900 text-gray-900 dark:text-white">
+    <div className="min-h-screen bg-gray-50 dark:bg-slate-800 text-gray-900 dark:text-white">
       {/* Topbar */}
       <Breadcrumb items={[{ label: 'Company Stats' }]} />
 
-      <div className="max-w-screen px-6 py-8 space-y-6">
+      <div className="w-full px-3 sm:px-6 py-3 sm:py-6 space-y-3 sm:space-y-6">
         {/* Page Header */}
         <motion.div
           initial={{ opacity: 0, y: -16 }}
@@ -258,8 +268,8 @@ export default function CompanyStatsPage() {
           className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"
         >
           <div>
-            <h1 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Company Stats</h1>
-            <p className="text-sm text-gray-500 dark:text-slate-400 mt-0.5">
+            <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Company Stats</h1>
+            <p className="text-xs sm:text-sm text-gray-500 dark:text-slate-400 mt-0.5">
               Manage company statistics displayed on the website
             </p>
           </div>
@@ -309,7 +319,7 @@ export default function CompanyStatsPage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.15 }}
         >
-          <Card>
+          <Card className="bg-white dark:bg-slate-900 border-gray-200 dark:border-slate-700">
             <CardContent className="p-0">
               <DataTable columns={columns} data={stats} loading={loading} />
             </CardContent>
@@ -405,7 +415,7 @@ export default function CompanyStatsPage() {
             <Button type="button" variant="outline" onClick={() => setIsModalOpen(false)}>
               Cancel
             </Button>
-            <Button type="submit" className="bg-emerald-600 hover:bg-emerald-700">
+            <Button type="submit" className="bg-emerald-600 hover:bg-emerald-700" disabled={isCreating || isUpdating}>
               {isEditing ? 'Update' : 'Create'}
             </Button>
           </div>
@@ -428,7 +438,7 @@ export default function CompanyStatsPage() {
             <Button variant="outline" onClick={() => setIsDeleteModalOpen(false)}>
               Cancel
             </Button>
-            <Button variant="error" onClick={handleDelete}>
+            <Button variant="error" onClick={handleDelete} disabled={isDeleting}>
               Delete
             </Button>
           </div>

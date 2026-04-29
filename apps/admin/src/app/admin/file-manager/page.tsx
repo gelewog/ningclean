@@ -261,7 +261,7 @@ export default function FileManagerPage() {
   ]
 
   return (
-    <div className="min-h-screen bg-gray-50/50 dark:bg-slate-900 text-gray-900 dark:text-white">
+    <div className="min-h-screen bg-gray-50/50 dark:bg-slate-800 text-gray-900 dark:text-white">
       <AnimatePresence>
         {clipboard && (
           <ClipboardIndicator
@@ -276,21 +276,40 @@ export default function FileManagerPage() {
       {/* Topbar */}
       <Breadcrumb items={[{ label: 'File Manager' }]} />
 
-      <div className="px-4 md:px-6 py-6 space-y-6">
+      <div className="w-full px-3 sm:px-6 py-3 sm:py-6 space-y-3 sm:space-y-6">
         {/* Page Header */}
-        <motion.div initial={{ opacity: 0, y: -16 }} animate={{ opacity: 1, y: 0 }} className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <motion.div 
+          initial={{ opacity: 0, y: -16 }} 
+          animate={{ opacity: 1, y: 0 }} 
+          className="flex flex-wrap items-start justify-between gap-3 sm:gap-4"
+        >
           <div>
-            <h1 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">File Manager</h1>
-            <p className="text-sm text-gray-500 dark:text-slate-400 mt-1">Kelola semua file upload</p>
+            <div className="flex items-center gap-3">
+              <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-gray-900 dark:text-white">File Manager</h1>
+              <div className="flex items-center gap-2">
+                <Button 
+                  variant="ghost" 
+                  size="icon"
+                  onClick={() => fetchFiles(currentPath)} 
+                  className="h-8 w-8 text-gray-500 dark:text-slate-400"
+                  title="Refresh"
+                >
+                  <RefreshCw className="w-4 h-4" />
+                </Button>
+                <Button 
+                  variant="outline" 
+                  size="icon"
+                  onClick={() => setIsCreateFolderModalOpen(true)} 
+                  className="h-8 w-8"
+                  title="New Folder"
+                >
+                  <FolderPlus className="w-4 h-4" />
+                </Button>
+              </div>
+            </div>
+            <p className="text-xs sm:text-sm text-gray-500 dark:text-slate-400 mt-1">Kelola semua file upload</p>
           </div>
           <div className="flex items-center gap-2">
-            <Button variant="ghost" size="sm" onClick={() => fetchFiles(currentPath)} className="text-gray-500 dark:text-slate-400">
-              <RefreshCw className="w-4 h-4" />
-            </Button>
-            <Button variant="outline" size="sm" onClick={() => setIsCreateFolderModalOpen(true)} className="gap-2">
-              <FolderPlus className="w-4 h-4" />
-              New Folder
-            </Button>
             <UploadButton currentPath={currentPath} />
           </div>
         </motion.div>
@@ -407,8 +426,8 @@ export default function FileManagerPage() {
 
             <div className="flex items-center gap-3">
               <div className="relative flex-1 sm:flex-none">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-                <Input value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} placeholder="Search files..." className="pl-10 h-10 w-full sm:w-64 bg-gray-100 dark:bg-slate-800 border-0" />
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-slate-500 z-10 pointer-events-none" />
+                <Input value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} placeholder="Search files..." className="pl-10 h-10 w-full sm:w-64 bg-gray-100 dark:bg-slate-800 border-0 relative z-1" />
               </div>
               <div className="flex items-center gap-1 p-1 bg-gray-100 dark:bg-slate-800 rounded-xl">
                 <button onClick={() => setViewMode('grid')} className={`p-2 rounded-lg transition-colors ${viewMode === 'grid' ? 'bg-white dark:bg-slate-700 shadow-sm' : 'hover:bg-gray-200 dark:hover:bg-slate-700'}`}>
@@ -435,11 +454,13 @@ export default function FileManagerPage() {
         </motion.div>
 
         {/* File List */}
-        <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-700 rounded-2xl overflow-hidden">
+        <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="sm:bg-white sm:dark:bg-slate-900 sm:border sm:border-gray-200 dark:sm:border-slate-700 sm:rounded-2xl overflow-hidden">
           {loading ? (
-            <div className="flex items-center justify-center py-20">
-              <Loader2 className="w-8 h-8 animate-spin text-emerald-500" />
-            </div>
+            viewMode === 'grid' ? (
+              <GridViewSkeleton />
+            ) : (
+              <ListViewSkeleton />
+            )
           ) : viewMode === 'grid' ? (
             <div className="p-4">
               <GridView
@@ -456,8 +477,26 @@ export default function FileManagerPage() {
               />
             </div>
           ) : (
-            <div className="divide-y divide-gray-100 dark:divide-slate-700/50">
+            <div className="hidden sm:block divide-y divide-gray-100 dark:divide-slate-700/50">
               <ListView
+                files={filteredFiles}
+                folders={filteredFolders}
+                selectedItems={selectedItems}
+                onToggleSelect={toggleSelect}
+                onNavigate={navigateToFolder}
+                onPreview={setPreviewFile}
+                onCopy={handleCopy}
+                onCut={handleCut}
+                onRename={(name, path, type) => setRenameModal({ name, path, type })}
+                onDelete={handleDeleteSingle}
+              />
+            </div>
+          )}
+          
+          {/* Mobile List View with Cards */}
+          {viewMode === 'list' && !loading && (
+            <div className="sm:hidden">
+              <MobileListView
                 files={filteredFiles}
                 folders={filteredFolders}
                 selectedItems={selectedItems}
@@ -570,7 +609,7 @@ function GridView({
               <motion.div key={folder.path} initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="group relative">
                 <button
                   onClick={() => onNavigate(folder.path)}
-                  className={`w-full p-4 rounded-2xl border-2 transition-all ${selectedItems.has(folder.path) ? 'border-emerald-500 bg-emerald-50/50 dark:bg-emerald-900/20' : 'border-dashed border-gray-200 dark:border-slate-700 hover:border-amber-400 dark:hover:border-amber-500 hover:bg-amber-50/50 dark:hover:bg-amber-900/10'}`}
+                  className={`w-full p-4 rounded-2xl border-2 transition-all sm:bg-transparent sm:dark:bg-transparent bg-white dark:bg-slate-900 ${selectedItems.has(folder.path) ? 'border-emerald-500 bg-emerald-50/50 dark:bg-emerald-900/20' : 'border-dashed border-gray-200 dark:border-slate-700 hover:border-amber-400 dark:hover:border-amber-500 hover:bg-amber-50/50 dark:hover:bg-amber-900/10'}`}
                 >
                   <div className="w-12 h-12 mx-auto rounded-xl bg-amber-100 dark:bg-amber-900/40 flex items-center justify-center mb-2">
                     <Folder className="w-6 h-6 text-amber-500" />
@@ -756,5 +795,321 @@ function ActionButton({ icon, onClick, className = '' }: { icon: React.ReactNode
     <button onClick={onClick} className={`p-1.5 rounded-lg bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 shadow-lg hover:bg-gray-50 dark:hover:bg-slate-700 transition-colors ${className}`}>
       {icon}
     </button>
+  )
+}
+
+// Mobile List View Component with Cards
+function MobileListView({
+  files, folders, selectedItems, onToggleSelect, onNavigate, onPreview, onCopy, onCut, onRename, onDelete
+}: {
+  files: FileInfo[]
+  folders: FolderInfo[]
+  selectedItems: Set<string>
+  onToggleSelect: (path: string) => void
+  onNavigate: (path: string) => void
+  onPreview: (file: FileInfo) => void
+  onCopy: (path: string, name: string, type: 'file' | 'folder') => void
+  onCut: (path: string, name: string, type: 'file' | 'folder') => void
+  onRename: (name: string, path: string, type: 'file' | 'folder') => void
+  onDelete: (path: string, type: 'file' | 'folder') => void
+}) {
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString)
+    return date.toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' })
+  }
+
+  const getFileIcon = (extension: string, isImage: boolean) => {
+    if (isImage) return <ImageIcon className="w-5 h-5" />
+    const ext = extension.toLowerCase()
+    if (['.pdf'].includes(ext)) return <FileText className="w-5 h-5 text-red-500" />
+    if (['.mp4', '.mov', '.avi'].includes(ext)) return <Film className="w-5 h-5 text-purple-500" />
+    if (['.mp3', '.wav', '.flac'].includes(ext)) return <Music className="w-5 h-5 text-green-500" />
+    if (['.zip', '.rar', '.7z', '.tar', '.gz'].includes(ext)) return <Archive className="w-5 h-5 text-amber-500" />
+    return <File className="w-5 h-5 text-gray-400" />
+  }
+
+  const getFileColor = (extension: string, isImage: boolean): string => {
+    if (isImage) return 'text-emerald-500'
+    const ext = extension.toLowerCase()
+    if (['.pdf'].includes(ext)) return 'text-red-500'
+    if (['.mp4', '.mov', '.avi'].includes(ext)) return 'text-purple-500'
+    if (['.mp3', '.wav', '.flac'].includes(ext)) return 'text-green-500'
+    if (['.zip', '.rar', '.7z', '.tar', '.gz'].includes(ext)) return 'text-amber-500'
+    return 'text-gray-400'
+  }
+
+  if (files.length === 0 && folders.length === 0) {
+    return (
+      <div className="text-center py-12">
+        <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gray-100 dark:bg-slate-800 flex items-center justify-center">
+          <Folder className="w-8 h-8 text-gray-400" />
+        </div>
+        <p className="text-gray-500 dark:text-slate-400">Tidak ada file di folder ini</p>
+      </div>
+    )
+  }
+
+  return (
+    <div className="space-y-2 p-3">
+      {/* Folders */}
+      {folders.map((folder) => (
+        <div 
+          key={folder.path} 
+          className={`bg-white dark:bg-slate-900 rounded-2xl shadow-sm p-3 transition-colors ${
+            selectedItems.has(folder.path) ? 'bg-emerald-50 dark:bg-emerald-900/20 ring-1 ring-emerald-500' : ''
+          }`}
+        >
+          <div className="flex items-center gap-3">
+            <button 
+              onClick={() => onToggleSelect(folder.path)} 
+              className="flex-shrink-0 text-gray-400 hover:text-emerald-500"
+            >
+              {selectedItems.has(folder.path) 
+                ? <CheckSquare className="w-5 h-5 text-emerald-500" /> 
+                : <Square className="w-5 h-5" />
+              }
+            </button>
+            
+            <button 
+              onClick={() => onNavigate(folder.path)}
+              className="flex items-center gap-3 flex-1 min-w-0"
+            >
+              <div className="w-10 h-10 rounded-xl bg-amber-100 dark:bg-amber-900/30 flex items-center justify-center flex-shrink-0">
+                <Folder className="w-5 h-5 text-amber-600 dark:text-amber-400" />
+              </div>
+              <div className="min-w-0">
+                <p className="font-medium text-gray-900 dark:text-white truncate text-sm">{folder.name}</p>
+                <p className="text-xs text-gray-500 dark:text-slate-400">{folder.fileCount} files</p>
+              </div>
+            </button>
+            
+            <div className="flex items-center gap-1">
+              <button 
+                onClick={(e) => { e.stopPropagation(); onRename(folder.name, folder.path, 'folder') }}
+                className="p-2 rounded-lg text-gray-400 hover:text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/20"
+              >
+                <Edit3 className="w-4 h-4" />
+              </button>
+              <button 
+                onClick={(e) => { e.stopPropagation(); onDelete(folder.path, 'folder') }}
+                className="p-2 rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20"
+              >
+                <Trash2 className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+        </div>
+      ))}
+
+      {/* Files */}
+      {files.map((file) => (
+        <div 
+          key={file.path} 
+          className={`bg-white dark:bg-slate-900 rounded-2xl shadow-sm p-3 transition-colors ${
+            selectedItems.has(file.path) ? 'bg-emerald-50 dark:bg-emerald-900/20 ring-1 ring-emerald-500' : ''
+          }`}
+        >
+          <div className="flex items-center gap-3">
+            <button 
+              onClick={() => onToggleSelect(file.path)}
+              className="flex-shrink-0 text-gray-400 hover:text-emerald-500"
+            >
+              {selectedItems.has(file.path) 
+                ? <CheckSquare className="w-5 h-5 text-emerald-500" /> 
+                : <Square className="w-5 h-5" />
+              }
+            </button>
+            
+            <button 
+              onClick={() => file.isImage ? onPreview(file) : onPreview(file)}
+              className="flex items-center gap-3 flex-1 min-w-0"
+            >
+              <div className={`w-10 h-10 rounded-xl bg-gray-100 dark:bg-slate-800 flex items-center justify-center flex-shrink-0 ${getFileColor(file.extension, file.isImage)}`}>
+                {file.isImage ? (
+                  <img 
+                    src={file.url} 
+                    alt={file.name}
+                    className="w-full h-full object-cover rounded-xl"
+                    onError={(e) => {
+                      const target = e.target as HTMLImageElement
+                      target.style.display = 'none'
+                    }}
+                  />
+                ) : (
+                  getFileIcon(file.extension, file.isImage)
+                )}
+              </div>
+              
+              <div className="min-w-0 flex-1">
+                <p className="font-medium text-gray-900 dark:text-white truncate text-sm">{file.name}</p>
+                <div className="flex items-center gap-2 text-xs text-gray-500 dark:text-slate-400">
+                  <span>{file.sizeFormatted}</span>
+                  <span>•</span>
+                  <span>{formatDate(file.modifiedAt)}</span>
+                </div>
+              </div>
+            </button>
+            
+            <div className="flex items-center gap-1">
+              <button 
+                onClick={(e) => { e.stopPropagation(); onRename(file.name, file.path, 'file') }}
+                className="p-2 rounded-lg text-gray-400 hover:text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/20"
+              >
+                <Edit3 className="w-4 h-4" />
+              </button>
+              <button 
+                onClick={(e) => { e.stopPropagation(); onDelete(file.path, 'file') }}
+                className="p-2 rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20"
+              >
+                <Trash2 className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  )
+}
+
+// Grid View Skeleton Component
+function GridViewSkeleton() {
+  return (
+    <div className="p-4">
+      {/* Folders Section Skeleton */}
+      <div className="mb-6">
+        <h3 className="text-sm font-medium text-gray-500 dark:text-slate-400 mb-3">Folders</h3>
+        <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-3">
+          {Array.from({ length: 4 }).map((_, i) => (
+            <div key={i} className="animate-pulse bg-white dark:bg-slate-900 rounded-2xl border-2 border-dashed border-gray-200 dark:border-slate-700 p-4">
+              <div className="w-12 h-12 mx-auto rounded-xl bg-amber-100 dark:bg-amber-900/20 mb-2" />
+              <div className="h-4 bg-gray-200 dark:bg-slate-700 rounded mb-1 mx-auto w-3/4" />
+              <div className="h-3 bg-gray-100 dark:bg-slate-800 rounded mx-auto w-1/2" />
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Files Section Skeleton */}
+      <div>
+        <h3 className="text-sm font-medium text-gray-500 dark:text-slate-400 mb-3">Files</h3>
+        <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-3">
+          {Array.from({ length: 8 }).map((_, i) => (
+            <div key={i} className="animate-pulse bg-white dark:bg-slate-900 rounded-2xl border border-gray-200 dark:border-slate-700 p-4">
+              <div className="aspect-square rounded-xl overflow-hidden bg-gray-100 dark:bg-slate-800 mb-2">
+                <div className="w-full h-full bg-gray-200 dark:bg-slate-700" />
+              </div>
+              <div className="h-4 bg-gray-200 dark:bg-slate-700 rounded mb-1" />
+              <div className="h-3 bg-gray-100 dark:bg-slate-800 rounded w-2/3" />
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  )
+}
+
+// List View Skeleton Component - Versi Tabel dengan Background Tepat
+function ListViewSkeleton() {
+  return (
+    <div className="sm:bg-white sm:dark:bg-slate-900 sm:border sm:border-gray-200 dark:sm:border-slate-700 sm:rounded-2xl overflow-hidden">
+      {/* Header sesuai ListView */}
+      <div className="hidden sm:grid grid-cols-12 gap-4 px-6 py-3 bg-gray-50/50 dark:bg-slate-800/30 text-sm font-medium text-gray-500 dark:text-slate-400 border-b border-gray-100 dark:border-slate-700/50">
+        <div className="col-span-6">Name</div>
+        <div className="col-span-2">Size</div>
+        <div className="col-span-3">Modified</div>
+        <div className="col-span-1" />
+      </div>
+
+      {/* Folder Skeleton */}
+      <div className="grid grid-cols-12 gap-4 px-6 py-3 items-center border-b border-gray-100 dark:border-slate-700/50 animate-pulse bg-white dark:bg-slate-900">
+        <div className="col-span-12 sm:col-span-6 flex items-center gap-3">
+          <div className="w-4 h-4 bg-gray-200 dark:bg-slate-700 rounded-sm" />
+          <div className="w-8 h-8 rounded bg-amber-200 dark:bg-amber-900/30 flex-shrink-0" />
+          <div className="h-4 bg-gray-200 dark:bg-slate-700 rounded w-28" />
+        </div>
+        <div className="hidden sm:col-span-2 sm:block">
+          <div className="h-3 bg-gray-200 dark:bg-slate-700 rounded w-16" />
+        </div>
+        <div className="hidden sm:col-span-3 sm:block">
+          <div className="h-3 bg-gray-200 dark:bg-slate-700 rounded w-20" />
+        </div>
+        <div className="hidden sm:col-span-1 sm:flex justify-end gap-1">
+          <div className="w-7 h-7 bg-gray-200 dark:bg-slate-700 rounded" />
+          <div className="w-7 h-7 bg-gray-200 dark:bg-slate-700 rounded" />
+          <div className="w-7 h-7 bg-gray-200 dark:bg-slate-700 rounded" />
+        </div>
+      </div>
+
+      {/* File Skeleton Items */}
+      {Array.from({ length: 5 }).map((_, i) => (
+        <div key={i} className="grid grid-cols-12 gap-4 px-6 py-3 items-center border-b border-gray-100 dark:border-slate-700/50 animate-pulse bg-white dark:bg-slate-900 last:border-0">
+          <div className="col-span-12 sm:col-span-6 flex items-center gap-3">
+            <div className="w-4 h-4 bg-gray-200 dark:bg-slate-700 rounded-sm" />
+            <div className="w-8 h-8 rounded bg-gray-300 dark:bg-slate-700 flex-shrink-0" />
+            <div className="h-4 bg-gray-200 dark:bg-slate-700 rounded w-40" />
+          </div>
+          <div className="hidden sm:col-span-2 sm:block">
+            <div className="h-3 bg-gray-200 dark:bg-slate-700 rounded w-14" />
+          </div>
+          <div className="hidden sm:col-span-3 sm:block">
+            <div className="h-3 bg-gray-200 dark:bg-slate-700 rounded w-20" />
+          </div>
+          <div className="hidden sm:col-span-1 sm:flex justify-end gap-1">
+            <div className="w-7 h-7 bg-gray-200 dark:bg-slate-700 rounded" />
+            <div className="w-7 h-7 bg-gray-200 dark:bg-slate-700 rounded" />
+            <div className="w-7 h-7 bg-gray-200 dark:bg-slate-700 rounded" />
+          </div>
+        </div>
+      ))}
+    </div>
+  )
+}
+
+// Mobile List Skeleton Component
+function MobileListSkeleton() {
+  return (
+    <div className="space-y-2 p-3">
+      {/* Section Title Skeleton */}
+      <div className="h-4 bg-gray-300 dark:bg-slate-700 rounded w-20 mb-2" />
+      
+      {/* Folder Cards Skeleton */}
+      {Array.from({ length: 2 }).map((_, i) => (
+        <div key={i} className="bg-white dark:bg-slate-900 rounded-2xl shadow-sm p-3">
+          <div className="flex items-center gap-3">
+            <div className="w-5 h-5 bg-gray-200 dark:bg-slate-700 flex-shrink-0" />
+            <div className="w-10 h-10 rounded-xl bg-amber-100 dark:bg-amber-900/20 flex-shrink-0" />
+            <div className="flex-1 min-w-0">
+              <div className="h-4 bg-gray-200 dark:bg-slate-700 rounded mb-1 w-3/4" />
+              <div className="h-3 bg-gray-100 dark:bg-slate-800 rounded w-1/2" />
+            </div>
+            <div className="flex items-center gap-1">
+              <div className="w-8 h-8 bg-gray-200 dark:bg-slate-700 rounded" />
+              <div className="w-8 h-8 bg-gray-200 dark:bg-slate-700 rounded" />
+            </div>
+          </div>
+        </div>
+      ))}
+
+      {/* Section Title Skeleton */}
+      <div className="h-4 bg-gray-300 dark:bg-slate-700 rounded w-16 mb-2 mt-4" />
+
+      {/* File Cards Skeleton */}
+      {Array.from({ length: 4 }).map((_, i) => (
+        <div key={i} className="bg-white dark:bg-slate-900 rounded-2xl shadow-sm p-3">
+          <div className="flex items-center gap-3">
+            <div className="w-5 h-5 bg-gray-200 dark:bg-slate-700 flex-shrink-0" />
+            <div className="w-10 h-10 rounded-xl bg-gray-100 dark:bg-slate-800 flex-shrink-0" />
+            <div className="flex-1 min-w-0">
+              <div className="h-4 bg-gray-200 dark:bg-slate-700 rounded mb-1 w-full max-w-[160px]" />
+              <div className="h-3 bg-gray-100 dark:bg-slate-800 rounded w-24" />
+            </div>
+            <div className="flex items-center gap-1">
+              <div className="w-8 h-8 bg-gray-200 dark:bg-slate-700 rounded" />
+              <div className="w-8 h-8 bg-gray-200 dark:bg-slate-700 rounded" />
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
   )
 }

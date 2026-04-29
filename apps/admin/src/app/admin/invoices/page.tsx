@@ -2,17 +2,20 @@
 
 import * as React from 'react'
 import { motion } from 'framer-motion'
-import { FileText, Search, Calendar, Download, Eye, Plus, CheckCircle, Clock, DollarSign, RotateCcw } from 'lucide-react'
+import { FileText, Search, Calendar, Download, Eye, Plus, CheckCircle, DollarSign, RotateCcw } from 'lucide-react'
 import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Badge } from '@/components/ui/badge'
 import { Modal } from '@/components/admin/Modal'
 import { Pagination } from '@/components/admin/Pagination'
-import { getBookings, getBookingInvoice, InvoiceData, createInvoice, updateInvoiceStatus } from '@/lib/api'
+import { getBookingInvoice, InvoiceData, createInvoice, updateInvoiceStatus } from '@/lib/api'
 import { formatDate } from '@/lib/utils'
+import { DataTable } from '@/components/admin/DataTable'
 import { Breadcrumb } from '@/components/admin/Breadcrumb'
 import { toast } from 'sonner'
+import { useBookings } from '@/lib/use-queries'
+import { useQueryClient } from '@tanstack/react-query'
 
 // Booking Status (lowercase keys to match API)
 const BOOKING_STATUS_COLORS: Record<string, string> = {
@@ -51,10 +54,10 @@ const INVOICE_STATUS_LABELS: Record<string, string> = {
 }
 
 export default function InvoicesPage() {
-  const [bookings, setBookings] = React.useState<any[]>([])
-  const [loading, setLoading] = React.useState(true)
+  const queryClient = useQueryClient()
   const [search, setSearch] = React.useState('')
-  const [pagination, setPagination] = React.useState({ page: 1, limit: 20, total: 0, totalPages: 0 })
+  const [page, setPage] = React.useState(1)
+  const [limit] = React.useState(20)
   const [statusFilter, setStatusFilter] = React.useState('')
   const [invoiceStatusFilter, setInvoiceStatusFilter] = React.useState('')
   const [selectedBooking, setSelectedBooking] = React.useState<any>(null)
@@ -63,31 +66,23 @@ export default function InvoicesPage() {
   const [loadingInvoice, setLoadingInvoice] = React.useState(false)
   const [generatingInvoice, setGeneratingInvoice] = React.useState<string | null>(null)
 
-  React.useEffect(() => {
-    fetchBookings()
-  }, [pagination.page, statusFilter])
+  // Use TanStack Query for bookings
+  const { data: bookingsData, isLoading: loading, error } = useBookings({
+    page,
+    limit,
+    status: statusFilter || undefined,
+  })
 
-  async function fetchBookings() {
-    setLoading(true)
-    try {
-      const response = await getBookings({
-        page: pagination.page,
-        limit: pagination.limit,
-        status: statusFilter || undefined,
-      })
-      // Use actual booking data from API (may include invoice if API returns it)
-      setBookings(response.data)
-      setPagination((prev) => ({
-        ...prev,
-        total: response.total,
-        totalPages: response.totalPages,
-      }))
-    } catch (error) {
+  const bookings = bookingsData?.data || []
+  const totalPages = bookingsData?.totalPages || 0
+  const total = bookingsData?.total || 0
+
+  // Handle error
+  React.useEffect(() => {
+    if (error) {
       toast.error('Gagal memuat bookings')
-    } finally {
-      setLoading(false)
     }
-  }
+  }, [error])
 
   // Helper to get invoice status from booking
   const getInvoiceStatus = (booking: any): string => {
@@ -105,10 +100,8 @@ export default function InvoicesPage() {
       })
       
       toast.success('Invoice berhasil dibuat')
-      // Update local state
-      setBookings(prev => prev.map(b => 
-        b.id === booking.id ? { ...b, invoice } : b
-      ))
+      // Invalidate bookings cache
+      queryClient.invalidateQueries({ queryKey: ['bookings'] })
     } catch (error) {
       toast.error('Gagal membuat invoice')
     } finally {
@@ -121,7 +114,8 @@ export default function InvoicesPage() {
     try {
       await updateInvoiceStatus(bookingId, newStatus)
       toast.success(`Status invoice diupdate ke ${newStatus}`)
-      fetchBookings()
+      // Invalidate bookings cache
+      queryClient.invalidateQueries({ queryKey: ['bookings'] })
     } catch (error) {
       toast.error('Gagal update status')
     }
@@ -153,7 +147,7 @@ export default function InvoicesPage() {
   const filteredBookings = React.useMemo(() => {
     let filtered = bookings.filter(booking =>
       booking.orderNumber?.toLowerCase().includes(search.toLowerCase()) ||
-      booking.guestName?.toLowerCase().includes(search.toLowerCase()) ||
+      booking.customerName?.toLowerCase().includes(search.toLowerCase()) ||
       booking.address?.toLowerCase().includes(search.toLowerCase())
     )
     
@@ -169,11 +163,11 @@ export default function InvoicesPage() {
   }, [bookings, search, invoiceStatusFilter])
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-slate-900 text-gray-900 dark:text-white">
+    <div className="min-h-screen bg-gray-50 dark:bg-slate-800 text-gray-900 dark:text-white">
       {/* Topbar */}
       <Breadcrumb items={[{ label: 'Invoices' }]} />
 
-      <div className="w-full px-4 md:px-6 py-6 space-y-6">
+      <div className="w-full px-3 sm:px-6 py-3 sm:py-6 space-y-3 sm:space-y-6">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: -16 }}
@@ -181,49 +175,54 @@ export default function InvoicesPage() {
         >
           <div>
             <h1 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Invoice</h1>
-            <p className="text-sm text-gray-500 dark:text-slate-400 mt-0.5">Generate dan preview invoice untuk bookings</p>
+            <p className="text-xs sm:text-sm text-gray-500 dark:text-slate-400 mt-0.5">Buat dan lihat invoice untuk pesanan</p>
           </div>
         </motion.div>
 
-        {/* Filters */}
+        {/* Search & Filters */}
         <motion.div
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="flex flex-col gap-3 sm:flex-row"
+          className="bg-white dark:bg-slate-900 rounded-xl border border-gray-200 dark:border-slate-700 shadow-sm p-3 sm:p-4"
         >
-          <div className="relative flex-1">
-            <Input
-              icon={<Search className="h-4 w-4 text-gray-400 dark:text-slate-500" />}
-              placeholder="Cari order number, nama, alamat..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-            />
+          <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
+            <div className="relative flex-1">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400 dark:text-slate-500 z-10 pointer-events-none" />
+              <Input
+                placeholder="Cari order number, nama, alamat..."
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                className="pl-10 bg-white dark:bg-slate-800 border-gray-200 dark:border-slate-700 relative z-1"
+              />
+            </div>
+            <div className="flex gap-2 flex-1 sm:flex-none">
+              <select
+                className="h-10 rounded-lg border border-gray-200 dark:border-slate-600 bg-white dark:bg-slate-800 px-3 text-sm text-gray-700 dark:text-slate-200 flex-1 sm:flex-none"
+                value={statusFilter}
+                onChange={(e) => { setStatusFilter(e.target.value); setPage(1); }}
+              >
+                <option value="">Semua Status</option>
+                <option value="PENDING">Pending</option>
+                <option value="CONFIRMED">Dikonfirmasi</option>
+                <option value="IN_PROGRESS">Sedang Dikerjakan</option>
+                <option value="COMPLETED">Selesai</option>
+                <option value="CANCELLED">Dibatalkan</option>
+              </select>
+              
+              <select
+                className="h-10 rounded-lg border border-gray-200 dark:border-slate-600 bg-white dark:bg-slate-800 px-3 text-sm text-gray-700 dark:text-slate-200 flex-1 sm:flex-none"
+                value={invoiceStatusFilter}
+                onChange={(e) => { setInvoiceStatusFilter(e.target.value); setPage(1); }}
+              >
+                <option value="">Semua Invoice</option>
+                <option value="DRAFT">Draf</option>
+                <option value="ISSUED">Terbit</option>
+                <option value="PAID">Lunas</option>
+                <option value="CANCELLED">Dibatalkan</option>
+              </select>
+            </div>
           </div>
-          <select
-            className="h-10 rounded-xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 text-sm"
-            value={statusFilter}
-            onChange={(e) => { setStatusFilter(e.target.value); setPagination(prev => ({ ...prev, page: 1 })); }}
-          >
-            <option value="">Semua Status Booking</option>
-            <option value="PENDING">Pending</option>
-            <option value="CONFIRMED">Dikonfirmasi</option>
-            <option value="IN_PROGRESS">Sedang Dikerjakan</option>
-            <option value="COMPLETED">Selesai</option>
-            <option value="CANCELLED">Dibatalkan</option>
-          </select>
-          <select
-            className="h-10 rounded-xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 text-sm"
-            value={invoiceStatusFilter}
-            onChange={(e) => { setInvoiceStatusFilter(e.target.value); setPagination(prev => ({ ...prev, page: 1 })); }}
-          >
-            <option value="">Semua Status Invoice</option>
-            <option value="none">Belum Dibuat</option>
-            <option value="draft">Draf</option>
-            <option value="issued">Terbit</option>
-            <option value="paid">Lunas</option>
-            <option value="cancelled">Dibatalkan</option>
-          </select>
         </motion.div>
 
         {/* Bookings List */}
@@ -232,98 +231,133 @@ export default function InvoicesPage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.15 }}
         >
-          <div className="bg-white dark:bg-slate-900 border border-gray-100 dark:border-slate-700 rounded-2xl overflow-hidden shadow-sm dark:shadow-slate-900/50">
-            {loading ? (
-              <div className="flex items-center justify-center py-20">
-                <div className="h-8 w-8 animate-spin rounded-full border-4 border-gray-200 dark:border-slate-700 border-t-emerald-500" />
-              </div>
-            ) : filteredBookings.length === 0 ? (
-              <div className="text-center py-20">
-                <FileText className="h-12 w-12 text-gray-300 mx-auto mb-4" />
-                <p className="text-gray-500 dark:text-slate-400">Tidak ada bookings</p>
-              </div>
-            ) : (
-              <div className="divide-y divide-gray-100 dark:divide-slate-700">
-                {filteredBookings.map((booking) => {
-                  const invStatus = getInvoiceStatus(booking)
-                  const hasInvoice = invStatus !== 'none'
-                  
-                  return (
-                    <div
-                      key={booking.id}
-                      className="flex flex-col sm:flex-row sm:items-center gap-3 p-4 hover:bg-gray-50 dark:hover:bg-slate-800 transition-colors"
-                    >
-                      <div className="flex items-center gap-3 sm:gap-4 flex-1 min-w-0">
-                        <div className="h-10 sm:h-12 w-10 sm:w-12 rounded-lg bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center flex-shrink-0">
-                          <FileText className="h-5 sm:h-6 w-5 sm:w-6 text-emerald-600" />
+          <div className="sm:bg-white sm:dark:bg-slate-900 sm:shadow-sm sm:border sm:border-gray-200 dark:sm:border-slate-700 sm:rounded-2xl overflow-hidden">
+            <DataTable
+              columns={[
+                { key: 'orderNumber', label: 'Order' },
+                { key: 'customerName', label: 'Pelanggan' },
+                { key: 'totalAmount', label: 'Total' },
+                { key: 'status', label: 'Status' },
+              ]}
+              data={filteredBookings}
+              loading={loading}
+              renderCard={(row: any) => {
+                const invStatus = getInvoiceStatus(row)
+                const hasInvoice = invStatus !== 'none'
+                return (
+                  <div className="bg-white dark:bg-slate-900 rounded-2xl border border-gray-200 dark:border-slate-700 shadow-sm hover:shadow-md transition-all duration-300 p-4 active:scale-[0.99]">
+                    {/* Header - Order & Invoice Status */}
+                    <div className="flex items-center justify-between pb-3 border-b border-gray-100 dark:border-slate-700/50">
+                      <div className="flex items-center gap-3">
+                        <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-600 flex items-center justify-center flex-shrink-0">
+                          <FileText className="h-5 w-5 text-white" />
                         </div>
-                        <div className="flex-1 min-w-0">
-                          <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 mb-1">
-                            <h3 className="font-medium text-gray-900 dark:text-white text-sm sm:text-base truncate">{booking.orderNumber}</h3>
-                            <Badge variant={(booking.status || 'unknown').toLowerCase() === 'confirmed' ? 'success' : (booking.status || 'unknown').toLowerCase() === 'pending' ? 'warning' : (booking.status || 'unknown').toLowerCase() === 'cancelled' ? 'error' : 'default'} className="text-[10px] sm:text-xs px-1.5 py-0">
-                              {BOOKING_STATUS_LABELS[(booking.status || 'unknown').toLowerCase()]}
-                            </Badge>
-                            <Badge variant={invStatus === 'paid' ? 'success' : invStatus === 'unpaid' ? 'warning' : 'error'} className="text-[10px] sm:text-xs px-1.5 py-0">
-                              {INVOICE_STATUS_LABELS[invStatus]}
-                            </Badge>
-                          </div>
-                          <div className="flex flex-wrap items-center gap-1 sm:gap-3 text-xs sm:text-sm text-gray-500 dark:text-slate-400">
-                            <span className="truncate max-w-[100px] sm:max-w-none">{booking.guestName || 'Guest'}</span>
-                            <span className="hidden sm:inline">•</span>
-                            <span className="flex items-center gap-1">
-                              <Calendar className="h-3 w-3" />
-                              {booking.serviceDate ? formatDate(booking.serviceDate) : '-'}
-                            </span>
-                          </div>
+                        <div>
+                          <p className="font-semibold text-gray-900 dark:text-white text-sm">{row.orderNumber}</p>
+                          <p className="text-xs text-gray-500 dark:text-slate-400">{row.customerName || 'Guest'}</p>
                         </div>
                       </div>
-                      
-                      <div className="flex items-center justify-between sm:justify-end gap-2 sm:gap-4">
-                        <p className="font-semibold text-gray-900 dark:text-white text-sm sm:text-base">
-                          Rp {Number(booking.totalAmount || 0).toLocaleString('id-ID')}
+                      <span className={`text-xs px-2 py-1 rounded-full ${INVOICE_STATUS_COLORS[invStatus]}`}>
+                        {INVOICE_STATUS_LABELS[invStatus]}
+                      </span>
+                    </div>
+
+                    {/* Booking Status & Date */}
+                    <div className="py-3 grid grid-cols-2 gap-3">
+                      <div className="rounded-xl bg-gray-50 dark:bg-slate-800 p-2.5">
+                        <p className="text-xs text-gray-400 dark:text-slate-500 mb-0.5">Status Booking</p>
+                        <span className={`text-xs px-2 py-0.5 rounded-full inline-block ${BOOKING_STATUS_COLORS[(row.status || 'unknown').toLowerCase()]}`}>
+                          {BOOKING_STATUS_LABELS[(row.status || 'unknown').toLowerCase()]}
+                        </span>
+                      </div>
+                      <div className="rounded-xl bg-blue-50 dark:bg-blue-900/20 p-2.5">
+                        <p className="text-xs text-gray-400 dark:text-slate-500 mb-0.5">Jadwal</p>
+                        <p className="text-sm font-medium text-gray-900 dark:text-white flex items-center gap-1">
+                          <Calendar className="h-3 w-3 text-blue-500" />
+                          {row.scheduledDate ? formatDate(row.scheduledDate) : '-'}
                         </p>
-                        
-                        <div className="flex items-center gap-2">
-                          {hasInvoice ? (
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              onClick={() => handlePreview(booking)}
-                              disabled={loadingInvoice}
-                              className="gap-1.5 sm:gap-2 px-2.5 sm:px-3"
-                            >
-                              <Eye className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
-                              <span className="hidden sm:inline">Preview</span>
-                            </Button>
-                          ) : (
-                            <Button
-                              size="sm"
-                              onClick={() => handleGenerateInvoice(booking)}
-                              disabled={generatingInvoice === booking.id}
-                              className="gap-1.5 sm:gap-2 bg-emerald-600 hover:bg-emerald-700 px-2.5 sm:px-3"
-                            >
-                              {generatingInvoice === booking.id ? (
-                                <span className="animate-spin">⏳</span>
-                              ) : (
-                                <Plus className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
-                              )}
-                              <span className="hidden sm:inline">Buat Invoice</span>
-                              <span className="sm:hidden">Buat</span>
-                            </Button>
-                          )}
-                        </div>
                       </div>
                     </div>
-                  )
-                })}
-              </div>
-            )}
-            {pagination.totalPages > 1 && (
+
+                    {/* Total & Actions */}
+                    <div className="flex items-center justify-between pt-3 border-t border-gray-100 dark:border-slate-700/50">
+                      <div>
+                        <p className="text-xs text-gray-400 dark:text-slate-500">Total</p>
+                        <p className="text-lg font-bold text-emerald-600 dark:text-emerald-400">
+                          Rp {Number(row.totalAmount || 0).toLocaleString('id-ID')}
+                        </p>
+                      </div>
+                      {hasInvoice ? (
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => handlePreview(row)}
+                          disabled={loadingInvoice}
+                          className="gap-1.5"
+                        >
+                          <Eye className="h-4 w-4" />
+                          <span className="hidden sm:inline">Preview</span>
+                        </Button>
+                      ) : (
+                        <Button
+                          size="sm"
+                          onClick={() => handleGenerateInvoice(row)}
+                          disabled={generatingInvoice === row.id}
+                          className="gap-1.5 bg-emerald-600 hover:bg-emerald-700"
+                        >
+                          {generatingInvoice === row.id ? (
+                            <span className="animate-spin">⏳</span>
+                          ) : (
+                            <Plus className="h-4 w-4" />
+                          )}
+                          Buat
+                        </Button>
+                      )}
+                    </div>
+                  </div>
+                )
+              }}
+              skeletonCard={(i: number) => (
+                <div className="bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-700 rounded-2xl p-4 animate-pulse shadow-sm">
+                  {/* Header Skeleton */}
+                  <div className="flex items-center justify-between pb-3 border-b border-gray-100 dark:border-slate-700">
+                    <div className="flex items-center gap-3">
+                      <div className="h-10 w-10 rounded-xl bg-emerald-100 dark:bg-slate-700 flex-shrink-0" />
+                      <div className="space-y-2">
+                        <div className="h-4 w-24 rounded bg-gray-200 dark:bg-slate-700" />
+                        <div className="h-3 w-16 rounded bg-gray-100 dark:bg-slate-700" />
+                      </div>
+                    </div>
+                    <div className="h-6 w-16 rounded-full bg-gray-200 dark:bg-slate-700" />
+                  </div>
+                  {/* Stats Skeleton */}
+                  <div className="py-3 grid grid-cols-2 gap-3">
+                    <div className="h-14 rounded-xl bg-gray-200 dark:bg-slate-700" />
+                    <div className="h-14 rounded-xl bg-blue-100 dark:bg-slate-700" />
+                  </div>
+                  {/* Footer Skeleton */}
+                  <div className="flex items-center justify-between pt-3 border-t border-gray-100 dark:border-slate-700">
+                    <div className="space-y-1">
+                      <div className="h-3 w-10 rounded bg-gray-100 dark:bg-slate-700" />
+                      <div className="h-5 w-24 rounded bg-emerald-100 dark:bg-slate-700" />
+                    </div>
+                    <div className="h-8 w-20 rounded-lg bg-gray-200 dark:bg-slate-700" />
+                  </div>
+                </div>
+              )}
+              emptyState={
+                <div className="text-center py-20">
+                  <FileText className="h-12 w-12 text-gray-300 mx-auto mb-4" />
+                  <p className="text-gray-500 dark:text-slate-400">Tidak ada pesanan</p>
+                </div>
+              }
+            />
+            {totalPages > 1 && (
               <div className="border-t border-gray-100 dark:border-slate-700">
                 <Pagination
-                  currentPage={pagination.page}
-                  totalPages={pagination.totalPages}
-                  onPageChange={(page) => setPagination(prev => ({ ...prev, page }))}
+                  currentPage={page}
+                  totalPages={totalPages}
+                  onPageChange={setPage}
                 />
               </div>
             )}
@@ -370,40 +404,40 @@ export default function InvoicesPage() {
                 </div>
                 <div className="text-right">
                   <h2 className="text-xl font-bold text-emerald-600 dark:text-emerald-400">{invoiceData.template.companyName}</h2>
-                  <p className="text-sm text-gray-500 dark:text-slate-400">{invoiceData.template.companyAddress}</p>
-                  <p className="text-sm text-gray-500 dark:text-slate-400">{invoiceData.template.companyPhone}</p>
-                  <p className="text-sm text-gray-500 dark:text-slate-400">{invoiceData.template.companyEmail}</p>
+                  <p className="text-xs sm:text-sm text-gray-500 dark:text-slate-400">{invoiceData.template.companyAddress}</p>
+                  <p className="text-xs sm:text-sm text-gray-500 dark:text-slate-400">{invoiceData.template.companyPhone}</p>
+                  <p className="text-xs sm:text-sm text-gray-500 dark:text-slate-400">{invoiceData.template.companyEmail}</p>
                 </div>
               </div>
 
               {/* Invoice Info */}
               <div className="grid grid-cols-2 gap-8 mb-8">
                 <div>
-                  <p className="text-sm text-gray-500 dark:text-slate-400 mb-1">Tanggal Invoice</p>
+                  <p className="text-xs sm:text-sm text-gray-500 dark:text-slate-400 mb-1">Tanggal Invoice</p>
                   <p className="font-medium">{invoiceData.invoice.date}</p>
                 </div>
                 <div>
-                  <p className="text-sm text-gray-500 dark:text-slate-400 mb-1">Bill To</p>
+                  <p className="text-xs sm:text-sm text-gray-500 dark:text-slate-400 mb-1">Pelanggan</p>
                   <p className="font-medium">{invoiceData.invoice.customerName}</p>
-                  <p className="text-sm text-gray-500 dark:text-slate-400">{invoiceData.invoice.customerEmail}</p>
-                  <p className="text-sm text-gray-500 dark:text-slate-400">{invoiceData.invoice.customerPhone}</p>
+                  <p className="text-xs sm:text-sm text-gray-500 dark:text-slate-400">{invoiceData.invoice.customerEmail}</p>
+                  <p className="text-xs sm:text-sm text-gray-500 dark:text-slate-400">{invoiceData.invoice.customerPhone}</p>
                 </div>
               </div>
 
               {/* Service Details */}
               <div className="mb-4">
-                <p className="text-sm text-gray-500 dark:text-slate-400 mb-1">Service Date</p>
+                <p className="text-xs sm:text-sm text-gray-500 dark:text-slate-400 mb-1">Tanggal Layanan</p>
                 <p className="font-medium">{invoiceData.booking.serviceDateFormatted}</p>
-                <p className="text-sm text-gray-500 dark:text-slate-400">Address: {invoiceData.booking.address}</p>
+                <p className="text-xs sm:text-sm text-gray-500 dark:text-slate-400">Alamat: {invoiceData.booking.address}</p>
               </div>
 
               {/* Items Table */}
               <table className="w-full mb-8">
                 <thead>
                   <tr className="border-b-2 border-gray-200 dark:border-slate-700">
-                    <th className="text-left py-3 text-sm font-semibold text-gray-600 dark:text-slate-300">Description</th>
-                    <th className="text-center py-3 text-sm font-semibold text-gray-600 dark:text-slate-300">Qty</th>
-                    <th className="text-right py-3 text-sm font-semibold text-gray-600 dark:text-slate-300">Price</th>
+                    <th className="text-left py-3 text-sm font-semibold text-gray-600 dark:text-slate-300">Deskripsi</th>
+                    <th className="text-center py-3 text-sm font-semibold text-gray-600 dark:text-slate-300">Jumlah</th>
+                    <th className="text-right py-3 text-sm font-semibold text-gray-600 dark:text-slate-300">Harga</th>
                     <th className="text-right py-3 text-sm font-semibold text-gray-600 dark:text-slate-300">Total</th>
                   </tr>
                 </thead>
@@ -412,7 +446,7 @@ export default function InvoicesPage() {
                     <tr key={index} className="border-b border-gray-100 dark:border-slate-700">
                       <td className="py-3">
                         <p className="font-medium text-gray-900 dark:text-white">{item.name}</p>
-                        <p className="text-sm text-gray-500 dark:text-slate-400">{item.description}</p>
+                        <p className="text-xs sm:text-sm text-gray-500 dark:text-slate-400">{item.description}</p>
                       </td>
                       <td className="py-3 text-center text-gray-900 dark:text-white">{item.quantity}</td>
                       <td className="py-3 text-right text-gray-900 dark:text-white">Rp {item.price.toLocaleString('id-ID')}</td>
@@ -445,7 +479,7 @@ export default function InvoicesPage() {
               {/* Notes */}
               {invoiceData.template.notes && (
                 <div className="mt-8 p-4 bg-gray-50 dark:bg-slate-800 rounded-lg">
-                  <p className="text-sm text-gray-500 dark:text-slate-400">Notes:</p>
+                  <p className="text-xs sm:text-sm text-gray-500 dark:text-slate-400">Catatan:</p>
                   <p className="text-sm text-gray-900 dark:text-white">{invoiceData.template.notes}</p>
                 </div>
               )}
@@ -504,7 +538,7 @@ export default function InvoicesPage() {
               </Button>
               <Button onClick={handlePrint} className="bg-emerald-600 hover:bg-emerald-700 gap-2">
                 <Download className="h-4 w-4" />
-                Print / Download
+                Cetak / Unduh
               </Button>
             </div>
           </div>

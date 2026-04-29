@@ -2,19 +2,24 @@
 
 import * as React from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { 
-  Plus, Edit, Trash2, MapPin, Calendar, Star, X, 
+import {
+  Plus, Edit, Trash2, MapPin, Calendar, Star, X,
   AlertCircle, Globe, Search, Hash
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Badge } from '@/components/ui/badge'
 import { DataTable } from '@/components/admin/DataTable'
-import { getServiceAreas, createServiceArea, updateServiceArea, deleteServiceArea } from '@/lib/api'
 import { ServiceArea } from '@/types'
 import { formatDate } from '@/lib/utils'
 import { toast } from 'sonner'
 import { Breadcrumb } from '@/components/admin/Breadcrumb'
+import {
+  useServiceAreas,
+  useCreateServiceArea,
+  useUpdateServiceArea,
+  useDeleteServiceArea,
+} from '@/lib/use-queries'
 
 interface AreaFormData {
   city: string
@@ -83,14 +88,14 @@ function AreaFormModal({
         className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm"
         onClick={onClose}
       />
-      
-      <div className="fixed inset-0 z-50 flex items-start sm:items-center justify-center p-0 sm:p-6 pointer-events-none">
+
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 pointer-events-none">
         <motion.div
           initial={{ opacity: 0, scale: 0.95, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: 20 }}
           transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-          className="pointer-events-auto w-full h-full sm:h-auto sm:max-w-xl bg-white dark:bg-slate-900 sm:rounded-2xl shadow-2xl border-0 sm:border border-gray-200 dark:border-slate-700 overflow-hidden flex flex-col sm:max-h-[90vh]"
+          className="pointer-events-auto w-full max-w-xl bg-white dark:bg-slate-900 rounded-2xl shadow-2xl border border-gray-200 dark:border-slate-700 overflow-hidden flex flex-col max-h-[90vh]"
           onClick={(e) => e.stopPropagation()}
         >
           {/* Header */}
@@ -248,8 +253,8 @@ function AreaFormModal({
             <Button variant="outline" onClick={onClose}>
               Batal
             </Button>
-            <Button 
-              onClick={onSave} 
+            <Button
+              onClick={onSave}
               disabled={saving}
               className="bg-emerald-600 hover:bg-emerald-700 gap-2"
             >
@@ -303,14 +308,14 @@ function AreaDeleteModal({
         className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm"
         onClick={onClose}
       />
-      
-      <div className="fixed inset-0 z-50 flex items-start sm:items-center justify-center p-0 sm:p-6 pointer-events-none">
+
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 pointer-events-none">
         <motion.div
           initial={{ opacity: 0, scale: 0.95, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: 20 }}
           transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-          className="pointer-events-auto w-full h-full sm:h-auto sm:max-w-md bg-white dark:bg-slate-900 sm:rounded-2xl shadow-2xl border-0 sm:border border-gray-200 dark:border-slate-700 overflow-hidden"
+          className="pointer-events-auto w-full max-w-md bg-white dark:bg-slate-900 rounded-2xl shadow-2xl border border-gray-200 dark:border-slate-700 overflow-hidden"
           onClick={(e) => e.stopPropagation()}
         >
           <div className="p-6">
@@ -320,7 +325,7 @@ function AreaDeleteModal({
               </div>
               <div>
                 <h2 className="text-lg font-bold text-gray-900 dark:text-white">Hapus Service Area</h2>
-                <p className="text-sm text-gray-500 dark:text-slate-400">
+                <p className="text-xs sm:text-sm text-gray-500 dark:text-slate-400">
                   Tindakan ini tidak dapat dibatalkan
                 </p>
               </div>
@@ -347,8 +352,8 @@ function AreaDeleteModal({
               <Button variant="outline" onClick={onClose}>
                 Batal
               </Button>
-              <Button 
-                onClick={onConfirm} 
+              <Button
+                onClick={onConfirm}
                 disabled={deleting}
                 className="bg-red-600 hover:bg-red-700 gap-2"
               >
@@ -373,8 +378,12 @@ function AreaDeleteModal({
 }
 
 export default function AreasPage() {
-  const [items, setItems] = React.useState<ServiceArea[]>([])
-  const [loading, setLoading] = React.useState(true)
+  // TanStack Query hooks
+  const { data: items = [], isLoading: loading, refetch } = useServiceAreas()
+  const createMutation = useCreateServiceArea()
+  const updateMutation = useUpdateServiceArea()
+  const deleteMutation = useDeleteServiceArea()
+
   const [isModalOpen, setIsModalOpen] = React.useState(false)
   const [isDeleteModalOpen, setIsDeleteModalOpen] = React.useState(false)
   const [selectedItem, setSelectedItem] = React.useState<ServiceArea | null>(null)
@@ -389,25 +398,7 @@ export default function AreasPage() {
     isFeatured: false,
   })
   const [errors, setErrors] = React.useState<Partial<AreaFormData>>({})
-  const [saving, setSaving] = React.useState(false)
-  const [deleting, setDeleting] = React.useState(false)
   const [search, setSearch] = React.useState('')
-
-  React.useEffect(() => {
-    fetchItems()
-  }, [])
-
-  async function fetchItems() {
-    setLoading(true)
-    try {
-      const data = await getServiceAreas()
-      setItems(data)
-    } catch (error) {
-      toast.error('Failed to fetch service areas')
-    } finally {
-      setLoading(false)
-    }
-  }
 
   function openCreateModal() {
     setIsEditing(false)
@@ -458,7 +449,6 @@ export default function AreasPage() {
   async function handleSubmit() {
     if (!validateForm()) return
 
-    setSaving(true)
     const coverageArray = formData.coverage
       ? formData.coverage.split(',').map(p => p.trim()).filter(Boolean)
       : []
@@ -475,41 +465,39 @@ export default function AreasPage() {
 
     try {
       if (isEditing && selectedItem) {
-        await updateServiceArea(selectedItem.id, itemData)
+        await updateMutation.mutateAsync({ id: selectedItem.id, data: itemData })
         toast.success('Service area updated successfully')
       } else {
-        await createServiceArea(itemData)
+        await createMutation.mutateAsync(itemData)
         toast.success('Service area created successfully')
       }
       setIsModalOpen(false)
-      fetchItems()
+      refetch()
     } catch (error) {
       toast.error(`Failed to ${isEditing ? 'update' : 'create'} service area`)
-    } finally {
-      setSaving(false)
     }
   }
 
   async function handleDelete() {
     if (!selectedItem) return
-    setDeleting(true)
     try {
-      await deleteServiceArea(selectedItem.id)
+      await deleteMutation.mutateAsync(selectedItem.id)
       toast.success('Service area deleted successfully')
       setIsDeleteModalOpen(false)
-      fetchItems()
+      refetch()
     } catch (error) {
       toast.error('Failed to delete service area')
-    } finally {
-      setDeleting(false)
     }
   }
 
   async function handleToggleFeatured(item: ServiceArea) {
     try {
-      await updateServiceArea(item.id, { isFeatured: !item.isFeatured })
+      await updateMutation.mutateAsync({
+        id: item.id,
+        data: { isFeatured: !item.isFeatured }
+      })
       toast.success(`Area ${!item.isFeatured ? 'featured' : 'unfeatured'}`)
-      fetchItems()
+      refetch()
     } catch (error) {
       toast.error('Failed to update area')
     }
@@ -518,8 +506,8 @@ export default function AreasPage() {
   const filteredItems = React.useMemo(() => {
     if (!search) return items
     const term = search.toLowerCase()
-    return items.filter(item => 
-      item.city.toLowerCase().includes(term) || 
+    return items.filter(item =>
+      item.city.toLowerCase().includes(term) ||
       item.region.toLowerCase().includes(term) ||
       item.slug.toLowerCase().includes(term)
     )
@@ -612,30 +600,31 @@ export default function AreasPage() {
   ]
 
   return (
-    <div className="min-h-screen bg-gray-50/50 dark:bg-slate-900 text-gray-900 dark:text-white">
+    <div className="min-h-screen bg-gray-50/50 dark:bg-slate-800 text-gray-900 dark:text-white">
       {/* Topbar */}
       <Breadcrumb items={[{ label: 'Service Areas' }]} />
 
-      <div className="w-full px-4 md:px-6 py-6 space-y-6">
+      <div className="w-full px-3 sm:px-6 py-3 sm:py-6 space-y-3 sm:space-y-6">
         {/* Page Header */}
         <motion.div
           initial={{ opacity: 0, y: -16 }}
           animate={{ opacity: 1, y: 0 }}
-          className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"
+          className="flex flex-wrap items-start justify-between gap-3 sm:gap-4"
         >
           <div>
-            <h1 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Service Areas</h1>
-            <p className="text-sm text-gray-500 dark:text-slate-400 mt-1">Manage service coverage areas</p>
+            <div className="flex items-center gap-3">
+              <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Service Areas</h1>
+              <Button onClick={openCreateModal} className="bg-emerald-600 hover:bg-emerald-700 h-8 text-xs px-3">
+                <Plus className="h-4 w-4" />
+              </Button>
+            </div>
+            <p className="text-xs sm:text-sm text-gray-500 dark:text-slate-400 mt-1">Manage service coverage areas</p>
           </div>
           <div className="flex items-center gap-2">
-            <div className="px-4 py-2 bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700">
-              <span className="text-sm text-gray-500 dark:text-slate-400">Total: </span>
-              <span className="text-sm font-bold text-gray-900 dark:text-white">{items.length}</span>
+            <div className="px-2 sm:px-3 py-1.5 sm:py-2 bg-white dark:bg-slate-900 rounded-lg sm:rounded-xl border border-gray-200 dark:border-slate-600">
+              <span className="text-xs sm:text-sm text-gray-500 dark:text-slate-400">Total: </span>
+              <span className="text-xs sm:text-sm font-bold text-gray-900 dark:text-white">{items.length}</span>
             </div>
-            <Button onClick={openCreateModal} className="bg-emerald-600 hover:bg-emerald-700 gap-2">
-              <Plus className="h-4 w-4" />
-              New Area
-            </Button>
           </div>
         </motion.div>
 
@@ -644,12 +633,13 @@ export default function AreasPage() {
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
+          className="bg-white dark:bg-slate-900 rounded-xl border border-gray-200 dark:border-slate-700 shadow-sm p-3 sm:p-4"
         >
           <div className="relative max-w-md">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400 dark:text-slate-500 z-10 pointer-events-none" />
             <Input
               placeholder="Search areas..."
-              className="pl-10 bg-white dark:bg-slate-800 border-gray-200 dark:border-slate-700"
+              className="pl-10 bg-white dark:bg-slate-800 border-gray-200 dark:border-slate-700 relative z-1"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
             />
@@ -662,7 +652,7 @@ export default function AreasPage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.15 }}
         >
-          <div className="bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-700 rounded-2xl overflow-hidden shadow-sm">
+          <div className="sm:bg-white sm:dark:bg-slate-900 sm:border sm:border-gray-200 dark:sm:border-slate-700 sm:rounded-2xl overflow-hidden shadow-sm">
             <DataTable
               columns={columns}
               data={filteredItems}
@@ -680,6 +670,116 @@ export default function AreasPage() {
                   </p>
                 </div>
               }
+              renderCard={(row: ServiceArea) => (
+                <div className="bg-white dark:bg-slate-900 rounded-2xl border border-gray-200 dark:border-slate-700 shadow-sm hover:shadow-md transition-all duration-300 p-3 cursor-pointer active:scale-[0.99]">
+                  {/* Header - Avatar & Name */}
+                  <div className="flex items-start gap-3 pb-2 border-b border-gray-100 dark:border-slate-700/50">
+                    <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-600 text-white shadow-lg shadow-emerald-500/20 flex-shrink-0">
+                      <MapPin className="h-6 w-6" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-1.5 flex-wrap">
+                        <p className="font-semibold text-gray-900 dark:text-white truncate">{row.city}</p>
+                        {row.isFeatured && <Star className="h-3.5 w-3.5 text-amber-500 fill-amber-500 flex-shrink-0" />}
+                      </div>
+                      <p className="text-xs text-gray-500 dark:text-slate-400 truncate">{row.region}</p>
+                    </div>
+                    <button
+                      onClick={(e) => { e.stopPropagation(); openEditModal(row); }}
+                      className="w-8 h-8 rounded-lg bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-600 flex items-center justify-center text-gray-500 dark:text-slate-400 hover:bg-emerald-50 dark:hover:bg-emerald-900/30 hover:text-emerald-600 dark:hover:text-emerald-400 hover:border-emerald-200 dark:hover:border-emerald-700/50 transition-all flex-shrink-0"
+                    >
+                      <Edit className="h-4 w-4" />
+                    </button>
+                  </div>
+
+                  {/* Stats Grid */}
+                  <div className="grid grid-cols-2 gap-2 py-2">
+                    <div className="bg-blue-50/50 dark:bg-blue-900/10 rounded-xl p-2.5 flex items-center gap-2">
+                      <div className="w-8 h-8 rounded-lg bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center flex-shrink-0">
+                        <Hash className="h-3.5 w-3.5 text-blue-600 dark:text-blue-400" />
+                      </div>
+                      <div className="min-w-0">
+                        <p className="text-[10px] text-gray-500 dark:text-slate-400">Slug</p>
+                        <p className="text-xs font-medium text-gray-700 dark:text-slate-300 truncate">{row.slug}</p>
+                      </div>
+                    </div>
+
+                    <div className="bg-amber-50/50 dark:bg-amber-900/10 rounded-xl p-2.5 flex items-center gap-2">
+                      <div className="w-8 h-8 rounded-lg bg-amber-100 dark:bg-amber-900/30 flex items-center justify-center flex-shrink-0">
+                        <Globe className="h-3.5 w-3.5 text-amber-600 dark:text-amber-400" />
+                      </div>
+                      <div>
+                        <p className="text-[10px] text-gray-500 dark:text-slate-400">Coverage</p>
+                        <p className="text-xs font-medium text-gray-700 dark:text-slate-300">{row.coverage?.length || 0} kecamatan</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Footer - Status & Actions */}
+                  <div className="flex items-center justify-between pt-2 border-t border-gray-100 dark:border-slate-700/50">
+                    <div className="flex items-center gap-1.5">
+                      <div className={`w-2 h-2 rounded-full ${row.isActive ? 'bg-emerald-500' : 'bg-gray-400'}`} />
+                      <span className={`text-xs font-medium ${row.isActive ? 'text-emerald-600 dark:text-emerald-400' : 'text-gray-500 dark:text-slate-400'}`}>
+                        {row.isActive ? 'Active' : 'Inactive'}
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <button
+                        onClick={(e) => { e.stopPropagation(); handleToggleFeatured(row); }}
+                        className="w-7 h-7 rounded-lg flex items-center justify-center text-gray-400 hover:text-amber-500 hover:bg-amber-50 dark:hover:bg-amber-900/20 transition-all"
+                      >
+                        <Star className={`h-4 w-4 ${row.isFeatured ? 'fill-amber-400 text-amber-400' : ''}`} />
+                      </button>
+                      <button
+                        onClick={(e) => { e.stopPropagation(); openDeleteModal(row); }}
+                        className="w-7 h-7 rounded-lg flex items-center justify-center text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition-all"
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
+              skeletonCard={(i) => (
+                <div
+                  key={i}
+                  className="bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-700 rounded-2xl p-3 animate-pulse shadow-sm"
+                >
+                  {/* Header - Avatar & Name */}
+                  <div className="flex items-start gap-3 pb-2 border-b border-gray-100 dark:border-slate-700/50">
+                    <div className="skeleton h-12 w-12 rounded-xl flex-shrink-0 dark:bg-slate-700" />
+                    <div className="flex-1 min-w-0 pt-0.5">
+                      <div className="skeleton h-4 w-28 rounded dark:bg-slate-700 mb-2" />
+                      <div className="skeleton h-3 w-full max-w-[160px] rounded dark:bg-slate-700" />
+                    </div>
+                    <div className="skeleton h-8 w-8 rounded-lg flex-shrink-0 dark:bg-slate-700" />
+                  </div>
+
+                  {/* Stats Grid */}
+                  <div className="grid grid-cols-2 gap-2 py-2">
+                    <div className="bg-blue-50/50 dark:bg-slate-800/50 rounded-xl p-2.5 flex items-center gap-2">
+                      <div className="skeleton h-8 w-8 rounded-lg flex-shrink-0 dark:bg-slate-700" />
+                      <div className="flex-1 min-w-0">
+                        <div className="skeleton h-2.5 w-10 rounded dark:bg-slate-700 mb-1.5" />
+                        <div className="skeleton h-3.5 w-20 rounded dark:bg-slate-700" />
+                      </div>
+                    </div>
+                    <div className="bg-amber-50/50 dark:bg-slate-800/50 rounded-xl p-2.5 flex items-center gap-2">
+                      <div className="skeleton h-8 w-8 rounded-lg flex-shrink-0 dark:bg-slate-700" />
+                      <div className="flex-1 min-w-0">
+                        <div className="skeleton h-2.5 w-10 rounded dark:bg-slate-700 mb-1.5" />
+                        <div className="skeleton h-3.5 w-6 rounded dark:bg-slate-700" />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Footer - Status & Actions */}
+                  <div className="flex items-center justify-between pt-2 border-t border-gray-100 dark:border-slate-700/50">
+                    <div className="skeleton h-4 w-12 rounded dark:bg-slate-700" />
+                    <div className="skeleton h-7 w-16 rounded-lg dark:bg-slate-700" />
+                  </div>
+                </div>
+              )}
             />
           </div>
         </motion.div>
@@ -697,7 +797,7 @@ export default function AreasPage() {
         setFormData={setFormData}
         errors={errors}
         setErrors={setErrors}
-        saving={saving}
+        saving={createMutation.isPending || updateMutation.isPending}
         onSave={handleSubmit}
       />
 
@@ -707,7 +807,7 @@ export default function AreasPage() {
         onClose={() => setIsDeleteModalOpen(false)}
         item={selectedItem}
         onConfirm={handleDelete}
-        deleting={deleting}
+        deleting={deleteMutation.isPending}
       />
     </div>
   )

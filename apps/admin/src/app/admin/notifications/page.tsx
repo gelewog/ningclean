@@ -167,69 +167,73 @@ export default function NotificationsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-slate-900 text-gray-900 dark:text-white">
+    <div className="min-h-screen bg-gray-50 dark:bg-slate-800 text-gray-900 dark:text-white">
       {/* Topbar */}
       <Breadcrumb items={[{ label: 'Notifications' }]} />
 
       <div className="w-full px-4 md:px-6 py-6 space-y-6">
         {/* Header */}
-        <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+        <motion.div
+          initial={{ opacity: 0, y: -16 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="flex flex-wrap items-start justify-between gap-3 sm:gap-4"
+        >
           <div>
-            <h1 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Notifikasi</h1>
-            <p className="mt-1 text-sm text-gray-500 dark:text-slate-400">
+            <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Notifikasi</h1>
+            <p className="text-xs sm:text-sm text-gray-500 dark:text-slate-400 mt-1">
               {unreadCount > 0 ? `${unreadCount} notifikasi belum dibaca` : 'Semua notifikasi sudah dibaca'}
             </p>
           </div>
-          <div className="flex items-center gap-3">
-            {/* Filter */}
-            <div className="flex items-center gap-2 rounded-xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-1">
+          <div className="flex items-center gap-2">
+            {/* Filter Toggle - Icon Only */}
+            <div className="flex items-center rounded-lg border border-gray-200 dark:border-slate-600 bg-white dark:bg-slate-900 p-0.5">
               <button
                 onClick={() => { setFilter('all'); fetchNotifications(1, 'all') }}
-                className={`flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
+                className={`flex items-center justify-center w-8 h-8 rounded-md transition-colors ${
                   filter === 'all'
                     ? 'bg-emerald-600 text-white'
                     : 'text-gray-600 dark:text-slate-300 hover:bg-gray-100 dark:hover:bg-slate-700'
                 }`}
+                title="Semua"
               >
                 <Filter className="h-4 w-4" />
-                Semua
               </button>
               <button
                 onClick={() => { setFilter('unread'); fetchNotifications(1, 'unread') }}
-                className={`flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
+                className={`flex items-center justify-center w-8 h-8 rounded-md transition-colors relative ${
                   filter === 'unread'
                     ? 'bg-emerald-600 text-white'
                     : 'text-gray-600 dark:text-slate-300 hover:bg-gray-100 dark:hover:bg-slate-700'
                 }`}
+                title="Belum Dibaca"
               >
                 <Bell className="h-4 w-4" />
-                Belum Dibaca
                 {unreadCount > 0 && (
-                  <span className="flex h-5 min-w-[1.25rem] items-center justify-center rounded-full bg-emerald-500 px-1.5 text-[10px] font-bold text-white">
+                  <span className="absolute -top-1 -right-1 flex h-4 min-w-[1rem] items-center justify-center rounded-full bg-red-500 px-1 text-[8px] font-bold text-white">
                     {unreadCount}
                   </span>
                 )}
               </button>
             </div>
 
-            {/* Mark all as read */}
+            {/* Mark all as read - Icon Only */}
             {unreadCount > 0 && (
               <Button
                 variant="outline"
-                size="sm"
+                size="icon"
                 onClick={handleMarkAllAsRead}
                 disabled={actionLoading === 'all'}
-                className="gap-2"
+                className="h-8 w-8"
+                title="Tandai Semua Dibaca"
               >
                 <CheckCheck className="h-4 w-4" />
-                Tandai Semua Dibaca
               </Button>
             )}
           </div>
-        </div>
+        </motion.div>
 
         {/* Notifications List */}
-        <div className="rounded-2xl border border-gray-100 dark:border-slate-700 bg-white dark:bg-slate-900 overflow-hidden shadow-sm dark:shadow-slate-900/50">
+        <div className="sm:bg-white sm:dark:bg-slate-900 sm:shadow-sm sm:border sm:border-gray-200 dark:sm:border-slate-700 sm:rounded-2xl overflow-hidden">
           {loading ? (
             <div className="flex items-center justify-center py-20">
               <div className="h-8 w-8 animate-spin rounded-full border-4 border-gray-200 border-t-emerald-500" />

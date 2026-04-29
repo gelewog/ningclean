@@ -1317,6 +1317,14 @@ export async function updateCustomer(id: string, data: { isVip?: boolean; notes?
   })
 }
 
+export async function deleteCustomer(id: string): Promise<any> {
+  const token = getToken()
+  return fetchApi<any>(`/admin/customers/${id}`, {
+    method: 'DELETE',
+    token,
+  })
+}
+
 // Invoice API Functions
 export async function createInvoice(bookingId: string, data?: { templateId?: string; dueDate?: Date }): Promise<any> {
   const token = getToken()
@@ -1552,4 +1560,72 @@ export async function unsubscribeSubscriber(email: string): Promise<{ success: b
 export async function sendTestNewsletter(): Promise<{ success: boolean; message: string }> {
   const token = getToken()
   return fetchApi<{ success: boolean; message: string }>('/newsletter/send-test', { method: 'POST', token })
+}
+
+// Users
+export interface User {
+  id: string
+  name: string
+  email: string
+  phone?: string
+  role: string
+  isActive: boolean
+  avatar?: string
+  createdAt: string
+}
+
+export async function getUsers(params?: {
+  page?: number
+  limit?: number
+  search?: string
+  role?: string
+}): Promise<PaginatedResponse<User>> {
+  const token = getToken()
+  
+  const queryParams = new URLSearchParams()
+  if (params?.page) queryParams.set('page', params.page.toString())
+  if (params?.limit) queryParams.set('limit', params.limit.toString())
+  if (params?.search) queryParams.set('search', params.search)
+  if (params?.role) queryParams.set('role', params.role)
+  
+  const query = queryParams.toString()
+  const endpoint = `/admin/users${query ? `?${query}` : ''}`
+  
+  try {
+    return await fetchApi<PaginatedResponse<User>>(endpoint, { token })
+  } catch {
+    return {
+      data: [],
+      total: 0,
+      page: params?.page || 1,
+      limit: params?.limit || 10,
+      totalPages: 0,
+    }
+  }
+}
+
+export async function createUser(data: { name: string; email: string; phone?: string; role: string; password: string }): Promise<{ success: boolean; message: string; data: User }> {
+  const token = getToken()
+  return fetchApi<{ success: boolean; message: string; data: User }>('/admin/users', {
+    method: 'POST',
+    token,
+    body: JSON.stringify(data),
+  })
+}
+
+export async function updateUser(id: string, data: { name?: string; email?: string; phone?: string; role?: string; isActive?: boolean }): Promise<{ success: boolean; message: string; data: User }> {
+  const token = getToken()
+  return fetchApi<{ success: boolean; message: string; data: User }>(`/admin/users/${id}`, {
+    method: 'PUT',
+    token,
+    body: JSON.stringify(data),
+  })
+}
+
+export async function deleteUser(id: string): Promise<{ success: boolean; message: string }> {
+  const token = getToken()
+  return fetchApi<{ success: boolean; message: string }>(`/admin/users/${id}`, {
+    method: 'DELETE',
+    token,
+  })
 }

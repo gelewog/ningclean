@@ -10,7 +10,7 @@ import { Badge } from '@/components/ui/badge'
 import { ImageUpload, useImageUpload } from '@/components/ui/ImageUpload'
 import { Modal } from '@/components/admin/Modal'
 import { DataTable } from '@/components/admin/DataTable'
-import { getTeamMembers, createTeamMember, updateTeamMember, deleteTeamMember } from '@/lib/api'
+import { useTeamMembers, useCreateTeamMember, useUpdateTeamMember, useDeleteTeamMember } from '@/lib/use-queries'
 import { Breadcrumb } from '@/components/admin/Breadcrumb'
 import { TeamMember } from '@/types'
 import { formatDate } from '@/lib/utils'
@@ -37,8 +37,10 @@ interface TeamFormData {
 const departments = ['Cleaning', 'Management', 'Support', 'Marketing', 'Technical', 'HR']
 
 export default function TeamPage() {
-  const [items, setItems] = React.useState<TeamMember[]>([])
-  const [loading, setLoading] = React.useState(true)
+  const { data: items = [], isLoading: loading, refetch } = useTeamMembers()
+  const createMutation = useCreateTeamMember()
+  const updateMutation = useUpdateTeamMember()
+  const deleteMutation = useDeleteTeamMember()
   const [isModalOpen, setIsModalOpen] = React.useState(false)
   const [isDeleteModalOpen, setIsDeleteModalOpen] = React.useState(false)
   const [selectedItem, setSelectedItem] = React.useState<TeamMember | null>(null)
@@ -63,22 +65,6 @@ export default function TeamPage() {
   const [errors, setErrors] = React.useState<Partial<TeamFormData>>({})
   const [selectedImageFile, setSelectedImageFile] = React.useState<File | null>(null)
   const { uploadImage } = useImageUpload()
-
-  React.useEffect(() => {
-    fetchItems()
-  }, [])
-
-  async function fetchItems() {
-    setLoading(true)
-    try {
-      const data = await getTeamMembers()
-      setItems(data)
-    } catch (error) {
-      toast.error('Failed to fetch team members')
-    } finally {
-      setLoading(false)
-    }
-  }
 
   function openCreateModal() {
     setIsEditing(false)
@@ -196,15 +182,15 @@ export default function TeamPage() {
 
     try {
       if (isEditing && selectedItem) {
-        await updateTeamMember(selectedItem.id, itemData)
+        await updateMutation.mutateAsync({ id: selectedItem.id, data: itemData })
         toast.success('Team member updated successfully')
       } else {
-        await createTeamMember(itemData)
+        await createMutation.mutateAsync(itemData)
         toast.success('Team member created successfully')
       }
       setSelectedImageFile(null)
       setIsModalOpen(false)
-      fetchItems()
+      refetch()
     } catch (error) {
       toast.error(`Failed to ${isEditing ? 'update' : 'create'} team member`)
     }
@@ -213,10 +199,10 @@ export default function TeamPage() {
   async function handleDelete() {
     if (!selectedItem) return
     try {
-      await deleteTeamMember(selectedItem.id)
+      await deleteMutation.mutateAsync(selectedItem.id)
       toast.success('Team member deleted successfully')
       setIsDeleteModalOpen(false)
-      fetchItems()
+      refetch()
     } catch (error) {
       toast.error('Failed to delete team member')
     }
@@ -264,7 +250,7 @@ export default function TeamPage() {
     },
     {
       key: 'order',
-      label: 'Order',
+      label: 'Urutan',
       render: (value: number) => (
         <div className="flex items-center gap-1">
           <GripVertical className="h-4 w-4 text-gray-400 dark:text-slate-500" />
@@ -283,7 +269,7 @@ export default function TeamPage() {
     },
     {
       key: 'socialLinks',
-      label: 'Social',
+      label: 'Media Sosial',
       render: (value: any) => {
         const links = value as { facebook?: string; instagram?: string; linkedin?: string; twitter?: string } | null
         const hasSocial = links?.facebook || links?.instagram || links?.linkedin || links?.twitter
@@ -300,7 +286,7 @@ export default function TeamPage() {
     },
     {
       key: 'createdAt',
-      label: 'Created',
+      label: 'Dibuat',
       render: (value: string) => (
         <div className="flex items-center gap-1 text-sm text-gray-500 dark:text-slate-400">
           <Calendar className="h-3.5 w-3.5" />
@@ -310,7 +296,7 @@ export default function TeamPage() {
     },
     {
       key: 'actions',
-      label: 'Actions',
+      label: 'Aksi',
       render: (_: any, row: TeamMember) => (
         <div className="flex items-center gap-1">
           <Button variant="ghost" size="icon" onClick={() => openEditModal(row)}>
@@ -329,21 +315,28 @@ export default function TeamPage() {
       {/* Topbar */}
       <Breadcrumb items={[{ label: 'Team' }]} />
 
-      <div className="w-full px-4 md:px-6 py-6 space-y-6">
+      <div className="w-full px-3 sm:px-6 py-3 sm:py-6 space-y-3 sm:space-y-6">
         {/* Page Header */}
         <motion.div
           initial={{ opacity: 0, y: -16 }}
           animate={{ opacity: 1, y: 0 }}
-          className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"
+          className="flex flex-wrap items-start justify-between gap-3 sm:gap-4"
         >
           <div>
-            <h1 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Team Members</h1>
-            <p className="text-sm text-gray-500 dark:text-slate-400 mt-0.5">Manage team members and staff</p>
+            <div className="flex items-center gap-3">
+              <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Team Members</h1>
+              <Button onClick={openCreateModal} className="bg-emerald-600 hover:bg-emerald-700 h-8 text-xs px-3">
+                <Plus className="h-4 w-4" />
+              </Button>
+            </div>
+            <p className="text-xs sm:text-sm text-gray-500 dark:text-slate-400 mt-0.5">Manage team members and staff</p>
           </div>
-          <Button onClick={openCreateModal}>
-            <Plus className="mr-2 h-4 w-4" />
-            New Team Member
-          </Button>
+          <div className="flex items-center gap-2">
+            <div className="px-2 sm:px-3 py-1.5 sm:py-2 bg-white dark:bg-slate-900 rounded-lg sm:rounded-xl border border-gray-200 dark:border-slate-600">
+              <span className="text-xs sm:text-sm text-gray-500 dark:text-slate-400">Total: </span>
+              <span className="text-xs sm:text-sm font-bold text-gray-900 dark:text-white">{items.length}</span>
+            </div>
+          </div>
         </motion.div>
 
         {/* Table */}
@@ -352,11 +345,217 @@ export default function TeamPage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.15 }}
         >
-          <div className="bg-white dark:bg-slate-900 border border-gray-100 dark:border-slate-700 rounded-2xl overflow-hidden shadow-sm dark:shadow-slate-900/50">
+          <div className="sm:bg-white sm:dark:bg-slate-900 sm:shadow-sm sm:border sm:border-gray-200 dark:sm:border-slate-700 sm:rounded-2xl overflow-hidden">
             <DataTable
               columns={columns}
               data={items}
               loading={loading}
+          renderCard={(row: TeamMember) => (
+            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-gray-200 dark:border-slate-700 shadow-sm hover:shadow-md transition-all duration-300 p-4 active:scale-[0.99]">
+              {/* Header - Avatar with gradient background */}
+              <div className="flex items-start gap-4 border-b border-gray-100 dark:border-slate-700 pb-4">
+                {row.avatar ? (
+                  <div className="relative flex-shrink-0">
+                    <img 
+                      src={row.avatar} 
+                      alt={row.name}
+                      className="h-16 w-16 rounded-2xl object-cover shadow-lg shadow-emerald-500/10 ring-2 ring-white dark:ring-slate-700"
+                    />
+                    <div className={`absolute -bottom-1 -right-1 h-5 w-5 rounded-full ring-2 ring-white dark:ring-slate-900 ${
+                      row.isActive ? 'bg-emerald-500' : 'bg-gray-400'
+                    }`}>
+                      <div className="h-full w-full rounded-full flex items-center justify-center">
+                        {row.isActive ? (
+                          <User className="h-3 w-3 text-white" />
+                        ) : (
+                          <User className="h-3 w-3 text-white" />
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="relative flex-shrink-0">
+                    <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-emerald-400 to-emerald-600 text-2xl font-bold text-white shadow-lg shadow-emerald-500/20 ring-2 ring-white dark:ring-slate-700">
+                      {row.name?.charAt(0).toUpperCase() || '?'}
+                    </div>
+                    <div className={`absolute -bottom-1 -right-1 h-5 w-5 rounded-full ring-2 ring-white dark:ring-slate-900 ${
+                      row.isActive ? 'bg-emerald-500' : 'bg-gray-400'
+                    }}`}
+                    >
+                      <div className="h-full w-full rounded-full flex items-center justify-center">
+                        <div className="h-2 w-2 rounded-full bg-white" />
+                      </div>
+                    </div>
+                  </div>
+                )}
+                <div className="flex-1 min-w-0">
+                  <p className="font-bold text-gray-900 dark:text-white text-lg truncate">{row.name}</p>
+                  <p className="text-sm text-emerald-600 dark:text-emerald-400 font-medium">{row.position}</p>
+                  <div className="flex items-center gap-2 mt-2">
+                    <span className={`text-[10px] px-2 py-0.5 rounded-full font-medium ${
+                      row.isActive 
+                        ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400' 
+                        : 'bg-gray-100 text-gray-600 dark:bg-slate-700 dark:text-gray-400'
+                    }`}>
+                      {row.isActive ? 'Aktif' : 'Nonaktif'}
+                    </span>
+                    <span className="text-[10px] px-2 py-0.5 rounded-full bg-blue-50 text-blue-700 dark:bg-blue-900/20 dark:text-blue-400 font-medium">
+                      Urutan {row.order}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Stats Grid - Department */}
+              <div className="py-4">
+                <div className="grid grid-cols-1 gap-2">
+                  <div className="flex items-center gap-3 p-3 rounded-xl bg-gray-50 dark:bg-slate-800/80">
+                    <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-orange-400 to-orange-500 flex items-center justify-center flex-shrink-0">
+                      <span className="text-lg font-bold text-white">{row.department?.charAt(0)}</span>
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-xs text-gray-400 dark:text-slate-500">Departemen</p>
+                      <p className="font-semibold text-gray-900 dark:text-white truncate">{row.department}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Contact Info */}
+              {(row.email || row.phone) && (
+                <div className="pb-4 space-y-2">
+                  {row.email && (
+                    <div className="flex items-center gap-2 text-xs text-gray-500 dark:text-slate-400 p-2 rounded-lg bg-gray-50 dark:bg-slate-800/50">
+                      <div className="h-6 w-6 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center flex-shrink-0">
+                        <Mail className="h-3 w-3 text-blue-600 dark:text-blue-400" />
+                      </div>
+                      <span className="truncate">{row.email}</span>
+                    </div>
+                  )}
+                  {row.phone && (
+                    <div className="flex items-center gap-2 text-xs text-gray-500 dark:text-slate-400 p-2 rounded-lg bg-gray-50 dark:bg-slate-800/50">
+                      <div className="h-6 w-6 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center flex-shrink-0">
+                        <Phone className="h-3 w-3 text-green-600 dark:text-green-400" />
+                      </div>
+                      <span>{row.phone}</span>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* Social Links */}
+              {(row.socialLinks?.facebook || row.socialLinks?.linkedin || row.socialLinks?.twitter || row.socialLinks?.instagram) && (
+                <div className="pb-4 border-t border-gray-100 dark:border-slate-700/50 pt-3">
+                  <p className="text-xs text-gray-400 dark:text-slate-500 mb-2">Media Sosial</p>
+                  <div className="flex items-center gap-2">
+                    {row.socialLinks?.facebook && (
+                      <a 
+                        href={row.socialLinks.facebook} 
+                        target="_blank" 
+                        rel="noopener noreferrer" 
+                        className="h-8 w-8 rounded-xl bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center text-blue-600 dark:text-blue-400 hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-colors"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        <Facebook className="h-4 w-4" />
+                      </a>
+                    )}
+                    {row.socialLinks?.instagram && (
+                      <a 
+                        href={row.socialLinks.instagram} 
+                        target="_blank" 
+                        rel="noopener noreferrer" 
+                        className="h-8 w-8 rounded-xl bg-pink-50 dark:bg-pink-900/20 flex items-center justify-center text-pink-600 dark:text-pink-400 hover:bg-pink-100 dark:hover:bg-pink-900/30 transition-colors"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        <Instagram className="h-4 w-4" />
+                      </a>
+                    )}
+                    {row.socialLinks?.linkedin && (
+                      <a 
+                        href={row.socialLinks.linkedin} 
+                        target="_blank" 
+                        rel="noopener noreferrer" 
+                        className="h-8 w-8 rounded-xl bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center text-blue-700 dark:text-blue-400 hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-colors"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        <Linkedin className="h-4 w-4" />
+                      </a>
+                    )}
+                    {row.socialLinks?.twitter && (
+                      <a 
+                        href={row.socialLinks.twitter} 
+                        target="_blank" 
+                        rel="noopener noreferrer" 
+                        className="h-8 w-8 rounded-xl bg-sky-50 dark:bg-sky-900/20 flex items-center justify-center text-sky-500 dark:text-sky-400 hover:bg-sky-100 dark:hover:bg-sky-900/30 transition-colors"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        <Twitter className="h-4 w-4" />
+                      </a>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {/* Actions Footer */}
+              <div className="flex items-center justify-between pt-3 border-t border-gray-100 dark:border-slate-700">
+                <div className="text-xs text-gray-400 dark:text-slate-500">
+                  <div className="flex items-center gap-1">
+                    <Calendar className="h-3 w-3" />
+                    <span>{formatDate(row.createdAt)}</span>
+                  </div>
+                </div>
+                <div className="flex items-center gap-2">
+                  <button 
+                    onClick={(e) => { e.stopPropagation(); openEditModal(row); }}
+                    className="h-9 w-9 rounded-xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 flex items-center justify-center text-gray-600 dark:text-slate-400 hover:bg-emerald-50 hover:text-emerald-600 dark:hover:bg-emerald-900/20 dark:hover:text-emerald-400 transition-colors shadow-sm"
+                  >
+                    <Edit className="h-4 w-4" />
+                  </button>
+                  <button 
+                    onClick={(e) => { e.stopPropagation(); openDeleteModal(row); }}
+                    className="h-9 w-9 rounded-xl border border-red-200 dark:border-red-800/50 bg-red-50 dark:bg-red-900/20 flex items-center justify-center text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/30 transition-colors shadow-sm"
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+          skeletonCard={(i: number) => (
+            <div className="bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-700 rounded-2xl p-4 animate-pulse shadow-sm">
+              {/* Header Skeleton - Avatar & Name */}
+              <div className="flex items-start gap-4 border-b border-gray-100 dark:border-slate-700 pb-4">
+                <div className="h-16 w-16 rounded-2xl bg-emerald-100 dark:bg-slate-700 flex-shrink-0" />
+                <div className="flex-1 space-y-2">
+                  <div className="h-5 w-32 rounded bg-gray-200 dark:bg-slate-700" />
+                  <div className="h-4 w-24 rounded bg-gray-100 dark:bg-slate-700" />
+                  <div className="flex gap-2 mt-2">
+                    <div className="h-5 w-14 rounded-full bg-gray-200 dark:bg-slate-700" />
+                    <div className="h-5 w-16 rounded-full bg-blue-100 dark:bg-slate-700" />
+                  </div>
+                </div>
+              </div>
+              
+              {/* Department Skeleton */}
+              <div className="py-4">
+                <div className="h-16 rounded-xl bg-gray-200 dark:bg-slate-700" />
+              </div>
+              
+              {/* Contact Skeleton */}
+              <div className="pb-4 space-y-2">
+                <div className="h-10 rounded-lg bg-gray-100 dark:bg-slate-700" />
+              </div>
+              
+              {/* Actions Skeleton */}
+              <div className="flex items-center justify-between pt-3 border-t border-gray-100 dark:border-slate-700">
+                <div className="h-4 w-24 rounded bg-gray-100 dark:bg-slate-700" />
+                <div className="flex gap-2">
+                  <div className="h-9 w-9 rounded-xl bg-gray-200 dark:bg-slate-700" />
+                  <div className="h-9 w-9 rounded-xl bg-red-100 dark:bg-slate-700" />
+                </div>
+              </div>
+            </div>
+          )}
             />
           </div>
         </motion.div>
@@ -386,7 +585,7 @@ export default function TeamPage() {
                 <h3 className="text-xl font-bold text-gray-900 dark:text-white">
                   {formData.name || 'New Member'}
                 </h3>
-                <p className="text-sm text-gray-500 dark:text-slate-400">
+                <p className="text-xs sm:text-sm text-gray-500 dark:text-slate-400">
                   {formData.position || 'Position not set'} • {formData.department}
                 </p>
               </div>
@@ -594,7 +793,7 @@ export default function TeamPage() {
             <Button type="button" variant="outline" onClick={() => setIsModalOpen(false)}>
               Batal
             </Button>
-            <Button type="submit" className="bg-emerald-600 hover:bg-emerald-700 gap-2">
+            <Button type="submit" disabled={createMutation.isPending || updateMutation.isPending} className="bg-emerald-600 hover:bg-emerald-700 gap-2">
               <Save className="w-4 h-4" />
               {isEditing ? 'Simpan Perubahan' : 'Tambah Member'}
             </Button>
@@ -616,13 +815,13 @@ export default function TeamPage() {
             <p className="text-gray-700 dark:text-slate-300">
               Are you sure you want to delete <strong className="text-red-600 dark:text-red-400">{selectedItem?.name}</strong>?
             </p>
-            <p className="text-sm text-gray-500 dark:text-slate-400 mt-2">This action cannot be undone. All associated data will be permanently removed.</p>
+            <p className="text-xs sm:text-sm text-gray-500 dark:text-slate-400 mt-2">This action cannot be undone. All associated data will be permanently removed.</p>
           </div>
           <div className="flex items-center justify-end gap-3">
             <Button variant="outline" onClick={() => setIsDeleteModalOpen(false)}>
               Cancel
             </Button>
-            <Button variant="error" onClick={handleDelete} className="gap-2">
+            <Button variant="error" onClick={handleDelete} loading={deleteMutation.isPending} className="gap-2">
               <Trash2 className="w-4 h-4" />
               Delete Member
             </Button>

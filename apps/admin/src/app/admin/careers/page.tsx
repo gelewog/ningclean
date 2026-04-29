@@ -368,7 +368,7 @@ function JobDeleteModal({
               </div>
               <div>
                 <h2 className="text-lg font-bold text-gray-900 dark:text-white">Hapus Lowongan</h2>
-                <p className="text-sm text-gray-500 dark:text-slate-400">
+                <p className="text-xs sm:text-sm text-gray-500 dark:text-slate-400">
                   Tindakan ini tidak dapat dibatalkan
                 </p>
               </div>
@@ -657,25 +657,25 @@ export default function CareersPage() {
   ]
 
   return (
-    <div className="min-h-screen bg-gray-50/50 dark:bg-slate-900 text-gray-900 dark:text-white">
+    <div className="min-h-screen bg-gray-50/50 dark:bg-slate-800 text-gray-900 dark:text-white">
       {/* Topbar */}
       <Breadcrumb items={[{ label: 'Careers' }]} />
 
-      <div className="w-full px-4 md:px-6 py-6 space-y-6">
+      <div className="w-full px-3 sm:px-6 py-3 sm:py-6 space-y-3 sm:space-y-6">
         {/* Page Header */}
         <motion.div
           initial={{ opacity: 0, y: -16 }}
           animate={{ opacity: 1, y: 0 }}
-          className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"
+          className="flex flex-wrap items-start justify-between gap-4"
         >
           <div>
             <h1 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Careers</h1>
-            <p className="text-sm text-gray-500 dark:text-slate-400 mt-1">Manage job listings and openings</p>
+            <p className="text-xs sm:text-sm text-gray-500 dark:text-slate-400 mt-1">Manage job listings and openings</p>
           </div>
           <div className="flex items-center gap-2">
             <div className="px-4 py-2 bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700">
-              <span className="text-sm text-gray-500 dark:text-slate-400">Total: </span>
-              <span className="text-sm font-bold text-gray-900 dark:text-white">{items.length}</span>
+              <span className="text-xs sm:text-sm text-gray-500 dark:text-slate-400">Total: </span>
+              <span className="text-xs sm:text-sm font-bold text-gray-900 dark:text-white">{items.length}</span>
             </div>
             <Button onClick={openCreateModal} className="bg-emerald-600 hover:bg-emerald-700 gap-2">
               <Plus className="h-4 w-4" />
@@ -707,7 +707,7 @@ export default function CareersPage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.15 }}
         >
-          <div className="bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-700 rounded-2xl overflow-hidden shadow-sm">
+          <div className="sm:bg-white sm:dark:bg-slate-900 sm:border sm:border-gray-200 dark:sm:border-slate-700 sm:rounded-2xl overflow-hidden shadow-sm">
             <DataTable
               columns={columns}
               data={filteredItems}
@@ -725,6 +725,158 @@ export default function CareersPage() {
                   </p>
                 </div>
               }
+              renderCard={(row: JobListing) => (
+                <div className="bg-white dark:bg-slate-900 rounded-2xl border border-gray-200 dark:border-slate-700 shadow-sm hover:shadow-md transition-all duration-300 p-3 cursor-pointer active:scale-[0.99]">
+                  {/* Header - Icon & Title */}
+                  <div className="flex items-start gap-3 pb-2 border-b border-gray-100 dark:border-slate-700/50">
+                    <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-600 shadow-lg shadow-emerald-500/20 flex-shrink-0">
+                      <Briefcase className="h-6 w-6 text-white" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="font-semibold text-gray-900 dark:text-white truncate">{row.title}</p>
+                      <p className="text-xs text-gray-500 dark:text-slate-400 truncate">{row.department}</p>
+                    </div>
+                    <button 
+                      onClick={(e) => { e.stopPropagation(); openEditModal(row); }}
+                      className="w-8 h-8 rounded-lg bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-600 flex items-center justify-center text-gray-500 dark:text-slate-400 hover:bg-emerald-50 dark:hover:bg-emerald-900/30 hover:text-emerald-600 dark:hover:text-emerald-400 hover:border-emerald-200 dark:hover:border-emerald-700/50 transition-all flex-shrink-0"
+                    >
+                      <Edit className="h-4 w-4" />
+                    </button>
+                  </div>
+
+                  {/* Stats Grid */}
+                  <div className="grid grid-cols-2 gap-2 py-2">
+                    <div className="bg-blue-50/50 dark:bg-blue-900/10 rounded-xl p-2.5 flex items-center gap-2">
+                      <div className="w-8 h-8 rounded-lg bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center flex-shrink-0">
+                        <MapPin className="h-3.5 w-3.5 text-blue-600 dark:text-blue-400" />
+                      </div>
+                      <div className="min-w-0">
+                        <p className="text-[10px] text-gray-500 dark:text-slate-400">Lokasi</p>
+                        <p className="text-xs font-medium text-gray-700 dark:text-slate-300 truncate">{row.location}</p>
+                      </div>
+                    </div>
+
+                    <div className="bg-amber-50/50 dark:bg-amber-900/10 rounded-xl p-2.5 flex items-center gap-2">
+                      <div className="w-8 h-8 rounded-lg bg-amber-100 dark:bg-amber-900/30 flex items-center justify-center flex-shrink-0">
+                        <span className="text-xs font-semibold text-amber-600 dark:text-amber-400">
+                          {row.type?.charAt(0).toUpperCase()}
+                        </span>
+                      </div>
+                      <div>
+                        <p className="text-[10px] text-gray-500 dark:text-slate-400">Tipe</p>
+                        <p className="text-xs font-medium text-gray-700 dark:text-slate-300">{row.type}</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Applicants & Expiry */}
+                  <div className="grid grid-cols-2 gap-2 pb-2">
+                    <div className="bg-sky-50/50 dark:bg-sky-900/10 rounded-xl p-2.5 flex items-center gap-2">
+                      <div className="w-8 h-8 rounded-lg bg-sky-100 dark:bg-sky-900/30 flex items-center justify-center flex-shrink-0">
+                        <Users className="h-3.5 w-3.5 text-sky-600 dark:text-sky-400" />
+                      </div>
+                      <div>
+                        <p className="text-[10px] text-gray-500 dark:text-slate-400">Pelamar</p>
+                        <p className="text-xs font-medium text-sky-600 dark:text-sky-400">{row.applicantCount || 0}</p>
+                      </div>
+                    </div>
+
+                    <div className="bg-rose-50/50 dark:bg-rose-900/10 rounded-xl p-2.5 flex items-center gap-2">
+                      <div className="w-8 h-8 rounded-lg bg-rose-100 dark:bg-rose-900/30 flex items-center justify-center flex-shrink-0">
+                        <Calendar className="h-3.5 w-3.5 text-rose-600 dark:text-rose-400" />
+                      </div>
+                      <div className="min-w-0">
+                        <p className="text-[10px] text-gray-500 dark:text-slate-400">Deadline</p>
+                        <p className="text-xs font-medium text-rose-600 dark:text-rose-400 truncate">
+                          {row.expiresAt ? formatDate(row.expiresAt) : '—'}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Footer - Status & Actions */}
+                  <div className="flex items-center justify-between pt-2 border-t border-gray-100 dark:border-slate-700/50">
+                    <Badge variant={row.isActive ? 'success' : 'default'} className="text-[10px]">
+                      {row.isActive ? 'Aktif' : 'Nonaktif'}
+                    </Badge>
+                    <div className="flex items-center gap-1">
+                      <button 
+                        onClick={(e) => { e.stopPropagation(); openEditModal(row); }}
+                        className="w-7 h-7 rounded-lg flex items-center justify-center text-gray-500 dark:text-slate-400 hover:bg-emerald-50 dark:hover:bg-emerald-900/30 hover:text-emerald-600 dark:hover:text-emerald-400 transition-all"
+                      >
+                        <Edit className="h-3.5 w-3.5" />
+                      </button>
+                      <button 
+                        onClick={(e) => { e.stopPropagation(); openDeleteModal(row); }}
+                        className="w-7 h-7 rounded-lg flex items-center justify-center text-gray-500 dark:text-slate-400 hover:bg-red-50 dark:hover:bg-red-900/30 hover:text-red-600 dark:hover:text-red-400 transition-all"
+                      >
+                        <Trash2 className="h-3.5 w-3.5" />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
+              skeletonCard={(i) => (
+                <div
+                  key={i}
+                  className="bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-700 rounded-2xl p-3 animate-pulse shadow-sm"
+                >
+                  {/* Header - Icon & Title */}
+                  <div className="flex items-start gap-3 pb-2 border-b border-gray-100 dark:border-slate-700/50">
+                    <div className="skeleton h-12 w-12 rounded-xl flex-shrink-0 dark:bg-slate-700" />
+                    <div className="flex-1 min-w-0 pt-0.5">
+                      <div className="skeleton h-4 w-28 rounded dark:bg-slate-700 mb-2" />
+                      <div className="skeleton h-3 w-full max-w-[120px] rounded dark:bg-slate-700" />
+                    </div>
+                    <div className="skeleton h-8 w-8 rounded-lg flex-shrink-0 dark:bg-slate-700" />
+                  </div>
+
+                  {/* Stats Grid */}
+                  <div className="grid grid-cols-2 gap-2 py-2">
+                    <div className="bg-blue-50/50 dark:bg-slate-800/50 rounded-xl p-2.5 flex items-center gap-2">
+                      <div className="skeleton h-8 w-8 rounded-lg flex-shrink-0 dark:bg-slate-700" />
+                      <div className="flex-1 min-w-0">
+                        <div className="skeleton h-2.5 w-10 rounded dark:bg-slate-700 mb-1.5" />
+                        <div className="skeleton h-3.5 w-16 rounded dark:bg-slate-700" />
+                      </div>
+                    </div>
+                    <div className="bg-amber-50/50 dark:bg-slate-800/50 rounded-xl p-2.5 flex items-center gap-2">
+                      <div className="skeleton h-8 w-8 rounded-lg flex-shrink-0 dark:bg-slate-700" />
+                      <div className="flex-1 min-w-0">
+                        <div className="skeleton h-2.5 w-8 rounded dark:bg-slate-700 mb-1.5" />
+                        <div className="skeleton h-3.5 w-12 rounded dark:bg-slate-700" />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Applicants & Expiry */}
+                  <div className="grid grid-cols-2 gap-2 pb-2">
+                    <div className="bg-sky-50/50 dark:bg-slate-800/50 rounded-xl p-2.5 flex items-center gap-2">
+                      <div className="skeleton h-8 w-8 rounded-lg flex-shrink-0 dark:bg-slate-700" />
+                      <div className="flex-1 min-w-0">
+                        <div className="skeleton h-2.5 w-12 rounded dark:bg-slate-700 mb-1.5" />
+                        <div className="skeleton h-3.5 w-6 rounded dark:bg-slate-700" />
+                      </div>
+                    </div>
+                    <div className="bg-rose-50/50 dark:bg-slate-800/50 rounded-xl p-2.5 flex items-center gap-2">
+                      <div className="skeleton h-8 w-8 rounded-lg flex-shrink-0 dark:bg-slate-700" />
+                      <div className="flex-1 min-w-0">
+                        <div className="skeleton h-2.5 w-12 rounded dark:bg-slate-700 mb-1.5" />
+                        <div className="skeleton h-3.5 w-14 rounded dark:bg-slate-700" />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Footer - Status & Actions */}
+                  <div className="flex items-center justify-between pt-2 border-t border-gray-100 dark:border-slate-700/50">
+                    <div className="skeleton h-5 w-14 rounded-full dark:bg-slate-700" />
+                    <div className="flex items-center gap-1">
+                      <div className="skeleton h-7 w-7 rounded-lg dark:bg-slate-700" />
+                      <div className="skeleton h-7 w-7 rounded-lg dark:bg-slate-700" />
+                    </div>
+                  </div>
+                </div>
+              )}
             />
           </div>
         </motion.div>
