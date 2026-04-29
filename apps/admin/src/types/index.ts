@@ -82,6 +82,7 @@ export interface BlogPost {
   publishedAt?: string | null
   createdAt: string
   updatedAt: string
+  views?: number
 }
 
 export interface DashboardStats {
@@ -118,7 +119,7 @@ export interface TeamMember {
   phone?: string
   isActive: boolean
   order: number
-  socialLinks?: { linkedin?: string; twitter?: string; facebook?: string }
+  socialLinks?: { linkedin?: string; twitter?: string; facebook?: string; instagram?: string }
   createdAt: string
   updatedAt: string
 }
@@ -189,6 +190,7 @@ export interface JobListing {
   salaryRange?: string
   isActive: boolean
   expiresAt?: string
+  applicantCount?: number
   createdAt: string
   updatedAt: string
 }

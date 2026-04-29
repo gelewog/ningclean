@@ -104,10 +104,10 @@ export default function TeamPage() {
       isActive: item.isActive,
       order: item.order,
       socialLinks: {
-        facebook: (item.socialLinks as any)?.facebook || '',
-        instagram: (item.socialLinks as any)?.instagram || '',
-        linkedin: (item.socialLinks as any)?.linkedin || '',
-        twitter: (item.socialLinks as any)?.twitter || '',
+        facebook: item.socialLinks?.facebook || '',
+        instagram: item.socialLinks?.instagram || '',
+        linkedin: item.socialLinks?.linkedin || '',
+        twitter: item.socialLinks?.twitter || '',
       },
     })
     setErrors({})

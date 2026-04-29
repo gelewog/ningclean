@@ -19,14 +19,14 @@ import Link from 'next/link'
 export default function BlogPage() {
   const [search, setSearch] = React.useState('')
   const [pagination, setPagination] = React.useState({ page: 1, limit: 10, total: 0, totalPages: 0 })
-  const [statusFilter, setStatusFilter] = React.useState('')
+  const [statusFilter, setStatusFilter] = React.useState<'all' | 'draft' | 'published'>('all')
   const [deleteId, setDeleteId] = React.useState<string | null>(null)
   const [deleting, setDeleting] = React.useState(false)
 
   const { data: postsResponse, isLoading: loading, refetch } = useBlogPosts({
     page: pagination.page,
     limit: pagination.limit,
-    status: statusFilter || undefined,
+    status: statusFilter === 'all' ? undefined : statusFilter || undefined,
   })
 
   const posts = postsResponse?.data || []
@@ -142,9 +142,9 @@ export default function BlogPage() {
               <select
                 className="h-10 rounded-lg border border-gray-200 dark:border-slate-600 bg-white dark:bg-slate-800 px-3 text-sm text-gray-700 dark:text-slate-200 flex-1 sm:flex-none"
                 value={statusFilter}
-                onChange={(e) => { setStatusFilter(e.target.value); setPagination(prev => ({ ...prev, page: 1 })); }}
+                onChange={(e) => { setStatusFilter(e.target.value as 'all' | 'draft' | 'published'); setPagination(prev => ({ ...prev, page: 1 })); }}
               >
-                <option value="">Semua Status</option>
+                <option value="all">Semua Status</option>
                 <option value="published">Published</option>
                 <option value="draft">Draft</option>
               </select>
@@ -286,7 +286,7 @@ export default function BlogPage() {
                       <div className="flex items-center gap-3 text-xs text-gray-400 dark:text-slate-500">
                         <span className="flex items-center gap-1">
                           <Eye className="h-3 w-3" />
-                          {row.views || 0} views
+                          {(row as BlogPost).views || 0} views
                         </span>
                       </div>
                       <div className="flex items-center gap-1">
