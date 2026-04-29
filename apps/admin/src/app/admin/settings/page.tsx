@@ -448,21 +448,21 @@ export default function SettingsPage() {
         <motion.div
           initial={{ opacity: 0, y: -16 }}
           animate={{ opacity: 1, y: 0 }}
-          className="flex flex-wrap items-start justify-between gap-3 sm:gap-4"
+          className="flex flex-wrap items-start justify-between gap-4"
         >
-          <div>
+          <div className="min-w-0 flex-1">
             <div className="flex items-center gap-3">
               <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Settings</h1>
               <button
                 onClick={loadSettings}
-                className="inline-flex items-center h-8 px-3 rounded-lg bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-600 text-xs font-medium text-gray-700 dark:text-slate-200 hover:bg-gray-50 dark:hover:bg-slate-800 transition-all"
+                className="inline-flex items-center h-8 px-3 rounded-lg bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-600 text-xs font-medium text-gray-700 dark:text-slate-200 hover:bg-gray-50 dark:hover:bg-slate-800 transition-all flex-shrink-0"
               >
                 <RefreshCw className="w-3.5 h-3.5" />
               </button>
             </div>
-            <p className="text-xs sm:text-sm text-gray-500 dark:text-slate-400 mt-0.5">Kelola pengaturan website dan konfigurasi sistem</p>
+            <p className="text-xs sm:text-sm text-gray-500 dark:text-slate-400 mt-0.5 truncate">Kelola pengaturan website dan konfigurasi sistem</p>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex-shrink-0">
             <button
               onClick={handleSave}
               disabled={saving}

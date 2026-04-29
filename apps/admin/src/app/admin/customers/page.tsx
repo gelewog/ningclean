@@ -697,11 +697,11 @@ export default function CustomersPage() {
           animate={{ opacity: 1, y: 0 }}
           className="flex flex-wrap items-start justify-between gap-4"
         >
-          <div>
+          <div className="min-w-0 flex-1">
             <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Customer</h1>
-            <p className="text-xs sm:text-sm text-gray-500 dark:text-slate-400 mt-0.5 sm:mt-1">Kelola dan lihat informasi customer</p>
+            <p className="text-xs sm:text-sm text-gray-500 dark:text-slate-400 mt-0.5 sm:mt-1 truncate">Kelola dan lihat informasi customer</p>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex-shrink-0">
             <div className="px-4 py-2 bg-white dark:bg-slate-900 rounded-xl border border-gray-200 dark:border-slate-700 shadow-sm">
               <span className="text-xs sm:text-sm text-gray-500 dark:text-slate-400">Total: </span>
               <span className="text-xs sm:text-sm font-bold text-gray-900 dark:text-white">{pagination.total}</span>

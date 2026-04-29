@@ -668,16 +668,16 @@ export default function CareersPage() {
           animate={{ opacity: 1, y: 0 }}
           className="flex flex-wrap items-start justify-between gap-4"
         >
-          <div>
-            <h1 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Careers</h1>
-            <p className="text-xs sm:text-sm text-gray-500 dark:text-slate-400 mt-1">Manage job listings and openings</p>
+          <div className="min-w-0 flex-1">
+            <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Careers</h1>
+            <p className="text-xs sm:text-sm text-gray-500 dark:text-slate-400 mt-1 truncate">Manage job listings and openings</p>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex-shrink-0 flex flex-wrap items-center gap-2">
             <div className="px-4 py-2 bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700">
               <span className="text-xs sm:text-sm text-gray-500 dark:text-slate-400">Total: </span>
               <span className="text-xs sm:text-sm font-bold text-gray-900 dark:text-white">{items.length}</span>
             </div>
-            <Button onClick={openCreateModal} className="bg-emerald-600 hover:bg-emerald-700 gap-2">
+            <Button onClick={openCreateModal} className="bg-emerald-600 hover:bg-emerald-700 gap-2 flex-shrink-0">
               <Plus className="h-4 w-4" />
               New Job
             </Button>

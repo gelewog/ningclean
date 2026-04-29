@@ -494,25 +494,23 @@ export default function BlogCategoriesPage() {
         <motion.div
           initial={{ opacity: 0, y: -16 }}
           animate={{ opacity: 1, y: 0 }}
-          className="flex flex-wrap items-start justify-between gap-3 sm:gap-4"
+          className="flex flex-wrap items-start justify-between gap-4"
         >
-          <div>
+          <div className="min-w-0 flex-1">
             <div className="flex items-center gap-3">
               <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Kategori Blog</h1>
               <Button 
                 onClick={openCreateModal}
-                className="bg-emerald-600 hover:bg-emerald-700 h-8 text-xs px-3"
+                className="bg-emerald-600 hover:bg-emerald-700 h-8 text-xs px-3 flex-shrink-0"
               >
                 <Plus className="h-4 w-4" />
               </Button>
             </div>
-            <p className="text-xs sm:text-sm text-gray-500 dark:text-slate-400 mt-1">Kelola kategori untuk mengelompokkan blog posts</p>
+            <p className="text-xs sm:text-sm text-gray-500 dark:text-slate-400 mt-1 truncate">Kelola kategori untuk mengelompokkan blog posts</p>
           </div>
-          <div className="flex items-center gap-2">
-            <div className="px-2 sm:px-3 py-1.5 sm:py-2 bg-white dark:bg-slate-900 rounded-lg sm:rounded-xl border border-gray-200 dark:border-slate-600">
-              <span className="text-xs sm:text-sm text-gray-500 dark:text-slate-400">Total: </span>
-              <span className="text-xs sm:text-sm font-bold text-gray-900 dark:text-white">{categories.length}</span>
-            </div>
+          <div className="flex-shrink-0 px-2 sm:px-3 py-1.5 sm:py-2 bg-white dark:bg-slate-900 rounded-lg sm:rounded-xl border border-gray-200 dark:border-slate-600">
+            <span className="text-xs sm:text-sm text-gray-500 dark:text-slate-400">Total: </span>
+            <span className="text-xs sm:text-sm font-bold text-gray-900 dark:text-white">{categories.length}</span>
           </div>
         </motion.div>
 
@@ -548,27 +546,38 @@ export default function BlogCategoriesPage() {
               renderCard={(row: BlogCategory) => (
                 <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-sm hover:shadow-md transition-all duration-300 p-4 active:scale-[0.99]"
                 >
-                  {/* Header - Icon & Name */}
-                  <div className="flex items-start gap-4 border-b border-gray-100 dark:border-slate-700 pb-4"
+                  {/* Header - Icon, Name & Actions */}
+                  <div className="flex items-center justify-between gap-3 border-b border-gray-100 dark:border-slate-700 pb-4"
                   >
-                    <div className="h-14 w-14 rounded-2xl bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center flex-shrink-0 shadow-lg shadow-emerald-500/20"
+                    <div className="flex items-center gap-3 min-w-0"
                     >
-                      <Folder className="h-7 w-7 text-white" />
-                    </div>
-                    <div className="flex-1 min-w-0"
-                    >
-                      <p className="font-bold text-gray-900 dark:text-white text-lg truncate">{row.name}</p>
-                      <div className="flex items-center gap-2 mt-1">
-                        <div className="flex items-center gap-1.5 text-xs text-gray-500 dark:text-slate-400"
-                        >
-                          <div className="h-5 w-5 rounded bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center"
+                      <div className="h-12 w-12 sm:h-14 sm:w-14 rounded-2xl bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center flex-shrink-0 shadow-lg shadow-emerald-500/20"
+                      >
+                        <Folder className="h-6 w-6 sm:h-7 sm:w-7 text-white" />
+                      </div>
+                      <div className="min-w-0"
+                      >
+                        <p className="font-bold text-gray-900 dark:text-white text-base sm:text-lg truncate">{row.name}</p>
+                        <div className="flex items-center gap-2 mt-0.5">
+                          <div className="flex items-center gap-1 text-xs text-gray-500 dark:text-slate-400"
                           >
                             <Hash className="h-3 w-3 text-blue-600 dark:text-blue-400" />
+                            <span className="text-blue-600 dark:text-blue-400 font-medium">/{row.slug}</span>
                           </div>
-                          <span className="text-blue-600 dark:text-blue-400 font-medium">/{row.slug}</span>
                         </div>
                       </div>
                     </div>
+
+                    {/* Edit Button - Header Right */}
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        openEditModal(row)
+                      }}
+                      className="h-9 w-9 rounded-xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 flex items-center justify-center text-gray-600 dark:text-slate-400 hover:bg-emerald-50 hover:text-emerald-600 dark:hover:bg-emerald-900/20 dark:hover:text-emerald-400 transition-colors shadow-sm flex-shrink-0"
+                    >
+                      <Edit className="h-4 w-4" />
+                    </button>
                   </div>
 
                   {/* Description */}
@@ -579,39 +588,23 @@ export default function BlogCategoriesPage() {
                     </p>
                   )}
 
-                  {/* Posts Count Badge */}
-                  <div className="py-2"
+                  {/* Footer - Total Posts Left, Delete Right */}
+                  <div className="flex items-center justify-between pt-3 border-t border-gray-100 dark:border-slate-700"
                   >
-                    <div className="flex items-center justify-between p-3 rounded-xl bg-amber-50 dark:bg-amber-900/20 border border-amber-100 dark:border-amber-800"
+                    {/* Total Posts - Left */}
+                    <div className="flex items-center gap-2"
                     >
-                      <div className="flex items-center gap-2"
+                      <div className="h-8 w-8 rounded-lg bg-amber-100 dark:bg-amber-800/50 flex items-center justify-center"
                       >
-                        <div className="h-8 w-8 rounded-lg bg-amber-100 dark:bg-amber-800/50 flex items-center justify-center"
-                        >
-                          <FileText className="h-4 w-4 text-amber-600 dark:text-amber-400" />
-                        </div>
-                        <span className="text-sm text-gray-600 dark:text-slate-400"
-                        >Total Posts</span>
+                        <FileText className="h-4 w-4 text-amber-600 dark:text-amber-400" />
                       </div>
-                      <span className="text-xl font-bold text-amber-700 dark:text-amber-400"
-                      >
-                        {row._count?.posts || 0}
-                      </span>
+                      <div>
+                        <span className="text-xs text-gray-500 dark:text-slate-400">Total Posts</span>
+                        <p className="text-lg font-bold text-amber-700 dark:text-amber-400 leading-tight">{row._count?.posts || 0}</p>
+                      </div>
                     </div>
-                  </div>
 
-                  {/* Footer - Actions */}
-                  <div className="flex items-center justify-end gap-2 pt-3 border-t border-gray-100 dark:border-slate-700"
-                  >
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation()
-                        openEditModal(row)
-                      }}
-                      className="h-9 w-9 rounded-xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 flex items-center justify-center text-gray-600 dark:text-slate-400 hover:bg-emerald-50 hover:text-emerald-600 dark:hover:bg-emerald-900/20 dark:hover:text-emerald-400 transition-colors shadow-sm"
-                    >
-                      <Edit className="h-4 w-4" />
-                    </button>
+                    {/* Delete Button - Right */}
                     <button
                       onClick={(e) => {
                         e.stopPropagation()

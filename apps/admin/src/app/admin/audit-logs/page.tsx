@@ -282,11 +282,11 @@ export default function AuditLogPage() {
           animate={{ opacity: 1, y: 0 }}
           className="flex flex-wrap items-start justify-between gap-4"
         >
-          <div>
+          <div className="min-w-0 flex-1">
             <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Log Audit</h1>
-            <p className="text-xs sm:text-sm text-gray-500 dark:text-slate-400 mt-1">Lacak semua aktivitas admin dan perubahan data</p>
+            <p className="text-xs sm:text-sm text-gray-500 dark:text-slate-400 mt-1 truncate">Lacak semua aktivitas admin dan perubahan data</p>
           </div>
-          <div className="px-2 sm:px-3 py-1.5 sm:py-2 bg-white dark:bg-slate-900 rounded-xl border border-gray-200 dark:border-slate-600">
+          <div className="flex-shrink-0 px-2 sm:px-3 py-1.5 sm:py-2 bg-white dark:bg-slate-900 rounded-xl border border-gray-200 dark:border-slate-600">
             <span className="text-xs sm:text-sm text-gray-500 dark:text-slate-400">Total: </span>
             <span className="text-xs sm:text-sm font-bold text-gray-900 dark:text-white">{totalLogs}</span>
           </div>

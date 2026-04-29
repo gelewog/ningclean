@@ -1055,18 +1055,18 @@ export default function GalleryPage() {
         <motion.div
           initial={{ opacity: 0, y: -16 }}
           animate={{ opacity: 1, y: 0 }}
-          className="flex flex-wrap items-start justify-between gap-3 sm:gap-4"
+          className="flex flex-wrap items-start justify-between gap-4"
         >
-          <div>
+          <div className="min-w-0 flex-1">
             <div className="flex items-center gap-3">
               <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Gallery</h1>
-              <Button onClick={openCreateModal} className="bg-emerald-600 hover:bg-emerald-700 h-8 text-xs px-3">
+              <Button onClick={openCreateModal} className="bg-emerald-600 hover:bg-emerald-700 h-8 text-xs px-3 flex-shrink-0">
                 <Plus className="h-4 w-4" />
               </Button>
             </div>
-            <p className="text-xs sm:text-sm text-gray-500 dark:text-slate-400 mt-1">Manage gallery items and portfolio</p>
+            <p className="text-xs sm:text-sm text-gray-500 dark:text-slate-400 mt-1 truncate">Manage gallery items and portfolio</p>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex-shrink-0">
             <div className="px-2 sm:px-3 py-1.5 sm:py-2 bg-white dark:bg-slate-900 rounded-lg sm:rounded-xl border border-gray-200 dark:border-slate-600">
               <span className="text-xs sm:text-sm text-gray-500 dark:text-slate-400">Total: </span>
               <span className="text-xs sm:text-sm font-bold text-gray-900 dark:text-white">{items.length}</span>
