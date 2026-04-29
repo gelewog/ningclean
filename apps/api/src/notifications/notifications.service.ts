@@ -279,12 +279,23 @@ export class NotificationsService implements OnModuleInit {
     const { page = 1, limit = 20, unreadOnly = false } = options;
     const where = unreadOnly ? { isRead: false } : {};
     const skip = (page - 1) * limit;
-    return this.prisma.notification.findMany({
-      where,
-      orderBy: { createdAt: 'desc' },
-      take: limit,
-      skip,
-    });
+    
+    const [notifications, totalCount, unreadCount] = await Promise.all([
+      this.prisma.notification.findMany({
+        where,
+        orderBy: { createdAt: 'desc' },
+        take: limit,
+        skip,
+      }),
+      this.prisma.notification.count({ where }),
+      this.prisma.notification.count({ where: { isRead: false } }),
+    ]);
+    
+    return {
+      data: notifications,
+      totalPages: Math.ceil(totalCount / limit),
+      unreadCount,
+    };
   }
 
   // Get unread count

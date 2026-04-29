@@ -145,7 +145,7 @@ export default function AuditLogPage() {
     setLoading(true)
     try {
       const token = getToken()
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}/admin/audit-logs`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}/api/admin/audit-logs`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
