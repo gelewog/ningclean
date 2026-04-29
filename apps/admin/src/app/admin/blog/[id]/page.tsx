@@ -14,6 +14,7 @@ import Link from 'next/link'
 import { getBlogPostById, updateBlogPost, deleteBlogPost, getBlogCategories, BlogCategory, createDraftPreview } from '@/lib/api'
 import { BlogPost } from '@/types'
 import { toast } from 'sonner'
+import { Breadcrumb } from '@/components/admin/Breadcrumb'
 
 interface BlogFormData {
   title: string
@@ -158,38 +159,30 @@ export default function EditBlogPostPage() {
 
   return (
     <div className="min-h-screen bg-gray-50/50 dark:bg-slate-800 text-gray-900 dark:text-white">
-      {/* Topbar */}
-      <div className="sticky top-0 z-20 bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border-b border-gray-200 dark:border-slate-700 px-4 md:px-6 py-4">
-        <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-slate-400">
-          <span>Admin</span>
-          <ChevronRight className="w-4 h-4" />
-          <Link href="/admin/blog" className="hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">Blog</Link>
-          <ChevronRight className="w-4 h-4" />
-          <span className="text-gray-900 dark:text-white font-medium">Edit Post</span>
-        </div>
-      </div>
+      {/* Breadcrumb */}
+      <Breadcrumb items={[{ label: 'Blog', href: '/admin/blog' }, { label: 'Edit Post' }]} />
 
       <div className="w-full px-4 md:px-6 py-6 space-y-6">
         {/* Page Header */}
         <motion.div
           initial={{ opacity: 0, y: -16 }}
           animate={{ opacity: 1, y: 0 }}
-          className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"
+          className="flex flex-wrap items-start justify-between gap-3 sm:gap-4"
         >
-          <div className="flex items-center gap-3">
-            <Link href="/admin/blog" className="p-2 hover:bg-gray-100 dark:hover:bg-slate-800 rounded-xl transition-colors shrink-0">
-              <ArrowLeft className="w-5 h-5 text-gray-500 dark:text-slate-400" />
-            </Link>
-            <div className="min-w-0">
+          <div className="min-w-0 flex-1">
+            <div className="flex items-center gap-3">
+              <Link href="/admin/blog" className="p-2 hover:bg-gray-100 dark:hover:bg-slate-800 rounded-xl transition-colors shrink-0">
+                <ArrowLeft className="w-5 h-5 text-gray-500 dark:text-slate-400" />
+              </Link>
               <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-gray-900 dark:text-white truncate">Edit Post</h1>
-              <p className="text-sm text-gray-500 dark:text-slate-400 mt-0.5">Edit artikel blog</p>
             </div>
+            <p className="text-sm text-gray-500 dark:text-slate-400 mt-1 truncate">Edit artikel blog</p>
           </div>
-          <div className="flex items-center gap-2 sm:gap-3">
+          <div className="flex-shrink-0 flex items-center gap-2 sm:gap-3">
             <Button
               variant="outline"
               onClick={() => setIsDeleteModalOpen(true)}
-              className="text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 border-red-200 dark:border-red-800 h-9 sm:h-10 px-2 sm:px-4"
+              className="text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 border-red-200 dark:border-red-800 h-9 sm:h-10 px-3 sm:px-4 bg-white dark:bg-slate-900"
             >
               <Trash2 className="w-4 h-4 sm:mr-2" />
               <span className="hidden sm:inline">Hapus</span>
@@ -197,7 +190,6 @@ export default function EditBlogPostPage() {
             <Button
               variant="outline"
               onClick={async () => {
-                // Build draft data
                 const draftData = {
                   title: formData.title,
                   content: formData.content,
@@ -210,10 +202,8 @@ export default function EditBlogPostPage() {
                   slug: post?.slug || 'draft-preview',
                   category: categories.find(c => c.id === formData.categoryId),
                 }
-                // Save to API and get temp ID
                 try {
                   const { id } = await createDraftPreview(draftData)
-                  // Open preview dengan URL dari environment variable
                   const webUrl = process.env.NEXT_PUBLIC_WEB_URL || 'http://localhost:3001'
                   window.open(`${webUrl}/blog/draft-preview/preview?id=${id}`, '_blank')
                 } catch (e) {
@@ -221,10 +211,10 @@ export default function EditBlogPostPage() {
                   toast.error('Gagal membuat preview')
                 }
               }}
-              className="h-9 sm:h-10 px-2 sm:px-4"
+              className="h-9 sm:h-10 px-3 sm:px-4 bg-white dark:bg-slate-900 border-gray-200 dark:border-slate-700"
             >
               <Eye className="w-4 h-4 sm:mr-2" />
-              <span className="hidden sm:inline">Preview Draft</span>
+              <span className="hidden sm:inline">Preview</span>
             </Button>
             <Button
               onClick={handleSubmit}

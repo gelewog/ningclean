@@ -109,26 +109,28 @@ export default function NewBlogPostPage() {
         <motion.div
           initial={{ opacity: 0, y: -16 }}
           animate={{ opacity: 1, y: 0 }}
-          className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"
+          className="flex flex-wrap items-start justify-between gap-3 sm:gap-4"
         >
-          <div className="flex items-center gap-3">
-            <Link href="/admin/blog" className="p-2 hover:bg-gray-100 dark:hover:bg-slate-800 rounded-xl transition-colors shrink-0">
-              <ArrowLeft className="w-5 h-5 text-gray-500 dark:text-slate-400" />
-            </Link>
-            <div className="min-w-0">
+          <div className="min-w-0 flex-1">
+            <div className="flex items-center gap-3">
+              <Link href="/admin/blog" className="p-2 hover:bg-gray-100 dark:hover:bg-slate-800 rounded-xl transition-colors shrink-0">
+                <ArrowLeft className="w-5 h-5 text-gray-500 dark:text-slate-400" />
+              </Link>
               <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-gray-900 dark:text-white truncate">Buat Post Baru</h1>
-              <p className="text-sm text-gray-500 dark:text-slate-400 mt-0.5">Tulis artikel blog baru</p>
             </div>
+            <p className="text-sm text-gray-500 dark:text-slate-400 mt-1 truncate">Tulis artikel blog baru</p>
           </div>
-          <div className="flex items-center gap-2 sm:gap-3">
-            <Button variant="outline" onClick={() => router.push('/admin/blog')} className="h-9 sm:h-10 px-3 sm:px-4">
-              <span className="hidden sm:inline">Batal</span>
-              <span className="sm:hidden">Batal</span>
+          <div className="flex-shrink-0 flex items-center gap-2 sm:gap-3">
+            <Button 
+              variant="outline" 
+              onClick={() => router.push('/admin/blog')} 
+              className="h-9 sm:h-10 px-3 sm:px-4 bg-white dark:bg-slate-900 border-gray-200 dark:border-slate-700"
+            >
+              Batal
             </Button>
             <Button
               variant="outline"
               onClick={() => {
-                // Simpan draft ke localStorage untuk preview (fallback untuk local dev)
                 const draftData = {
                   title: formData.title || 'Untitled',
                   content: formData.content,
@@ -142,14 +144,13 @@ export default function NewBlogPostPage() {
                   category: undefined,
                 }
                 localStorage.setItem('blog_draft_preview', JSON.stringify(draftData))
-                // Open preview dengan URL dari environment variable
                 const webUrl = process.env.NEXT_PUBLIC_WEB_URL || 'http://localhost:3001'
                 window.open(`${webUrl}/admin/blog/preview`, '_blank')
               }}
-              className="h-9 sm:h-10 px-2 sm:px-4"
+              className="h-9 sm:h-10 px-3 sm:px-4 bg-white dark:bg-slate-900 border-gray-200 dark:border-slate-700"
             >
               <Eye className="w-4 h-4 sm:mr-2" />
-              <span className="hidden sm:inline">Preview Draft</span>
+              <span className="hidden sm:inline">Preview</span>
             </Button>
             <Button
               onClick={handleSubmit}

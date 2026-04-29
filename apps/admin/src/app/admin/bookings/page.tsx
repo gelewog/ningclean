@@ -444,7 +444,7 @@ function BookingsContent() {
       {/* Topbar */}
       <Breadcrumb items={[{ label: 'Bookings' }]} />
 
-      <div className="w-full px-3 sm:px-6 py-3 sm:py-6 space-y-3 sm:space-y-6">
+      <div className="w-full px-4 md:px-6 py-4 md:py-6 space-y-4 md:space-y-6">
 
         {/* Page Header */}
         <motion.div
@@ -452,24 +452,24 @@ function BookingsContent() {
           animate={{ opacity: 1, y: 0 }}
           className="flex flex-wrap items-start justify-between gap-4"
         >
-          <div>
-            <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Bookings</h1>
-            <p className="text-xs sm:text-sm text-gray-500 dark:text-slate-400 mt-0.5">Kelola semua booking dan pesanan layanan cleaning</p>
+          <div className="min-w-0 flex-1">
+            <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-gray-900 dark:text-white truncate">Bookings</h1>
+            <p className="text-xs sm:text-sm text-gray-500 dark:text-slate-400 mt-0.5 truncate">Kelola semua booking dan pesanan layanan cleaning</p>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 flex-shrink-0">
             <button
               onClick={handleExport}
-              className="inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-medium bg-white dark:bg-slate-800 text-gray-700 dark:text-slate-200 border border-gray-200 dark:border-slate-700 hover:bg-gray-50 dark:hover:bg-slate-700 hover:text-gray-900 dark:hover:text-white transition-all"
+              className="inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-medium bg-white dark:bg-slate-900 text-gray-700 dark:text-slate-200 border border-gray-200 dark:border-slate-700 hover:bg-gray-50 dark:hover:bg-slate-700 hover:text-gray-900 dark:hover:text-white transition-all"
             >
               <Download className="w-3.5 h-3.5" />
-              <span>Export</span>
+              <span className="hidden sm:inline">Export</span>
             </button>
             <button
               onClick={() => { fetchServices(); setNewBookingOpen(true) }}
-              className="inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-medium bg-emerald-500 text-white border border-emerald-600 hover:bg-emerald-600 transition-all"
+              className="inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-medium bg-emerald-500 text-white border border-emerald-600 hover:bg-emerald-600 transition-all whitespace-nowrap"
             >
               <Plus className="w-3.5 h-3.5" />
-              <span className="whitespace-nowrap">Booking Baru</span>
+              <span>Baru</span>
             </button>
           </div>
         </motion.div>
@@ -537,31 +537,36 @@ function BookingsContent() {
         </AnimatePresence>
 
         {/* Filters */}
-        <div className="bg-white dark:bg-slate-900 rounded-xl border border-gray-200 dark:border-slate-700 shadow-sm p-3 sm:p-4">
-        <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
-          <DarkInput
-            placeholder="Cari booking..."
-            icon={<Search className="w-4 h-4" />}
-            value={search}
-            onChange={e => setSearch(e.target.value)}
-            onKeyDown={e => e.key === 'Enter' && setLoading(true)}
-            className="flex-1"
-          />
-          <div className="flex gap-2 flex-1 sm:flex-none">
-            <DarkSelect
-              options={STATUS_OPTIONS}
-              value={statusFilter}
-              onChange={e => setStatusFilter(e.target.value)}
-              className="flex-1 sm:flex-none"
-            />
-            <DarkSelect
-              options={AREA_OPTIONS}
-              value={areaFilter}
-              onChange={e => setAreaFilter(e.target.value)}
-              className="flex-1 sm:flex-none"
-            />
+        <div className="bg-white dark:bg-slate-900 rounded-xl border border-gray-100 dark:border-slate-700 shadow-sm p-4">
+          <div className="flex flex-col md:flex-row gap-3">
+            <div className="relative flex-1">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400 dark:text-slate-500 pointer-events-none" />
+              <input
+                type="text"
+                placeholder="Cari booking..."
+                value={search}
+                onChange={e => setSearch(e.target.value)}
+                onKeyDown={e => e.key === 'Enter' && setLoading(true)}
+                className="w-full pl-9 pr-4 py-2.5 bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-xl text-sm text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-slate-500 focus:outline-none focus:border-blue-500 dark:focus:border-blue-400 transition-all"
+              />
+            </div>
+            <div className="flex gap-2 md:flex-none">
+              <select
+                value={statusFilter}
+                onChange={e => setStatusFilter(e.target.value)}
+                className="flex-1 md:flex-none bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-xl text-sm text-gray-700 dark:text-slate-200 focus:outline-none focus:border-blue-500 dark:focus:border-blue-400 transition-all py-2.5 px-3 cursor-pointer"
+              >
+                {STATUS_OPTIONS.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
+              </select>
+              <select
+                value={areaFilter}
+                onChange={e => setAreaFilter(e.target.value)}
+                className="flex-1 md:flex-none bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-xl text-sm text-gray-700 dark:text-slate-200 focus:outline-none focus:border-blue-500 dark:focus:border-blue-400 transition-all py-2.5 px-3 cursor-pointer"
+              >
+                {AREA_OPTIONS.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
+              </select>
+            </div>
           </div>
-        </div>
         </div>
 
         {/* Table */}
@@ -571,8 +576,8 @@ function BookingsContent() {
             data={bookings}
             loading={loading || isBookingsLoading}
             onRowClick={(row) => { setSelectedBooking(row); setIsDetailOpen(true) }}
-            renderCard={(row) => (
-              <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-sm hover:shadow-md transition-all duration-300 p-3 cursor-pointer active:scale-[0.99]">
+          renderCard={(row) => (
+            <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-sm hover:shadow-md transition-all duration-300 p-3 cursor-pointer active:scale-[0.99] border border-gray-100 dark:border-slate-700/50">
               <div className="space-y-2">
                 {/* Header - ID & Status */}
                 <div className="flex items-center justify-between border-b border-gray-100 dark:border-slate-700/50 pb-1.5">
@@ -776,12 +781,6 @@ function BookingsContent() {
               <div className="flex items-center gap-3">
                 <span className="font-mono text-xs text-gray-500 dark:text-slate-400">#{selectedBooking.id?.slice(0, 8)}</span>
                 <StatusPill status={selectedBooking.status} />
-              </div>
-              <div className="flex items-center gap-2">
-                <WhatsAppButton
-                  phone={selectedBooking.customerPhone}
-                  message={`Halo ${selectedBooking.customerName}, saya dari NingClean ingin konfirmasi booking Anda...`}
-                />
               </div>
             </div>
 

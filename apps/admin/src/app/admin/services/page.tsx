@@ -355,7 +355,7 @@ function ServiceModal({
                             className={`px-4 py-3 rounded-xl text-sm font-medium transition-all border-2 ${
                               isSelected
                                 ? `${colorStyle.border} ${colorStyle.borderDark} ${colorStyle.light} ${colorStyle.dark} ${colorStyle.text} ${colorStyle.textDark}`
-                                : 'border-gray-200 dark:border-slate-600 text-gray-600 dark:text-slate-400 hover:border-gray-300 dark:hover:border-slate-500'
+                                : 'bg-white dark:bg-slate-900 border-gray-200 dark:border-slate-600 text-gray-600 dark:text-slate-400 hover:border-gray-300 dark:hover:border-slate-500'
                             }`}
                           >
                             {opt.label}
@@ -519,12 +519,12 @@ function ServiceModal({
           </div>
 
           {/* Footer */}
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-0 px-4 sm:px-6 py-4 border-t border-gray-100 dark:border-slate-700 bg-gray-50/50 dark:bg-slate-800/50">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-0 px-4 sm:px-6 py-4 border-t border-gray-100 dark:border-slate-700 bg-white dark:bg-slate-900">
             <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-slate-400 order-2 sm:order-1">
               <span className="text-red-500">*</span> Required fields
             </div>
             <div className="flex items-center gap-2 sm:gap-3 order-1 sm:order-2">
-              <Button variant="outline" onClick={onClose} disabled={loading} className="flex-1 sm:flex-none">
+              <Button variant="outline" onClick={onClose} disabled={loading} className="flex-1 sm:flex-none bg-white dark:bg-slate-900 border-gray-200 dark:border-slate-700">
                 Cancel
               </Button>
               <Button onClick={onSubmit} disabled={loading} className="flex-1 sm:flex-none gap-2 bg-emerald-600 hover:bg-emerald-700">
@@ -847,9 +847,9 @@ export default function ServicesPage() {
           className="flex gap-2 overflow-x-auto pb-1 -mx-3 px-3 sm:mx-0 sm:px-0"
         >
           {[
-            { key: 'all', label: 'All', count: services.length, color: 'bg-blue-500 text-white border-blue-500 shadow-lg shadow-blue-500/25', inactiveColor: 'bg-white dark:bg-slate-800 border-gray-200 dark:border-slate-700 text-gray-600 dark:text-slate-400 hover:border-gray-300 dark:hover:border-slate-600' },
-            { key: 'active', label: 'Active', count: services.filter(s => s.isActive).length, color: 'bg-emerald-500 text-white border-emerald-500 shadow-lg shadow-emerald-500/25', inactiveColor: 'bg-white dark:bg-slate-800 border-gray-200 dark:border-slate-700 text-gray-600 dark:text-slate-400 hover:border-gray-300 dark:hover:border-slate-600' },
-            { key: 'inactive', label: 'Inactive', count: services.filter(s => !s.isActive).length, color: 'bg-gray-500 text-white border-gray-500 shadow-lg shadow-gray-500/25', inactiveColor: 'bg-white dark:bg-slate-800 border-gray-200 dark:border-slate-700 text-gray-600 dark:text-slate-400 hover:border-gray-300 dark:hover:border-slate-600' },
+            { key: 'all', label: 'All', count: services.length, color: 'bg-blue-500 text-white border-blue-500 shadow-lg shadow-blue-500/25', inactiveColor: 'bg-white dark:bg-slate-900 border-gray-200 dark:border-slate-700 text-gray-600 dark:text-slate-400 hover:border-gray-300 dark:hover:border-slate-600' },
+            { key: 'active', label: 'Active', count: services.filter(s => s.isActive).length, color: 'bg-emerald-500 text-white border-emerald-500 shadow-lg shadow-emerald-500/25', inactiveColor: 'bg-white dark:bg-slate-900 border-gray-200 dark:border-slate-700 text-gray-600 dark:text-slate-400 hover:border-gray-300 dark:hover:border-slate-600' },
+            { key: 'inactive', label: 'Inactive', count: services.filter(s => !s.isActive).length, color: 'bg-gray-500 text-white border-gray-500 shadow-lg shadow-gray-500/25', inactiveColor: 'bg-white dark:bg-slate-900 border-gray-200 dark:border-slate-700 text-gray-600 dark:text-slate-400 hover:border-gray-300 dark:hover:border-slate-600' },
           ].map((tab: any) => (
             <button
               key={tab.key}
@@ -906,7 +906,7 @@ export default function ServicesPage() {
                       exit={{ opacity: 0, scale: 0.9 }}
                       transition={{ delay: index * 0.05 }}
                     >
-                      <Card className={`group overflow-hidden transition-all hover:shadow-xl dark:hover:shadow-slate-900/50 ${!service.isActive ? 'opacity-60 grayscale' : ''} dark:bg-slate-800 dark:border-slate-700`}>
+                      <Card className={`group overflow-hidden transition-all hover:shadow-xl dark:hover:shadow-slate-900/50 ${!service.isActive ? 'opacity-60 grayscale' : ''} bg-white dark:bg-slate-900 dark:border-slate-700`}>
                         {/* Image */}
                         <div className="relative">
                           {service.image ? (
@@ -935,7 +935,7 @@ export default function ServicesPage() {
                           )}
                         </div>
                         
-                        <CardHeader className="pb-2 dark:bg-slate-800 p-3 sm:p-6">
+                        <CardHeader className="pb-2 dark:bg-slate-900 p-3 sm:p-6 border-b border-gray-100 dark:border-slate-700">
                           <div className="flex items-start justify-between">
                             <div className="flex items-center gap-2 sm:gap-3">
                               <div className={`rounded-lg sm:rounded-xl p-2 sm:p-3 ${service.isActive ? 'bg-gradient-to-br from-emerald-500 to-emerald-600 text-white shadow-lg shadow-emerald-500/25' : 'bg-gray-200 dark:bg-slate-700 text-gray-400 dark:text-slate-400'}`}>
@@ -951,7 +951,7 @@ export default function ServicesPage() {
                           </div>
                         </CardHeader>
                         
-                        <CardContent className="dark:bg-slate-800 p-3 sm:p-6 pt-0 sm:pt-0">
+                        <CardContent className="dark:bg-slate-900 p-3 sm:p-6 pt-3 sm:pt-4">
                           <p className="mb-3 sm:mb-4 text-xs sm:text-sm text-gray-500 dark:text-slate-400 line-clamp-2">{service.description}</p>
                           <div className="flex items-center justify-between gap-2">
                             <div>

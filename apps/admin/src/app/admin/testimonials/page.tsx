@@ -92,7 +92,7 @@ function TestimonialFormModal({
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: 20 }}
           transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-          className="pointer-events-auto w-full max-w-lg bg-white dark:bg-slate-900 sm:rounded-2xl shadow-2xl border-0 sm:border border-gray-200 dark:border-slate-600 overflow-hidden flex flex-col max-h-[90vh] sm:max-h-[85vh]"
+          className="pointer-events-auto w-full max-w-lg bg-white dark:bg-slate-900 rounded-2xl shadow-2xl border border-gray-200 dark:border-slate-600 overflow-hidden flex flex-col max-h-[90vh] sm:max-h-[85vh]"
           onClick={(e) => e.stopPropagation()}
         >
           {/* Header */}
@@ -351,7 +351,7 @@ function TestimonialDeleteModal({
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: 20 }}
           transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-          className="pointer-events-auto w-full h-full sm:h-auto sm:max-w-md bg-white dark:bg-slate-900 sm:rounded-2xl shadow-2xl border-0 sm:border border-gray-200 dark:border-slate-600 overflow-hidden"
+          className="pointer-events-auto w-full max-w-md bg-white dark:bg-slate-900 rounded-2xl shadow-2xl border border-gray-200 dark:border-slate-600 overflow-hidden"
           onClick={(e) => e.stopPropagation()}
         >
           <div className="p-4 sm:p-6">
@@ -393,7 +393,7 @@ function TestimonialDeleteModal({
             </div>
 
             <div className="mt-6 flex justify-end gap-3">
-              <Button variant="outline" onClick={onClose}>
+              <Button variant="outline" onClick={onClose} className="bg-white dark:bg-slate-900 border-gray-200 dark:border-slate-700">
                 Batal
               </Button>
               <Button 
