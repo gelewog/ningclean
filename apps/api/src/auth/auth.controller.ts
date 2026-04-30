@@ -37,7 +37,7 @@ export class AuthController {
   @ApiOperation({ summary: 'Update current user profile' })
   @ApiResponse({ status: 200, description: 'Profile updated successfully' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
-  async updateProfile(@Request() req: any, @Body() body: { name?: string; email?: string }) {
+  async updateProfile(@Request() req: any, @Body() body: { name?: string; email?: string; phone?: string; avatar?: string }) {
     return this.authService.updateProfile(req.user.id, body);
   }
 
