@@ -124,7 +124,10 @@ export default function AnalyticsPage() {
     setLoading(true)
     try {
       const token = getToken()
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}/admin/analytics`, {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'
+      // Ensure /api prefix is present
+      const baseUrl = apiUrl.endsWith('/api') ? apiUrl : `${apiUrl}/api`
+      const res = await fetch(`${baseUrl}/admin/analytics`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
