@@ -36,7 +36,7 @@ export default function ProfileSettingsPage() {
   const [mounted, setMounted] = React.useState(false)
 
   // Form fields
-  const [name, setName] = React.useState('Risky NingClean')
+  const [name, setName] = React.useState('Nama Lengkap')
   const [email, setEmail] = React.useState('')
   const [phone, setPhone] = React.useState('')
   const [avatar, setAvatar] = React.useState('')
@@ -400,7 +400,7 @@ export default function ProfileSettingsPage() {
                           type="text"
                           value={name}
                           onChange={e => setName(e.target.value)}
-                          placeholder="Risky NingClean"
+                          placeholder="Nama Lengkap"
                           className="w-full pl-12 pr-4 py-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all"
                         />
                       </div>
