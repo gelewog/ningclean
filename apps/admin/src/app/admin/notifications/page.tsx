@@ -42,7 +42,9 @@ export default function NotificationsPage() {
         params.set('unreadOnly', 'true')
       }
 
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api'}/notifications?${params}`, {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api'
+      const baseUrl = apiUrl.endsWith('/api') ? apiUrl : `${apiUrl}/api`
+      const res = await fetch(`${baseUrl}/notifications?${params}`, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json',
@@ -71,7 +73,9 @@ export default function NotificationsPage() {
 
     setActionLoading(id)
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api'}/notifications/${id}/read`, {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api'
+      const baseUrl = apiUrl.endsWith('/api') ? apiUrl : `${apiUrl}/api`
+      const res = await fetch(`${baseUrl}/notifications/${id}/read`, {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -94,7 +98,9 @@ export default function NotificationsPage() {
 
     setActionLoading(id)
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api'}/notifications/${id}/unread`, {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api'
+      const baseUrl = apiUrl.endsWith('/api') ? apiUrl : `${apiUrl}/api`
+      const res = await fetch(`${baseUrl}/notifications/${id}/unread`, {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -117,7 +123,9 @@ export default function NotificationsPage() {
 
     setActionLoading('all')
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api'}/notifications/read-all`, {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api'
+      const baseUrl = apiUrl.endsWith('/api') ? apiUrl : `${apiUrl}/api`
+      const res = await fetch(`${baseUrl}/notifications/read-all`, {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${token}`,
