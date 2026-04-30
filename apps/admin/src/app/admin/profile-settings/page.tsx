@@ -36,7 +36,7 @@ export default function ProfileSettingsPage() {
   const [mounted, setMounted] = React.useState(false)
 
   // Form fields
-  const [name, setName] = React.useState('')
+  const [name, setName] = React.useState('Risky NingClean')
   const [email, setEmail] = React.useState('')
   const [phone, setPhone] = React.useState('')
   const [avatar, setAvatar] = React.useState('')
@@ -108,8 +108,10 @@ export default function ProfileSettingsPage() {
       }
 
       const token = getToken()
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'
+      const baseUrl = apiUrl.endsWith('/api') ? apiUrl : `${apiUrl}/api`
       if (token) {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api'}/auth/me`, {
+        const res = await fetch(`${baseUrl}/auth/me`, {
           headers: {
             'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json',
@@ -152,7 +154,9 @@ export default function ProfileSettingsPage() {
       if (result.success && result.data) {
         // Auto-save avatar to database
         const token = getToken()
-        const saveRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api'}/auth/profile`, {
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'
+        const baseUrl = apiUrl.endsWith('/api') ? apiUrl : `${apiUrl}/api`
+        const saveRes = await fetch(`${baseUrl}/auth/profile`, {
           method: 'PUT',
           headers: {
             'Authorization': `Bearer ${token}`,
@@ -191,7 +195,9 @@ export default function ProfileSettingsPage() {
     setSaving(true)
     try {
       const token = getToken()
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api'}/auth/profile`, {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'
+      const baseUrl = apiUrl.endsWith('/api') ? apiUrl : `${apiUrl}/api`
+      const res = await fetch(`${baseUrl}/auth/profile`, {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -237,7 +243,9 @@ export default function ProfileSettingsPage() {
     setSaving(true)
     try {
       const token = getToken()
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api'}/auth/change-password`, {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'
+      const baseUrl = apiUrl.endsWith('/api') ? apiUrl : `${apiUrl}/api`
+      const res = await fetch(`${baseUrl}/auth/change-password`, {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -392,7 +400,7 @@ export default function ProfileSettingsPage() {
                           type="text"
                           value={name}
                           onChange={e => setName(e.target.value)}
-                          placeholder="Masukkan nama lengkap"
+                          placeholder="Risky NingClean"
                           className="w-full pl-12 pr-4 py-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all"
                         />
                       </div>
