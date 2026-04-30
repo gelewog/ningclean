@@ -160,8 +160,8 @@ function NotifIcon({ type }: { type: string }) {
 
 function QuickActions({ onAction }: { onAction: (path: string) => void }) {
   const actions = [
-    { id: 'new-booking', label: 'New Booking', icon: Plus, path: '/admin/bookings', color: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-400' },
-    { id: 'new-customer', label: 'New Customer', icon: Users, path: '/admin/customers', color: 'bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-400' },
+    { id: 'new-booking', label: 'Booking Baru', icon: Plus, path: '/admin/bookings', color: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-400' },
+    { id: 'new-customer', label: 'Customer Baru', icon: Users, path: '/admin/customers', color: 'bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-400' },
   ]
 
   return (
@@ -199,14 +199,14 @@ function RecentSearches({
     <div className="px-2 py-2 border-b border-gray-100 dark:border-slate-700">
       <div className="flex items-center justify-between px-2 mb-1.5">
         <span className="text-[10px] font-semibold text-gray-500 dark:text-slate-400 uppercase tracking-wider">
-          Recent
+          Terbaru
         </span>
         <button
           onClick={onClear}
           className="text-[10px] text-gray-400 hover:text-red-500 dark:hover:text-red-400 transition-colors flex items-center gap-0.5"
         >
           <Trash2 className="w-3 h-3" />
-          Clear
+          Hapus
         </button>
       </div>
       <div className="space-y-0.5">
@@ -285,7 +285,7 @@ function SearchResultsPanel({
       {hasQuery && (
         <div className="flex items-center justify-between px-4 py-2 border-b border-gray-100 dark:border-slate-700">
           <span className="text-[12px] font-semibold text-gray-700 dark:text-slate-300">
-            Results for &quot;{query}&quot;
+            Hasil untuk "{query}"
           </span>
           <button
             onClick={onClose}
@@ -302,7 +302,7 @@ function SearchResultsPanel({
           loading ? (
             <div className="flex flex-col items-center justify-center py-8">
               <div className="w-6 h-6 rounded-full border-2 border-gray-200 border-t-emerald-500 animate-spin" />
-              <p className="text-[11px] text-gray-500 dark:text-slate-400 mt-2">Searching...</p>
+              <p className="text-[11px] text-gray-500 dark:text-slate-400 mt-2">Mencari...</p>
             </div>
           ) : results.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-8 px-4">
@@ -310,10 +310,10 @@ function SearchResultsPanel({
                 <Search className="w-5 h-5 text-gray-400 dark:text-slate-500" />
               </div>
               <p className="text-[12px] text-gray-500 dark:text-slate-400">
-                No results for &quot;{query}&quot;
+                Tidak ada hasil untuk "{query}"
               </p>
               <p className="text-[10px] text-gray-400 dark:text-slate-500 mt-1">
-                Try different keywords or check spelling
+                Coba kata kunci lain atau periksa ejaan
               </p>
             </div>
           ) : (
@@ -370,10 +370,10 @@ function SearchResultsPanel({
           recentSearches.length === 0 && (
             <div className="flex flex-col items-center justify-center py-6 px-4">
               <p className="text-[11px] text-gray-400 dark:text-slate-500">
-                Type at least 2 characters to search
+                Ketik minimal 2 karakter untuk mencari
               </p>
               <p className="text-[10px] text-gray-400 dark:text-slate-500 mt-1">
-                Search by name, phone, address, or order number
+                Cari berdasarkan nama, telepon, alamat, atau nomor order
               </p>
             </div>
           )
@@ -384,7 +384,7 @@ function SearchResultsPanel({
       {hasQuery && results.length > 0 && !loading && (
         <div className="px-4 py-2 border-t border-gray-100 dark:border-slate-700 text-center">
           <p className="text-[10px] text-gray-400 dark:text-slate-500">
-            Press Enter to view all results
+            Tekan Enter untuk melihat semua hasil
           </p>
         </div>
       )}
@@ -554,14 +554,14 @@ function UserPanel({
           className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-[13px] text-gray-600 dark:text-slate-400 hover:bg-gray-100 dark:hover:bg-slate-800 hover:text-gray-900 dark:hover:text-slate-100 transition-all text-left"
         >
           <User className="w-4 h-4 flex-shrink-0" />
-          Profile Settings
+          Pengaturan Profil
         </button>
         <button
           onClick={() => { onClose(); onNavigate('/admin/settings?tab=personal') }}
           className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-[13px] text-gray-600 dark:text-slate-400 hover:bg-gray-100 dark:hover:bg-slate-800 hover:text-gray-900 dark:hover:text-slate-100 transition-all text-left"
         >
           <Settings className="w-4 h-4 flex-shrink-0" />
-          Preferences
+          Preferensi
         </button>
         <div className="h-px bg-gray-100 dark:bg-slate-700 my-1" />
         <button
@@ -569,7 +569,7 @@ function UserPanel({
           className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-[13px] text-gray-600 dark:text-slate-400 hover:bg-red-50 dark:hover:bg-red-900/20 hover:text-red-600 dark:hover:text-red-400 transition-all text-left"
         >
           <LogOut className="w-4 h-4 flex-shrink-0" />
-          Sign Out
+          Keluar
         </button>
       </div>
     </motion.div>
@@ -878,7 +878,7 @@ export function Header({ onMenuClick }: HeaderProps) {
           <input
             ref={searchInputRef}
             type="text"
-            placeholder="Search by name, phone, address... (Ctrl+K)"
+            placeholder="Cari berdasarkan nama, telepon, alamat... (Ctrl+K)"
             className="h-9 w-60 lg:w-96 bg-gray-50 dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-xl pl-10 pr-8 text-sm text-gray-700 dark:text-slate-200 placeholder:text-gray-400 dark:placeholder:text-slate-500 focus:outline-none focus:border-emerald-500 dark:focus:border-emerald-400 focus:ring-1 focus:ring-emerald-500/20 dark:focus:ring-emerald-400/20 transition-all"
             value={searchQuery}
             onChange={e => {
@@ -927,7 +927,7 @@ export function Header({ onMenuClick }: HeaderProps) {
         <button
           onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
           className="w-9 h-9 rounded-lg border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 flex items-center justify-center text-gray-500 dark:text-slate-400 hover:text-gray-700 dark:hover:text-slate-200 hover:bg-gray-50 dark:hover:bg-slate-700 transition-all"
-          title={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+          title={theme === 'dark' ? 'Mode Terang' : 'Mode Gelap'}
         >
           {theme === 'dark' ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
         </button>

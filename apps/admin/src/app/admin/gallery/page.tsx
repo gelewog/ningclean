@@ -209,10 +209,10 @@ function GalleryFormModal({
                 </div>
                 <div>
                   <h2 className="text-xl font-bold text-gray-900 dark:text-white">
-                    {isEditing ? 'Edit Gallery Item' : 'Create Gallery Item'}
+                    {isEditing ? 'Edit Item Galeri' : 'Buat Item Galeri Baru'}
                   </h2>
                   <p className="text-xs sm:text-sm text-gray-500 dark:text-slate-400 mt-0.5">
-                    {isEditing ? 'Perbarui informasi gallery item' : 'Buat gallery item baru'}
+                    {isEditing ? 'Perbarui informasi item galeri' : 'Buat item galeri baru'}
                   </p>
                 </div>
               </div>
@@ -236,7 +236,7 @@ function GalleryFormModal({
                 {/* Title */}
                 <div className="space-y-2">
                   <label className="text-sm font-medium text-gray-700 dark:text-slate-200">
-                    Title <span className="text-red-500">*</span>
+                    Judul <span className="text-red-500">*</span>
                   </label>
                   <div className="relative">
                     <Input
@@ -245,7 +245,7 @@ function GalleryFormModal({
                         setFormData({ ...formData, title: e.target.value })
                         setErrors({ ...errors, title: '' })
                       }}
-                      placeholder="Enter gallery item title"
+                      placeholder="Masukkan judul item galeri"
                       className={`h-11 px-4 ${errors.title ? 'border-red-500 focus:border-red-500 ring-2 ring-red-500/20' : 'border-gray-200 dark:border-slate-700 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20'}`}
                     />
                   </div>
@@ -262,7 +262,7 @@ function GalleryFormModal({
                   {/* Before Image Upload */}
                   <div className="space-y-2">
                     <label className="text-sm font-medium text-gray-700 dark:text-slate-200">
-                      Before Image <span className="text-red-500">*</span>
+                      Gambar Sebelum <span className="text-red-500">*</span>
                     </label>
                     <div className={`relative border-2 border-dashed rounded-2xl overflow-hidden transition-all ${
                       errors.beforeImage
@@ -281,7 +281,7 @@ function GalleryFormModal({
                           />
                           <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
                           <div className="absolute top-2 left-2 px-2 py-1 rounded-lg bg-black/40 backdrop-blur-sm text-[10px] font-medium text-white uppercase tracking-wide">
-                            Before
+                            Sebelum
                           </div>
                           <button
                             type="button"
@@ -327,7 +327,7 @@ function GalleryFormModal({
                   {/* After Image Upload */}
                   <div className="space-y-2">
                     <label className="text-sm font-medium text-gray-700 dark:text-slate-200">
-                      After Image <span className="text-red-500">*</span>
+                      Gambar Sesudah <span className="text-red-500">*</span>
                     </label>
                     <div className={`relative border-2 border-dashed rounded-2xl overflow-hidden transition-all ${
                       errors.afterImage
@@ -346,7 +346,7 @@ function GalleryFormModal({
                           />
                           <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
                           <div className="absolute top-2 left-2 px-2 py-1 rounded-lg bg-emerald-500/80 backdrop-blur-sm text-[10px] font-medium text-white uppercase tracking-wide">
-                            After
+                            Sesudah
                           </div>
                           <button
                             type="button"
@@ -393,9 +393,9 @@ function GalleryFormModal({
                 {/* Before/After Slider Preview */}
                 {(formData.beforeImage || formData.afterImage) && (
                   <div className="space-y-2">
-                    <label className="text-sm font-medium text-gray-700 dark:text-slate-200">
-                      Before/After Preview
-                    </label>
+                  <label className="text-sm font-medium text-gray-700 dark:text-slate-200">
+                    Preview Sebelum/Sesudah
+                  </label>
                     <div className="relative aspect-[4/3] rounded-2xl overflow-hidden bg-gray-100 dark:bg-slate-800">
                       {formData.beforeImage && formData.afterImage ? (
                         <BeforeAfterPreview
@@ -419,7 +419,7 @@ function GalleryFormModal({
                             className="w-full h-full object-cover grayscale sepia-[0.3]"
                           />
                           <div className="absolute top-2 left-2 px-2 py-1 rounded-lg bg-black/50 backdrop-blur-sm text-[10px] font-medium text-white uppercase tracking-wide">
-                            Before Only
+                            Hanya Sebelum
                           </div>
                         </div>
                       ) : formData.afterImage ? (
@@ -433,7 +433,7 @@ function GalleryFormModal({
                             className="w-full h-full object-cover"
                           />
                           <div className="absolute top-2 left-2 px-2 py-1 rounded-lg bg-emerald-500/80 backdrop-blur-sm text-[10px] font-medium text-white uppercase tracking-wide">
-                            After Only
+                            Hanya Sesudah
                           </div>
                         </div>
                       ) : null}
@@ -445,7 +445,7 @@ function GalleryFormModal({
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <label className="text-sm font-medium text-gray-700 dark:text-slate-200">
-                      Category <span className="text-red-500">*</span>
+                      Kategori <span className="text-red-500">*</span>
                     </label>
                     <div className="relative">
                       <select
@@ -475,7 +475,7 @@ function GalleryFormModal({
                   </div>
                   <div className="space-y-2">
                     <label className="text-sm font-medium text-gray-700 dark:text-slate-200">
-                      Display Order
+                      Urutan Tampilan
                     </label>
                     <Input
                       type="number"
@@ -490,14 +490,14 @@ function GalleryFormModal({
                 {/* Location */}
                 <div className="space-y-2">
                   <label className="text-sm font-medium text-gray-700 dark:text-slate-200">
-                    Location
+                    Lokasi
                   </label>
                   <div className="relative">
                     <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
                     <Input
                       value={formData.location}
                       onChange={(e) => setFormData({ ...formData, location: e.target.value })}
-                      placeholder="e.g., Surabaya, East Java"
+                      placeholder="Contoh: Surabaya, Jawa Timur"
                       className="h-11 pl-11 border-gray-200 dark:border-slate-700 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20"
                     />
                   </div>
@@ -506,12 +506,12 @@ function GalleryFormModal({
                 {/* Description */}
                 <div className="space-y-2">
                   <label className="text-sm font-medium text-gray-700 dark:text-slate-200">
-                    Description
+                    Deskripsi
                   </label>
                   <textarea
                     value={formData.description}
                     onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                    placeholder="Enter description..."
+                    placeholder="Masukkan deskripsi..."
                     rows={3}
                     className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-slate-700 text-sm text-gray-900 dark:text-slate-100 bg-white dark:bg-slate-800 resize-none focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all placeholder:text-gray-400 dark:placeholder:text-slate-500"
                   />
@@ -530,7 +530,7 @@ function GalleryFormModal({
                       />
                     </div>
                     <div className="flex-1">
-                      <span className="text-sm font-medium text-gray-900 dark:text-white group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">Featured Item</span>
+                      <span className="text-sm font-medium text-gray-900 dark:text-white group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">Item Unggulan</span>
                       <p className="text-xs text-gray-500 dark:text-slate-400">Tampilkan di halaman utama</p>
                     </div>
                     {formData.isFeatured && (
@@ -549,12 +549,12 @@ function GalleryFormModal({
                       />
                     </div>
                     <div className="flex-1">
-                      <span className="text-sm font-medium text-gray-900 dark:text-white group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">Active</span>
+                      <span className="text-sm font-medium text-gray-900 dark:text-white group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">Aktif</span>
                       <p className="text-xs text-gray-500 dark:text-slate-400">Item akan ditampilkan publik</p>
                     </div>
                     {formData.isActive && (
                       <div className="px-2 py-1 rounded-lg bg-emerald-100 dark:bg-emerald-900/30">
-                        <span className="text-[10px] font-medium text-emerald-600 dark:text-emerald-400">Visible</span>
+                        <span className="text-[10px] font-medium text-emerald-600 dark:text-emerald-400">Tampil</span>
                       </div>
                     )}
                   </label>
@@ -705,11 +705,11 @@ function GalleryDeleteModal({
 
                 {/* Warning Badge */}
                 <div className="absolute bottom-3 right-3">
-                  <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 text-xs font-medium">
+                    <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 text-xs font-medium">
                     <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                     </svg>
-                    Danger Zone
+                    Zona Bahaya
                   </span>
                 </div>
               </div>
@@ -842,11 +842,11 @@ export default function GalleryPage() {
 
   function validateForm(): boolean {
     const newErrors: Partial<GalleryFormData> = {}
-    if (!formData.title.trim()) newErrors.title = 'Title is required'
-    if (!formData.category.trim()) newErrors.category = 'Category is required'
+    if (!formData.title.trim()) newErrors.title = 'Judul wajib diisi'
+    if (!formData.category.trim()) newErrors.category = 'Kategori wajib diisi'
     // Both before and after images are required
-    if (!formData.beforeImage.trim()) newErrors.beforeImage = 'Before image is required'
-    if (!formData.afterImage.trim()) newErrors.afterImage = 'After image is required'
+    if (!formData.beforeImage.trim()) newErrors.beforeImage = 'Gambar sebelum wajib diisi'
+    if (!formData.afterImage.trim()) newErrors.afterImage = 'Gambar sesudah wajib diisi'
     setErrors(newErrors)
     return Object.keys(newErrors).length === 0
   }
@@ -874,7 +874,7 @@ export default function GalleryPage() {
       if (uploadedUrl) {
         imageUrl = uploadedUrl
       } else {
-        toast.error('Failed to upload image')
+        toast.error('Gagal mengupload gambar')
         return
       }
     } else {
@@ -888,7 +888,7 @@ export default function GalleryPage() {
       if (uploadedUrl) {
         beforeImage = uploadedUrl
       } else {
-        toast.error('Failed to upload before image')
+        toast.error('Gagal mengupload gambar sebelum')
         return
       }
     } else {
@@ -902,7 +902,7 @@ export default function GalleryPage() {
       if (uploadedUrl) {
         afterImage = uploadedUrl
       } else {
-        toast.error('Failed to upload after image')
+        toast.error('Gagal mengupload gambar sesudah')
         return
       }
     } else {
@@ -925,7 +925,7 @@ export default function GalleryPage() {
 
     // Final validation - imageUrl must be valid
     if (!itemData.imageUrl) {
-      toast.error('At least one image is required')
+      toast.error('Minimal satu gambar wajib diisi')
       return
     }
 
@@ -945,7 +945,7 @@ export default function GalleryPage() {
       setIsModalOpen(false)
     } catch (error: any) {
       console.error('[Gallery] Error:', error)
-      toast.error(`Failed to ${isEditing ? 'update' : 'create'} gallery item: ${error?.message || error}`)
+      // Toast handled by mutation hooks
     }
   }
 
@@ -955,7 +955,7 @@ export default function GalleryPage() {
       await deleteMutation.mutateAsync(selectedItem.id)
       setIsDeleteModalOpen(false)
     } catch (error: any) {
-      toast.error(error?.message || 'Failed to delete gallery item')
+      // Toast handled by useDeleteGalleryItem hook
     }
   }
 
@@ -963,14 +963,14 @@ export default function GalleryPage() {
     try {
       await updateMutation.mutateAsync({ id: item.id, data: { isFeatured: !item.isFeatured } })
     } catch (error: any) {
-      toast.error(error?.message || 'Failed to update item')
+      // Toast handled by useUpdateGalleryItem hook
     }
   }
 
   const columns = [
     {
       key: 'title',
-      label: 'Image',
+      label: 'Gambar',
       render: (value: string, row: GalleryItem) => (
         <div className="flex items-center gap-3">
           <img
@@ -991,14 +991,14 @@ export default function GalleryPage() {
     },
     {
       key: 'category',
-      label: 'Category',
+      label: 'Kategori',
       render: (value: string) => (
         <Badge variant="outline">{value}</Badge>
       ),
     },
     {
       key: 'isFeatured',
-      label: 'Featured',
+      label: 'Unggulan',
       render: (value: boolean, row: GalleryItem) => (
         <button onClick={() => handleToggleFeatured(row)}>
           <Star className={`h-5 w-5 ${value ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300 dark:text-slate-600'}`} />
@@ -1010,18 +1010,18 @@ export default function GalleryPage() {
       label: 'Status',
       render: (value: boolean) => (
         <Badge variant={value ? 'success' : 'default'}>
-          {value ? 'Active' : 'Inactive'}
+                {value ? 'Aktif' : 'Nonaktif'}
         </Badge>
       ),
     },
     {
       key: 'order',
-      label: 'Order',
+      label: 'Urutan',
       render: (value: number) => <span className="text-sm text-gray-700 dark:text-slate-300">{value}</span>,
     },
     {
       key: 'createdAt',
-      label: 'Created',
+      label: 'Dibuat',
       render: (value: string) => (
         <div className="flex items-center gap-1 text-sm text-gray-500 dark:text-slate-400">
           <Calendar className="h-3.5 w-3.5" />
@@ -1031,7 +1031,7 @@ export default function GalleryPage() {
     },
     {
       key: 'actions',
-      label: 'Actions',
+      label: 'Aksi',
       render: (_: any, row: GalleryItem) => (
         <div className="flex items-center gap-1">
           <Button variant="ghost" size="sm" onClick={() => openEditModal(row)} className="text-gray-500 dark:text-slate-400 hover:text-emerald-600">
@@ -1064,7 +1064,7 @@ export default function GalleryPage() {
                 <Plus className="h-4 w-4" />
               </Button>
             </div>
-            <p className="text-xs sm:text-sm text-gray-500 dark:text-slate-400 mt-1 truncate">Manage gallery items and portfolio</p>
+            <p className="text-xs sm:text-sm text-gray-500 dark:text-slate-400 mt-1 truncate">Kelola item galeri dan portofolio</p>
           </div>
           <div className="flex-shrink-0">
             <div className="px-2 sm:px-3 py-1.5 sm:py-2 bg-white dark:bg-slate-900 rounded-lg sm:rounded-xl border border-gray-200 dark:border-slate-600">

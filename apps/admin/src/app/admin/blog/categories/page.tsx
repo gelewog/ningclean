@@ -367,15 +367,13 @@ export default function BlogCategoriesPage() {
     try {
       if (isEditing && selectedCategory) {
         await updateBlogCategory(selectedCategory.id, formData)
-        toast.success('Kategori berhasil diperbarui')
       } else {
         await createBlogCategory(formData)
-        toast.success('Kategori berhasil dibuat')
       }
       setIsModalOpen(false)
       fetchCategories()
     } catch (error: any) {
-      toast.error(error.message || 'Gagal menyimpan kategori')
+      // Toast handled by hooks
     } finally {
       setSaving(false)
     }
@@ -386,11 +384,10 @@ export default function BlogCategoriesPage() {
     setDeleting(true)
     try {
       await deleteBlogCategory(selectedCategory.id)
-      toast.success('Kategori berhasil dihapus')
       setIsDeleteModalOpen(false)
       fetchCategories()
     } catch (error: any) {
-      toast.error(error.message || 'Gagal menghapus kategori')
+      // Toast handled by useDeleteBlogCategory hook
     } finally {
       setDeleting(false)
     }

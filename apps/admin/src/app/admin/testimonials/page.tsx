@@ -697,9 +697,8 @@ export default function TestimonialsPage() {
       }
       setSelectedImageFile(null)
       setIsModalOpen(false)
-      toast.success(isEditing ? 'Testimoni berhasil diperbarui' : 'Testimoni berhasil ditambahkan')
     } catch (error) {
-      toast.error(`Gagal ${isEditing ? 'memperbarui' : 'menambah'} testimoni`)
+      // Toast handled by hooks
     }
   }
 
@@ -708,9 +707,8 @@ export default function TestimonialsPage() {
     try {
       await deleteMutation.mutateAsync(selectedTestimonial.id)
       setIsDeleteModalOpen(false)
-      toast.success('Testimoni berhasil dihapus')
     } catch (error) {
-      toast.error('Gagal menghapus testimoni')
+      // Toast handled by useDeleteTestimonial hook
     }
   }
 

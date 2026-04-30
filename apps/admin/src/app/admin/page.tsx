@@ -36,7 +36,7 @@ export default function DashboardPage() {
 
   React.useEffect(() => {
     if (statsError) {
-      console.error('Failed to fetch dashboard data:', statsError)
+      console.error('Gagal memuat data dashboard:', statsError)
     }
   }, [statsError])
 
@@ -58,7 +58,7 @@ export default function DashboardPage() {
     },
     {
       key: 'serviceName',
-      label: 'Service',
+      label: 'Layanan',
       render: (value: string, row: any) => (
         <div>
           <p className="font-medium text-gray-900 dark:text-white">{value}</p>
@@ -68,7 +68,7 @@ export default function DashboardPage() {
     },
     {
       key: 'scheduledDate',
-      label: 'Schedule',
+      label: 'Jadwal',
       render: (value: string, row: any) => (
         <div>
           <p className="text-sm text-gray-900 dark:text-white">{formatDate(value)}</p>
@@ -133,21 +133,21 @@ export default function DashboardPage() {
               </div>
               <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-gray-900 dark:text-white truncate">Dashboard</h1>
             </div>
-            <p className="text-sm text-gray-500 dark:text-slate-400 mt-1 truncate">Welcome back! Here&apos;s what&apos;s happening with Ningclean.</p>
+            <p className="text-sm text-gray-500 dark:text-slate-400 mt-1 truncate">Selamat datang kembali! Berikut ringkasan aktivitas NingClean.</p>
           </div>
           <div className="flex-shrink-0 flex items-center gap-2 sm:gap-3">
             <Button variant="outline" className="rounded-xl gap-2 bg-white dark:bg-slate-900 border-gray-200 dark:border-slate-700" asChild>
               <Link href="/admin/bookings">
                 <Calendar className="h-4 w-4" />
-                <span className="hidden sm:inline">View Bookings</span>
-                <span className="sm:hidden">Bookings</span>
+                <span className="hidden sm:inline">Lihat Booking</span>
+                <span className="sm:hidden">Booking</span>
               </Link>
             </Button>
             <Button className="rounded-xl gap-2 bg-emerald-600 hover:bg-emerald-700" asChild>
               <Link href="/admin/bookings">
                 <Plus className="h-4 w-4" />
-                <span className="hidden sm:inline">New Booking</span>
-                <span className="sm:hidden">New</span>
+                <span className="hidden sm:inline">Booking Baru</span>
+                <span className="sm:hidden">Baru</span>
               </Link>
             </Button>
           </div>
@@ -162,20 +162,20 @@ export default function DashboardPage() {
         >
           <motion.div variants={item}>
             <StatCard
-              title="Total Bookings"
+              title="Total Booking"
               value={stats?.totalBookings || 0}
               change={stats?.bookingsTrend}
-              changeLabel="vs last month"
+              changeLabel="vs bulan lalu"
               icon={Calendar}
               iconBg="bg-gradient-to-br from-blue-500 to-blue-600"
             />
           </motion.div>
           <motion.div variants={item}>
             <StatCard
-              title="Total Revenue"
+              title="Total Pendapatan"
               value={stats?.totalRevenue || 0}
               change={stats?.revenueTrend}
-              changeLabel="vs last month"
+              changeLabel="vs bulan lalu"
               icon={DollarSign}
               iconBg="bg-gradient-to-br from-emerald-500 to-emerald-600"
               format="currency"
@@ -183,7 +183,7 @@ export default function DashboardPage() {
           </motion.div>
           <motion.div variants={item}>
             <StatCard
-              title="Total Customers"
+              title="Total Customer"
               value={stats?.totalCustomers || 0}
               icon={Users}
               iconBg="bg-gradient-to-br from-purple-500 to-purple-600"
@@ -191,7 +191,7 @@ export default function DashboardPage() {
           </motion.div>
           <motion.div variants={item}>
             <StatCard
-              title="Pending Bookings"
+              title="Booking Pending"
               value={stats?.pendingBookings || 0}
               icon={Clock}
               iconBg="bg-gradient-to-br from-amber-500 to-amber-600"
@@ -208,13 +208,13 @@ export default function DashboardPage() {
             transition={{ delay: 0.3 }}
             className="rounded-2xl border border-gray-100 dark:border-slate-700/50 bg-white dark:bg-slate-900 p-6 shadow-sm dark:shadow-slate-900/50 backdrop-blur-sm"
           >
-            <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-gray-500 dark:text-slate-400">Quick Actions</h3>
+            <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-gray-500 dark:text-slate-400">Aksi Cepat</h3>
             <div className="space-y-3">
               <Button variant="outline" className="w-full justify-between rounded-xl border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-gray-900 dark:text-white hover:bg-blue-50 dark:hover:bg-slate-800 hover:border-blue-200 dark:hover:border-blue-600 hover:text-blue-600 dark:hover:text-blue-400" asChild>
                 <Link href="/admin/bookings">
                   <span className="flex items-center gap-2">
                     <Calendar className="h-4 w-4" />
-                    Manage Bookings
+                    Kelola Booking
                   </span>
                   <ArrowRight className="h-4 w-4" />
                 </Link>
@@ -223,7 +223,7 @@ export default function DashboardPage() {
                 <Link href="/admin/services">
                   <span className="flex items-center gap-2">
                     <DollarSign className="h-4 w-4" />
-                    Update Services
+                    Update Layanan
                   </span>
                   <ArrowRight className="h-4 w-4" />
                 </Link>
@@ -232,7 +232,7 @@ export default function DashboardPage() {
                 <Link href="/admin/blog">
                   <span className="flex items-center gap-2">
                     <Plus className="h-4 w-4" />
-                    Create Blog Post
+                    Buat Post Blog
                   </span>
                   <ArrowRight className="h-4 w-4" />
                 </Link>
@@ -247,15 +247,15 @@ export default function DashboardPage() {
             transition={{ delay: 0.4 }}
             className="rounded-2xl border border-gray-100 dark:border-slate-700/50 bg-white dark:bg-slate-900 p-6 shadow-sm dark:shadow-slate-900/50 backdrop-blur-sm"
           >
-            <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-gray-500 dark:text-slate-400">Alerts</h3>
+            <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-gray-500 dark:text-slate-400">Peringatan</h3>
             <div className="space-y-3">
               <div className="flex items-start gap-3 rounded-xl border border-amber-100 dark:border-amber-900/30 bg-amber-50/50 dark:bg-amber-900/20 p-4">
                 <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-amber-100 dark:bg-amber-900/30">
                   <AlertCircle className="h-4 w-4 text-amber-600 dark:text-amber-400" />
                 </div>
                 <div className="flex-1">
-                  <p className="text-sm font-medium text-gray-900 dark:text-white">3 bookings need confirmation</p>
-                  <p className="text-xs text-gray-500 dark:text-slate-400">Action required within 24 hours</p>
+                  <p className="text-sm font-medium text-gray-900 dark:text-white">3 booking perlu konfirmasi</p>
+                  <p className="text-xs text-gray-500 dark:text-slate-400">Tindakan diperlukan dalam 24 jam</p>
                 </div>
               </div>
               <div className="flex items-start gap-3 rounded-xl border border-red-100 dark:border-red-900/30 bg-red-50/50 dark:bg-red-900/20 p-4">
@@ -263,8 +263,8 @@ export default function DashboardPage() {
                   <AlertCircle className="h-4 w-4 text-red-600 dark:text-red-400" />
                 </div>
                 <div className="flex-1">
-                  <p className="text-sm font-medium text-gray-900 dark:text-white">2 bookings cancelled today</p>
-                  <p className="text-xs text-gray-500 dark:text-slate-400">Review cancellation reasons</p>
+                  <p className="text-sm font-medium text-gray-900 dark:text-white">2 booking dibatalkan hari ini</p>
+                  <p className="text-xs text-gray-500 dark:text-slate-400">Tinjau alasan pembatalan</p>
                 </div>
               </div>
             </div>
@@ -278,7 +278,7 @@ export default function DashboardPage() {
             className="rounded-2xl border border-gray-100 dark:border-slate-700/50 bg-white dark:bg-slate-900 p-6 shadow-sm dark:shadow-slate-900/50 backdrop-blur-sm"
           >
             <div className="mb-4 flex items-center justify-between">
-              <h3 className="text-sm font-semibold uppercase tracking-wider text-gray-500 dark:text-slate-400">Revenue Overview</h3>
+              <h3 className="text-sm font-semibold uppercase tracking-wider text-gray-500 dark:text-slate-400">Ikhtisar Pendapatan</h3>
               <div className="flex items-center gap-1 text-xs text-emerald-600 dark:text-emerald-400">
                 <TrendingUp className="h-3 w-3" />
                 +12.5%
@@ -296,13 +296,13 @@ export default function DashboardPage() {
               ))}
             </div>
             <div className="mt-3 flex justify-between text-xs text-gray-400 dark:text-slate-500">
-              <span>Mon</span>
-              <span>Tue</span>
-              <span>Wed</span>
-              <span>Thu</span>
-              <span>Fri</span>
-              <span>Sat</span>
-              <span>Sun</span>
+              <span>Sen</span>
+              <span>Sel</span>
+              <span>Rab</span>
+              <span>Kam</span>
+              <span>Jum</span>
+              <span>Sab</span>
+              <span>Min</span>
             </div>
           </motion.div>
         </div>
@@ -315,10 +315,10 @@ export default function DashboardPage() {
           className="rounded-2xl border border-gray-100 dark:border-slate-700/50 bg-white dark:bg-slate-900 shadow-sm dark:shadow-slate-900/50 backdrop-blur-sm"
         >
           <div className="flex items-center justify-between border-b border-gray-100 dark:border-slate-700 px-6 py-5">
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Recent Bookings</h3>
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Booking Terbaru</h3>
             <Button variant="ghost" size="sm" className="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 hover:bg-blue-50 dark:hover:bg-blue-900/30 rounded-xl" asChild>
               <Link href="/admin/bookings" className="flex items-center gap-1">
-                View All
+                Lihat Semua
                 <ArrowRight className="h-4 w-4" />
               </Link>
             </Button>
@@ -328,7 +328,7 @@ export default function DashboardPage() {
               columns={columns}
               data={recentBookings}
               loading={loading}
-              onRowClick={(row) => console.log('Row clicked:', row)}
+              onRowClick={(row) => console.log('Baris diklik:', row)}
               renderCard={(row) => (
                 <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-sm hover:shadow-md transition-all duration-300 p-3 cursor-pointer active:scale-[0.99] border border-gray-100 dark:border-slate-700/50">
                   <div className="space-y-2">

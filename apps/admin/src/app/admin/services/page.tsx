@@ -53,22 +53,40 @@ interface ServiceFormData {
   availableCities: string[]
 }
 
-// Modern Switch Component
-function Switch({ checked, onChange, disabled = false }: { checked: boolean; onChange: () => void; disabled?: boolean }) {
+// Modern Switch Component dengan Optimistic UI support
+function Switch({ 
+  checked, 
+  onChange, 
+  disabled = false,
+  loading = false 
+}: { 
+  checked: boolean; 
+  onChange: () => void; 
+  disabled?: boolean;
+  loading?: boolean;
+}) {
   return (
     <button
       type="button"
       onClick={onChange}
-      disabled={disabled}
+      disabled={disabled || loading}
       className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 dark:focus:ring-offset-slate-800 ${
         checked ? 'bg-emerald-500 dark:bg-emerald-500' : 'bg-gray-300 dark:bg-slate-600'
-      } ${disabled ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'}`}
+      } ${disabled || loading ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'}`}
     >
       <span
-        className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+        className={`inline-block h-4 w-4 transform rounded-full transition-transform ${
+          loading ? 'bg-gray-200' : 'bg-white'
+        } ${
           checked ? 'translate-x-6' : 'translate-x-1'
         }`}
       />
+      {/* Loading indicator */}
+      {loading && (
+        <span className="absolute inset-0 flex items-center justify-center">
+          <span className="w-2 h-2 bg-white/50 rounded-full animate-pulse" />
+        </span>
+      )}
     </button>
   )
 }
@@ -173,6 +191,7 @@ function ServiceModal({
   return (
     <AnimatePresence>
       <motion.div
+        key="service-modal-overlay"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
@@ -181,13 +200,16 @@ function ServiceModal({
         onClick={onClose}
       />
       
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 pointer-events-none">
-        <motion.div
+      <motion.div
+        key="service-modal-container"
+        initial={{ opacity: 0, scale: 0.95, y: 20 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        exit={{ opacity: 0, scale: 0.95, y: 20 }}
+        transition={{ type: 'spring', damping: 25, stiffness: 300 }}
+        className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 pointer-events-none"
+      >
+        <div 
           ref={modalRef}
-          initial={{ opacity: 0, scale: 0.95, y: 20 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          exit={{ opacity: 0, scale: 0.95, y: 20 }}
-          transition={{ type: 'spring', damping: 25, stiffness: 300 }}
           className="pointer-events-auto w-full max-w-2xl max-h-[85vh] sm:max-h-[90vh] bg-white dark:bg-slate-900 rounded-2xl shadow-2xl border border-gray-200 dark:border-slate-700 overflow-hidden flex flex-col"
           onClick={(e) => e.stopPropagation()}
         >
@@ -198,8 +220,8 @@ function ServiceModal({
                 {isEditing ? <Edit className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600 dark:text-blue-400" /> : <Plus className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600 dark:text-blue-400" />}
               </div>
               <div className="min-w-0">
-                <h2 className="text-sm sm:text-lg font-bold text-gray-900 dark:text-white truncate">{isEditing ? 'Edit Service' : 'Create Service'}</h2>
-                <p className="text-[10px] sm:text-xs text-gray-500 dark:text-slate-400 hidden xs:block">{isEditing ? 'Update service details' : 'Add a new cleaning service'}</p>
+                <h2 className="text-sm sm:text-lg font-bold text-gray-900 dark:text-white truncate">{isEditing ? 'Edit Layanan' : 'Buat Layanan'}</h2>
+                <p className="text-[10px] sm:text-xs text-gray-500 dark:text-slate-400 hidden xs:block">{isEditing ? 'Perbarui detail layanan' : 'Tambah layanan pembersih baru'}</p>
               </div>
             </div>
             <Button
@@ -216,10 +238,10 @@ function ServiceModal({
           <div className="px-4 sm:px-6 border-b border-gray-100 dark:border-slate-700">
             <div className="flex justify-between sm:justify-start sm:gap-1">
               {[
-                { key: 'basic', label: 'Basic', icon: Package, shortLabel: 'Basic' },
-                { key: 'details', label: 'Details', icon: List, shortLabel: 'Info' },
-                { key: 'features', label: 'Features', icon: CheckCircle2, shortLabel: 'Feat' },
-                { key: 'cities', label: 'Cities', icon: Building, shortLabel: 'City' },
+                { key: 'basic', label: 'Dasar', icon: Package, shortLabel: 'Dasar' },
+                { key: 'details', label: 'Detail', icon: List, shortLabel: 'Info' },
+                { key: 'features', label: 'Fitur', icon: CheckCircle2, shortLabel: 'Fitur' },
+                { key: 'cities', label: 'Kota', icon: Building, shortLabel: 'Kota' },
               ].map((tab) => (
                 <button
                   key={tab.key}
@@ -251,10 +273,10 @@ function ServiceModal({
                   {/* Service Name */}
                   <div className="bg-gray-50 dark:bg-slate-800 rounded-xl p-4 border border-gray-100 dark:border-slate-700">
                     <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-2">
-                      Service Name <span className="text-red-500">*</span>
+                      Nama Layanan <span className="text-red-500">*</span>
                     </label>
                     <Input
-                      placeholder="e.g. Home Deep Cleaning"
+                      placeholder="Contoh: Pembersihan Rumah Mendalam"
                       value={formData.name}
                       onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                       className="bg-white dark:bg-slate-900"
@@ -265,24 +287,24 @@ function ServiceModal({
                   {/* Slug */}
                   <div className="bg-gray-50 dark:bg-slate-800 rounded-xl p-4 border border-gray-100 dark:border-slate-700">
                     <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-2">
-                      Slug <span className="text-gray-400 text-xs">(URL friendly name)</span>
+                      Slug <span className="text-gray-400 text-xs">(Nama ramah URL)</span>
                     </label>
                     <Input
-                      placeholder="e.g. home-deep-cleaning"
+                      placeholder="Contoh: pembersihan-rumah-mendalam"
                       value={formData.slug}
                       onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
                       className="bg-white dark:bg-slate-900 font-mono text-sm"
                     />
-                    <p className="text-xs text-gray-400 mt-1">Auto-generated from name if left empty</p>
+                    <p className="text-xs text-gray-400 mt-1">Dibuat otomatis dari nama jika dikosongkan</p>
                   </div>
 
                   {/* Description */}
                   <div className="bg-gray-50 dark:bg-slate-800 rounded-xl p-4 border border-gray-100 dark:border-slate-700">
                     <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-2">
-                      Description <span className="text-red-500">*</span>
+                      Deskripsi <span className="text-red-500">*</span>
                     </label>
                     <Textarea
-                      placeholder="Describe what this service includes..."
+                      placeholder="Jelaskan apa yang termasuk dalam layanan ini..."
                       value={formData.description}
                       onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                       className="bg-white dark:bg-slate-900 min-h-[100px]"
@@ -305,7 +327,7 @@ function ServiceModal({
                       <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-2">
                         <div className="flex items-center gap-2">
                           <DollarSign className="w-4 h-4 text-emerald-500" />
-                          Price (IDR) <span className="text-red-500">*</span>
+                          Harga <span className="text-red-500">*</span>
                         </div>
                       </label>
                       <Input
@@ -321,7 +343,7 @@ function ServiceModal({
                       <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-2">
                         <div className="flex items-center gap-2">
                           <Clock className="w-4 h-4 text-blue-500" />
-                          Duration (minutes) <span className="text-red-500">*</span>
+                          Durasi (menit) <span className="text-red-500">*</span>
                         </div>
                       </label>
                       <Input
@@ -340,7 +362,7 @@ function ServiceModal({
                     <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-3">
                       <div className="flex items-center gap-2">
                         <Tag className="w-4 h-4 text-purple-500" />
-                        Category
+                        Kategori
                       </div>
                     </label>
                     <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
@@ -368,7 +390,7 @@ function ServiceModal({
                   {/* Icon Selection */}
                   <div className="bg-gray-50 dark:bg-slate-800 rounded-xl p-4 border border-gray-100 dark:border-slate-700">
                     <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-3">
-                      Service Icon
+                      Ikon Layanan
                     </label>
                     <div className="grid grid-cols-8 gap-2">
                       {SERVICE_ICONS.map((icon) => {
@@ -394,7 +416,7 @@ function ServiceModal({
                   {/* Image Upload */}
                   <div className="bg-gray-50 dark:bg-slate-800 rounded-xl p-4 border border-gray-100 dark:border-slate-700">
                     <ImageUpload
-                      label="Service Image"
+                      label="Gambar Layanan"
                       folder="services"
                       value={formData.image}
                       onChange={(url) => setFormData({ ...formData, image: url })}
@@ -418,10 +440,10 @@ function ServiceModal({
                     <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-2">
                       <div className="flex items-center gap-2">
                         <List className="w-4 h-4 text-amber-500" />
-                        Features
+                        Fitur
                       </div>
                     </label>
-                    <p className="text-xs text-gray-500 dark:text-slate-400 mb-3">Enter one feature per line. These will be displayed on the service page.</p>
+                    <p className="text-xs text-gray-500 dark:text-slate-400 mb-3">Masukkan satu fitur per baris. Ini akan ditampilkan di halaman layanan.</p>
                     <Textarea
                       placeholder="Pembersihan dinding & langit-langit&#10;Sikat & vacuum karpet/sofa&#10;Sterilisasi kamar mandi"
                       value={formData.features}
@@ -430,7 +452,7 @@ function ServiceModal({
                     />
                     {formData.features && (
                       <div className="mt-4">
-                        <p className="text-xs font-medium text-gray-500 dark:text-slate-400 mb-2">Preview:</p>
+                        <p className="text-xs font-medium text-gray-500 dark:text-slate-400 mb-2">Pratinjau:</p>
                         <div className="space-y-2">
                           {formData.features.split('\n').filter(f => f.trim()).map((feature, i) => (
                             <div key={i} className="flex items-center gap-2 text-sm">
@@ -455,10 +477,10 @@ function ServiceModal({
                       />
                       <label htmlFor="isFeatured" className="flex items-center gap-2 font-medium text-amber-800 dark:text-amber-300">
                         <Star className="w-4 h-4 fill-amber-500 text-amber-500" />
-                        Featured Service
+                        Layanan Unggulan
                       </label>
                     </div>
-                    <p className="text-sm text-amber-600 dark:text-amber-400 mt-2 ml-8">This service will be highlighted on the homepage</p>
+                    <p className="text-sm text-amber-600 dark:text-amber-400 mt-2 ml-8">Layanan ini akan ditampilkan di halaman utama</p>
                   </div>
                 </motion.div>
               )}
@@ -475,11 +497,11 @@ function ServiceModal({
                     <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-2">
                       <div className="flex items-center gap-2">
                         <Building className="w-4 h-4 text-blue-500" />
-                        Available Cities
+                        Kota Tersedia
                       </div>
                     </label>
                     <p className="text-xs text-gray-500 dark:text-slate-400 mb-4">
-                      Select cities where this service is available. Leave all unchecked for all cities.
+                      Pilih kota di mana layanan ini tersedia. Kosongkan semua jika tersedia di semua kota.
                     </p>
                     <div className="grid grid-cols-2 gap-3">
                       {[
@@ -509,7 +531,7 @@ function ServiceModal({
                     </div>
                     {formData.availableCities.length === 0 && (
                       <p className="text-xs text-emerald-600 dark:text-emerald-400 mt-3">
-                        No cities selected = available in all cities
+                        Tidak ada kota dipilih = tersedia di semua kota
                       </p>
                     )}
                   </div>
@@ -520,22 +542,19 @@ function ServiceModal({
 
           {/* Footer */}
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-0 px-4 sm:px-6 py-4 border-t border-gray-100 dark:border-slate-700 bg-white dark:bg-slate-900">
-            <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-slate-400 order-2 sm:order-1">
-              <span className="text-red-500">*</span> Required fields
-            </div>
             <div className="flex items-center gap-2 sm:gap-3 order-1 sm:order-2">
               <Button variant="outline" onClick={onClose} disabled={loading} className="flex-1 sm:flex-none bg-white dark:bg-slate-900 border-gray-200 dark:border-slate-700">
-                Cancel
+                Batal
               </Button>
               <Button onClick={onSubmit} disabled={loading} className="flex-1 sm:flex-none gap-2 bg-emerald-600 hover:bg-emerald-700">
                 {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
-                <span className="sm:hidden">{isEditing ? 'Save' : 'Create'}</span>
-                <span className="hidden sm:inline">{isEditing ? 'Update Service' : 'Create Service'}</span>
+                <span className="sm:hidden">{isEditing ? 'Simpan' : 'Buat'}</span>
+                <span className="hidden sm:inline">{isEditing ? 'Perbarui Layanan' : 'Buat Layanan'}</span>
               </Button>
             </div>
           </div>
-        </motion.div>
-      </div>
+        </div>
+      </motion.div>
     </AnimatePresence>
   )
 }
@@ -641,6 +660,18 @@ export default function ServicesPage() {
   const [selectedImageFile, setSelectedImageFile] = React.useState<File | null>(null)
   const { uploadImage } = useImageUpload()
 
+  // Optimistic UI state for toggle active
+  const [optimisticStates, setOptimisticStates] = React.useState<Record<string, { isActive: boolean; isLoading: boolean }>>({})
+
+  // Get effective state for a service (optimistic > actual)
+  const getServiceState = (service: any) => {
+    const optimistic = optimisticStates[service.id]
+    if (optimistic) {
+      return { ...service, isActive: optimistic.isActive }
+    }
+    return service
+  }
+
   function generateSlug(name: string): string {
     return name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')
   }
@@ -692,13 +723,13 @@ export default function ServicesPage() {
 
   function validateForm(): boolean {
     const newErrors: Partial<ServiceFormData> = {}
-    if (!formData.name.trim()) newErrors.name = 'Name is required'
-    if (!formData.description.trim()) newErrors.description = 'Description is required'
+    if (!formData.name.trim()) newErrors.name = 'Nama layanan wajib diisi'
+    if (!formData.description.trim()) newErrors.description = 'Deskripsi wajib diisi'
     if (!formData.price || isNaN(Number(formData.price)) || Number(formData.price) <= 0) {
-      newErrors.price = 'Valid price is required'
+      newErrors.price = 'Harga wajib diisi dengan nilai yang valid'
     }
     if (!formData.duration || isNaN(Number(formData.duration)) || Number(formData.duration) <= 0) {
-      newErrors.duration = 'Valid duration is required'
+      newErrors.duration = 'Durasi wajib diisi dengan nilai yang valid'
     }
     setErrors(newErrors)
     return Object.keys(newErrors).length === 0
@@ -760,15 +791,36 @@ export default function ServicesPage() {
 
   async function handleToggleActive(service: any) {
     const newIsActive = !service.isActive
+    const serviceId = service.id
+    
+    // 1. IMMEDIATE: Set optimistic state (UI instantly updates)
+    setOptimisticStates(prev=>({
+      ...prev,
+      [serviceId]: { isActive: newIsActive, isLoading: true }
+    }))
+    
+    // 2. Send request to server
     updateServiceMutation.mutate(
-      { id: service.id, data: { isActive: newIsActive } },
+      { id: serviceId, data: { isActive: newIsActive } },
       {
         onSuccess: () => {
-          toast.success(`Service "${service.name}" ${newIsActive ? 'activated' : 'deactivated'}`)
+          // 3. Success: Clear optimistic state, show success toast
+          setOptimisticStates(prev=> {
+            const newState = { ...prev }
+            delete newState[serviceId]
+            return newState
+          })
+          toast.success(`Service "${service.name}" ${newIsActive ? 'aktif' : 'nonaktif'}`)
           refetch()
         },
         onError: (error: any) => {
-          toast.error(`Failed to update: ${error.message || 'Unknown error'}`)
+          // 4. Error: Rollback optimistic state, show error toast
+          setOptimisticStates(prev=> {
+            const newState = { ...prev }
+            delete newState[serviceId]
+            return newState
+          })
+          toast.error(`Gagal mengupdate: ${error.message || 'Error unknown'}`)
         },
       }
     )
@@ -847,9 +899,9 @@ export default function ServicesPage() {
           className="flex gap-2 overflow-x-auto pb-1 -mx-3 px-3 sm:mx-0 sm:px-0"
         >
           {[
-            { key: 'all', label: 'All', count: services.length, color: 'bg-blue-500 text-white border-blue-500 shadow-lg shadow-blue-500/25', inactiveColor: 'bg-white dark:bg-slate-900 border-gray-200 dark:border-slate-700 text-gray-600 dark:text-slate-400 hover:border-gray-300 dark:hover:border-slate-600' },
-            { key: 'active', label: 'Active', count: services.filter(s => s.isActive).length, color: 'bg-emerald-500 text-white border-emerald-500 shadow-lg shadow-emerald-500/25', inactiveColor: 'bg-white dark:bg-slate-900 border-gray-200 dark:border-slate-700 text-gray-600 dark:text-slate-400 hover:border-gray-300 dark:hover:border-slate-600' },
-            { key: 'inactive', label: 'Inactive', count: services.filter(s => !s.isActive).length, color: 'bg-gray-500 text-white border-gray-500 shadow-lg shadow-gray-500/25', inactiveColor: 'bg-white dark:bg-slate-900 border-gray-200 dark:border-slate-700 text-gray-600 dark:text-slate-400 hover:border-gray-300 dark:hover:border-slate-600' },
+            { key: 'all', label: 'Semua', count: services.length, color: 'bg-blue-500 text-white border-blue-500 shadow-lg shadow-blue-500/25', inactiveColor: 'bg-white dark:bg-slate-900 border-gray-200 dark:border-slate-700 text-gray-600 dark:text-slate-400 hover:border-gray-300 dark:hover:border-slate-600' },
+            { key: 'active', label: 'Aktif', count: services.filter(s => s.isActive).length, color: 'bg-emerald-500 text-white border-emerald-500 shadow-lg shadow-emerald-500/25', inactiveColor: 'bg-white dark:bg-slate-900 border-gray-200 dark:border-slate-700 text-gray-600 dark:text-slate-400 hover:border-gray-300 dark:hover:border-slate-600' },
+            { key: 'inactive', label: 'Nonaktif', count: services.filter(s => !s.isActive).length, color: 'bg-gray-500 text-white border-gray-500 shadow-lg shadow-gray-500/25', inactiveColor: 'bg-white dark:bg-slate-900 border-gray-200 dark:border-slate-700 text-gray-600 dark:text-slate-400 hover:border-gray-300 dark:hover:border-slate-600' },
           ].map((tab: any) => (
             <button
               key={tab.key}
@@ -897,6 +949,9 @@ export default function ServicesPage() {
                 ))
               : filteredServices.map((service, index) => {
                   const IconComponent = getIconComponent(service.icon || 'Package')
+                  // Dapatkan effective state dengan optimistic UI
+                  const serviceState = getServiceState(service)
+                  const isOptimisticLoading = optimisticStates[service.id]?.isLoading || false
                   return (
                     <motion.div
                       key={service.id}
@@ -906,7 +961,7 @@ export default function ServicesPage() {
                       exit={{ opacity: 0, scale: 0.9 }}
                       transition={{ delay: index * 0.05 }}
                     >
-                      <Card className={`group overflow-hidden transition-all hover:shadow-xl dark:hover:shadow-slate-900/50 ${!service.isActive ? 'opacity-60 grayscale' : ''} bg-white dark:bg-slate-900 dark:border-slate-700`}>
+                      <Card className={`group overflow-hidden transition-all hover:shadow-xl dark:hover:shadow-slate-900/50 ${!serviceState.isActive ? 'opacity-60 grayscale' : ''} bg-white dark:bg-slate-900 dark:border-slate-700`}>
                         {/* Image */}
                         <div className="relative">
                           {service.image ? (
@@ -928,7 +983,7 @@ export default function ServicesPage() {
                               </Badge>
                             </div>
                           )}
-                          {!service.isActive && (
+                          {!serviceState.isActive && (
                             <div className="absolute left-2 top-2">
                               <Badge variant="default" className="shadow-lg text-[10px] sm:text-xs py-0.5 dark:bg-slate-700 dark:text-slate-300 dark:border-slate-600">Inactive</Badge>
                             </div>
@@ -938,7 +993,7 @@ export default function ServicesPage() {
                         <CardHeader className="pb-2 dark:bg-slate-900 p-3 sm:p-6 border-b border-gray-100 dark:border-slate-700">
                           <div className="flex items-start justify-between">
                             <div className="flex items-center gap-2 sm:gap-3">
-                              <div className={`rounded-lg sm:rounded-xl p-2 sm:p-3 ${service.isActive ? 'bg-gradient-to-br from-emerald-500 to-emerald-600 text-white shadow-lg shadow-emerald-500/25' : 'bg-gray-200 dark:bg-slate-700 text-gray-400 dark:text-slate-400'}`}>
+                              <div className={`rounded-lg sm:rounded-xl p-2 sm:p-3 ${serviceState.isActive ? 'bg-gradient-to-br from-emerald-500 to-emerald-600 text-white shadow-lg shadow-emerald-500/25' : 'bg-gray-200 dark:bg-slate-700 text-gray-400 dark:text-slate-400'}`}>
                                 <IconComponent className="h-4 w-4 sm:h-6 sm:w-6" />
                               </div>
                               <div className="min-w-0">
@@ -962,11 +1017,12 @@ export default function ServicesPage() {
                               </p>
                             </div>
                             <div className="flex items-center gap-1 sm:gap-1">
-                              <div className="flex items-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-1 sm:py-1.5 rounded-lg bg-gray-50 dark:bg-slate-700 border border-gray-100 dark:border-slate-600">
+                              <div className="flex items-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-1 sm:py-1.5 rounded-lg bg-gray-50 dark:bg-slate-900 border border-gray-100 dark:border-slate-900">
                                 <span className="text-[10px] sm:text-xs text-gray-500 dark:text-slate-300 hidden xs:inline">Active</span>
                                 <Switch
-                                  checked={service.isActive}
+                                  checked={serviceState.isActive}
                                   onChange={() => handleToggleActive(service)}
+                                  loading={isOptimisticLoading}
                                 />
                               </div>
                               <Button variant="ghost" size="icon" onClick={() => openEditModal(service)} className="h-8 w-8 sm:h-9 sm:w-9 hover:bg-blue-50 dark:hover:bg-blue-900/30 hover:text-blue-600 dark:text-slate-400">

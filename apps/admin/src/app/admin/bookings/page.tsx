@@ -723,8 +723,8 @@ function BookingsContent() {
               className="px-3 sm:px-4 py-2 sm:py-2 rounded-lg text-sm font-medium bg-gray-100 dark:bg-slate-700 text-gray-700 dark:text-slate-300 hover:bg-gray-200 dark:hover:bg-slate-600 flex items-center gap-1.5"
             >
               <FileText className="w-4 h-4" />
-              <span className="sm:hidden">Notes</span>
-              <span className="hidden sm:inline">Internal Notes</span>
+              <span className="sm:hidden">Catatan</span>
+              <span className="hidden sm:inline">Catatan Internal</span>
             </button>
             <div className="flex flex-row items-center gap-2 sm:gap-3">
               {selectedBooking.status !== 'cancelled' && selectedBooking.status !== 'completed' && (
@@ -734,7 +734,7 @@ function BookingsContent() {
                   className="px-3 sm:px-4 py-2 sm:py-2 rounded-lg text-sm font-medium bg-red-500 text-white hover:bg-red-600 disabled:opacity-50 flex items-center gap-1.5"
                 >
                   <X className="w-4 h-4" />
-                  Cancel
+                  Batal
                 </button>
               )}
               {selectedBooking.status === 'pending' && (
@@ -744,7 +744,7 @@ function BookingsContent() {
                   className="px-3 sm:px-4 py-2 sm:py-2 rounded-lg text-sm font-medium bg-blue-500 text-white hover:bg-blue-600 disabled:opacity-50 flex items-center gap-1.5"
                 >
                   <Check className="w-4 h-4" />
-                  <span className="sm:hidden">Confirm</span>
+                  <span className="sm:hidden">Konfirmasi</span>
                   <span className="hidden sm:inline">Konfirmasi</span>
                 </button>
               )}

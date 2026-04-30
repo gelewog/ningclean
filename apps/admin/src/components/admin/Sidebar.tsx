@@ -58,66 +58,66 @@ interface NavItem {
 
 const NAV_SECTIONS: { label: string; items: NavItem[] }[] = [
   {
-    label: 'Overview',
+    label: 'Ringkasan',
     items: [
       { href: '/admin',           label: 'Dashboard',     icon: LayoutDashboard },
-      { href: '/admin/analytics', label: 'Analytics',     icon: TrendingUp },
+      { href: '/admin/analytics', label: 'Analitik',     icon: TrendingUp },
     ],
   },
   {
-    label: 'Operations',
+    label: 'Operasional',
     items: [
-      { href: '/admin/bookings',      label: 'Bookings',      icon: Calendar,    badge: 34, badgeVariant: 'amber' },
-      { href: '/admin/services',      label: 'Services',      icon: Briefcase },
-      { href: '/admin/customers',     label: 'Customers',     icon: Users },
-      { href: '/admin/notifications', label: 'Notifications', icon: Bell,        badge: 5, badgeVariant: 'blue' },
+      { href: '/admin/bookings',      label: 'Booking',      icon: Calendar,    badge: 34, badgeVariant: 'amber' },
+      { href: '/admin/services',      label: 'Layanan',      icon: Briefcase },
+      { href: '/admin/customers',     label: 'Customer',     icon: Users },
+      { href: '/admin/notifications', label: 'Notifikasi', icon: Bell,        badge: 5, badgeVariant: 'blue' },
       { href: '/admin/newsletter',    label: 'Newsletter',   icon: Mail },
-      { href: '/admin/invoices',      label: 'Invoices',      icon: FileText },
+      { href: '/admin/invoices',      label: 'Invoice',      icon: FileText },
     ],
   },
   {
-    label: 'People',
+    label: 'Tim',
     items: [
-      { href: '/admin/team',  label: 'Team',  icon: Users },
-      { href: '/admin/users', label: 'Users', icon: UserCircle },
+      { href: '/admin/team',  label: 'Tim',  icon: Users },
+      { href: '/admin/users', label: 'User', icon: UserCircle },
     ],
   },
   {
-    label: 'Content',
+    label: 'Konten',
     items: [
       {
         label: 'Blog',
         icon: Edit3,
         children: [
-          { href: '/admin/blog',            label: 'All Posts',  icon: Edit3 },
-          { href: '/admin/blog/categories', label: 'Categories', icon: FolderOpen },
+          { href: '/admin/blog',            label: 'Semua Post',  icon: Edit3 },
+          { href: '/admin/blog/categories', label: 'Kategori', icon: FolderOpen },
         ],
       },
-      { href: '/admin/gallery',        label: 'Gallery',        icon: Image },
+      { href: '/admin/gallery',        label: 'Galeri',        icon: Image },
       { href: '/admin/file-manager',   label: 'File Manager',   icon: HardDrive },
-      { href: '/admin/testimonials',   label: 'Testimonials',   icon: MessageSquare },
+      { href: '/admin/testimonials',   label: 'Testimoni',   icon: MessageSquare },
       { href: '/admin/faq',            label: 'FAQ',            icon: HelpCircle },
     ],
   },
   {
-    label: 'Config',
+    label: 'Konfigurasi',
     items: [
-      { href: '/admin/areas',         label: 'Areas',    icon: MapPin },
-      { href: '/admin/pricing',       label: 'Pricing',  icon: DollarSign },
-      { href: '/admin/careers',       label: 'Careers',  icon: BriefcaseMedical },
+      { href: '/admin/areas',         label: 'Area',    icon: MapPin },
+      { href: '/admin/pricing',       label: 'Harga',  icon: DollarSign },
+      { href: '/admin/careers',       label: 'Karir',  icon: BriefcaseMedical },
       { href: '/admin/email-templates', label: 'Email & SMS', icon: Mail },
       {
-        label: 'Settings',
+        label: 'Pengaturan',
         icon: Settings,
         children: [
-          { href: '/admin/settings',                   label: 'General',       icon: Globe },
-          { href: '/admin/settings?tab=navigation',    label: 'Navigation',    icon: Navigation },
-          { href: '/admin/settings?tab=homepage',      label: 'Homepage',      icon: Home },
+          { href: '/admin/settings',                   label: 'Umum',       icon: Globe },
+          { href: '/admin/settings?tab=navigation',    label: 'Navigasi',    icon: Navigation },
+          { href: '/admin/settings?tab=homepage',      label: 'Beranda',      icon: Home },
           { href: '/admin/settings?tab=footer',        label: 'Footer',        icon: Layers },
-          { href: '/admin/settings?tab=notifications', label: 'Notifications', icon: Bell },
+          { href: '/admin/settings?tab=notifications', label: 'Notifikasi', icon: Bell },
         ],
       },
-      { href: '/admin/audit-logs', label: 'Audit Logs', icon: Activity },
+      { href: '/admin/audit-logs', label: 'Log Audit', icon: Activity },
     ],
   },
 ]
@@ -330,7 +330,7 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
                 </div>
                 <div className="overflow-hidden">
                   <div className="text-sm font-bold text-gray-900 dark:text-white tracking-tight whitespace-nowrap">NingClean</div>
-                  <div className="text-[10px] text-gray-500 dark:text-slate-400 whitespace-nowrap">Admin Panel</div>
+                  <div className="text-[10px] text-gray-500 dark:text-slate-400 whitespace-nowrap">Panel Admin</div>
                 </div>
               </motion.div>
             )}
@@ -394,7 +394,7 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
             )}
           >
             <LogOut className="w-[18px] h-[18px] flex-shrink-0" />
-            {!collapsed && <span className="font-medium">Logout</span>}
+            {!collapsed && <span className="font-medium">Keluar</span>}
           </button>
         </div>
       </motion.aside>

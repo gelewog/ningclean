@@ -94,7 +94,7 @@ function FAQFormModal({
               </div>
               <div>
                 <h2 className="text-lg font-bold text-gray-900 dark:text-white">
-                  {isEditing ? 'Edit FAQ' : 'Create FAQ'}
+                  {isEditing ? 'Edit FAQ' : 'Buat FAQ Baru'}
                 </h2>
                 <p className="text-xs text-gray-500 dark:text-slate-400">
                   {isEditing ? 'Perbarui pertanyaan' : 'Buat FAQ baru'}
@@ -117,7 +117,7 @@ function FAQFormModal({
               {/* Question */}
               <div className="space-y-2">
                 <label className="text-sm font-medium text-gray-700 dark:text-slate-200">
-                  Question <span className="text-red-500">*</span>
+                  Pertanyaan <span className="text-red-500">*</span>
                 </label>
                 <Input
                   value={formData.question}
@@ -125,7 +125,7 @@ function FAQFormModal({
                     setFormData({ ...formData, question: e.target.value })
                     setErrors({ ...errors, question: undefined })
                   }}
-                  placeholder="Enter the question"
+                  placeholder="Masukkan pertanyaan"
                   className={errors.question ? 'border-red-500 focus:border-red-500' : ''}
                 />
                 {errors.question && <p className="text-sm text-red-500">{errors.question}</p>}
@@ -135,7 +135,7 @@ function FAQFormModal({
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <label className="text-sm font-medium text-gray-700 dark:text-slate-200">
-                    Category
+                    Kategori
                   </label>
                   <select
                     value={formData.category}
@@ -149,7 +149,7 @@ function FAQFormModal({
                 </div>
                 <div className="space-y-2">
                   <label className="text-sm font-medium text-gray-700 dark:text-slate-200">
-                    Display Order
+                    Urutan Tampilan
                   </label>
                   <Input
                     type="number"
@@ -163,7 +163,7 @@ function FAQFormModal({
               {/* Answer */}
               <div className="space-y-2">
                 <label className="text-sm font-medium text-gray-700 dark:text-slate-200">
-                  Answer <span className="text-red-500">*</span>
+                  Jawaban <span className="text-red-500">*</span>
                 </label>
                 <textarea
                   value={formData.answer}
@@ -171,7 +171,7 @@ function FAQFormModal({
                     setFormData({ ...formData, answer: e.target.value })
                     setErrors({ ...errors, answer: undefined })
                   }}
-                  placeholder="Enter the answer..."
+                  placeholder="Masukkan jawaban..."
                   rows={5}
                   className={`w-full px-3 py-2 rounded-lg border text-sm bg-white dark:bg-slate-800 text-gray-900 dark:text-slate-100 resize-none focus:outline-none focus:ring-2 focus:ring-emerald-500/20 transition-all placeholder:text-gray-400 dark:placeholder:text-slate-500 ${errors.answer ? 'border-red-500' : 'border-gray-200 dark:border-slate-700 focus:border-emerald-500 dark:focus:border-emerald-400'}`}
                 />
@@ -188,7 +188,7 @@ function FAQFormModal({
                     className="w-5 h-5 rounded border-gray-300 text-emerald-600 focus:ring-emerald-500"
                   />
                   <div>
-                    <span className="text-sm font-medium text-gray-900 dark:text-white">Active</span>
+                    <span className="text-sm font-medium text-gray-900 dark:text-white">Aktif</span>
                     <p className="text-xs text-gray-500 dark:text-slate-400">FAQ akan ditampilkan publik</p>
                   </div>
                 </label>
@@ -506,7 +506,7 @@ export default function FAQPage() {
                 <Plus className="h-4 w-4" />
               </Button>
             </div>
-            <p className="text-xs sm:text-sm text-gray-500 dark:text-slate-400 mt-1 truncate">Manage frequently asked questions</p>
+            <p className="text-xs sm:text-sm text-gray-500 dark:text-slate-400 mt-1 truncate">Kelola pertanyaan yang sering ditanyakan</p>
           </div>
           <div className="flex-shrink-0">
             <div className="px-2 sm:px-3 py-1.5 sm:py-2 bg-white dark:bg-slate-900 rounded-lg sm:rounded-xl border border-gray-200 dark:border-slate-600">
@@ -526,7 +526,7 @@ export default function FAQPage() {
           <div className="relative max-w-md">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400 dark:text-slate-500 z-10 pointer-events-none" />
             <Input
-              placeholder="Search FAQs..."
+              placeholder="Cari FAQ..."
               className="pl-10 bg-white dark:bg-slate-800 border-gray-200 dark:border-slate-700 relative z-1"
               value={search}
               onChange={(e) => setSearch(e.target.value)}

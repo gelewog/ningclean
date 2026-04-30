@@ -106,15 +106,15 @@ export function FilePreviewModal({ isOpen, onClose, file }: FilePreviewModalProp
           <div className="px-6 py-4 border-t border-gray-100 dark:border-slate-700/50 bg-gray-50/50 dark:bg-slate-800/30">
             <div className="grid grid-cols-3 gap-4 text-sm">
               <div>
-                <p className="text-gray-500 dark:text-slate-400">Created</p>
+                <p className="text-gray-500 dark:text-slate-400">Dibuat</p>
                 <p className="font-medium text-gray-900 dark:text-white">{formatDate(file.createdAt)}</p>
               </div>
               <div>
-                <p className="text-gray-500 dark:text-slate-400">Modified</p>
+                <p className="text-gray-500 dark:text-slate-400">Diubah</p>
                 <p className="font-medium text-gray-900 dark:text-white">{formatDate(file.modifiedAt)}</p>
               </div>
               <div>
-                <p className="text-gray-500 dark:text-slate-400">Type</p>
+                <p className="text-gray-500 dark:text-slate-400">Tipe</p>
                 <p className="font-medium text-gray-900 dark:text-white">{file.type}</p>
               </div>
             </div>

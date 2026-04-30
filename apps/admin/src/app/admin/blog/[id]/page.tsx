@@ -127,10 +127,9 @@ export default function EditBlogPostPage() {
         publishedAt,
       })
       setSelectedCoverFile(null)
-      toast.success('Post berhasil diperbarui')
       router.push('/admin/blog')
     } catch (error: any) {
-      toast.error(error.message || 'Gagal memperbarui post')
+      // Toast handled by useUpdateBlogPost hook
     } finally {
       setSaving(false)
     }
@@ -140,10 +139,9 @@ export default function EditBlogPostPage() {
     setDeleting(true)
     try {
       await deleteBlogPost(postId)
-      toast.success('Post berhasil dihapus')
       router.push('/admin/blog')
     } catch (error: any) {
-      toast.error(error.message || 'Gagal menghapus post')
+      // Toast handled by useDeleteBlogPost hook
     } finally {
       setDeleting(false)
     }

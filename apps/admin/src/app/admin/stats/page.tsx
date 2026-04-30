@@ -136,7 +136,7 @@ export default function CompanyStatsPage() {
             setIsModalOpen(false)
           },
           onError: () => {
-            toast.error('Failed to update company stat')
+            // Toast handled by useUpdateCompanyStat hook
           },
         }
       )
@@ -146,7 +146,7 @@ export default function CompanyStatsPage() {
           setIsModalOpen(false)
         },
         onError: () => {
-          toast.error('Failed to create company stat')
+          // Toast handled by useCreateCompanyStat hook
         },
       })
     }
@@ -159,7 +159,7 @@ export default function CompanyStatsPage() {
         setIsDeleteModalOpen(false)
       },
       onError: () => {
-        toast.error('Failed to delete company stat')
+        // Toast handled by useDeleteCompanyStat hook
       },
     })
   }

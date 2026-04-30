@@ -62,8 +62,8 @@ export function CreateFolderModal({ isOpen, onClose, onConfirm, loading, current
                   </div>
                 </div>
                 <div>
-                  <h2 className="text-xl font-bold text-gray-900 dark:text-white">Create New Folder</h2>
-                  <p className="text-sm text-gray-500 dark:text-slate-400 mt-0.5">in: {currentPath || 'uploads'}</p>
+                  <h2 className="text-xl font-bold text-gray-900 dark:text-white">Buat Folder Baru</h2>
+                  <p className="text-sm text-gray-500 dark:text-slate-400 mt-0.5">di: {currentPath || 'uploads'}</p>
                 </div>
               </div>
               <button onClick={onClose} className="absolute top-4 right-4 w-8 h-8 rounded-xl bg-gray-100 dark:bg-slate-800 hover:bg-gray-200 dark:hover:bg-slate-700 flex items-center justify-center transition-colors">
@@ -73,11 +73,11 @@ export function CreateFolderModal({ isOpen, onClose, onConfirm, loading, current
 
             <form onSubmit={handleSubmit}>
               <div className="px-6 py-5">
-                <label className="text-sm font-medium text-gray-700 dark:text-slate-200 mb-2 block">Folder Name</label>
+                <label className="text-sm font-medium text-gray-700 dark:text-slate-200 mb-2 block">Nama Folder</label>
                 <Input
                   value={folderName}
                   onChange={(e) => setFolderName(e.target.value)}
-                  placeholder="Enter folder name..."
+                  placeholder="Masukkan nama folder..."
                   className="h-11"
                   autoFocus
                 />
@@ -100,12 +100,12 @@ export function CreateFolderModal({ isOpen, onClose, onConfirm, loading, current
                   {loading ? (
                     <div className="flex items-center gap-2">
                       <Loader2 className="w-4 h-4 animate-spin" />
-                      <span>Creating...</span>
+                      <span>Membuat...</span>
                     </div>
                   ) : (
                     <div className="flex items-center gap-2">
                       <FolderPlus className="w-4 h-4" />
-                      <span>Create Folder</span>
+                      <span>Buat Folder</span>
                     </div>
                   )}
                 </button>

@@ -93,7 +93,7 @@ export class AdminService {
 
   // User management (for admin/staff accounts - all roles)
   async getAllUsers() {
-    return this.prisma.user.findMany({
+    const users = await this.prisma.user.findMany({
       select: {
         id: true,
         email: true,
@@ -105,6 +105,15 @@ export class AdminService {
       },
       orderBy: { createdAt: 'desc' },
     });
+
+    // Return in paginated format to match frontend expectation
+    return {
+      data: users,
+      total: users.length,
+      page: 1,
+      limit: users.length,
+      totalPages: 1,
+    };
   }
 
   async updateUser(id: string, data: { name?: string; email?: string; phone?: string }) {
@@ -116,124 +125,169 @@ export class AdminService {
 
   // Analytics data for dashboard charts
   async getAnalytics() {
-    const now = new Date();
-    const thirtyDaysAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
-    const twelveMonthsAgo = new Date(now.getTime() - 365 * 24 * 60 * 60 * 1000);
+    try {
+      const now = new Date();
+      const thirtyDaysAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+      const twelveMonthsAgo = new Date(now.getTime() - 365 * 24 * 60 * 60 * 1000);
 
-    // Monthly revenue for last 12 months
-    const monthlyRevenueRaw: any[] = await this.prisma.$queryRaw`
-      SELECT 
-        DATE_TRUNC('month', "createdAt")::text as month,
-        COALESCE(SUM("totalAmount"), 0)::float as revenue,
-        COUNT(*)::int as bookings
-      FROM "bookings"
-      WHERE "status" = 'COMPLETED'
-        AND "createdAt" >= ${twelveMonthsAgo}
-      GROUP BY DATE_TRUNC('month', "createdAt")
-      ORDER BY month ASC
-    `;
-    const monthlyRevenue = monthlyRevenueRaw.map((r: any) => ({
-      month: r.month,
-      revenue: Number(r.revenue),
-      bookings: Number(r.bookings)
-    }));
+      // Initialize empty arrays as fallback
+      let monthlyRevenue: any[] = [];
+      let dailyBookings: any[] = [];
+      let servicePopularity: any[] = [];
+      let statusBreakdown: any[] = [];
+      let customerGrowth: any[] = [];
+      let topCustomers: any[] = [];
 
-    // Daily bookings for last 30 days
-    const dailyBookingsRaw: any[] = await this.prisma.$queryRaw`
-      SELECT 
-        DATE("createdAt")::text as date,
-        COUNT(*)::int as bookings,
-        COALESCE(SUM("totalAmount"), 0)::float as revenue
-      FROM "bookings"
-      WHERE "createdAt" >= ${thirtyDaysAgo}
-      GROUP BY DATE("createdAt")
-      ORDER BY date ASC
-    `;
-    const dailyBookings = dailyBookingsRaw.map((r: any) => ({
-      date: r.date,
-      bookings: Number(r.bookings),
-      revenue: Number(r.revenue)
-    }));
+      // Try-catch each query independently
+      try {
+        // Monthly revenue for last 12 months
+        const monthlyRevenueRaw = await this.prisma.$queryRawUnsafe<
+          { month: string; revenue: number; bookings: number }[]
+        >(`
+          SELECT 
+            DATE_TRUNC('month', "createdAt")::text as month,
+            COALESCE(SUM("totalAmount"), 0)::float as revenue,
+            COUNT(*)::int as bookings
+          FROM "bookings"
+          WHERE "status" = 'COMPLETED'
+            AND "createdAt" >= '${twelveMonthsAgo.toISOString()}'
+          GROUP BY DATE_TRUNC('month', "createdAt")
+          ORDER BY month ASC
+        `);
+        monthlyRevenue = monthlyRevenueRaw.map((r) => ({
+          month: r.month,
+          revenue: Number(r.revenue),
+          bookings: Number(r.bookings)
+        }));
+      } catch (e) {
+        console.error('Monthly revenue query failed:', e);
+      }
 
-    // Service popularity
-    const servicePopularityRaw: any[] = await this.prisma.$queryRaw`
-      SELECT 
-        bi."serviceId",
-        s.name as "serviceName",
-        COUNT(*)::int as count
-      FROM booking_items bi
-      JOIN services s ON s.id = bi."serviceId"
-      GROUP BY bi."serviceId", s.name
-      ORDER BY count DESC
-      LIMIT 5
-    `;
-    const servicePopularity = servicePopularityRaw.map((r: any) => ({
-      serviceId: r.serviceId,
-      serviceName: r.serviceName,
-      count: Number(r.count)
-    }));
+      try {
+        // Daily bookings for last 30 days
+        const dailyBookingsRaw = await this.prisma.$queryRawUnsafe<
+          { date: string; bookings: number; revenue: number }[]
+        >(`
+          SELECT 
+            DATE("createdAt")::text as date,
+            COUNT(*)::int as bookings,
+            COALESCE(SUM("totalAmount"), 0)::float as revenue
+          FROM "bookings"
+          WHERE "createdAt" >= '${thirtyDaysAgo.toISOString()}'
+          GROUP BY DATE("createdAt")
+          ORDER BY date ASC
+        `);
+        dailyBookings = dailyBookingsRaw.map((r) => ({
+          date: r.date,
+          bookings: Number(r.bookings),
+          revenue: Number(r.revenue)
+        }));
+      } catch (e) {
+        console.error('Daily bookings query failed:', e);
+      }
 
-    // Booking status breakdown
-    const statusBreakdown = await this.prisma.booking.groupBy({
-      by: ['status'],
-      _count: { status: true },
-    });
-
-    // Customer growth (new customers per month)
-    const customerGrowthRaw: any[] = await this.prisma.$queryRaw`
-      SELECT 
-        DATE_TRUNC('month', "createdAt")::text as month,
-        COUNT(*)::int as "newCustomers"
-      FROM "customers"
-      WHERE "createdAt" >= ${twelveMonthsAgo}
-      GROUP BY DATE_TRUNC('month', "createdAt")
-      ORDER BY month ASC
-    `;
-    const customerGrowth = customerGrowthRaw.map((r: any) => ({
-      month: r.month,
-      newCustomers: Number(r.newCustomers)
-    }));
-
-    // Top customers by spending (exclude guest bookings with null customerId)
-    const topCustomers = await this.prisma.booking.groupBy({
-      by: ['customerId'],
-      _sum: { totalAmount: true },
-      where: { customerId: { not: null } },
-      orderBy: { _sum: { totalAmount: 'desc' } },
-      take: 5,
-    });
-
-    // Get customer details for top customers
-    const topCustomersWithDetails = await Promise.all(
-      topCustomers.map(async (tc) => {
-        const customer = await this.prisma.customer.findUnique({
-          where: { id: tc.customerId },
-          select: { name: true, email: true },
+      try {
+        // Service popularity using Prisma API
+        const servicePopularityResult = await this.prisma.bookingItem.groupBy({
+          by: ['serviceId'],
+          _count: { serviceId: true },
+          orderBy: { _count: { serviceId: 'desc' } },
+          take: 5,
         });
-        return {
-          customerId: tc.customerId,
-          name: customer?.name || 'Unknown',
-          email: customer?.email || '',
-          totalSpent: tc._sum.totalAmount || 0,
-        };
-      })
-    );
 
-    return {
-      monthlyRevenue,
-      dailyBookings,
-      servicePopularity: servicePopularity.map((sp) => ({
-        serviceId: sp.serviceId,
-        serviceName: sp.serviceName,
-        count: Number(sp.count),
-      })),
-      statusBreakdown: statusBreakdown.map((sb) => ({
-        status: sb.status,
-        count: sb._count.status,
-      })),
-      customerGrowth,
-      topCustomers: topCustomersWithDetails,
-    };
+        // Get service names
+        servicePopularity = await Promise.all(
+          servicePopularityResult.map(async (item) => {
+            const service = await this.prisma.service.findUnique({
+              where: { id: item.serviceId },
+              select: { name: true },
+            });
+            return {
+              serviceId: item.serviceId,
+              serviceName: service?.name || 'Unknown Service',
+              count: item._count.serviceId || 0,
+            };
+          })
+        );
+      } catch (e) {
+        console.error('Service popularity query failed:', e);
+      }
+
+      try {
+        // Booking status breakdown
+        const statusResult = await this.prisma.booking.groupBy({
+          by: ['status'],
+          _count: { status: true },
+        });
+        statusBreakdown = statusResult.map((sb) => ({
+          status: sb.status,
+          count: sb._count.status,
+        }));
+      } catch (e) {
+        console.error('Status breakdown query failed:', e);
+      }
+
+      try {
+        // Customer growth (new customers per month)
+        const customerGrowthRaw = await this.prisma.$queryRawUnsafe<
+          { month: string; newCustomers: number }[]
+        >(`
+          SELECT 
+            DATE_TRUNC('month', "createdAt")::text as month,
+            COUNT(*)::int as "newCustomers"
+          FROM "customers"
+          WHERE "createdAt" >= '${twelveMonthsAgo.toISOString()}'
+          GROUP BY DATE_TRUNC('month', "createdAt")
+          ORDER BY month ASC
+        `);
+        customerGrowth = customerGrowthRaw.map((r) => ({
+          month: r.month,
+          newCustomers: Number(r.newCustomers)
+        }));
+      } catch (e) {
+        console.error('Customer growth query failed:', e);
+      }
+
+      try {
+        // Top customers by spending
+        const topCustomersResult = await this.prisma.booking.groupBy({
+          by: ['customerId'],
+          _sum: { totalAmount: true },
+          where: { customerId: { not: null } },
+          orderBy: { _sum: { totalAmount: 'desc' } },
+          take: 5,
+        });
+
+        topCustomers = await Promise.all(
+          topCustomersResult.map(async (tc) => {
+            const customer = await this.prisma.customer.findUnique({
+              where: { id: tc.customerId },
+              select: { name: true, email: true },
+            });
+            return {
+              customerId: tc.customerId,
+              name: customer?.name || 'Unknown',
+              email: customer?.email || '',
+              totalSpent: tc._sum.totalAmount ? Number(tc._sum.totalAmount) : 0,
+            };
+          })
+        );
+      } catch (e) {
+        console.error('Top customers query failed:', e);
+      }
+
+      return {
+        monthlyRevenue,
+        dailyBookings,
+        servicePopularity,
+        statusBreakdown,
+        customerGrowth,
+        topCustomers,
+      };
+    } catch (error) {
+      console.error('Analytics error:', error);
+      throw error;
+    }
   }
 
   // Booking management - update single booking

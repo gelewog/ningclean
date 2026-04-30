@@ -90,12 +90,10 @@ export default function NewBlogPostPage() {
         publishedAt,
       })
 
-      toast.dismiss(loadingToast)
       setSelectedCoverFile(null)
       router.push('/admin/blog')
     } catch (error: any) {
-      toast.dismiss(loadingToast)
-      toast.error(error.message || 'Gagal membuat post')
+      // Toast handled by useCreateBlogPost hook
     }
   }
 

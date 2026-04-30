@@ -133,14 +133,14 @@ export default function TeamPage() {
 
   async function validateForm(): Promise<boolean> {
     const newErrors: Partial<TeamFormData> = {}
-    if (!formData.name.trim()) newErrors.name = 'Name is required'
-    if (!formData.position.trim()) newErrors.position = 'Position is required'
-    if (!formData.department.trim()) newErrors.department = 'Department is required'
-    
+    if (!formData.name.trim()) newErrors.name = 'Nama wajib diisi'
+    if (!formData.position.trim()) newErrors.position = 'Posisi wajib diisi'
+    if (!formData.department.trim()) newErrors.department = 'Departemen wajib diisi'
+
     // Check for duplicates
     const { nameExists, emailExists } = await checkDuplicate()
-    if (nameExists) newErrors.name = 'Team member with this name already exists'
-    if (emailExists) newErrors.email = 'Email already exists'
+    if (nameExists) newErrors.name = 'Anggota tim dengan nama ini sudah ada'
+    if (emailExists) newErrors.email = 'Email sudah digunakan'
     
     setErrors(newErrors)
     return Object.keys(newErrors).length === 0
@@ -154,12 +154,11 @@ export default function TeamPage() {
     let avatarUrl = formData.avatar
     if (selectedImageFile) {
       const uploadedUrl = await uploadImage(selectedImageFile, 'team')
-      if (uploadedUrl) {
-        avatarUrl = uploadedUrl
-      } else {
-        toast.error('Failed to upload image')
+      if (!uploadedUrl) {
+        toast.error('Gagal mengupload gambar')
         return
       }
+      avatarUrl = uploadedUrl
     }
 
     const itemData = {
@@ -183,16 +182,14 @@ export default function TeamPage() {
     try {
       if (isEditing && selectedItem) {
         await updateMutation.mutateAsync({ id: selectedItem.id, data: itemData })
-        toast.success('Team member updated successfully')
       } else {
         await createMutation.mutateAsync(itemData)
-        toast.success('Team member created successfully')
       }
       setSelectedImageFile(null)
       setIsModalOpen(false)
       refetch()
     } catch (error) {
-      toast.error(`Failed to ${isEditing ? 'update' : 'create'} team member`)
+      // Toast handled by hooks
     }
   }
 
@@ -200,11 +197,10 @@ export default function TeamPage() {
     if (!selectedItem) return
     try {
       await deleteMutation.mutateAsync(selectedItem.id)
-      toast.success('Team member deleted successfully')
       setIsDeleteModalOpen(false)
       refetch()
     } catch (error) {
-      toast.error('Failed to delete team member')
+      // Toast handled by useDeleteTeamMember hook
     }
   }
 
@@ -329,7 +325,7 @@ export default function TeamPage() {
                 <Plus className="h-4 w-4" />
               </Button>
             </div>
-            <p className="text-xs sm:text-sm text-gray-500 dark:text-slate-400 mt-0.5 truncate">Manage team members and staff</p>
+            <p className="text-xs sm:text-sm text-gray-500 dark:text-slate-400 mt-0.5 truncate">Kelola anggota tim dan staf</p>
           </div>
           <div className="flex-shrink-0">
             <div className="px-2 sm:px-3 py-1.5 sm:py-2 bg-white dark:bg-slate-900 rounded-lg sm:rounded-xl border border-gray-200 dark:border-slate-600">
@@ -565,7 +561,7 @@ export default function TeamPage() {
       <Modal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        title={isEditing ? 'Edit Team Member' : 'Create New Team Member'}
+        title={isEditing ? 'Edit Anggota Tim' : 'Tambah Anggota Tim Baru'}
         size="xl"
         titleIcon={<User className="w-5 h-5" />}
         accentColor="emerald"
@@ -583,10 +579,10 @@ export default function TeamPage() {
               </div>
               <div className="flex-1">
                 <h3 className="text-xl font-bold text-gray-900 dark:text-white">
-                  {formData.name || 'New Member'}
+                  {formData.name || 'Anggota Baru'}
                 </h3>
                 <p className="text-xs sm:text-sm text-gray-500 dark:text-slate-400">
-                  {formData.position || 'Position not set'} • {formData.department}
+                  {formData.position || 'Posisi belum diatur'} • {formData.department}
                 </p>
               </div>
             </div>
@@ -805,7 +801,7 @@ export default function TeamPage() {
       <Modal
         isOpen={isDeleteModalOpen}
         onClose={() => setIsDeleteModalOpen(false)}
-        title="Delete Team Member"
+        title="Hapus Anggota Tim"
         size="sm"
         titleIcon={<Trash2 className="w-5 h-5" />}
         accentColor="red"
@@ -813,17 +809,17 @@ export default function TeamPage() {
         <div className="space-y-6">
           <div className="p-4 bg-red-50 dark:bg-red-900/20 rounded-xl border border-red-200 dark:border-red-800/50">
             <p className="text-gray-700 dark:text-slate-300">
-              Are you sure you want to delete <strong className="text-red-600 dark:text-red-400">{selectedItem?.name}</strong>?
+              Apakah Anda yakin ingin menghapus <strong className="text-red-600 dark:text-red-400">{selectedItem?.name}</strong>?
             </p>
-            <p className="text-xs sm:text-sm text-gray-500 dark:text-slate-400 mt-2">This action cannot be undone. All associated data will be permanently removed.</p>
+            <p className="text-xs sm:text-sm text-gray-500 dark:text-slate-400 mt-2">Tindakan ini tidak dapat dibatalkan. Semua data yang terkait akan dihapus secara permanen.</p>
           </div>
           <div className="flex items-center justify-end gap-3">
             <Button variant="outline" onClick={() => setIsDeleteModalOpen(false)}>
-              Cancel
+              Batal
             </Button>
             <Button variant="error" onClick={handleDelete} loading={deleteMutation.isPending} className="gap-2">
               <Trash2 className="w-4 h-4" />
-              Delete Member
+              Hapus Member
             </Button>
           </div>
         </div>

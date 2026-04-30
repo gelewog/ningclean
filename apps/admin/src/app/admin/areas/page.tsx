@@ -31,7 +31,7 @@ interface AreaFormData {
   isFeatured: boolean
 }
 
-const regions = ['East Java', 'Central Java', 'West Java', 'DKI Jakarta', 'Bali', 'Other']
+const regions = ['Jawa Timur', 'Jawa Tengah', 'Jawa Barat', 'DKI Jakarta', 'Bali', 'Lainnya']
 
 function generateSlug(city: string): string {
   return city.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')
@@ -106,7 +106,7 @@ function AreaFormModal({
               </div>
               <div>
                 <h2 className="text-lg font-bold text-gray-900 dark:text-white">
-                  {isEditing ? 'Edit Service Area' : 'Create Service Area'}
+                  {isEditing ? 'Edit Area Layanan' : 'Buat Area Layanan'}
                 </h2>
                 <p className="text-xs text-gray-500 dark:text-slate-400">
                   {isEditing ? 'Perbarui area layanan' : 'Buat area layanan baru'}
@@ -129,9 +129,9 @@ function AreaFormModal({
               {/* City & Slug */}
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <label className="text-sm font-medium text-gray-700 dark:text-slate-200">
-                    City <span className="text-red-500">*</span>
-                  </label>
+                <label className="text-sm font-medium text-gray-700 dark:text-slate-200">
+                  Kota <span className="text-red-500">*</span>
+                </label>
                   <Input
                     icon={<MapPin className="h-4 w-4 text-gray-400" />}
                     value={formData.city}
@@ -140,7 +140,7 @@ function AreaFormModal({
                       setFormData(prev => ({ ...prev, city, slug: generateSlug(city) }))
                       setErrors({ ...errors, city: '' })
                     }}
-                    placeholder="e.g., Surabaya"
+                    placeholder="contoh: Surabaya"
                     className={errors.city ? 'border-red-500 focus:border-red-500' : ''}
                   />
                   {errors.city && <p className="text-sm text-red-500">{errors.city}</p>}
@@ -157,7 +157,7 @@ function AreaFormModal({
                         setFormData({ ...formData, slug: e.target.value })
                         setErrors({ ...errors, slug: '' })
                       }}
-                      placeholder="e.g., surabaya"
+                      placeholder="contoh: surabaya"
                       className={`pl-7 ${errors.slug ? 'border-red-500 focus:border-red-500' : ''}`}
                     />
                   </div>
@@ -168,7 +168,7 @@ function AreaFormModal({
               {/* Region */}
               <div className="space-y-2">
                 <label className="text-sm font-medium text-gray-700 dark:text-slate-200">
-                  Region/Province <span className="text-red-500">*</span>
+                  Wilayah/Provinsi <span className="text-red-500">*</span>
                 </label>
                 <select
                   value={formData.region}
@@ -190,12 +190,12 @@ function AreaFormModal({
               {/* Description */}
               <div className="space-y-2">
                 <label className="text-sm font-medium text-gray-700 dark:text-slate-200">
-                  Description
+                  Deskripsi
                 </label>
                 <textarea
                   value={formData.description}
                   onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                  placeholder="Enter description about this service area..."
+                  placeholder="Masukkan deskripsi tentang area layanan ini..."
                   rows={3}
                   className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-slate-700 text-sm text-gray-900 dark:text-slate-100 bg-white dark:bg-slate-800 resize-none focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 dark:focus:border-emerald-400 transition-all placeholder:text-gray-400 dark:placeholder:text-slate-500"
                 />
@@ -204,12 +204,12 @@ function AreaFormModal({
               {/* Coverage Areas */}
               <div className="space-y-2">
                 <label className="text-sm font-medium text-gray-700 dark:text-slate-200">
-                  Coverage Areas (Kecamatan)
+                  Area Cakupan (Kecamatan)
                 </label>
                 <textarea
                   value={formData.coverage}
                   onChange={(e) => setFormData({ ...formData, coverage: e.target.value })}
-                  placeholder="Gubeng, Tegalsari, Rungkut, Genteng, Wonokromo (comma separated)"
+                  placeholder="Gubeng, Tegalsari, Rungkut, Genteng, Wonokromo (pisahkan dengan koma)"
                   rows={3}
                   className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-slate-700 text-sm text-gray-900 dark:text-slate-100 bg-white dark:bg-slate-800 resize-none focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 dark:focus:border-emerald-400 transition-all placeholder:text-gray-400 dark:placeholder:text-slate-500"
                 />
@@ -228,7 +228,7 @@ function AreaFormModal({
                     className="w-5 h-5 rounded border-gray-300 text-emerald-600 focus:ring-emerald-500"
                   />
                   <div>
-                    <span className="text-sm font-medium text-gray-900 dark:text-white">Featured Area</span>
+                    <span className="text-sm font-medium text-gray-900 dark:text-white">Area Unggulan</span>
                     <p className="text-xs text-gray-500 dark:text-slate-400">Tampilkan di halaman utama</p>
                   </div>
                 </label>
@@ -240,7 +240,7 @@ function AreaFormModal({
                     className="w-5 h-5 rounded border-gray-300 text-emerald-600 focus:ring-emerald-500"
                   />
                   <div>
-                    <span className="text-sm font-medium text-gray-900 dark:text-white">Active</span>
+                    <span className="text-sm font-medium text-gray-900 dark:text-white">Aktif</span>
                     <p className="text-xs text-gray-500 dark:text-slate-400">Area tersedia untuk booking</p>
                   </div>
                 </label>
@@ -324,7 +324,7 @@ function AreaDeleteModal({
                 <AlertCircle className="w-6 h-6 text-red-600 dark:text-red-400" />
               </div>
               <div>
-                <h2 className="text-lg font-bold text-gray-900 dark:text-white">Hapus Service Area</h2>
+                <h2 className="text-lg font-bold text-gray-900 dark:text-white">Hapus Area Layanan</h2>
                 <p className="text-xs sm:text-sm text-gray-500 dark:text-slate-400">
                   Tindakan ini tidak dapat dibatalkan
                 </p>
@@ -341,7 +341,7 @@ function AreaDeleteModal({
                   <p className="text-xs text-gray-500 dark:text-slate-400">{item.region}</p>
                   {item.coverage && (
                     <p className="text-xs text-gray-400 dark:text-slate-500 mt-1">
-                      {item.coverage.length} coverage areas
+                      {item.coverage.length} area cakupan
                     </p>
                   )}
                 </div>
@@ -391,7 +391,7 @@ export default function AreasPage() {
   const [formData, setFormData] = React.useState<AreaFormData>({
     city: '',
     slug: '',
-    region: 'East Java',
+    region: 'Jawa Timur',
     description: '',
     coverage: '',
     isActive: true,
@@ -406,7 +406,7 @@ export default function AreasPage() {
     setFormData({
       city: '',
       slug: '',
-      region: 'East Java',
+      region: 'Jawa Timur',
       description: '',
       coverage: '',
       isActive: true,
@@ -439,9 +439,9 @@ export default function AreasPage() {
 
   function validateForm(): boolean {
     const newErrors: Partial<AreaFormData> = {}
-    if (!formData.city.trim()) newErrors.city = 'City is required'
-    if (!formData.slug.trim()) newErrors.slug = 'Slug is required'
-    if (!formData.region.trim()) newErrors.region = 'Region is required'
+    if (!formData.city.trim()) newErrors.city = 'Kota wajib diisi'
+    if (!formData.slug.trim()) newErrors.slug = 'Slug wajib diisi'
+    if (!formData.region.trim()) newErrors.region = 'Wilayah wajib diisi'
     setErrors(newErrors)
     return Object.keys(newErrors).length === 0
   }
@@ -466,15 +466,13 @@ export default function AreasPage() {
     try {
       if (isEditing && selectedItem) {
         await updateMutation.mutateAsync({ id: selectedItem.id, data: itemData })
-        toast.success('Service area updated successfully')
       } else {
         await createMutation.mutateAsync(itemData)
-        toast.success('Service area created successfully')
       }
       setIsModalOpen(false)
       refetch()
     } catch (error) {
-      toast.error(`Failed to ${isEditing ? 'update' : 'create'} service area`)
+      // Toast error handled by mutation hook
     }
   }
 
@@ -482,11 +480,10 @@ export default function AreasPage() {
     if (!selectedItem) return
     try {
       await deleteMutation.mutateAsync(selectedItem.id)
-      toast.success('Service area deleted successfully')
       setIsDeleteModalOpen(false)
       refetch()
     } catch (error) {
-      toast.error('Failed to delete service area')
+      // Toast error handled by mutation hook
     }
   }
 
@@ -496,10 +493,9 @@ export default function AreasPage() {
         id: item.id,
         data: { isFeatured: !item.isFeatured }
       })
-      toast.success(`Area ${!item.isFeatured ? 'featured' : 'unfeatured'}`)
       refetch()
     } catch (error) {
-      toast.error('Failed to update area')
+      // Toast error handled by mutation hook
     }
   }
 
@@ -531,7 +527,7 @@ export default function AreasPage() {
     },
     {
       key: 'slug',
-      label: 'Slug',
+      label: 'Kategori',
       render: (value: string) => (
         <div className="flex items-center gap-2">
           <div className="w-6 h-6 rounded bg-blue-50 dark:bg-blue-900/30 flex items-center justify-center">
@@ -543,7 +539,7 @@ export default function AreasPage() {
     },
     {
       key: 'coverage',
-      label: 'Coverage',
+      label: 'Cakupan',
       render: (value: string[]) => (
         <div className="flex items-center gap-2">
           <div className="w-6 h-6 rounded bg-amber-50 dark:bg-amber-900/30 flex items-center justify-center">
@@ -557,7 +553,7 @@ export default function AreasPage() {
     },
     {
       key: 'isFeatured',
-      label: 'Featured',
+      label: 'Unggulan',
       render: (value: boolean, row: ServiceArea) => (
         <button onClick={() => handleToggleFeatured(row)}>
           <Star className={`h-5 w-5 ${value ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300 dark:text-slate-600'}`} />
@@ -569,13 +565,13 @@ export default function AreasPage() {
       label: 'Status',
       render: (value: boolean) => (
         <Badge variant={value ? 'success' : 'default'}>
-          {value ? 'Active' : 'Inactive'}
+          {value ? 'Aktif' : 'Nonaktif'}
         </Badge>
       ),
     },
     {
       key: 'createdAt',
-      label: 'Created',
+      label: 'Dibuat',
       render: (value: string) => (
         <div className="flex items-center gap-1 text-sm text-gray-500 dark:text-slate-400">
           <Calendar className="h-3.5 w-3.5" />
@@ -602,7 +598,7 @@ export default function AreasPage() {
   return (
     <div className="min-h-screen bg-gray-50/50 dark:bg-slate-800 text-gray-900 dark:text-white">
       {/* Topbar */}
-      <Breadcrumb items={[{ label: 'Service Areas' }]} />
+      <Breadcrumb items={[{ label: 'Area Layanan' }]} />
 
       <div className="w-full px-3 sm:px-6 py-3 sm:py-6 space-y-3 sm:space-y-6">
         {/* Page Header */}
@@ -613,12 +609,12 @@ export default function AreasPage() {
         >
           <div className="min-w-0 flex-1">
             <div className="flex items-center gap-3">
-              <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Service Areas</h1>
+              <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Area Layanan</h1>
               <Button onClick={openCreateModal} className="bg-emerald-600 hover:bg-emerald-700 h-8 text-xs px-3 flex-shrink-0">
                 <Plus className="h-4 w-4" />
               </Button>
             </div>
-            <p className="text-xs sm:text-sm text-gray-500 dark:text-slate-400 mt-1 truncate">Manage service coverage areas</p>
+            <p className="text-xs sm:text-sm text-gray-500 dark:text-slate-400 mt-1 truncate">Kelola area cakupan layanan</p>
           </div>
           <div className="flex-shrink-0">
             <div className="px-2 sm:px-3 py-1.5 sm:py-2 bg-white dark:bg-slate-900 rounded-lg sm:rounded-xl border border-gray-200 dark:border-slate-600">
@@ -638,7 +634,7 @@ export default function AreasPage() {
           <div className="relative max-w-md">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400 dark:text-slate-500 z-10 pointer-events-none" />
             <Input
-              placeholder="Search areas..."
+              placeholder="Cari area..."
               className="pl-10 bg-white dark:bg-slate-800 border-gray-200 dark:border-slate-700 relative z-1"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
@@ -663,10 +659,10 @@ export default function AreasPage() {
                     <Globe className="h-8 w-8 text-gray-400 dark:text-slate-500" />
                   </div>
                   <p className="text-sm font-medium text-gray-900 dark:text-white">
-                    {search ? 'No areas found' : 'No service areas yet'}
+                    {search ? 'Tidak ada area ditemukan' : 'Belum ada area layanan'}
                   </p>
                   <p className="mt-1 text-sm text-gray-500 dark:text-slate-400">
-                    {search ? 'Try different keywords' : 'Click the button above to add your first area'}
+                    {search ? 'Coba kata kunci lain' : 'Klik tombol di atas untuk menambah area pertama'}
                   </p>
                 </div>
               }
@@ -709,7 +705,7 @@ export default function AreasPage() {
                         <Globe className="h-3.5 w-3.5 text-amber-600 dark:text-amber-400" />
                       </div>
                       <div>
-                        <p className="text-[10px] text-gray-500 dark:text-slate-400">Coverage</p>
+                        <p className="text-[10px] text-gray-500 dark:text-slate-400">Cakupan</p>
                         <p className="text-xs font-medium text-gray-700 dark:text-slate-300">{row.coverage?.length || 0} kecamatan</p>
                       </div>
                     </div>
@@ -720,7 +716,7 @@ export default function AreasPage() {
                     <div className="flex items-center gap-1.5">
                       <div className={`w-2 h-2 rounded-full ${row.isActive ? 'bg-emerald-500' : 'bg-gray-400'}`} />
                       <span className={`text-xs font-medium ${row.isActive ? 'text-emerald-600 dark:text-emerald-400' : 'text-gray-500 dark:text-slate-400'}`}>
-                        {row.isActive ? 'Active' : 'Inactive'}
+                        {row.isActive ? 'Aktif' : 'Nonaktif'}
                       </span>
                     </div>
                     <div className="flex items-center gap-1">

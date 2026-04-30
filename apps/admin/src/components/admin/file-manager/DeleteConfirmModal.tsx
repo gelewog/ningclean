@@ -93,14 +93,14 @@ export function DeleteConfirmModal({ isOpen, onClose, items, onConfirm, deleting
                     <div className="flex-1 min-w-0">
                       <p className="text-sm font-medium text-gray-900 dark:text-white truncate">{item.name}</p>
                       <p className="text-xs text-gray-500 dark:text-slate-400">
-                        {item.type === 'folder' ? `${item.fileCount || 0} files` : item.sizeFormatted}
+                        {item.type === 'folder' ? `${item.fileCount || 0} file` : item.sizeFormatted}
                       </p>
                     </div>
                   </div>
                 ))}
                 {items.length > 5 && (
                   <p className="text-xs text-gray-500 dark:text-slate-400 text-center py-2">
-                    +{items.length - 5} more items...
+                    +{items.length - 5} item lainnya...
                   </p>
                 )}
               </div>

@@ -19,7 +19,7 @@ interface BreadcrumbProps {
 export function Breadcrumb({ items, showLive = true }: BreadcrumbProps) {
   const pathname = usePathname()
   
-  // Build breadcrumb from items, prepend NingClean Admin / Dashboard
+  // Build breadcrumb from items, prepend Dashboard
   const breadcrumbItems = [
     { label: 'Dashboard', href: '/admin' },
     ...items,

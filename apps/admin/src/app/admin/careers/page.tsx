@@ -533,15 +533,13 @@ export default function CareersPage() {
     try {
       if (isEditing && selectedItem) {
         await updateJobListing(selectedItem.id, itemData)
-        toast.success('Job listing updated successfully')
       } else {
         await createJobListing(itemData)
-        toast.success('Job listing created successfully')
       }
       setIsModalOpen(false)
       fetchItems()
     } catch (error) {
-      toast.error(`Failed to ${isEditing ? 'update' : 'create'} job listing`)
+      // Toast handled by useCreateJobListing/useUpdateJobListing hooks
     } finally {
       setSaving(false)
     }
@@ -552,11 +550,10 @@ export default function CareersPage() {
     setDeleting(true)
     try {
       await deleteJobListing(selectedItem.id)
-      toast.success('Job listing deleted successfully')
       setIsDeleteModalOpen(false)
       fetchItems()
     } catch (error) {
-      toast.error('Failed to delete job listing')
+      // Toast handled by useDeleteJobListing hook
     } finally {
       setDeleting(false)
     }

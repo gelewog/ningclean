@@ -207,14 +207,116 @@ export default function UsersPage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.15 }}
         >
-           <div className="sm:bg-white sm:dark:bg-slate-900 sm:border sm:dark:border-slate-700 sm:rounded-2xl shadow-sm overflow-hidden">
-            {loading ? (
-              <div className="flex items-center justify-center h-32">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 dark:border-blue-400"></div>
-              </div>
-            ) : (
-              <DataTable columns={columns} data={filteredUsers} />
-            )}
+          <div className="sm:bg-white sm:dark:bg-slate-900 sm:border sm:dark:border-slate-700 sm:rounded-2xl shadow-sm overflow-hidden">
+            <DataTable
+              columns={columns}
+              data={filteredUsers}
+              loading={loading}
+              renderCard={(row: User) => (
+                <div className="bg-white dark:bg-slate-900 rounded-2xl border border-gray-200 dark:border-slate-700 shadow-sm hover:shadow-md transition-all duration-300 p-3 cursor-pointer active:scale-[0.99]">
+                  {/* Header - Avatar & Name */}
+                  <div className="flex items-start gap-3 pb-2 border-b border-gray-100 dark:border-slate-700/50">
+                    <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 text-lg font-bold text-white shadow-lg shadow-blue-500/20 flex-shrink-0">
+                      {row.name?.charAt(0).toUpperCase() || '?'}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="font-semibold text-gray-900 dark:text-white truncate">{row.name}</p>
+                      <p className="text-xs text-gray-500 dark:text-slate-400 truncate">{row.email}</p>
+                    </div>
+                    <button
+                      onClick={(e) => { e.stopPropagation(); openEdit(row); }}
+                      className="w-8 h-8 rounded-lg bg-white dark:bg-slate-700 border border-gray-200 dark:border-slate-600 flex items-center justify-center text-gray-500 dark:text-slate-400 hover:bg-blue-50 dark:hover:bg-blue-900/30 hover:text-blue-600 dark:hover:text-blue-400 hover:border-blue-200 dark:hover:border-blue-700/50 transition-all flex-shrink-0"
+                    >
+                      <Edit3 className="h-4 w-4" />
+                    </button>
+                  </div>
+
+                  {/* Stats Grid */}
+                  <div className="grid grid-cols-2 gap-2 py-2">
+                    <div className="bg-emerald-50/50 dark:bg-emerald-900/10 rounded-xl p-2.5 flex items-center gap-2">
+                      <div className="w-8 h-8 rounded-lg bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center flex-shrink-0">
+                        <Phone className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" />
+                      </div>
+                      <div className="min-w-0">
+                        <p className="text-[10px] text-gray-500 dark:text-slate-400">Telepon</p>
+                        <p className="text-xs font-medium text-gray-700 dark:text-slate-300 truncate">{row.phone || '—'}</p>
+                      </div>
+                    </div>
+
+                    <div className="bg-purple-50/50 dark:bg-purple-900/10 rounded-xl p-2.5 flex items-center gap-2">
+                      <div className="w-8 h-8 rounded-lg bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center flex-shrink-0">
+                        <Shield className="h-3.5 w-3.5 text-purple-600 dark:text-purple-400" />
+                      </div>
+                      <div>
+                        <p className="text-[10px] text-gray-500 dark:text-slate-400">Peran</p>
+                        <p className="text-xs font-medium text-gray-700 dark:text-slate-300">
+                          {row.role === 'ADMIN' ? 'Admin' : row.role === 'STAFF' ? 'Staff' : 'Customer'}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Footer - Joined Date */}
+                  <div className="flex items-center justify-between pt-2 border-t border-gray-100 dark:border-slate-700/50">
+                    <div className="flex items-center gap-1.5">
+                      <Calendar className="h-3.5 w-3.5 text-gray-400" />
+                      <span className="text-xs text-gray-500 dark:text-slate-400">{formatDate(row.createdAt)}</span>
+                    </div>
+                    <Badge
+                      className={
+                        row.role === 'ADMIN'
+                          ? 'bg-purple-100 dark:bg-purple-900/30 text-purple-800 text-[10px]'
+                          : row.role === 'STAFF'
+                            ? 'bg-blue-100 dark:bg-blue-900/30 text-blue-800 text-[10px]'
+                            : 'bg-gray-100 dark:bg-slate-800 text-gray-800 text-[10px]'
+                      }
+                    >
+                      {row.role}
+                    </Badge>
+                  </div>
+                </div>
+              )}
+              skeletonCard={(i) => (
+                <div
+                  key={i}
+                  className="bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-700 rounded-2xl p-3 animate-pulse shadow-sm"
+                >
+                  {/* Header - Avatar & Name */}
+                  <div className="flex items-start gap-3 pb-2 border-b border-gray-100 dark:border-slate-700/50">
+                    <div className="skeleton h-12 w-12 rounded-xl flex-shrink-0 dark:bg-slate-700" />
+                    <div className="flex-1 min-w-0 pt-0.5">
+                      <div className="skeleton h-4 w-28 rounded dark:bg-slate-700 mb-2" />
+                      <div className="skeleton h-3 w-full max-w-[160px] rounded dark:bg-slate-700" />
+                    </div>
+                    <div className="skeleton h-8 w-8 rounded-lg flex-shrink-0 dark:bg-slate-700" />
+                  </div>
+
+                  {/* Stats Grid */}
+                  <div className="grid grid-cols-2 gap-2 py-2">
+                    <div className="bg-emerald-50/50 dark:bg-slate-800/50 rounded-xl p-2.5 flex items-center gap-2">
+                      <div className="skeleton h-8 w-8 rounded-lg flex-shrink-0 dark:bg-slate-700" />
+                      <div className="flex-1 min-w-0">
+                        <div className="skeleton h-2.5 w-10 rounded dark:bg-slate-700 mb-1.5" />
+                        <div className="skeleton h-3.5 w-20 rounded dark:bg-slate-700" />
+                      </div>
+                    </div>
+                    <div className="bg-purple-50/50 dark:bg-slate-800/50 rounded-xl p-2.5 flex items-center gap-2">
+                      <div className="skeleton h-8 w-8 rounded-lg flex-shrink-0 dark:bg-slate-700" />
+                      <div className="flex-1 min-w-0">
+                        <div className="skeleton h-2.5 w-10 rounded dark:bg-slate-700 mb-1.5" />
+                        <div className="skeleton h-3.5 w-12 rounded dark:bg-slate-700" />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Footer - Date & Role */}
+                  <div className="flex items-center justify-between pt-2 border-t border-gray-100 dark:border-slate-700/50">
+                    <div className="skeleton h-3 w-24 rounded dark:bg-slate-700" />
+                    <div className="skeleton h-5 w-14 rounded-full dark:bg-slate-700" />
+                  </div>
+                </div>
+              )}
+            />
           </div>
         </motion.div>
       </div>

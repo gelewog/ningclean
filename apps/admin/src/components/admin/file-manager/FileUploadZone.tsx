@@ -165,10 +165,10 @@ export function FileUploadZone({ currentPath, onUploadComplete, uploadFile }: Fi
                 <Upload className="w-10 h-10 text-blue-500" />
               </div>
               <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
-                Drop files here
+                Letakkan file di sini
               </h3>
               <p className="text-gray-500 dark:text-slate-400">
-                Files will be uploaded to {currentPath || 'root'} folder
+                File akan diupload ke folder {currentPath || 'root'}
               </p>
             </div>
           </motion.div>
@@ -187,7 +187,7 @@ export function FileUploadZone({ currentPath, onUploadComplete, uploadFile }: Fi
               <div className="flex items-center gap-2">
                 <Upload className="w-4 h-4 text-blue-500" />
                 <span className="font-medium text-gray-900 dark:text-white">
-                  {hasActiveUploads ? 'Uploading...' : 'Upload Complete'}
+                  {hasActiveUploads ? 'Mengupload...' : 'Upload Selesai'}
                 </span>
               </div>
               <button
@@ -255,20 +255,20 @@ function UploadItem({ upload, onRemove }: UploadItemProps) {
           {upload.status === 'uploading' && (
             <>
               <Loader2 className="w-3 h-3 animate-spin text-blue-500" />
-              <span className="text-xs text-gray-500 dark:text-slate-400">Uploading...</span>
+              <span className="text-xs text-gray-500 dark:text-slate-400">Mengupload...</span>
             </>
           )}
           {upload.status === 'success' && (
             <>
               <CheckCircle className="w-3 h-3 text-emerald-500" />
-              <span className="text-xs text-emerald-600 dark:text-emerald-400">Uploaded</span>
+              <span className="text-xs text-emerald-600 dark:text-emerald-400">Terupload</span>
             </>
           )}
           {upload.status === 'error' && (
             <>
               <AlertCircle className="w-3 h-3 text-red-500" />
               <span className="text-xs text-red-600 dark:text-red-400 truncate">
-                {upload.error || 'Failed'}
+                {upload.error || 'Gagal'}
               </span>
             </>
           )}

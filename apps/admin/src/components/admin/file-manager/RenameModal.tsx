@@ -59,7 +59,7 @@ export function RenameModal({ isOpen, onClose, item, onConfirm, loading }: Renam
                   </div>
                 </div>
                 <div>
-                  <h2 className="text-xl font-bold text-gray-900 dark:text-white">Rename {item.type === 'folder' ? 'Folder' : 'File'}</h2>
+                  <h2 className="text-xl font-bold text-gray-900 dark:text-white">Ubah Nama {item.type === 'folder' ? 'Folder' : 'File'}</h2>
                   <p className="text-sm text-gray-500 dark:text-slate-400 mt-0.5">{item.name}</p>
                 </div>
               </div>
@@ -70,11 +70,11 @@ export function RenameModal({ isOpen, onClose, item, onConfirm, loading }: Renam
 
             <form onSubmit={handleSubmit}>
               <div className="px-6 py-5">
-                <label className="text-sm font-medium text-gray-700 dark:text-slate-200 mb-2 block">New Name</label>
+                <label className="text-sm font-medium text-gray-700 dark:text-slate-200 mb-2 block">Nama Baru</label>
                 <Input
                   value={newName}
                   onChange={(e) => setNewName(e.target.value)}
-                  placeholder="Enter new name..."
+                  placeholder="Masukkan nama baru..."
                   className="h-11"
                   autoFocus
                 />
@@ -97,12 +97,12 @@ export function RenameModal({ isOpen, onClose, item, onConfirm, loading }: Renam
                   {loading ? (
                     <div className="flex items-center gap-2">
                       <Loader2 className="w-4 h-4 animate-spin" />
-                      <span>Renaming...</span>
+                      <span>Mengubah nama...</span>
                     </div>
                   ) : (
                     <div className="flex items-center gap-2">
                       <Edit3 className="w-4 h-4" />
-                      <span>Rename</span>
+                      <span>Ubah Nama</span>
                     </div>
                   )}
                 </button>

@@ -669,14 +669,12 @@ export default function PricingPage() {
 
       if (isEditing && selectedItem) {
         await updateMutation.mutateAsync({ id: selectedItem.id, data })
-        toast.success('Paket harga berhasil diperbarui')
       } else {
         await createMutation.mutateAsync(data)
-        toast.success('Paket harga berhasil ditambahkan')
       }
       setIsModalOpen(false)
     } catch (error) {
-      toast.error(isEditing ? 'Gagal memperbarui paket harga' : 'Gagal menambahkan paket harga')
+      // Toast error handled by mutation hook
     } finally {
       setSaving(false)
     }
@@ -688,10 +686,9 @@ export default function PricingPage() {
     setDeleting(true)
     try {
       await deleteMutation.mutateAsync(selectedItem.id)
-      toast.success('Paket harga berhasil dihapus')
       setIsDeleteModalOpen(false)
     } catch (error) {
-      toast.error('Gagal menghapus paket harga')
+      // Toast error handled by mutation hook
     } finally {
       setDeleting(false)
     }

@@ -47,11 +47,10 @@ export default function BlogPage() {
     setDeleting(true)
     try {
       await deleteBlogPost(id)
-      toast.success('Post berhasil dihapus')
       setDeleteId(null)
       refetch()
     } catch (error: any) {
-      toast.error(error.message || 'Gagal menghapus post')
+      // Toast handled by useDeleteBlogPost hook
     } finally {
       setDeleting(false)
     }

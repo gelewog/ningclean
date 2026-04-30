@@ -36,7 +36,7 @@ export function ClipboardIndicator({ clipboard, onPaste, onClear, hasItems }: Cl
             <Scissors className="w-4 h-4 text-amber-500 flex-shrink-0" />
           )}
           <span className="text-sm font-medium text-gray-700 dark:text-slate-200 truncate max-w-[120px] sm:max-w-[200px]">
-            {clipboard.operation === 'copy' ? 'Copied' : 'Cut'}: {clipboard.name}
+            {clipboard.operation === 'copy' ? 'Disalin' : 'Dipotong'}: {clipboard.name}
           </span>
         </div>
         <div className="hidden sm:block h-4 w-px bg-gray-200 dark:bg-slate-700 flex-shrink-0" />
@@ -46,7 +46,7 @@ export function ClipboardIndicator({ clipboard, onPaste, onClear, hasItems }: Cl
           className="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-lg bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-400 text-sm font-medium hover:bg-emerald-200 dark:hover:bg-emerald-900/60 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex-shrink-0"
         >
           <ClipboardPaste className="w-3.5 h-3.5" />
-          <span className="hidden sm:inline">Paste</span>
+          <span className="hidden sm:inline">Tempel</span>
         </button>
         <button
           onClick={onClear}

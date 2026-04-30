@@ -114,8 +114,8 @@ function CustomerDetailModal({
                 <User className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
               </div>
               <div>
-                <h2 className="text-lg font-bold text-gray-900 dark:text-white">Customer Details</h2>
-                <p className="text-xs text-gray-500 dark:text-slate-400">View and manage customer information</p>
+                <h2 className="text-lg font-bold text-gray-900 dark:text-white">Detail Customer</h2>
+                <p className="text-xs text-gray-500 dark:text-slate-400">Lihat dan kelola informasi customer</p>
               </div>
             </div>
             <div className="flex items-center gap-2">
@@ -154,20 +154,20 @@ function CustomerDetailModal({
                         {customer.userId ? (
                           <>
                             <UserCheck className="w-3 h-3" />
-                            Registered
+                            Terdaftar
                           </>
                         ) : (
                           <>
                             <Users className="w-3 h-3" />
-                            Guest
+                            Tamu
                           </>
                         )}
                       </Badge>
                     </div>
                     <p className="text-sm text-gray-500 dark:text-slate-400 mt-1">
-                      Customer since {formatDate(customer.createdAt)}
+                      Customer sejak {formatDate(customer.createdAt)}
                     </p>
-                    
+
                     {/* Quick Stats */}
                     <div className="flex items-center gap-6 mt-4">
                       <div className="flex items-center gap-2">
@@ -175,7 +175,7 @@ function CustomerDetailModal({
                           <Calendar className="w-4 h-4 text-blue-600 dark:text-blue-400" />
                         </div>
                         <div>
-                          <p className="text-xs text-gray-500 dark:text-slate-400">Bookings</p>
+                          <p className="text-xs text-gray-500 dark:text-slate-400">Booking</p>
                           <p className="text-sm font-semibold text-gray-900 dark:text-white">{customer.totalBookings || 0}</p>
                         </div>
                       </div>
@@ -184,7 +184,7 @@ function CustomerDetailModal({
                           <DollarSign className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
                         </div>
                         <div>
-                          <p className="text-xs text-gray-500 dark:text-slate-400">Total Spent</p>
+                          <p className="text-xs text-gray-500 dark:text-slate-400">Total Pengeluaran</p>
                           <p className="text-sm font-semibold text-emerald-600 dark:text-emerald-400">{formatCurrency(customer.totalSpent || 0)}</p>
                         </div>
                       </div>
@@ -195,7 +195,7 @@ function CustomerDetailModal({
 
               {/* VIP Toggle - Edit Mode */}
               {isEditing && (
-                <motion.div 
+                <motion.div
                   initial={{ opacity: 0, height: 0 }}
                   animate={{ opacity: 1, height: 'auto' }}
                   className="flex items-center gap-3 p-4 bg-amber-50 dark:bg-amber-900/20 rounded-xl border border-amber-200 dark:border-amber-800/50"
@@ -209,9 +209,9 @@ function CustomerDetailModal({
                   />
                   <label htmlFor="isVip" className="flex items-center gap-2 font-medium text-amber-800 dark:text-amber-300">
                     <Star className="w-4 h-4 fill-amber-500 text-amber-500" />
-                    VIP Customer
+                    Customer VIP
                   </label>
-                  <span className="text-sm text-amber-600 dark:text-amber-400">— Priority customer with special treatment</span>
+                  <span className="text-sm text-amber-600 dark:text-amber-400">— Customer prioritas dengan perlakuan khusus</span>
                 </motion.div>
               )}
 
@@ -234,7 +234,7 @@ function CustomerDetailModal({
                       <Phone className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
                     </div>
                     <div className="min-w-0 flex-1">
-                      <p className="text-xs text-gray-500 dark:text-slate-400 uppercase tracking-wide">Phone</p>
+                      <p className="text-xs text-gray-500 dark:text-slate-400 uppercase tracking-wide">Telepon</p>
                       <p className="text-sm font-medium text-gray-900 dark:text-white">{customer.phone || '—'}</p>
                     </div>
                   </div>
@@ -246,7 +246,7 @@ function CustomerDetailModal({
                 <div className="px-4 py-3 border-b border-gray-100 dark:border-slate-700 bg-gray-50/50 dark:bg-slate-800/50">
                   <div className="flex items-center gap-2">
                     <FileText className="w-4 h-4 text-gray-500 dark:text-slate-400" />
-                    <span className="text-sm font-semibold text-gray-900 dark:text-white">Internal Notes</span>
+                    <span className="text-sm font-semibold text-gray-900 dark:text-white">Catatan Internal</span>
                   </div>
                 </div>
                 <div className="p-4">
@@ -254,12 +254,12 @@ function CustomerDetailModal({
                     <textarea
                       value={editNotes}
                       onChange={(e) => setEditNotes(e.target.value)}
-                      placeholder="Add internal notes about this customer..."
+                      placeholder="Tambahkan catatan internal tentang customer ini..."
                       className="w-full h-24 px-3 py-2 rounded-lg border border-gray-200 dark:border-slate-600 text-sm text-gray-900 dark:text-slate-100 bg-white dark:bg-slate-900 resize-none focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 dark:focus:border-emerald-400 transition-all placeholder:text-gray-400 dark:placeholder:text-slate-500"
                     />
                   ) : (
                     <p className="text-sm text-gray-600 dark:text-slate-400">
-                      {customer.notes || 'No notes added yet.'}
+                      {customer.notes || 'Belum ada catatan.'}
                     </p>
                   )}
                 </div>
@@ -270,12 +270,12 @@ function CustomerDetailModal({
                 <div className="px-4 py-3 border-b border-gray-100 dark:border-slate-700 bg-gray-50/50 dark:bg-slate-800/50 flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <MapPin className="w-4 h-4 text-gray-500 dark:text-slate-400" />
-                    <span className="text-sm font-semibold text-gray-900 dark:text-white">Saved Addresses</span>
+                    <span className="text-sm font-semibold text-gray-900 dark:text-white">Alamat Tersimpan</span>
                   </div>
                   {isEditing && (
                     <Button variant="ghost" size="sm" onClick={addAddress} className="gap-1 text-emerald-600 hover:text-emerald-700 hover:bg-emerald-50 dark:hover:bg-emerald-900/20">
                       <Plus className="w-4 h-4" />
-                      Add Address
+                      Tambah Alamat
                     </Button>
                   )}
                 </div>
@@ -291,7 +291,7 @@ function CustomerDetailModal({
                         >
                           <div className="flex justify-between items-center gap-2">
                             <Input
-                              placeholder="Label (e.g., Home, Office)"
+                              placeholder="Label (contoh: Rumah, Kantor)"
                               value={addr.label}
                               onChange={(e) => updateAddress(index, 'label', e.target.value)}
                               className="text-sm flex-1"
@@ -306,20 +306,20 @@ function CustomerDetailModal({
                             </Button>
                           </div>
                           <Input
-                            placeholder="Full address"
+                            placeholder="Alamat lengkap"
                             value={addr.address}
                             onChange={(e) => updateAddress(index, 'address', e.target.value)}
                             className="text-sm"
                           />
                           <div className="grid grid-cols-2 gap-3">
                             <Input
-                              placeholder="City"
+                              placeholder="Kota"
                               value={addr.city}
                               onChange={(e) => updateAddress(index, 'city', e.target.value)}
                               className="text-sm"
                             />
                             <Input
-                              placeholder="Contact phone"
+                              placeholder="Telepon kontak"
                               value={addr.phone}
                               onChange={(e) => updateAddress(index, 'phone', e.target.value)}
                               className="text-sm"
@@ -330,10 +330,10 @@ function CustomerDetailModal({
                       {editAddresses.length === 0 && (
                         <div className="text-center py-8">
                           <MapPin className="w-10 h-10 text-gray-300 dark:text-slate-600 mx-auto mb-3" />
-                          <p className="text-sm text-gray-500 dark:text-slate-400">No addresses saved yet.</p>
+                          <p className="text-sm text-gray-500 dark:text-slate-400">Belum ada alamat tersimpan.</p>
                           <Button variant="outline" size="sm" onClick={addAddress} className="mt-3">
                             <Plus className="w-4 h-4 mr-1" />
-                            Add First Address
+                            Tambah Alamat Pertama
                           </Button>
                         </div>
                       )}
@@ -348,7 +348,7 @@ function CustomerDetailModal({
                             </div>
                             <div className="flex-1 min-w-0">
                               <div className="flex items-center gap-2">
-                                <span className="text-sm font-semibold text-gray-900 dark:text-white">{addr.label || `Address ${index + 1}`}</span>
+                                <span className="text-sm font-semibold text-gray-900 dark:text-white">{addr.label || `Alamat ${index + 1}`}</span>
                               </div>
                               <p className="text-sm text-gray-600 dark:text-slate-400 mt-0.5">{addr.address}</p>
                               <p className="text-xs text-gray-500 dark:text-slate-500 mt-1">{addr.city} {addr.phone && `• ${addr.phone}`}</p>
@@ -358,7 +358,7 @@ function CustomerDetailModal({
                       ) : (
                         <div className="text-center py-8">
                           <MapPin className="w-10 h-10 text-gray-300 dark:text-slate-600 mx-auto mb-3" />
-                          <p className="text-sm text-gray-500 dark:text-slate-400">No addresses saved yet.</p>
+                          <p className="text-sm text-gray-500 dark:text-slate-400">Belum ada alamat tersimpan.</p>
                         </div>
                       )}
                     </div>
@@ -371,8 +371,8 @@ function CustomerDetailModal({
                 <div className="px-4 py-3 border-b border-gray-100 dark:border-slate-700 bg-gray-50/50 dark:bg-slate-800/50">
                   <div className="flex items-center gap-2">
                     <Package className="w-4 h-4 text-gray-500 dark:text-slate-400" />
-                    <span className="text-sm font-semibold text-gray-900 dark:text-white">Order History</span>
-                    <Badge variant="info" className="ml-auto">{bookings.length} orders</Badge>
+                    <span className="text-sm font-semibold text-gray-900 dark:text-white">Riwayat Pesanan</span>
+                    <Badge variant="info" className="ml-auto">{bookings.length} pesanan</Badge>
                   </div>
                 </div>
                 <div className="p-4">
@@ -410,7 +410,7 @@ function CustomerDetailModal({
                   ) : (
                     <div className="text-center py-8">
                       <Package className="w-10 h-10 text-gray-300 dark:text-slate-600 mx-auto mb-3" />
-                      <p className="text-sm text-gray-500 dark:text-slate-400">No orders found for this customer.</p>
+                      <p className="text-sm text-gray-500 dark:text-slate-400">Belum ada pesanan untuk customer ini.</p>
                     </div>
                   )}
                 </div>
@@ -442,14 +442,15 @@ function CustomerDetailModal({
                 </Button>
               ) : (
                 <>
-                  <Button variant="outline" size="sm" onClick={() => setIsEditing(false)}>
+                  <Button variant="outline" size="sm" onClick={() => setIsEditing(false)} className="gap-2">
+                    <X className="h-4 w-4" />
                     Batal
                   </Button>
-                  <Button size="sm" onClick={onSave} disabled={saving}>
+                  <Button size="sm" onClick={onSave} disabled={saving} className="gap-2">
                     {saving ? (
-                      <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin mr-2" />
+                      <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
                     ) : (
-                      <Save className="h-4 w-4 mr-2" />
+                      <Save className="h-4 w-4" />
                     )}
                     Simpan
                   </Button>
@@ -555,11 +556,10 @@ export default function CustomersPage() {
         notes: editNotes,
         addresses: editAddresses,
       })
-      toast.success('Customer updated successfully')
       setIsEditing(false)
       fetchCustomers()
     } catch (error) {
-      toast.error('Failed to update customer')
+      // Toast handled by useUpdateCustomer hook
     } finally {
       setSaving(false)
     }
@@ -577,11 +577,10 @@ export default function CustomersPage() {
 
     try {
       await deleteCustomer(selectedCustomer.id)
-      toast.success('Customer berhasil dihapus')
       setIsDetailOpen(false)
       fetchCustomers()
     } catch (error) {
-      toast.error('Gagal menghapus customer')
+      // Toast handled by useDeleteCustomer hook
     }
   }
 

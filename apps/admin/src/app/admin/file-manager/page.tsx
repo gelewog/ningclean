@@ -214,12 +214,12 @@ export default function FileManagerPage() {
 
   const handleCopy = (path: string, name: string, type: 'file' | 'folder') => {
     setClipboard({ sourcePath: path, type, operation: 'copy', name })
-    toast.success(`${type === 'folder' ? 'Folder' : 'File'} copied to clipboard`)
+    toast.success(`${type === 'folder' ? 'Folder' : 'File'} disalin ke clipboard`)
   }
 
   const handleCut = (path: string, name: string, type: 'file' | 'folder') => {
     setClipboard({ sourcePath: path, type, operation: 'cut', name })
-    toast.success(`${type === 'folder' ? 'Folder' : 'File'} cut to clipboard`)
+    toast.success(`${type === 'folder' ? 'Folder' : 'File'} dipotong ke clipboard`)
   }
 
   const handlePaste = async () => {
@@ -241,7 +241,7 @@ export default function FileManagerPage() {
         if (clipboard.operation === 'cut') setClipboard(null)
         fetchFiles(currentPath)
       } else {
-        toast.error(result.message || 'Operation failed')
+        toast.error(result.message || 'Operasi gagal')
       }
     } catch (error) {
       toast.error('Gagal paste item')
@@ -292,7 +292,7 @@ export default function FileManagerPage() {
                   size="icon"
                   onClick={() => fetchFiles(currentPath)} 
                   className="h-8 w-8 text-gray-500 dark:text-slate-400"
-                  title="Refresh"
+                  title="Segarkan"
                 >
                   <RefreshCw className="w-4 h-4" />
                 </Button>
@@ -301,7 +301,7 @@ export default function FileManagerPage() {
                   size="icon"
                   onClick={() => setIsCreateFolderModalOpen(true)} 
                   className="h-8 w-8"
-                  title="New Folder"
+                  title="Folder Baru"
                 >
                   <FolderPlus className="w-4 h-4" />
                 </Button>
@@ -344,7 +344,7 @@ export default function FileManagerPage() {
                 </div>
                 <div>
                   <p className="text-2xl font-bold text-gray-900 dark:text-white">{stats.fileCount}</p>
-                  <p className="text-xs text-gray-500 dark:text-slate-400">Total Files</p>
+                  <p className="text-xs text-gray-500 dark:text-slate-400">Total File</p>
                 </div>
               </div>
             </div>
@@ -355,7 +355,7 @@ export default function FileManagerPage() {
                 </div>
                 <div>
                   <p className="text-2xl font-bold text-gray-900 dark:text-white">{stats.usedSpace}</p>
-                  <p className="text-xs text-gray-500 dark:text-slate-400">Storage Used</p>
+                  <p className="text-xs text-gray-500 dark:text-slate-400">Penyimpanan Terpakai</p>
                 </div>
               </div>
             </div>
@@ -366,7 +366,7 @@ export default function FileManagerPage() {
                 </div>
                 <div>
                   <p className="text-2xl font-bold text-gray-900 dark:text-white">{stats.folderCount}</p>
-                  <p className="text-xs text-gray-500 dark:text-slate-400">Folders</p>
+                  <p className="text-xs text-gray-500 dark:text-slate-400">Folder</p>
                 </div>
               </div>
             </div>
@@ -377,7 +377,7 @@ export default function FileManagerPage() {
                 </div>
                 <div>
                   <p className="text-2xl font-bold text-gray-900 dark:text-white">{stats.totalSpace}</p>
-                  <p className="text-xs text-gray-500 dark:text-slate-400">Total Space</p>
+                  <p className="text-xs text-gray-500 dark:text-slate-400">Total Penyimpanan</p>
                 </div>
               </div>
             </div>
@@ -427,7 +427,7 @@ export default function FileManagerPage() {
             <div className="flex items-center gap-3">
               <div className="relative flex-1 sm:flex-none">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-slate-500 z-10 pointer-events-none" />
-                <Input value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} placeholder="Search files..." className="pl-10 h-10 w-full sm:w-64 bg-gray-100 dark:bg-slate-800 border-0 relative z-1" />
+                <Input value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} placeholder="Cari file..." className="pl-10 h-10 w-full sm:w-64 bg-gray-100 dark:bg-slate-800 border-0 relative z-1" />
               </div>
               <div className="flex items-center gap-1 p-1 bg-gray-100 dark:bg-slate-800 rounded-xl">
                 <button onClick={() => setViewMode('grid')} className={`p-2 rounded-lg transition-colors ${viewMode === 'grid' ? 'bg-white dark:bg-slate-700 shadow-sm' : 'hover:bg-gray-200 dark:hover:bg-slate-700'}`}>
@@ -437,7 +437,7 @@ export default function FileManagerPage() {
                   <List className="w-4 h-4" />
                 </button>
               </div>
-              <button onClick={toggleSelectAll} className="p-2 rounded-xl bg-gray-100 dark:bg-slate-800 hover:bg-gray-200 dark:hover:bg-slate-700 transition-colors" title="Select All">
+              <button onClick={toggleSelectAll} className="p-2 rounded-xl bg-gray-100 dark:bg-slate-800 hover:bg-gray-200 dark:hover:bg-slate-700 transition-colors" title="Pilih Semua">
                 {selectedItems.size === filteredFiles.length + filteredFolders.length && filteredFiles.length + filteredFolders.length > 0
                   ? <CheckSquare className="w-4 h-4 text-emerald-500" />
                   : <Square className="w-4 h-4" />
@@ -446,7 +446,7 @@ export default function FileManagerPage() {
               {selectedItems.size > 0 && (
                 <Button variant="ghost" size="sm" onClick={() => setIsDeleteModalOpen(true)} className="text-red-600 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-900/20">
                   <Trash2 className="w-4 h-4 mr-1" />
-                  Delete ({selectedItems.size})
+                  Hapus ({selectedItems.size})
                 </Button>
               )}
             </div>

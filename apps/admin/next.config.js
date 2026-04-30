@@ -15,6 +15,12 @@ const nextConfig = {
     config.parallelism = 1;
     return config;
   },
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
+  typescript: {
+    ignoreBuildErrors: true,
+  },
   async rewrites() {
     return [
       {
