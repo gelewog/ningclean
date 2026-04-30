@@ -52,7 +52,9 @@ interface RecentSearch {
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api'
+const rawApiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'
+const API_BASE = rawApiUrl.endsWith('/api') ? rawApiUrl : `${rawApiUrl}/api`
+
 const RECENT_SEARCHES_KEY = 'ningclean_recent_searches'
 const MAX_RECENT_SEARCHES = 5
 
